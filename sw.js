@@ -63,19 +63,17 @@
    byte on every untouched/pristine day (checked against all 7 weekday
    templates). Content-only change; no shell asset paths changed. */
 
-const CACHE_VERSION = 'v7';
+const CACHE_VERSION = 'v8';
 const SHELL_CACHE = 'zatoona-shell-' + CACHE_VERSION;
 const RUNTIME_CACHE = 'zatoona-runtime-' + CACHE_VERSION;
 const CURRENT_CACHES = [SHELL_CACHE, RUNTIME_CACHE];
 
 /* The exact app shell — same-origin files required for the app to load and
    run with zero network access. './' and './index.html' are the real PWA
-   entry point (manifest start_url/scope); gym-meal-tracker-6_8.html is kept
-   too since it's still a valid, directly-linkable working copy. */
+   entry point (manifest start_url/scope). */
 const SHELL_ASSETS = [
   './',
   './index.html',
-  './gym-meal-tracker-6_8.html',
   './manifest.json',
   './icons/icon-192.png',
   './icons/icon-512.png',
