@@ -421,7 +421,7 @@
     <div class="stamp" id="stampKcal">🎯 ~1700 سعرة/يوم</div>
     <div class="stamp" id="stampProtein">🥩 هدف 83 جم بروتين</div>
     <div class="stamp" id="stampBudget">💰 ~2050 ج / 30 يوم</div>
-    <div class="stamp">🏋️ 3 أيام جيم</div>
+    <div class="stamp" id="stampGym">🏋️ 3 أيام جيم</div>
   </div>
 </header>
 
@@ -460,6 +460,21 @@
     <details class="settings-card" style="padding:0;">
       <summary style="cursor:pointer; color:var(--accent); font-weight:700; font-size:.85rem; padding:16px;">🎯 أهداف التغذية — Settings</summary>
       <div style="padding:0 16px 16px;">
+        <div class="sc-field" style="margin-bottom:10px;">
+          <label>هدف الوزن الشهري</label>
+          <div class="toggle-group" id="goalModeToggle" style="gap:6px;">
+            <button type="button" class="tbtn" data-goal="lose" style="width:auto;padding:0 14px;font-size:.75rem;">خسارة</button>
+            <button type="button" class="tbtn" data-goal="gain" style="width:auto;padding:0 14px;font-size:.75rem;">زيادة</button>
+            <button type="button" class="tbtn" data-goal="maintain" style="width:auto;padding:0 14px;font-size:.75rem;">ثبات</button>
+            <button type="button" class="tbtn" data-goal="none" style="width:auto;padding:0 14px;font-size:.75rem;">بدون هدف</button>
+          </div>
+        </div>
+        <div class="sc-grid" style="margin-bottom:10px;">
+          <div class="sc-field"><label>المعدل (كجم/شهر)</label><input type="number" min="0" step="0.1" id="goalKgPerMonth" class="weight-input" style="width:100%;"></div>
+          <div class="sc-field"><label>الوزن المستهدف (كجم)</label><input type="number" min="0" step="0.1" id="goalTargetWeight" class="weight-input" style="width:100%;"></div>
+          <div class="sc-field"><label>سعرات الثبات (kcal/يوم)</label><input type="number" min="0" step="10" id="goalMaintenanceCalories" class="weight-input" style="width:100%;"></div>
+        </div>
+        <div id="goalSummary" class="trim-note hidden" style="margin-bottom:10px;"></div>
         <div class="sc-field" style="margin-bottom:10px;">
           <label>السعرات اليومية (kcal)</label>
           <input type="number" min="0" step="10" id="targetCalories" class="weight-input" style="width:100%;">
@@ -598,6 +613,9 @@
         <div class="sc-field"><label>ألياف / وحدة (جم)</label><input type="number" min="0" step="0.0001" id="foodEditFiber" class="weight-input" style="width:100%;"></div>
         <div class="sc-field"><label>ملاحظات (اختياري)</label><input type="text" id="foodEditNotes" class="weight-input" style="width:100%;"></div>
       </div>
+      <div class="sc-grid hidden" id="foodEditLoafWrap" style="margin-top:10px;">
+        <div class="sc-field"><label>وزن الرغيف (جم) — للتحويل بين رغيف وجرام</label><input type="number" min="0" step="1" id="foodEditLoafGrams" class="weight-input" style="width:100%;"></div>
+      </div>
       <details style="margin-top:12px; border-top:1px solid var(--line); padding-top:10px;">
         <summary style="cursor:pointer; color:var(--teal); font-size:.78rem; font-weight:700;">🧪 عناصر غذائية دقيقة (اختياري)</summary>
         <div class="sc-grid" style="margin-top:10px;">
@@ -616,6 +634,38 @@
         <button class="reset-btn" id="foodEditCancel">إلغاء</button>
         <button class="reset-btn" id="foodEditSave" style="border-color:var(--good); color:var(--good); font-weight:700;">💾 حفظ الطعام</button>
       </div>
+    </div>
+    <div class="section-title"><span class="n">٧</span> Weekly Meal Plan</div>
+    <div class="section-hint">بيولّد خطة أسبوعية من أطعمتك الحالية وبيضبط الكميات على هدف السعرات والبروتين الفعلي — بيعرضها الأول ومبيغيّرش الخطة الحالية غير لما تأكد</div>
+    <div class="settings-card" id="s5bPlannerCard">
+      <div class="fallback-note" id="s5bTargetsLine" style="margin-bottom:10px;">دوس "ولّد" عشان تشوف الأهداف اليومية الفعلية اللي هتتحسب عليها الخطة.</div>
+      <details id="s5bPoolDetails" style="margin-bottom:10px;">
+        <summary style="cursor:pointer; color:var(--accent); font-weight:700; font-size:.78rem;">الأطعمة المسموح استخدامها</summary>
+        <div id="s5bPool" style="padding-top:8px;"></div>
+      </details>
+      <label style="display:flex; align-items:center; gap:8px; font-size:.78rem; margin-bottom:12px;">
+        <input type="checkbox" id="s5bSwaps"> تبديلات إضافية داخل نفس الفئة لتحسين الكارب/الدهون/الألياف كمان (اختياري — السعر بيدخل في اختيار الخطة دايمًا بعد السعرات والبروتين)
+      </label>
+      <div style="display:flex; justify-content:flex-end;">
+        <button class="reset-btn" id="s5bGenerate" style="border-color:var(--good); color:var(--good); font-weight:700;">⚙️ ولّد خطة أسبوعية</button>
+      </div>
+      <div id="s5bStatus" class="hidden"></div>
+      <div id="s5bPreview" class="hidden"></div>
+    </div>
+
+    <div class="section-title"><span class="n">٨</span> رفع نظام غذائي</div>
+    <div class="section-hint">الصق JSON أو حمّل ملف بأطعمة جديدة — بيتفحص بالكامل الأول وبيتدمج مع قاعدة الأطعمة من غير ما يمسح أو يبدّل أي طعام موجود</div>
+    <div class="settings-card" id="s5bImportCard">
+      <div class="section-hint" style="margin:0 0 8px; padding:0;">الشكل: كائن مفتاحه مفتاح الطعام (حروف إنجليزي/أرقام/_) وقيمته نفس حقول قاعدة الأطعمة. الوحدات: g / ml / egg / loaf / can / unit — الفئات: protein / carb / fruit / veg / fat / dairy / other — القيم الغذائية والسعر: رقم ≥ 0 لكل وحدة أو null لو غير معروف. اختياري: loafGrams (للرغيف بس) وmicros وnotes.</div>
+      <textarea id="s5bImportText" class="weight-input" rows="9" spellcheck="false" dir="ltr" style="width:100%; font-family:'IBM Plex Mono',monospace; font-size:.74rem; text-align:left;"></textarea>
+      <div style="display:flex; gap:10px; justify-content:space-between; align-items:center; margin-top:10px; flex-wrap:wrap;">
+        <input type="file" id="s5bImportFile" accept=".json,application/json" style="font-size:.72rem; max-width:60%;">
+        <span style="display:flex; gap:10px;">
+          <button class="reset-btn" id="s5bImportClear">مسح</button>
+          <button class="reset-btn" id="s5bImportBtn" style="border-color:var(--good); color:var(--good); font-weight:700;">⬆ استيراد</button>
+        </span>
+      </div>
+      <div id="s5bImportResult" class="hidden"></div>
     </div>
   </div>
 
@@ -698,8 +748,18 @@
     <div class="section-title"><span class="n">١</span> ملخص اليوم</div>
     <div class="summary" id="prayerSummary"></div>
 
-    <div class="section-title"><span class="n">٢</span> مواقيت الصلاة (اختياري)</div>
-    <div class="section-hint">لو حابب تدوّن مواقيت اليوم — مش شرط</div>
+    <div class="section-title" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+      <div><span class="n">٢</span> مواقيت الصلاة تلقائيًا</div>
+      <div style="display:flex; align-items:center; gap:8px; font-size:.82rem;">
+        <label for="prayerCitySelect" style="color:var(--muted); font-size:.78rem;">المدينة:</label>
+        <select id="prayerCitySelect" class="weight-input" style="padding:4px 8px; font-size:.8rem; border-radius:6px;">
+          <option value="Minya">المنيا (Minya)</option>
+          <option value="Alexandria">الإسكندرية (Alexandria)</option>
+        </select>
+        <button id="prayerRefreshBtn" class="reset-btn" type="button" style="padding:3px 10px; font-size:.78rem;" title="تحديث أوقات الصلاة">🔄 تحديث</button>
+      </div>
+    </div>
+    <div id="prayerApiStatus" class="section-hint" style="margin-top:2px; font-size:.75rem;"></div>
     <div class="checklist" id="prayerTimes"></div>
 
     <div class="section-title"><span class="n">٣</span> الفروض والسنن الراتبة</div>
@@ -792,6 +852,33 @@
       </details>
     </div>
 
+    <div class="settings-card">
+      <div class="sc-title">🌙 النوم والاستيقاظ والقيلولة — مبنيين على مواقيت صلاتك</div>
+      <div class="section-hint" style="padding:0; margin:0 0 12px;">مش بيتحسبوا من ساعة ثابتة — النوم الأساسي بيبدأ بعد العشاء، والقيلولة بعد الظهر، والاستيقاظ قبل الفجر. سجّل مواقيت صلاتك من تاب "الصلاة" عشان تكون مظبوطة.</div>
+      <div class="sc-field" style="margin-bottom:12px;">
+        <label>المدينة المعتمدة لمواقيت الصلاة</label>
+        <select id="scPrayerCity" class="weight-input" style="width:100%;">
+          <option value="Minya">المنيا (Minya)</option>
+          <option value="Alexandria">الإسكندرية (Alexandria)</option>
+        </select>
+      </div>
+      <div class="sc-field" style="margin-bottom:12px;">
+        <label>نوم أساسي يبدأ بعد صلاة العشاء بـ (دقيقة) — افتراضيًا ٣٠</label>
+        <input type="number" min="0" step="5" id="scSleepStartOffset" class="weight-input" style="width:100%;">
+      </div>
+      <div class="sc-field" style="margin-bottom:12px;">
+        <label>الاستيقاظ قبل الفجر بـ</label>
+        <div class="day-toggle-row" id="scWakePresetRow"></div>
+      </div>
+      <div class="sc-field" style="margin-bottom:8px;">
+        <label style="display:flex; align-items:center; gap:6px; cursor:pointer;"><input type="checkbox" id="scNapEnabled"> قيلولة بعد الظهر (تبدأ تلقائيًا بعد صلاة الظهر بـ١٥ دقيقة)</label>
+      </div>
+      <div class="sc-field" id="scNapDurationWrap">
+        <label>مدة القيلولة</label>
+        <div class="day-toggle-row" id="scNapDurationRow"></div>
+      </div>
+    </div>
+
     <div class="section-title"><span class="n">٢</span> جدول اليوم</div>
     <div class="section-hint">
       نظام أولويات: <span style="color:var(--bad); font-weight:700;">أساسي</span> (نوم/صلاة/أكل/كلية/جيم) ما بيتلغيش أبدًا —
@@ -805,9 +892,12 @@
     <div class="info-card" id="scheduleTimeEngineCard" style="margin-bottom:12px;"></div>
     <div class="info-card" id="scheduleStudyCard" style="margin-bottom:12px;"></div>
     <div style="display:flex; justify-content:flex-end; gap:8px; margin-bottom:10px; flex-wrap:wrap;">
+      <button class="reset-btn" id="scheduleFullGenBtn" style="border-color:var(--accent-dim); color:var(--accent-dim); font-weight:700;">🏗️ بناء الجدول من الأول</button>
       <button class="reset-btn" id="scheduleRecalcBtn" style="border-color:var(--accent); color:var(--accent);">🔄 إعادة حساب اليوم</button>
+      <button class="reset-btn" id="scheduleCopyBtn" style="border-color:var(--teal); color:var(--teal); font-weight:700;">📋 نسخ الجدول لأيام تانية</button>
       <button class="reset-btn" id="scheduleAddActBtn" style="border-color:var(--good); color:var(--good); font-weight:700;">➕ إضافة نشاط</button>
     </div>
+    <div class="settings-card hidden" id="scheduleCopyCard"></div>
     <div class="settings-card hidden" id="scheduleActEditCard"></div>
     <div class="timeline" id="scheduleTimeline"></div>
     <div class="sleep-block" id="scheduleSleepBlock"></div>
@@ -1065,6 +1155,8 @@
       </div>
     </div>
 
+    <div id="budgetOverspendAlert" class="conflict-banner hidden"></div>
+
     <div class="section-title"><span class="n">٣</span> التصنيف حسب الفئة</div>
     <div class="domain-card" id="budgetCategoryBreakdown"></div>
 
@@ -1131,7 +1223,17 @@ const FOOD_DB_DEFAULTS = {
   carrot:{name:'جزر', unit:'g', cat:'veg', kcal:.41, protein:.009, carb:.10, fat:.002, fiber:.028, price:.02},
   pepper:{name:'فلفل أخضر', unit:'g', cat:'veg', kcal:.20, protein:.0086, carb:.046, fat:.0017, fiber:.017, price:.025},
   greens:{name:'خضرة', unit:'g', cat:'veg', kcal:.23, protein:.02, carb:.036, fat:.003, fiber:.018, price:.03},
+  /* Stage 5A additions. No nutrition values or prices exist anywhere in the project requirements for these two,
+     so they are left as null = "unknown" (never a fabricated number and never a silent 0). Fill them in from the
+     Food DB editor. They are excluded from substitution suggestions until their nutrition is filled in, and
+     computeIngredients() reports nutritionIncomplete if a meal uses one. wholegrainBread uses unit 'loaf' like
+     the existing `bread`, so it supports the same grams<->loaf conversion via its loafGrams field. */
+  arugula:{name:'جرجير', unit:'g', cat:'veg', kcal:null, protein:null, carb:null, fat:null, fiber:null, price:null},
+  wholegrainBread:{name:'عيش الحبة الكاملة', unit:'loaf', cat:'carb', kcal:null, protein:null, carb:null, fat:null, fiber:null, price:null, loafGrams:null},
 };
+// Stage 5A: these defaults were added after launch, so they are skipped if the user already created a custom
+// food with the same name (the "add only if not already present" rule) — no duplicate entry in the picker.
+const FOOD_DEFAULTS_ADDED_5A = ['arugula','wholegrainBread'];
 let FOOD_DB = {}; // populated by rebuildFoodDB() before first use (called during init())
 let customFoods = {};        // storage: 'custom-foods'    — {key: {name,unit,cat,kcal,protein,carb,fat,fiber,price,micros?,notes?}}
 let foodOverrides = {};      // storage: 'food-overrides'  — {key: {...partial field overrides for a DEFAULT food}}
@@ -1144,8 +1246,10 @@ function loadDeletedDefaultFoods(){ const raw = storageGet('deleted-foods'); if(
 function saveDeletedDefaultFoods(obj){ storageSet('deleted-foods', JSON.stringify(obj)); }
 function rebuildFoodDB(){
   const out = {};
+  const customNames = new Set(Object.keys(customFoods).map(k=> String((customFoods[k]&&customFoods[k].name)||'').trim()));
   Object.keys(FOOD_DB_DEFAULTS).forEach(k=>{
     if(deletedDefaultFoods[k]) return;
+    if(FOOD_DEFAULTS_ADDED_5A.indexOf(k)>=0 && customNames.has(FOOD_DB_DEFAULTS[k].name)) return;
     out[k] = Object.assign({}, FOOD_DB_DEFAULTS[k], foodOverrides[k]||{});
   });
   Object.keys(customFoods).forEach(k=>{ out[k] = customFoods[k]; });
@@ -1161,20 +1265,52 @@ function isFoodReferencedInPlan(key){
 function getMealCost(dayIdx, mealIdx){ return getMealComputed(dayIdx, mealIdx).price; }
 function getDailyFoodCost(dateObj){ return computeAnalyticsForDates([dateObj]).nut.costSum; }
 const FOOD_CAT_LABEL = {protein:'بروتين', carb:'نشويات', fruit:'فاكهة', veg:'خضار', fat:'دهون', dairy:'ألبان'};
-function I(f,q){ return {f,q}; }
-function foodQtyLabel(f,q){
+function I(f,q,u){ return u ? {f,q,u} : {f,q}; }
+
+/* ---- Bread units (Stage 5A) ----
+   A food whose base unit is 'loaf' (every price/nutrition field on it is PER LOAF — unchanged, so all existing
+   bread data keeps meaning exactly what it did) may ALSO be quantified in grams: an ingredient item then carries
+   an optional u:'g' marker ({f:'bread', q:120, u:'g'}). Items without `u` mean the food's own base unit, so every
+   saved plan/override written before this stage is read exactly as before. The loaf weight is NOT in the logic: it
+   is the per-food field `loafGrams` on the food (editable in the Food DB editor, persisted through the existing
+   foodOverrides / customFoods storage). Unset/invalid = conversion unavailable; there is no default weight. */
+function loafGramsOf(key){
+  const fd = FOOD_DB[key];
+  if(!fd || fd.unit!=='loaf') return null;
+  const g = Number(fd.loafGrams);
+  return (Number.isFinite(g) && g>0) ? g : null;
+}
+function gramsToLoaves(key, grams){ const lg = loafGramsOf(key); return lg===null ? null : grams/lg; }
+function loavesToGrams(key, loaves){ const lg = loafGramsOf(key); return lg===null ? null : loaves*lg; }
+// Quantity of an ingredient expressed in its food's base unit (what price/kcal/protein/... are per).
+// null only when the item is in grams but the food has no usable loaf weight (cannot be converted).
+function ingBaseQty(it){
+  const fd = FOOD_DB[it.f];
+  if(fd && fd.unit==='loaf' && it.u==='g') return gramsToLoaves(it.f, it.q);
+  return it.q;
+}
+function fmtQty(q){ return Number.isInteger(q) ? String(q) : String(Math.round(q*100)/100); }
+function foodNutritionUnknown(fd){
+  return !fd || ['kcal','protein','carb','fat','fiber'].some(k=> !Number.isFinite(fd[k]));
+}
+
+function foodQtyLabel(f,q,u){
   const fd = FOOD_DB[f];
+  if(fd.unit==='loaf' && u==='g') return fmtQty(q)+'جم';
   if(fd.unit==='g') return q+'جم';
   if(fd.unit==='ml') return q+'مل';
   if(fd.unit==='egg') return q===2?'بيضتين':q===1?'بيضة واحدة':q+' بيضات';
-  if(fd.unit==='loaf') return q===1?'رغيف عيش بلدي':q+' أرغفة عيش بلدي';
+  if(fd.unit==='loaf'){
+    const core = String(fd.name).replace(/^رغيف\s+/, ''); // 'رغيف عيش بلدي' -> 'عيش بلدي'; 'عيش الحبة الكاملة' stays as is
+    return q===1 ? 'رغيف '+core : fmtQty(q)+' أرغفة '+core;
+  }
   if(fd.unit==='can') return q===1?'علبة تونة مصفاة':q+' علب تونة مصفاة';
   return String(q);
 }
 function ingredientText(it){
   const fd = FOOD_DB[it.f];
-  if(fd.unit==='egg'||fd.unit==='loaf'||fd.unit==='can') return foodQtyLabel(it.f,it.q);
-  return fd.name+' '+foodQtyLabel(it.f,it.q);
+  if(fd.unit==='egg'||fd.unit==='can'||(fd.unit==='loaf' && it.u!=='g')) return foodQtyLabel(it.f,it.q,it.u);
+  return fd.name+' '+foodQtyLabel(it.f,it.q,it.u);
 }
 function mealItemsText(ingList){ return ingList.map(ingredientText).join(' + '); }
 function computeIngredients(ingList){
@@ -1183,11 +1319,15 @@ function computeIngredients(ingList){
   // `price` becomes a PARTIAL total (known-price ingredients only) whenever priceIncomplete is true;
   // callers must surface that partiality rather than presenting it as a complete number.
   const out = {kcal:0,protein:0,carb:0,fat:0,fiber:0,price:0,priceIncomplete:false};
+  const nv = v=> Number.isFinite(v) ? v : 0;
   ingList.forEach(it=>{
     const fd = FOOD_DB[it.f]; if(!fd) return;
-    out.kcal += fd.kcal*it.q; out.protein += fd.protein*it.q; out.carb += fd.carb*it.q;
-    out.fat += fd.fat*it.q; out.fiber += fd.fiber*it.q;
-    if(fd.price==null) out.priceIncomplete = true; else out.price += fd.price*it.q;
+    const q = ingBaseQty(it); // base-unit quantity (grams of a loaf-food are converted through its loafGrams)
+    if(q===null){ out.unitIncomplete = true; return; } // grams with no loaf weight: cannot be converted, never guessed
+    if(foodNutritionUnknown(fd)) out.nutritionIncomplete = true; // unknown nutrition counts as 0 in the sums, but is flagged
+    out.kcal += nv(fd.kcal)*q; out.protein += nv(fd.protein)*q; out.carb += nv(fd.carb)*q;
+    out.fat += nv(fd.fat)*q; out.fiber += nv(fd.fiber)*q;
+    if(fd.price==null) out.priceIncomplete = true; else out.price += fd.price*q;
   });
   return out;
 }
@@ -1212,7 +1352,7 @@ function getMealComputed(dayIdx, mealIdx){
 function suggestSubstitutes(currentFoodKey, currentQty){
   const cur = FOOD_DB[currentFoodKey];
   const curPrice = cur.price*currentQty, curProtein = cur.protein*currentQty;
-  return Object.keys(FOOD_DB).filter(k=>k!==currentFoodKey && FOOD_DB[k].cat===cur.cat).map(k=>{
+  return Object.keys(FOOD_DB).filter(k=>k!==currentFoodKey && FOOD_DB[k].cat===cur.cat && !foodNutritionUnknown(FOOD_DB[k])).map(k=>{
     const fd = FOOD_DB[k];
     let qty = fd.price>0 ? (curPrice/fd.price) : currentQty;
     if(fd.unit==='g'||fd.unit==='ml') qty = Math.max(5, Math.round(qty/5)*5);
@@ -1273,15 +1413,31 @@ const PLAN_DEFAULTS = [
    changes. It's seeded once from PLAN_DEFAULTS, then persisted; edits mutate PLAN in place and call
    persistPlanChange(). Day-level fields (name/gym/gymType) are intentionally NOT user-editable in this
    session — Schedule (Session 2) depends on them staying structurally stable. */
+/* HOTFIX (PLAN persistence / initialization order): the next line runs while the script is still loading, and
+   loadUserPlan() reads through storageGet() -> STORAGE_PREFIX. That constant used to be declared much further down
+   (STORAGE section), so here it was still in its temporal dead zone: the read threw a ReferenceError, storageGet()'s
+   catch swallowed it and returned null, and every reload silently fell back to PLAN_DEFAULTS even though the saved
+   plan was sitting in storage. STORAGE_PREFIX is a plain string with no dependencies, so declaring it here is
+   enough: it is the only thing loadUserPlan() needs that was not yet initialized. The storage key ('user-plan') and
+   its format are unchanged. */
+const STORAGE_PREFIX = 'meal-gym-tracker:';
 let PLAN = loadUserPlan() || JSON.parse(JSON.stringify(PLAN_DEFAULTS));
+// A saved plan only counts as usable if every renderer can walk it. Nothing here ever writes or deletes: an
+// unusable plan stays in storage exactly as it is, and the default plan is used in memory instead.
+function planShapeIsValid(plan){
+  return plan.every(day=> day && typeof day==='object' && Array.isArray(day.meals) && day.meals.every(m=>
+    m && typeof m==='object' && Array.isArray(m.ing) && m.ing.every(it=> it && typeof it==='object' && typeof it.f==='string' && Number.isFinite(it.q))));
+}
+function planFoodsResolvable(plan){ return plan.every(day=> day.meals.every(m=> m.ing.every(it=> !!FOOD_DB[it.f]))); }
 function loadUserPlan(){
   const raw = storageGet('user-plan');
   if(!raw) return null;
   try{
     const parsed = JSON.parse(raw);
-    if(!Array.isArray(parsed) || parsed.length!==7) return null; // corrupt/foreign shape -> fall back to defaults rather than crash
+    if(!Array.isArray(parsed) || parsed.length!==7){ console.warn('[plan] saved plan has the wrong shape — using the default plan; the saved value was left untouched.'); return null; } // corrupt/foreign shape -> fall back to defaults rather than crash
+    if(!planShapeIsValid(parsed)){ console.warn('[plan] saved plan is structurally invalid — using the default plan; the saved value was left untouched.'); return null; }
     return parsed;
-  }catch(e){ return null; }
+  }catch(e){ console.warn('[plan] saved plan could not be parsed — using the default plan; the saved value was left untouched.', e); return null; }
 }
 function persistPlanChange(){ storageSet('user-plan', JSON.stringify(PLAN)); }
 
@@ -1289,7 +1445,7 @@ function persistPlanChange(){ storageSet('user-plan', JSON.stringify(PLAN)); }
 function computeShoppingList(){
   const totals = {};
   PLAN.forEach((day,dIdx)=> day.meals.forEach((m,mIdx)=>{
-    effectiveIngredients(dIdx,mIdx).forEach(it=>{ totals[it.f] = (totals[it.f]||0) + it.q; });
+    effectiveIngredients(dIdx,mIdx).forEach(it=>{ const bq = ingBaseQty(it); totals[it.f] = (totals[it.f]||0) + (bq===null ? 0 : bq); });
   }));
   return Object.keys(totals).map(f=>{
     const fd = FOOD_DB[f]; if(!fd) return null; // guards a dangling reference if a food was deleted while still referenced
@@ -1483,7 +1639,7 @@ const SLEEP_QUALITY_OPTS = [
 ];
 
 /* ================= STORAGE ================= */
-const STORAGE_PREFIX = 'meal-gym-tracker:';
+/* (STORAGE_PREFIX itself is declared above `let PLAN` — see the PLAN hotfix note there.) */
 function pad(n){ return n<10 ? '0'+n : ''+n; }
 function toISO(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
 
@@ -1534,6 +1690,8 @@ let scheduleSettings = null;
 let scheduleCheckState = {};
 let weekDotsSchedule = {};
 let scheduleActEditingId = null; // activity id currently open for edit, or 'NEW' for the add-activity form, or null
+let scheduleCopyOpen = false; // whether the "Copy this day's schedule" panel is showing
+let scheduleCopyTargets = []; // array of selected/added target ISO dates (Stage 3C copy panel) — never includes the source day
 let scheduleActDeleteConfirmId = null; // activity id whose inline delete-scope confirm row is open
 let weekDotsRecovery = {};
 let recoveryState = {};
@@ -1742,8 +1900,259 @@ function loadAzkar(iso){ return storageGetJSON('azkar:'+iso, {}); }
 function saveAzkar(iso,obj){ storageSet('azkar:'+iso, JSON.stringify(obj)); }
 function loadSleepQuality(iso){ return storageGet('sleepq:'+iso); }
 function saveSleepQuality(iso,val){ if(val===null) storageSet('sleepq:'+iso,''); else storageSet('sleepq:'+iso, val); }
-function loadPrayerTimes(iso){ return storageGetJSON('prayertimes:'+iso, {}); }
-function savePrayerTimes(iso,obj){ storageSet('prayertimes:'+iso, JSON.stringify(obj)); }
+/* ================= STAGE 3D: PRAYER API & CACHE ================= */
+const PRAYER_SUPPORTED_CITIES = ['Minya', 'Alexandria'];
+const PRAYER_API_BASE = 'https://api.aladhan.com/v1/calendarByCity';
+
+function cleanPrayerTime(str){
+  if(!str || typeof str !== 'string') return null;
+  const m = str.match(/\b(\d{1,2}):(\d{2})\b/);
+  if(!m) return null;
+  const h = parseInt(m[1], 10), min = parseInt(m[2], 10);
+  if(isNaN(h) || isNaN(min) || h < 0 || h > 23 || min < 0 || min > 59) return null;
+  return (h < 10 ? '0' + h : '' + h) + ':' + (min < 10 ? '0' + min : '' + min);
+}
+
+function timeToMinStage3D(hhmm){
+  if(!hhmm || typeof hhmm !== 'string') return null;
+  const p = hhmm.split(':').map(Number);
+  if(p.length < 2 || isNaN(p[0]) || isNaN(p[1])) return null;
+  return p[0] * 60 + p[1];
+}
+
+function hasValidPrayerTimes(pt){
+  if(!pt || typeof pt !== 'object') return false;
+  const keys = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'];
+  for(const k of keys){
+    if(!pt[k] || typeof pt[k] !== 'string') return false;
+    const cleaned = cleanPrayerTime(pt[k]);
+    if(!cleaned) return false;
+  }
+  const f = timeToMinStage3D(pt.fajr);
+  const d = timeToMinStage3D(pt.dhuhr);
+  const a = timeToMinStage3D(pt.asr);
+  const m = timeToMinStage3D(pt.maghrib);
+  const i = timeToMinStage3D(pt.isha);
+  if(f === null || d === null || a === null || m === null || i === null) return false;
+  if(!(f < d && d < a && a < m && m < i)) return false;
+  return true;
+}
+
+function loadPrayerCity(){
+  const stored = storageGet('prayer-city');
+  if(stored && PRAYER_SUPPORTED_CITIES.includes(stored)) return stored;
+  if(scheduleSettings && scheduleSettings.prayerCity && PRAYER_SUPPORTED_CITIES.includes(scheduleSettings.prayerCity)) return scheduleSettings.prayerCity;
+  return 'Minya';
+}
+
+function savePrayerCity(city){
+  if(!PRAYER_SUPPORTED_CITIES.includes(city)) city = 'Minya';
+  storageSet('prayer-city', city);
+  if(scheduleSettings){
+    scheduleSettings.prayerCity = city;
+    saveScheduleSettings(scheduleSettings);
+  }
+}
+
+function loadCachedPrayerTimes(city, iso){
+  const raw = storageGetJSON('prayercache:' + city + ':' + iso, null);
+  if(raw && hasValidPrayerTimes(raw)) return raw;
+  return null;
+}
+
+function saveCachedPrayerTimes(city, iso, timings, fetchedAt){
+  if(!hasValidPrayerTimes(timings)) return;
+  const payload = {
+    fajr: cleanPrayerTime(timings.fajr),
+    dhuhr: cleanPrayerTime(timings.dhuhr),
+    asr: cleanPrayerTime(timings.asr),
+    maghrib: cleanPrayerTime(timings.maghrib),
+    isha: cleanPrayerTime(timings.isha),
+    city: city,
+    fetchedAt: fetchedAt || Date.now()
+  };
+  storageSet('prayercache:' + city + ':' + iso, JSON.stringify(payload));
+}
+
+function loadPrayerTimes(iso){
+  const city = loadPrayerCity();
+  const cached = loadCachedPrayerTimes(city, iso);
+  if(cached) return cached;
+  const raw = storageGetJSON('prayertimes:' + iso, {});
+  if(raw && raw.city === city && hasValidPrayerTimes(raw)) return raw;
+  if(raw && !raw.city && hasValidPrayerTimes(raw)) return raw;
+  return {};
+}
+
+function savePrayerTimes(iso, obj){
+  const city = loadPrayerCity();
+  const toSave = Object.assign({}, obj, { city });
+  storageSet('prayertimes:' + iso, JSON.stringify(toSave));
+}
+
+let prayerApiStatusState = { status: 'idle', message: '', lastUpdated: null };
+
+function updatePrayerApiStatusUI(){
+  const el = document.getElementById('prayerApiStatus');
+  if(!el) return;
+  const city = loadPrayerCity();
+  const iso = (typeof weekDates !== 'undefined' && weekDates[selectedIdx]) ? toISO(weekDates[selectedIdx]) : todayISO;
+  const cached = loadCachedPrayerTimes(city, iso);
+  if(prayerApiStatusState.status === 'loading'){
+    el.innerHTML = `<span style="color:var(--accent);">⏳ جاري جلب مواقيت الصلاة عبر الإنترنت لمدينة ${city}...</span>`;
+  } else if(cached && cached.fetchedAt){
+    const d = new Date(cached.fetchedAt);
+    const timeStr = `${schedPad(d.getHours())}:${schedPad(d.getMinutes())} (${schedPad(d.getDate())}/${schedPad(d.getMonth()+1)})`;
+    const isOnline = (typeof navigator !== 'undefined' && navigator.onLine !== false);
+    const label = isOnline ? 'متصل' : 'كاش محفوظ (غير متصل)';
+    el.innerHTML = `<span style="color:var(--good);">✅ مواقيت ${city} (${label}) — آخر تحديث: ${timeStr}</span>`;
+  } else if(prayerApiStatusState.status === 'unavailable' || !cached){
+    el.innerHTML = `<span style="color:var(--bad); font-weight:700;">⚠️ مواقيت الصلاة غير متاحة لـ (${city} - ${iso}) — لا يوجد كاش محفوظ وغير متصل بالإنترنت.</span>`;
+  } else {
+    el.innerHTML = '';
+  }
+}
+
+function parseAndValidatePrayerTimings(timingsRaw){
+  if(!timingsRaw || typeof timingsRaw !== 'object') return null;
+  const map = {
+    fajr: timingsRaw.Fajr || timingsRaw.fajr,
+    dhuhr: timingsRaw.Dhuhr || timingsRaw.dhuhr,
+    asr: timingsRaw.Asr || timingsRaw.asr,
+    maghrib: timingsRaw.Maghrib || timingsRaw.maghrib,
+    isha: timingsRaw.Isha || timingsRaw.isha,
+  };
+  const res = {};
+  for(const k of ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha']){
+    const v = map[k];
+    if(!v || typeof v !== 'string') return null;
+    const c = cleanPrayerTime(v);
+    if(!c) return null;
+    res[k] = c;
+  }
+  if(!hasValidPrayerTimes(res)) return null;
+  return res;
+}
+
+function validateMonthApiResponse(json){
+  if(!json || typeof json !== 'object') return null;
+  if(json.code !== 200 || json.status !== 'OK') return null;
+  if(!Array.isArray(json.data) || json.data.length === 0) return null;
+  const validDays = [];
+  for(const item of json.data){
+    if(!item || typeof item !== 'object') return null;
+    const gDate = item.date && item.date.gregorian;
+    if(!gDate || !gDate.date) return null;
+    const parts = gDate.date.split('-');
+    if(parts.length !== 3) return null;
+    const [dd, mm, yyyy] = parts;
+    const day = parseInt(dd, 10), month = parseInt(mm, 10), year = parseInt(yyyy, 10);
+    if(isNaN(day) || isNaN(month) || isNaN(year) || day < 1 || day > 31 || month < 1 || month > 12) return null;
+    const iso = `${year}-${(month < 10 ? '0' + month : month)}-${(day < 10 ? '0' + day : day)}`;
+    const timings = parseAndValidatePrayerTimings(item.timings);
+    if(!timings) return null;
+    validDays.push({ iso, timings });
+  }
+  return validDays;
+}
+
+let prayerFetchInProgress = {};
+
+async function fetchPrayerTimesForMonth(city, year, month){
+  const fetchKey = `${city}:${year}-${month}`;
+  if(prayerFetchInProgress[fetchKey]) return prayerFetchInProgress[fetchKey];
+
+  const promise = (async ()=>{
+    prayerApiStatusState = { status: 'loading', message: 'جاري التحميل...' };
+    updatePrayerApiStatusUI();
+    try {
+      const url = `${PRAYER_API_BASE}?city=${encodeURIComponent(city)}&country=Egypt&method=5&month=${month}&year=${year}`;
+      const resp = await fetch(url);
+      if(!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const json = await resp.json();
+      const validDays = validateMonthApiResponse(json);
+      if(!validDays || validDays.length === 0){
+        throw new Error('Malformed prayer API response');
+      }
+      const now = Date.now();
+      validDays.forEach(d=>{
+        saveCachedPrayerTimes(city, d.iso, d.timings, now);
+      });
+      prayerApiStatusState = { status: 'online', message: 'تم التحديث بنجاح', lastUpdated: now };
+      return true;
+    } catch(err) {
+      console.warn('Prayer times fetch failed:', err);
+      const currentIso = (typeof weekDates !== 'undefined' && weekDates[selectedIdx]) ? toISO(weekDates[selectedIdx]) : todayISO;
+      const cached = loadCachedPrayerTimes(city, currentIso);
+      if(cached){
+        prayerApiStatusState = { status: 'cached', message: 'تم استخدام الكاش', lastUpdated: cached.fetchedAt };
+      } else {
+        prayerApiStatusState = { status: 'unavailable', message: 'بيانات الصلاة غير متاحة' };
+      }
+      return false;
+    } finally {
+      delete prayerFetchInProgress[fetchKey];
+      updatePrayerApiStatusUI();
+    }
+  })();
+
+  prayerFetchInProgress[fetchKey] = promise;
+  return promise;
+}
+
+async function ensurePrayerTimes(city, iso, forceNetwork = false){
+  const [y, m] = iso.split('-').map(Number);
+  const cached = loadCachedPrayerTimes(city, iso);
+  if(cached && !forceNetwork){
+    prayerTimesState = Object.assign({}, cached);
+    savePrayerTimes(iso, prayerTimesState);
+    prayerApiStatusState = { status: 'cached', message: 'تم التحميل من الكاش', lastUpdated: cached.fetchedAt };
+    updatePrayerApiStatusUI();
+    return true;
+  }
+  const ok = await fetchPrayerTimesForMonth(city, y, m);
+  const freshlyCached = loadCachedPrayerTimes(city, iso);
+  if(freshlyCached){
+    prayerTimesState = Object.assign({}, freshlyCached);
+    savePrayerTimes(iso, prayerTimesState);
+    return true;
+  } else {
+    prayerTimesState = {};
+    return false;
+  }
+}
+
+async function onCityChange(newCity){
+  savePrayerCity(newCity);
+  const sel1 = document.getElementById('prayerCitySelect');
+  if(sel1 && sel1.value !== newCity) sel1.value = newCity;
+  const sel2 = document.getElementById('scPrayerCity');
+  if(sel2 && sel2.value !== newCity) sel2.value = newCity;
+
+  const iso = toISO(weekDates[selectedIdx]);
+  await ensurePrayerTimes(newCity, iso);
+  prayerTimesState = loadPrayerTimes(iso);
+  renderPrayer();
+  recalculateDay(iso, selectedIdx, scheduleSettings);
+  weekDotsSchedule[iso] = computeDotClassSchedule(scheduleCheckState, scheduleChecklistItems(selectedIdx, scheduleSettings).length);
+  if(mode === 'schedule') renderSchedule();
+  if(mode === 'overview') renderOverview();
+}
+
+async function onPrayerRefresh(){
+  const city = loadPrayerCity();
+  const iso = toISO(weekDates[selectedIdx]);
+  const btn = document.getElementById('prayerRefreshBtn');
+  if(btn){ btn.disabled = true; btn.textContent = '⏳ جاري...'; }
+  const ok = await ensurePrayerTimes(city, iso, true);
+  if(btn){ btn.disabled = false; btn.textContent = '🔄 تحديث'; }
+  prayerTimesState = loadPrayerTimes(iso);
+  renderPrayer();
+  if(ok){
+    recalculateDay(iso, selectedIdx, scheduleSettings);
+    if(mode === 'schedule') renderSchedule();
+  }
+}
 function loadWeight(iso){ const raw = storageGet('weight:'+iso); return raw ? parseFloat(raw) : null; }
 function saveWeight(iso,n){ if(n===null || n==='' || isNaN(n)) storageSet('weight:'+iso,''); else storageSet('weight:'+iso, String(n)); }
 
@@ -1903,19 +2312,77 @@ function computeDefaultTargetsFromPlan(){
   const n = PLAN.length || 1;
   return { calories: Math.round(kcalSum/n), carbs: Math.round(carbSum/n), fat: Math.round(fatSum/n), fiber: Math.round(fiberSum/n) };
 }
+/* ---- Weight goals (Stage 5A) ----
+   The goal lives INSIDE nutritionTargets (same 'targets' storage key, same save/load path) as four extra fields:
+     goalMode ('lose'|'gain'|'maintain'|null = no goal), goalKgPerMonth, goalTargetWeight, maintenanceCalories.
+   There is no second calculation system: resolveTargets() — the one function everything already reads — simply uses
+   goalCalories() in place of the manual calories value while a goal is active. Protein/carb/fat then follow the
+   EXISTING macro logic untouched: in % mode they are derived from those calories (so they move with the goal), in
+   grams mode they stay exactly what the user typed. With no goal (the default, and every legacy save) nothing
+   changes at all. Target weight is informational (remaining kg / ETA / direction check) and never auto-changes
+   calories, matching the review engine's "recommendation only" rule. */
+const GOAL_MODES = ['lose','gain','maintain'];
+const KCAL_PER_KG_BODYWEIGHT = 7700; // standard energy-balance approximation for 1 kg of body weight; the single place to change it
+const WEEKS_PER_MONTH = 4.345;       // same month length the review engine already uses (computeAdjustment)
+function sanitizeGoalFields(t){
+  t.goalMode = GOAL_MODES.indexOf(t.goalMode)>=0 ? t.goalMode : null;
+  const kg = Number(t.goalKgPerMonth); t.goalKgPerMonth = (Number.isFinite(kg) && kg>0) ? kg : 0;
+  const tw = Number(t.goalTargetWeight); t.goalTargetWeight = (t.goalTargetWeight!==null && t.goalTargetWeight!=='' && Number.isFinite(tw) && tw>0) ? tw : null;
+  const mc = Number(t.maintenanceCalories); t.maintenanceCalories = (Number.isFinite(mc) && mc>0) ? mc : 0;
+  return t;
+}
+// signed kcal/day implied by the goal: negative = deficit (lose), positive = surplus (gain), 0 = maintain / no goal
+function goalDailyCalorieDelta(t){
+  const kg = Math.max(0, Number(t.goalKgPerMonth)||0);
+  const perDay = kg*KCAL_PER_KG_BODYWEIGHT/(WEEKS_PER_MONTH*7);
+  return t.goalMode==='lose' ? -perDay : t.goalMode==='gain' ? perDay : 0;
+}
+// a goal only drives calories once a mode is chosen AND the user's maintenance calories are known
+function goalIsActive(t){ return GOAL_MODES.indexOf(t.goalMode)>=0 && (Number(t.maintenanceCalories)||0)>0; }
+function goalCalories(t){ // null = goal not active (resolveTargets then uses the manual calories as before)
+  if(!goalIsActive(t)) return null;
+  return Math.max(0, Math.round((Number(t.maintenanceCalories)||0) + goalDailyCalorieDelta(t)));
+}
+function latestLoggedWeight(){ // most recent body-weight entry the user logged ('weight:<iso>' keys), or null
+  let best = null;
+  try{
+    const prefix = STORAGE_PREFIX+'weight:';
+    for(let i=0;i<localStorage.length;i++){
+      const k = localStorage.key(i);
+      if(!k || k.indexOf(prefix)!==0) continue;
+      const iso = k.slice(prefix.length), v = parseFloat(localStorage.getItem(k));
+      if(!isNaN(v) && v>0 && (best===null || iso>best.iso)) best = {iso, val:v};
+    }
+  }catch(e){}
+  return best;
+}
+function computeGoalProgress(t, currentWeight){
+  // remainingKg = distance still to cover in the goal's direction (0 once reached); null when it can't be computed yet
+  const kg = Math.max(0, Number(t.goalKgPerMonth)||0);
+  const out = {mode:t.goalMode, targetWeight:t.goalTargetWeight, currentWeight:currentWeight, remainingKg:null, monthsToGo:null, reached:false};
+  if(!GOAL_MODES.includes(t.goalMode) || t.goalTargetWeight===null || currentWeight===null || currentWeight===undefined) return out;
+  const diff = t.goalTargetWeight - currentWeight; // + = target is above the current weight, - = below
+  if(t.goalMode==='lose'){ out.reached = diff>=0; out.remainingKg = Math.max(0, -diff); }
+  else if(t.goalMode==='gain'){ out.reached = diff<=0; out.remainingKg = Math.max(0, diff); }
+  else { out.remainingKg = Math.abs(diff); out.reached = Math.abs(diff)<0.05; } // maintain: just the gap to the target weight
+  if((t.goalMode==='lose'||t.goalMode==='gain') && !out.reached && kg>0) out.monthsToGo = out.remainingKg/kg;
+  return out;
+}
 function loadTargets(){
   const seed = computeDefaultTargetsFromPlan();
-  const d = {protein:83, water:14, calories:seed.calories, carbs:seed.carbs, fat:seed.fat, fiber:seed.fiber, macroMode:'grams', proteinPct:30, carbPct:40, fatPct:30};
+  const d = {protein:83, water:14, calories:seed.calories, carbs:seed.carbs, fat:seed.fat, fiber:seed.fiber, macroMode:'grams', proteinPct:30, carbPct:40, fatPct:30,
+             goalMode:null, goalKgPerMonth:0, goalTargetWeight:null, maintenanceCalories:0};
   const raw = storageGet('targets');
   if(!raw) return d;
-  try{ return Object.assign(d, JSON.parse(raw)); }catch(e){ return d; }
+  try{ return sanitizeGoalFields(Object.assign(d, JSON.parse(raw))); }catch(e){ return d; }
 }
 function saveTargets(obj){ storageSet('targets', JSON.stringify(obj)); }
 function macroPctSum(t){ return (Number(t.proteinPct)||0) + (Number(t.carbPct)||0) + (Number(t.fatPct)||0); }
 function resolveTargets(t){
   // Returns concrete {calories,protein,carb,fat,fiber} grams regardless of stored mode, per
   // Protein g = kcal*pct/100/4, Carb g = kcal*pct/100/4, Fat g = kcal*pct/100/9.
-  const calories = Number(t.calories)||0;
+  const gc = goalCalories(t); // Stage 5A: an active weight goal supplies the calories; otherwise the manual value, as before
+  const calories = gc!==null ? gc : (Number(t.calories)||0);
   if(t.macroMode==='percent'){
     return {
       calories,
@@ -1942,7 +2409,7 @@ function computeLoggedTotalsForSelectedDay(){
   return {logged, doneCount};
 }
 function renderTargetSettingsForm(){
-  document.getElementById('targetCalories').value = nutritionTargets.calories;
+  renderGoalUI();
   document.getElementById('targetProtein').value = nutritionTargets.protein;
   document.getElementById('targetCarbs').value = nutritionTargets.carbs;
   document.getElementById('targetFat').value = nutritionTargets.fat;
@@ -1974,9 +2441,10 @@ function onMacroModeChange(modeVal){
   renderHeaderStamps(); renderSummary(); renderTargetProgress();
 }
 function onTargetSettingChange(){
-  nutritionTargets.calories = Math.max(0, Number(document.getElementById('targetCalories').value)||0);
+  if(!goalIsActive(nutritionTargets)) // while a goal drives calories the input only DISPLAYS the derived value — never overwrite the stored manual value with it
+    nutritionTargets.calories = Math.max(0, Number(document.getElementById('targetCalories').value)||0);
   nutritionTargets.protein = Math.max(0, Number(document.getElementById('targetProtein').value)||0);
-  PROTEIN_TARGET = nutritionTargets.protein; // legacy variable, still read by renderHeaderStamps' stamp text
+  PROTEIN_TARGET = nutritionTargets.protein; // legacy variable, no longer read by renderHeaderStamps (Stage 4 uses resolveTargets)
   nutritionTargets.carbs = Math.max(0, Number(document.getElementById('targetCarbs').value)||0);
   nutritionTargets.fat = Math.max(0, Number(document.getElementById('targetFat').value)||0);
   nutritionTargets.fiber = Math.max(0, Number(document.getElementById('targetFiber').value)||0);
@@ -1988,6 +2456,71 @@ function onTargetSettingChange(){
   saveTargets(nutritionTargets);
   renderMacroPctWarning();
   renderHeaderStamps(); renderSummary(); renderWater(); renderTargetProgress();
+}
+const GOAL_MODE_LABEL = {lose:'خسارة', gain:'زيادة', maintain:'ثبات'};
+function renderGoalUI(){
+  const t = nutritionTargets;
+  document.querySelectorAll('#goalModeToggle .tbtn').forEach(b=>{
+    const m = b.dataset.goal==='none' ? null : b.dataset.goal;
+    b.classList.toggle('on-right', m===t.goalMode);
+  });
+  const kgEl = document.getElementById('goalKgPerMonth');
+  kgEl.value = t.goalKgPerMonth>0 ? t.goalKgPerMonth : '';
+  kgEl.disabled = !(t.goalMode==='lose' || t.goalMode==='gain'); // kg/month is meaningless for maintain / no goal (value kept, not lost)
+  document.getElementById('goalTargetWeight').value = t.goalTargetWeight!==null ? t.goalTargetWeight : '';
+  document.getElementById('goalMaintenanceCalories').value = t.maintenanceCalories>0 ? t.maintenanceCalories : '';
+  const gc = goalCalories(t);
+  const calEl = document.getElementById('targetCalories');
+  calEl.value = gc!==null ? gc : t.calories;
+  calEl.disabled = gc!==null;
+  renderGoalSummary();
+}
+function renderGoalSummary(){
+  const el = document.getElementById('goalSummary');
+  if(!el) return;
+  const t = nutritionTargets;
+  if(!GOAL_MODES.includes(t.goalMode)){ el.classList.add('hidden'); el.innerHTML=''; return; }
+  const lines = [];
+  const resolved = resolveTargets(t);
+  if(!goalIsActive(t)){
+    lines.push('🔸 دخّل سعرات الثبات (kcal/يوم) عشان الهدف يتحسب — لحد ما تدخلها بيفضل هدف السعرات اليدوي شغّال زي ما هو.');
+  } else {
+    const delta = Math.round(goalDailyCalorieDelta(t));
+    const deltaTxt = delta===0 ? 'من غير فرق عن الثبات' : (delta<0 ? 'عجز '+Math.abs(delta)+' سعرة/يوم' : 'فائض '+delta+' سعرة/يوم');
+    lines.push(`🎯 الهدف اليومي: <b>${resolved.calories}</b> سعرة (${deltaTxt}) — بروتين ${round1(resolved.protein)} جم`+(nutritionTargets.macroMode==='percent'?' (من النسبة %)':' (من إعداد الجرام)'));
+    if(Math.round((Number(t.maintenanceCalories)||0)+goalDailyCalorieDelta(t))<0) lines.push('⚠️ العجز المطلوب أكبر من سعرات الثبات — الهدف اتقفل على صفر. راجع المعدل أو سعرات الثبات.');
+  }
+  if((t.goalMode==='lose'||t.goalMode==='gain') && !(t.goalKgPerMonth>0)) lines.push('🔸 حدد المعدل (كجم/شهر) — من غيره مفيش عجز/فائض بيتحسب.');
+  if(t.goalTargetWeight!==null){
+    const lw = latestLoggedWeight();
+    const gp = computeGoalProgress(t, lw ? lw.val : null);
+    if(!lw) lines.push('⚖️ سجّل وزنك من تاب الجيم عشان يتحسب المتبقي للوزن المستهدف.');
+    else if(t.goalMode==='maintain') lines.push(`⚖️ وزنك المسجّل ${lw.val} كجم، والوزن المستهدف ${t.goalTargetWeight} كجم (فرق ${round1(gp.remainingKg)} كجم).`);
+    else if(gp.reached) lines.push(`✅ وزنك المسجّل ${lw.val} كجم ${t.goalMode==='lose'?'عند أو تحت':'عند أو فوق'} الوزن المستهدف (${t.goalTargetWeight} كجم). السعرات مبتتغيّرش لوحدها، القرار ليك.`);
+    else lines.push(`⚖️ المتبقي ${round1(gp.remainingKg)} كجم للوصول لـ ${t.goalTargetWeight} كجم (وزنك المسجّل ${lw.val} كجم)`+(gp.monthsToGo!==null?` — حوالي ${round1(gp.monthsToGo)} شهر بالمعدل ده`:'')+'.');
+  }
+  el.classList.remove('hidden');
+  el.innerHTML = lines.join('<br>');
+}
+function afterGoalChange(){
+  saveTargets(nutritionTargets);
+  renderGoalUI(); renderMacroPctWarning();
+  renderHeaderStamps(); renderSummary(); renderTargetProgress();
+}
+function onGoalModeChange(modeVal){
+  nutritionTargets.goalMode = modeVal==='none' ? null : modeVal;
+  sanitizeGoalFields(nutritionTargets);
+  afterGoalChange();
+}
+function onGoalSettingChange(){
+  const kg = Number(document.getElementById('goalKgPerMonth').value);
+  const tw = document.getElementById('goalTargetWeight').value;
+  const mc = Number(document.getElementById('goalMaintenanceCalories').value);
+  if(!document.getElementById('goalKgPerMonth').disabled) nutritionTargets.goalKgPerMonth = (Number.isFinite(kg) && kg>0) ? kg : 0; // untouched while disabled so switching to maintain and back keeps it
+  nutritionTargets.goalTargetWeight = tw==='' ? null : Number(tw);
+  nutritionTargets.maintenanceCalories = (Number.isFinite(mc) && mc>0) ? mc : 0;
+  sanitizeGoalFields(nutritionTargets);
+  afterGoalChange();
 }
 function renderTargetProgress(){
   const el = document.getElementById('targetProgressCard');
@@ -2014,14 +2547,21 @@ function renderTargetProgress(){
   }).join('');
 }
 function renderHeaderStamps(){
-  let kcalSum=0; PLAN.forEach((d,i)=> kcalSum+=dayTargets(i).kcal);
-  const avgKcal = Math.round(kcalSum/PLAN.length);
-  const weeklyCost = computeShoppingList().reduce((a,it)=>a+it.price,0);
-  const monthlyCost = Math.round(weeklyCost*30/7);
-  const sK=document.getElementById('stampKcal'), sP=document.getElementById('stampProtein'), sB=document.getElementById('stampBudget');
-  if(sK) sK.textContent = `🎯 ~${avgKcal} سعرة/يوم`;
-  if(sP) sP.textContent = `🥩 هدف ${PROTEIN_TARGET} جم بروتين`;
-  if(sB) sB.textContent = `💰 ~${monthlyCost} ج / 30 يوم`;
+  // Stage 4: values come from the live state (resolveTargets / monthly overall budget) and each stamp
+  // is shown only in its own section (mode): Food = kcal+protein targets, Budget = overall budget,
+  // Gym = its existing stamp. Only textContent/class toggles here — no DOM creation, no listeners.
+  const sK=document.getElementById('stampKcal'), sP=document.getElementById('stampProtein'), sB=document.getElementById('stampBudget'), sG=document.getElementById('stampGym');
+  const t = resolveTargets(nutritionTargets);
+  if(sK) sK.textContent = `🎯 هدف ${Math.round(t.calories)} سعرة/يوم`;
+  if(sP) sP.textContent = `🥩 هدف ${round1(t.protein)} جم بروتين`;
+  if(sB && budgetSettings){ // budgetSettings is still null during the first init() call — applyMode() re-renders after load
+    const b = getOverallBudgetForMonth(currentBudgetMonthTag());
+    sB.textContent = `💰 ميزانية ${fmtMonthYear(budgetMonthCursor)}: ${b>0 ? fmtMoney(b)+' ج' : 'غير محددة'}`;
+  }
+  if(sK) sK.classList.toggle('hidden', mode!=='meal');
+  if(sP) sP.classList.toggle('hidden', mode!=='meal');
+  if(sB) sB.classList.toggle('hidden', mode!=='budget');
+  if(sG) sG.classList.toggle('hidden', mode!=='gym');
 }
 function renderSummary(){
   const day = PLAN[selectedIdx];
@@ -2054,7 +2594,8 @@ function subRowHtml(mealIdx, it, ix){
   const picking = openSubPicker && openSubPicker.mealIdx===mealIdx && openSubPicker.ingIdx===ix;
   let pickerHtml = '';
   if(picking){
-    const opts = suggestSubstitutes(it.origF||it.f, it.q);
+    const bq = ingBaseQty(it);
+    const opts = suggestSubstitutes(it.origF||it.f, bq===null ? it.q : bq);
     pickerHtml = `<div class="sub-opt-row">
       ${opts.map((o,oi)=>`<button class="sub-opt${oi===0?' best':''}" data-food="${o.food}" data-qty="${o.qty}">${escapeHtml(FOOD_DB[o.food].name)} ${foodQtyLabel(o.food,o.qty)} — ${o.price.toFixed(2)}ج${oi===0?' 💡قريب في السعر':''}</button>`).join('') || '<span style="color:var(--muted); font-size:.72rem;">مفيش بدائل من نفس الفئة متاحة</span>'}
     </div>`;
@@ -2257,10 +2798,12 @@ function renderFoodDbList(){
     const f = FOOD_DB[k];
     const unitLbl = f.unit==='g'?'/جم':f.unit==='ml'?'/مل':f.unit==='egg'?'/بيضة':f.unit==='loaf'?'/رغيف':f.unit==='can'?'/علبة':'/وحدة';
     const priceLbl = f.price==null ? '<span style="color:var(--bad);">⚠️ السعر غير متوفر</span>' : round1(f.price)+' ج'+unitLbl;
+    const nutLbl = foodNutritionUnknown(f) ? '<span style="color:var(--bad);">⚠️ القيم الغذائية غير محددة</span>' : `${Math.round(f.kcal)} سعرة${unitLbl} · ${round1(f.protein)}جم بروتين${unitLbl}`;
+    const loafLbl = f.unit==='loaf' ? ` · وزن الرغيف: ${loafGramsOf(k)!==null ? loafGramsOf(k)+' جم' : 'غير محدد'}` : '';
     return `<div class="check-row" data-key="${k}" style="cursor:pointer;">
       <div class="check-left">
         <div class="cname">${escapeHtml(f.name)} ${isCustomFoodKey(k)?'<span class="opt-badge">مخصّص</span>':''}</div>
-        <div class="cqty">${catLabel(f.cat)} — ${priceLbl} · ${Math.round(f.kcal)} سعرة${unitLbl} · ${round1(f.protein)}جم بروتين${unitLbl}</div>
+        <div class="cqty">${catLabel(f.cat)} — ${priceLbl} · ${nutLbl}${loafLbl}</div>
       </div>
     </div>`;
   }).join('');
@@ -2282,11 +2825,14 @@ function openFoodEditor(key){
   document.getElementById('foodEditCat').value = f.cat||'protein';
   document.getElementById('foodEditUnit').value = f.unit||'g';
   document.getElementById('foodEditPrice').value = f.price==null ? '' : f.price;
-  document.getElementById('foodEditKcal').value = f.kcal||0;
-  document.getElementById('foodEditProtein').value = f.protein||0;
-  document.getElementById('foodEditCarb').value = f.carb||0;
-  document.getElementById('foodEditFat').value = f.fat||0;
-  document.getElementById('foodEditFiber').value = f.fiber||0;
+  // Stage 5A: a null (unknown) nutrition value shows as an empty box instead of a fake 0 (known/zero values show exactly as before)
+  document.getElementById('foodEditKcal').value = f.kcal==null ? '' : f.kcal;
+  document.getElementById('foodEditProtein').value = f.protein==null ? '' : f.protein;
+  document.getElementById('foodEditCarb').value = f.carb==null ? '' : f.carb;
+  document.getElementById('foodEditFat').value = f.fat==null ? '' : f.fat;
+  document.getElementById('foodEditFiber').value = f.fiber==null ? '' : f.fiber;
+  document.getElementById('foodEditLoafGrams').value = f.loafGrams>0 ? f.loafGrams : '';
+  syncFoodLoafFieldVisibility();
   document.getElementById('foodEditNotes').value = f.notes||'';
   const micros = f.micros||{};
   document.getElementById('foodEditSodium').value = micros.sodium!=null?micros.sodium:'';
@@ -2304,7 +2850,17 @@ function closeFoodEditor(){
   editingFoodKey = null;
   document.getElementById('foodEditCard').classList.add('hidden');
 }
+function syncFoodLoafFieldVisibility(){
+  document.getElementById('foodEditLoafWrap').classList.toggle('hidden', document.getElementById('foodEditUnit').value!=='loaf');
+}
+// a nutrition box left empty on a food whose value was already unknown stays unknown (null); everywhere else empty = 0 as before
+function readNutritionField(id, key, orig){
+  const raw = document.getElementById(id).value;
+  if(raw==='' && orig && orig[key]==null) return null;
+  return Number(raw)||0;
+}
 function readFoodFormValues(){
+  const orig = (editingFoodKey && editingFoodKey!=='NEW') ? FOOD_DB[editingFoodKey] : null;
   const micros = {};
   const sodium=document.getElementById('foodEditSodium').value, potassium=document.getElementById('foodEditPotassium').value,
         calcium=document.getElementById('foodEditCalcium').value, iron=document.getElementById('foodEditIron').value;
@@ -2313,19 +2869,24 @@ function readFoodFormValues(){
   if(calcium!=='') micros.calcium = Number(calcium);
   if(iron!=='') micros.iron = Number(iron);
   const priceRaw = document.getElementById('foodEditPrice').value;
-  return {
+  const out = {
     name: document.getElementById('foodEditName').value.trim(),
     cat: document.getElementById('foodEditCat').value,
     unit: document.getElementById('foodEditUnit').value,
     price: priceRaw==='' ? null : Number(priceRaw), // null = price genuinely unavailable/unknown (never treated as free)
-    kcal: Number(document.getElementById('foodEditKcal').value)||0,
-    protein: Number(document.getElementById('foodEditProtein').value)||0,
-    carb: Number(document.getElementById('foodEditCarb').value)||0,
-    fat: Number(document.getElementById('foodEditFat').value)||0,
-    fiber: Number(document.getElementById('foodEditFiber').value)||0,
+    kcal: readNutritionField('foodEditKcal','kcal',orig),
+    protein: readNutritionField('foodEditProtein','protein',orig),
+    carb: readNutritionField('foodEditCarb','carb',orig),
+    fat: readNutritionField('foodEditFat','fat',orig),
+    fiber: readNutritionField('foodEditFiber','fiber',orig),
     notes: document.getElementById('foodEditNotes').value.trim(),
     micros,
   };
+  if(out.unit==='loaf'){ const lg = document.getElementById('foodEditLoafGrams').value; out.loafGrams = lg==='' ? null : Number(lg); }
+  return out;
+}
+function isFoodUsedInGramsInPlan(key){
+  return PLAN.some(day=> day.meals.some(m=> m.ing.some(it=> it.f===key && it.u==='g')));
 }
 function afterFoodDbChange(){
   rebuildFoodDB();
@@ -2342,6 +2903,11 @@ function onSaveFood(){
   }
   for(const k in vals.micros){
     if(vals.micros[k]<0){ showFoodHint('القيم الغذائية الدقيقة مينفعش تكون سالبة.'); return; }
+  }
+  if(vals.unit==='loaf' && vals.loafGrams!=null && !(vals.loafGrams>0)){ showFoodHint('وزن الرغيف لازم يكون أكبر من صفر (أو سيبه فاضي لو مش معروف).'); return; }
+  if(editingFoodKey && editingFoodKey!=='NEW' && isFoodUsedInGramsInPlan(editingFoodKey) && !(vals.unit==='loaf' && vals.loafGrams>0)){
+    showFoodHint('الطعام ده مستخدم بالجرام في الخطة — محتاج وحدة "رغيف" ووزن رغيف أكبر من صفر عشان التحويل يفضل شغّال.');
+    return;
   }
   if(editingFoodKey==='NEW'){
     const key = generateFoodKey();
@@ -2402,17 +2968,38 @@ let mealEditIngDraft = [];
 
 function foodPickerOptionsHtml(selectedKey){
   return Object.keys(FOOD_DB).sort((a,b)=>FOOD_DB[a].name.localeCompare(FOOD_DB[b].name,'ar'))
-    .map(k=> `<option value="${k}" ${k===selectedKey?'selected':''}>${escapeHtml(FOOD_DB[k].name)}</option>`).join('');
+    .map(k=> `<option value="${k}" ${k===selectedKey?'selected':''}>${escapeHtml(FOOD_DB[k].name)}${foodNutritionUnknown(FOOD_DB[k])?' ⚠️ (قيم غذائية غير محددة)':''}</option>`).join('');
+}
+function mealIngUnitSelectHtml(row, ix){
+  const fd = FOOD_DB[row.f];
+  if(!fd || fd.unit!=='loaf') return '';
+  const canGrams = loafGramsOf(row.f)!==null;
+  return `<select class="weight-input meal-ing-unit" data-ix="${ix}" style="flex:0 0 74px;" title="${canGrams?'':'حدد وزن الرغيف من قاعدة بيانات الأكل عشان تقدر تستخدم الجرام'}">
+        <option value="loaf" ${row.u==='g'?'':'selected'}>رغيف</option><option value="g" ${row.u==='g'?'selected':''} ${canGrams||row.u==='g'?'':'disabled'}>جم</option></select>`;
 }
 function renderMealEditIngredientRows(){
   const wrap = document.getElementById('mealEditIngredients');
   wrap.innerHTML = mealEditIngDraft.map((row,ix)=>`
     <div class="sub-item" data-ix="${ix}" style="gap:6px;">
       <select class="weight-input meal-ing-food" data-ix="${ix}" style="flex:2; min-width:0;">${foodPickerOptionsHtml(row.f)}</select>
-      <input type="number" class="weight-input meal-ing-qty" data-ix="${ix}" style="flex:0 0 72px;" min="0" step="1" value="${row.q}">
+      <input type="number" class="weight-input meal-ing-qty" data-ix="${ix}" style="flex:0 0 72px;" min="0" step="${(FOOD_DB[row.f]&&FOOD_DB[row.f].unit==='loaf'&&row.u!=='g')?'0.25':'1'}" value="${row.q}">
+      ${mealIngUnitSelectHtml(row, ix)}
       <button class="tbtn" data-remove-ix="${ix}" title="شيل المكوّن ده">✕</button>
     </div>`).join('') || '<div class="empty-note">لسه مفيش مكوّنات — ضيف واحد</div>';
-  wrap.querySelectorAll('.meal-ing-food').forEach(sel=> sel.addEventListener('change', (e)=>{ mealEditIngDraft[Number(sel.dataset.ix)].f = e.target.value; }));
+  wrap.querySelectorAll('.meal-ing-food').forEach(sel=> sel.addEventListener('change', (e)=>{
+    const row = mealEditIngDraft[Number(sel.dataset.ix)];
+    row.f = e.target.value;
+    if(row.u==='g' && loafGramsOf(row.f)===null) delete row.u; // new food has no gram support: back to its base unit
+    renderMealEditIngredientRows(); // the unit selector exists only for loaf foods
+  }));
+  wrap.querySelectorAll('.meal-ing-unit').forEach(sel=> sel.addEventListener('change', (e)=>{
+    const row = mealEditIngDraft[Number(sel.dataset.ix)];
+    const toGrams = e.target.value==='g';
+    if(toGrams && loafGramsOf(row.f)===null){ renderMealEditIngredientRows(); return; }
+    if(toGrams && row.u!=='g'){ row.q = Math.round(loavesToGrams(row.f, row.q)); row.u = 'g'; }       // loaf -> grams, same amount of bread
+    else if(!toGrams && row.u==='g'){ row.q = Math.round(gramsToLoaves(row.f, row.q)*100)/100; delete row.u; } // grams -> loaf
+    renderMealEditIngredientRows();
+  }));
   wrap.querySelectorAll('.meal-ing-qty').forEach(inp=> inp.addEventListener('change', (e)=>{ mealEditIngDraft[Number(inp.dataset.ix)].q = Math.max(0, Number(e.target.value)||0); e.target.value = mealEditIngDraft[Number(inp.dataset.ix)].q; }));
   wrap.querySelectorAll('[data-remove-ix]').forEach(btn=> btn.addEventListener('click', ()=>{
     mealEditIngDraft.splice(Number(btn.dataset.removeIx),1); renderMealEditIngredientRows();
@@ -2425,7 +3012,7 @@ function openMealEditor(mealIdx){
   document.getElementById('mealEditTitle').textContent = isNew ? 'وجبة جديدة' : 'تعديل: '+m.label;
   document.getElementById('mealEditLabel').value = m.label||'';
   document.getElementById('mealEditNote').value = m.note||'';
-  mealEditIngDraft = m.ing.map(it=>({f:it.f, q:it.q}));
+  mealEditIngDraft = m.ing.map(it=> it.u ? {f:it.f, q:it.q, u:it.u} : {f:it.f, q:it.q});
   renderMealEditIngredientRows();
   const dz = document.getElementById('mealEditDangerZone');
   dz.querySelectorAll('button').forEach(b=> b.classList.toggle('hidden', isNew));
@@ -2453,7 +3040,10 @@ function onSaveMealEdit(){
   const label = document.getElementById('mealEditLabel').value.trim();
   const note = document.getElementById('mealEditNote').value.trim();
   if(!label){ showMealHint('محتاج تكتب اسم للوجبة.'); return; }
-  const ing = mealEditIngDraft.filter(r=> r.f && r.q>0).map(r=>({f:r.f, q:r.q}));
+  if(mealEditIngDraft.some(r=> r.f && r.q>0 && r.u==='g' && loafGramsOf(r.f)===null)){
+    showMealHint('فيه مكوّن بالجرام بس الطعام ده معندوش وزن رغيف محدد — حدده من قاعدة بيانات الأكل الأول.'); return;
+  }
+  const ing = mealEditIngDraft.filter(r=> r.f && r.q>0).map(r=> (r.u==='g' && loafGramsOf(r.f)!==null) ? {f:r.f, q:r.q, u:'g'} : {f:r.f, q:r.q});
   if(ing.length===0){ showMealHint('محتاج مكوّن واحد على الأقل بكمية أكبر من صفر.'); return; }
   const mealObj = {label, ing};
   if(note) mealObj.note = note;
@@ -2490,6 +3080,670 @@ function onMoveMealEdit(direction){
   [arr[editingMealIdx], arr[to]] = [arr[to], arr[editingMealIdx]];
   closeMealEditor();
   afterPlanChange();
+}
+
+
+/* ================= STAGE 5B: WEEKLY MEAL PLAN + DIETARY JSON IMPORT =================
+   Additive only: nothing above or below this block was edited. Everything here goes through the existing single
+   sources of truth — computeIngredients() for every nutrition/price number (via per-unit values + the final
+   re-computation shown in the preview), resolveTargets(nutritionTargets) for the daily calorie/protein/macro targets
+   (so the weight-goal logic is reused untouched), effectiveIngredients() for the plan the user actually eats, and
+   rebuildFoodDB()/afterFoodDbChange() for the Food DB. computeAnalyticsForDates() reads LOGGED days against the global
+   PLAN, so it cannot score a hypothetical plan; it keeps using the same computeIngredients() engine underneath.
+
+   PLAN is a repeating weekly template (Saturday..Friday, index = (getDay()+1)%7), so "the week" here is PLAN itself and
+   no separate date system is introduced; the month used for the food-budget check is the month of the week currently
+   selected in the app (weekStart).
+
+   Weekly Meal Plan — generate -> validate -> commit:
+     * generate: builds a candidate plan in a separate variable (s5bPending). PLAN, subsOverride and storage are not
+       touched while generating, validating or previewing.
+     * validate: structural + numeric checks on the whole candidate; any failure aborts with a message.
+     * commit: only after an explicit confirm click. One all-or-nothing write (previous plan is saved first), verified by
+       read-back; if any step fails the previous values are restored and in-memory PLAN is never replaced.
+   Algorithm (deterministic, no randomness, bounded):
+     1. Skeleton = the current effective plan (day names/gym flags, meal labels/notes, the foods the user chose).
+     2. Foods with unknown nutrition (null) or an unusable loaf weight are NEVER used as numbers (never treated as 0): they are
+        replaced by the first complete food of the same category+unit (cheapest known price first, then name) or dropped,
+        and the user is told.
+     3. Quantities per day: two scale factors (protein-category lines / all other lines) are solved exactly for the daily
+        calorie + protein targets; if that is impossible the day falls back to one factor for calories and the protein gap
+        is reported. Quantities are rounded to the app's own steps (g/ml 5, loaf 0.25, loaf-in-grams 5, egg/can/unit 1) and
+        refined by at most S5B_MAX_PASSES passes of +/-1 step moves (stops earlier at a local optimum, so regenerating from a saved result gives the same result) that must strictly improve the ordered objective:
+        calories -> protein -> protein share -> raw error. This step only corrects rounding. Price and carb/fat/fiber are deliberately
+        NOT optimised through quantities: the app has no per-food minimum/maximum quantities, so chasing them would shrink or inflate
+        foods without bound (and make every regeneration drift). They decide the CHOICE OF FOODS instead (steps 2, 4 and 5), and they
+        are always reported in the preview.
+     4. Price-aware food choice (Stage 5B.1, ALWAYS on - it does not depend on the optional swaps below): for each line, same
+        category+unit foods from the allowed pool (at most S5B_MAX_SWAP_CANDIDATES per line, S5B_MAX_PRICE_SOLVES per run) are tried and
+        the day is re-solved for calories/protein. A candidate replaces the current food only if the ordered comparison says so:
+        calories -> protein -> protein share first; only when those are equal is price used, and only when BOTH days have fully known
+        prices (a null/missing price is never counted as 0 and never makes a food look cheaper - the price criterion is simply skipped)
+        and the candidate saves at least S5B_PRICE_MIN_GAIN per day. A price win may also never push the calorie/protein error above
+        max(the day's own price-blind error, S5B_PRICE_EQ_PCT % of the target). Sweeps repeat until nothing changes (bounded), so the saved
+        plan is a fixed point and regenerating from it gives the same plan.
+     5. Optional (off by default): extra same-category swaps that also use carb/fat/fiber (same ordered comparison and same guard),
+        at most S5B_MAX_SWAP_CANDIDATES per line and S5B_MAX_SOLVES per run.
+     Micronutrients: the app stores per-food micros but has no daily micronutrient targets, so that criterion is skipped (and
+     reported). There are no per-food min/max quantity limits in the app either — none are invented. */
+const S5B_TOL_PCT = 2;               // acceptance band used ONLY to decide whether a target is reported as met
+const S5B_MAX_SWAP_CANDIDATES = 8;   // work bound for the optional swap pass
+const S5B_MAX_SOLVES = 4000;         // deterministic work bound (operation count, not time)
+const S5B_MAX_PASSES = 12;           // refinement passes per solve; each accepted move strictly improves the objective, so it stops earlier at a local optimum
+const S5B_PRICE_EQ_PCT = 0.5;        // a price (or macro) win may not push the calorie/protein error above max(the day's own price-blind error, this % of the target)
+const S5B_PRICE_MIN_GAIN = 0.25;     // EGP/day a cheaper food must save to count as cheaper (same size as the objective's price bucket)
+const S5B_MAX_PRICE_SWEEPS = 5;      // sweeps of the base price-aware food choice per day (stops earlier when a sweep changes nothing)
+const S5B_MAX_PRICE_SOLVES = 4000;   // deterministic work bound for the base price-aware food choice (operation count, not time)
+let s5bPending = null;               // {plan, baseSig, baseSubsSig, result} — lives outside PLAN until confirmed
+let s5bFoodSel = {};                 // {foodKey:false} for foods the user un-ticked in the planner pool
+let s5bBusy = false;
+
+/* All-or-nothing write of several storage keys. storageSet() swallows errors by design, so a commit that must know
+   whether it worked uses this: write, read back, and on ANY failure restore every key to what it was before. */
+function s5bAtomicWrite(entries){
+  const prev = entries.map(e=>{ let raw = null; try{ raw = localStorage.getItem(STORAGE_PREFIX+e.key); }catch(x){} return {key:e.key, raw}; });
+  try{
+    entries.forEach(e=> localStorage.setItem(STORAGE_PREFIX+e.key, e.value));
+    entries.forEach(e=>{ if(localStorage.getItem(STORAGE_PREFIX+e.key)!==e.value) throw new Error('read-back mismatch: '+e.key); });
+    return {ok:true};
+  }catch(err){
+    prev.forEach(p=>{ try{ if(p.raw===null) localStorage.removeItem(STORAGE_PREFIX+p.key); else localStorage.setItem(STORAGE_PREFIX+p.key, p.raw); }catch(x){} });
+    return {ok:false, error:err};
+  }
+}
+
+/* ---------- planner helpers ---------- */
+function s5bAllowed(key){
+  const fd = FOOD_DB[key];
+  if(!fd || foodNutritionUnknown(fd)) return false;
+  return s5bFoodSel[key]!==false;
+}
+function s5bWhyNot(key, u){
+  const fd = FOOD_DB[key];
+  if(!fd) return 'الطعام مش موجود في قاعدة الأطعمة';
+  if(foodNutritionUnknown(fd)) return 'قيمه الغذائية غير محددة';
+  if(s5bFoodSel[key]===false) return 'مستبعد من قائمة الأطعمة المسموحة';
+  if(fd.unit==='loaf' && u==='g' && loafGramsOf(key)===null) return 'وزن الرغيف غير محدد';
+  return '';
+}
+function s5bCostScore(fd){ // lower = cheaper; unknown price sorts last (never treated as free)
+  if(fd.price==null) return Infinity;
+  const per = fd.cat==='protein' ? fd.protein : fd.kcal;
+  return per>0 ? fd.price/per : Infinity;
+}
+function s5bCandidates(cat, unit){
+  return Object.keys(FOOD_DB).filter(k=> FOOD_DB[k].cat===cat && FOOD_DB[k].unit===unit && s5bAllowed(k)).sort((a,b)=>{
+    const sa = s5bCostScore(FOOD_DB[a]), sb = s5bCostScore(FOOD_DB[b]);
+    if(sa!==sb) return sa<sb ? -1 : 1;
+    const n = FOOD_DB[a].name.localeCompare(FOOD_DB[b].name,'ar');
+    return n!==0 ? n : (a<b?-1:1);
+  });
+}
+function s5bStep(f,u){ // the app's own quantity conventions: suggestSubstitutes rounds g/ml to 5, the meal editor steps loaves by 0.25
+  const fd = FOOD_DB[f];
+  if(fd.unit==='g' || fd.unit==='ml') return 5;
+  if(fd.unit==='loaf') return u==='g' ? 5 : 0.25;
+  return 1;
+}
+function s5bRound(q, step){ return Math.max(step, Math.round(Math.round(q/step)*step*1e6)/1e6); }
+function s5bItem(l){ return l.u ? {f:l.f, q:l.q, u:l.u} : {f:l.f, q:l.q}; }
+function s5bUnitVals(l){ return computeIngredients([ s5bItem(Object.assign({}, l, {q:1})) ]); } // per-1-quantity values from the single calc engine
+const S5B_KEYS = ['kcal','protein','carb','fat','fiber','price'];
+
+function s5bObjective(tot, priceUnknown, T, full){
+  // full=false (quantity refinement): calories -> protein -> protein share -> raw error (this only corrects rounding).
+  // full=true (choosing between foods): calories -> protein -> protein share -> price -> carb/fat/fiber -> raw error.
+  const tolK = T.calories*S5B_TOL_PCT/100, tolP = T.protein*S5B_TOL_PCT/100;
+  const kErr = Math.abs(tot.kcal-T.calories), pErr = T.protein>0 ? Math.abs(tot.protein-T.protein) : 0;
+  const ratioT = T.protein*4/T.calories, ratio = tot.kcal>0 ? tot.protein*4/tot.kcal : 0;
+  const head = [
+    Math.max(0,kErr-tolK),                                     // 1 calories (inside the band counts as met)
+    T.protein>0 ? Math.max(0,pErr-tolP) : 0,                   // 2 protein
+    T.protein>0 ? Math.round(Math.abs(ratio-ratioT)/0.01) : 0  // 3 protein share of calories (1-point buckets)
+  ];
+  if(!full) return head.concat([kErr, pErr]);
+  const macro = ['carb','fat','fiber'].reduce((m,k)=> m + (T[k]>0 ? Math.abs(tot[k]-T[k])/T[k] : 0), 0);
+  return head.concat([
+    priceUnknown ? null : Math.round(tot.price/0.25),          // 4 price (EGP 0.25 buckets); null = some price unknown -> not comparable, skipped by s5bBetter (never counted as free)
+    Math.round(macro/0.02),                                    // 5 other macros (2% buckets)
+    kErr, pErr                                                 // tie-break: closer is better
+  ]);
+}
+function s5bBetter(a,b){ for(let i=0;i<a.length;i++){ if(a[i]===null || b[i]===null) continue; /* criterion not comparable -> skipped */ if(a[i]<b[i]-1e-9) return true; if(a[i]>b[i]+1e-9) return false; } return false; }
+
+/* Solves quantities for ONE day. lines: [{mi,f,u,cat,q}] with q = starting quantity. Pure: returns new lines. */
+function s5bSolveDay(lines, T){
+  const units = lines.map(s5bUnitVals);
+  const totalsOf = qs=>{
+    const t = {kcal:0,protein:0,carb:0,fat:0,fiber:0,price:0};
+    qs.forEach((q,i)=> S5B_KEYS.forEach(k=>{ t[k] += q*(units[i][k]||0); }));
+    return t;
+  };
+  const priceUnknown = units.some(u=> u.priceIncomplete);
+  let Kp=0,Pp=0,Ko=0,Po=0, hasP=false, hasO=false;
+  lines.forEach((l,i)=>{
+    if(l.cat==='protein'){ hasP=true; Kp+=l.q*units[i].kcal; Pp+=l.q*units[i].protein; }
+    else { hasO=true; Ko+=l.q*units[i].kcal; Po+=l.q*units[i].protein; }
+  });
+  let sP=1, sO=1, mode='uniform';
+  if(hasP && hasO && T.protein>0){
+    const det = Kp*Po - Ko*Pp;
+    if(Math.abs(det) > 1e-9*(Math.abs(Kp*Po)+Math.abs(Ko*Pp)+1)){
+      const a = (T.calories*Po - Ko*T.protein)/det, b = (Kp*T.protein - T.calories*Pp)/det;
+      if(a>0 && b>0){ sP=a; sO=b; mode='two-group'; }
+    }
+  }
+  if(mode==='uniform'){ const k = Kp+Ko; sP = sO = k>0 ? T.calories/k : 1; }
+  const steps = lines.map(l=> s5bStep(l.f,l.u));
+  let qs = lines.map((l,i)=> s5bRound(l.q*(l.cat==='protein'?sP:sO), steps[i]));
+  let best = s5bObjective(totalsOf(qs), priceUnknown, T, false);
+  for(let pass=0; pass<S5B_MAX_PASSES; pass++){
+    let improved = false;
+    for(let i=0;i<qs.length;i++){
+      for(const dir of [-1,1]){
+        const nq = qs[i]+dir*steps[i];
+        if(nq < steps[i]-1e-9) continue;
+        const trial = qs.slice(); trial[i] = Math.round(nq*1e6)/1e6;
+        const o = s5bObjective(totalsOf(trial), priceUnknown, T, false);
+        if(s5bBetter(o,best)){ qs = trial; best = o; improved = true; }
+      }
+    }
+    if(!improved) break;
+  }
+  return {lines: lines.map((l,i)=> Object.assign({}, l, {q:qs[i]})), obj:best, objP:s5bObjective(totalsOf(qs), priceUnknown, T, true), mode, hasP, hasO, tot:totalsOf(qs), priceUnknown};
+}
+
+/* Re-solves a day from its own result until it stops changing (at most 4 re-solves). The saved plan is then a fixed point of the
+   generator: regenerating from it gives the same plan instead of creeping by a step on each run. */
+function s5bSettle(lines, T){
+  let r = s5bSolveDay(lines, T);
+  for(let i=0;i<4;i++){
+    if(r.lines.every((l,j)=> l.q===lines[j].q)) break;
+    lines = r.lines; r = s5bSolveDay(lines, T);
+  }
+  return r;
+}
+
+/* Ordered comparison used to CHOOSE between foods (Stage 5B.1): calories -> protein -> protein share (strictly lexicographic) ->
+   price -> [withMacro: carb/fat/fiber -> raw error]. r = candidate result, b = current result, ref = the day's own price-blind solution.
+   Price only counts when both days have fully known prices (unknown/null is never 0) and differs by at least S5B_PRICE_MIN_GAIN.
+   A win decided by price/macros (priorities 4-5) may not push the calorie/protein error above max(ref's own error, S5B_PRICE_EQ_PCT % of
+   the target) - an absolute ceiling, so repeated regeneration can never creep away from the targets. */
+function s5bChoiceBetter(r, b, ref, T, withMacro){
+  const a = r.objP, o = b.objP;
+  for(let i=0;i<3;i++){ if(a[i]<o[i]-1e-9) return true; if(a[i]>o[i]+1e-9) return false; }
+  let lowerWin = false;
+  if(!r.priceUnknown && !b.priceUnknown){
+    const gain = b.tot.price - r.tot.price;
+    if(gain >= S5B_PRICE_MIN_GAIN-1e-9) lowerWin = true;
+    else if(gain <= -(S5B_PRICE_MIN_GAIN-1e-9)) return false;
+  }
+  if(!lowerWin){
+    if(!withMacro) return false;
+    if(a[4] < o[4]-1e-9) lowerWin = true;
+    else if(a[4] > o[4]+1e-9) return false;
+    else { if(a[5] < o[5]-1e-9) return true; if(a[5] > o[5]+1e-9) return false; return a[6] < o[6]-1e-9; }
+  }
+  const allowK = Math.max(ref.objP[5], T.calories*S5B_PRICE_EQ_PCT/100), allowP = Math.max(ref.objP[6], T.protein*S5B_PRICE_EQ_PCT/100);
+  return a[5] <= allowK+1e-9 && (T.protein>0 ? a[6] <= allowP+1e-9 : true);
+}
+
+/* Base price-aware food choice for ONE solved day (always on). Pure w.r.t. PLAN/storage: only reads FOOD_DB and returns a result.
+   Deterministic (candidate order = cost score then name, then key) and bounded (S5B_MAX_PRICE_SWEEPS, S5B_MAX_SWAP_CANDIDATES, pb.solves). */
+function s5bPriceChoicePass(cur, T, base0, pb, moves, dayIdx){
+  for(let sweep=0; sweep<S5B_MAX_PRICE_SWEEPS; sweep++){
+    let changed = false;
+    for(let i=0;i<cur.lines.length;i++){
+      const L = cur.lines[i], fd = FOOD_DB[L.f];
+      const cands = s5bCandidates(fd.cat, fd.unit).filter(k=> k!==L.f && !cur.lines.some(x=> x.mi===L.mi && x.f===k) && !(L.u==='g' && loafGramsOf(k)===null)).slice(0,S5B_MAX_SWAP_CANDIDATES);
+      const vkey = fd.cat==='protein' ? 'protein' : 'kcal', uL = s5bUnitVals(L), ok = [];
+      for(let ci=0; ci<cands.length; ci++){
+        const k = cands[ci];
+        if(pb.solves>=S5B_MAX_PRICE_SOLVES){ pb.hit = true; break; }
+        const uC = s5bUnitVals({f:k,u:L.u,q:1});
+        if(!(uC[vkey]>0) || !(L.q*uL[vkey]>0)) continue;
+        const q0 = Math.max(s5bStep(k,L.u), L.q*uL[vkey]/uC[vkey]);
+        const trial = cur.lines.map((x,j)=> j===i ? {mi:x.mi, f:k, u:L.u, cat:fd.cat, q:q0} : x);
+        pb.solves++;
+        const r = s5bSolveDay(trial, T);
+        if(s5bChoiceBetter(r, cur, base0, T, false)) ok.push({r, k, ci});
+      }
+      ok.sort((x,y)=>{
+        for(let h=0;h<3;h++){ const d = x.r.objP[h]-y.r.objP[h]; if(Math.abs(d)>1e-9) return d; }
+        const px = x.r.priceUnknown ? Infinity : x.r.tot.price, py = y.r.priceUnknown ? Infinity : y.r.tot.price;
+        if(px!==py && Number.isFinite(px) && Number.isFinite(py) && Math.abs(px-py)>1e-9) return px-py;
+        return x.ci-y.ci;
+      });
+      for(const c of ok){ // verify the SETTLED result still wins (settling only moves quantities by rounding steps)
+        pb.solves += 5;   // s5bSettle = 1 solve + at most 4 re-solves
+        const s = s5bSettle(c.r.lines, T);
+        if(s5bChoiceBetter(s, cur, base0, T, false)){
+          moves.push({day:PLAN[dayIdx].name, meal:PLAN[dayIdx].meals[L.mi].label, from:fd.name, to:FOOD_DB[c.k].name});
+          cur = s; changed = true; break;
+        }
+      }
+    }
+    if(!changed) break;
+  }
+  return cur;
+}
+
+/* Builds one day's lines from the effective plan, never using incomplete foods as numbers. */
+function s5bBuildDayLines(dayIdx, notes){
+  const day = PLAN[dayIdx], lines = [], emptyMeals = [];
+  day.meals.forEach((m,mi)=>{
+    const acc = [];
+    effectiveIngredients(dayIdx, mi).forEach(it=>{
+      const orig = FOOD_DB[it.f];
+      if(!orig || !(Number.isFinite(it.q) && it.q>0)){ notes.dropped.push({day:day.name, meal:m.label, food: orig?orig.name:String(it.f), reason: orig?'كمية غير صالحة':'الطعام مش موجود في قاعدة الأطعمة'}); return; }
+      let f = it.f, u = it.u;
+      const why = s5bWhyNot(f,u);
+      if(why){
+        const cands = s5bCandidates(orig.cat, orig.unit).filter(k=> k!==f && !acc.some(a=>a.f===k) && !(orig.unit==='loaf' && u==='g' && loafGramsOf(k)===null));
+        if(cands.length===0){ notes.dropped.push({day:day.name, meal:m.label, food:orig.name, reason:why+' ومفيش بديل مكتمل في نفس الفئة والوحدة'}); return; }
+        f = cands[0];
+        notes.replaced.push({day:day.name, meal:m.label, from:orig.name, to:FOOD_DB[f].name, reason:why});
+      }
+      const uu = (FOOD_DB[f].unit==='loaf' && u==='g') ? 'g' : undefined;
+      const dup = acc.find(a=> a.f===f);
+      if(dup){ // one food appears once per meal: merge (in the base unit unless both are grams)
+        if(dup.u===uu){ dup.q += it.q; }
+        else { dup.q = ingBaseQty({f:dup.f,q:dup.q,u:dup.u}) + ingBaseQty({f,q:it.q,u:uu}); dup.u = undefined; }
+        notes.merged.push({day:day.name, meal:m.label, food:FOOD_DB[f].name});
+        return;
+      }
+      acc.push({mi, f, u:uu, cat:FOOD_DB[f].cat, q:it.q});
+    });
+    if(acc.length===0) emptyMeals.push(m.label);
+    acc.forEach(a=> lines.push(a));
+  });
+  return {lines, emptyMeals};
+}
+
+function s5bValidatePlan(plan){
+  const errs = [];
+  if(!Array.isArray(plan) || plan.length!==PLAN.length){ return ['الخطة لازم تكون '+PLAN.length+' أيام بالظبط']; }
+  const names = new Set();
+  plan.forEach((day,d)=>{
+    if(!day || typeof day!=='object' || !Array.isArray(day.meals)){ errs.push('اليوم رقم '+(d+1)+' شكله غير صالح'); return; }
+    if(day.name!==PLAN[d].name || day.gym!==PLAN[d].gym || day.gymType!==PLAN[d].gymType) errs.push('بيانات اليوم '+PLAN[d].name+' اتغيّرت (الاسم/الجيم)');
+    if(names.has(day.name)) errs.push('يوم متكرر: '+day.name);
+    names.add(day.name);
+    if(day.meals.length!==PLAN[d].meals.length) errs.push('عدد وجبات '+day.name+' اتغيّر');
+    day.meals.forEach(m=>{
+      if(!m || typeof m.label!=='string' || !m.label.trim()){ errs.push('وجبة بدون اسم في '+day.name); return; }
+      if(!Array.isArray(m.ing) || m.ing.length===0){ errs.push(day.name+' / '+m.label+': مفيش مكوّنات'); return; }
+      const seen = new Set();
+      m.ing.forEach(it=>{
+        if(!it || typeof it.f!=='string' || !FOOD_DB[it.f]){ errs.push(day.name+' / '+m.label+': طعام غير موجود'); return; }
+        if(!(Number.isFinite(it.q) && it.q>0)) errs.push(day.name+' / '+m.label+': كمية غير صالحة ('+FOOD_DB[it.f].name+')');
+        if(foodNutritionUnknown(FOOD_DB[it.f])) errs.push(day.name+' / '+m.label+': '+FOOD_DB[it.f].name+' بياناته الغذائية ناقصة');
+        if(it.u!==undefined && !(it.u==='g' && FOOD_DB[it.f].unit==='loaf' && loafGramsOf(it.f)!==null)) errs.push(day.name+' / '+m.label+': وحدة غير صالحة ('+FOOD_DB[it.f].name+')');
+        if(seen.has(it.f)) errs.push(day.name+' / '+m.label+': '+FOOD_DB[it.f].name+' متكرر في نفس الوجبة');
+        seen.add(it.f);
+      });
+    });
+    const tot = computeIngredients([].concat.apply([], day.meals.map(m=> Array.isArray(m.ing)?m.ing:[])));
+    if(!['kcal','protein','carb','fat','fiber','price'].every(k=> Number.isFinite(tot[k])) || tot.unitIncomplete) errs.push('حسابات '+day.name+' مش سليمة');
+  });
+  if(errs.length===0){
+    if(!planShapeIsValid(plan) || !planFoodsResolvable(plan)) errs.push('الخطة المقترحة مش بنفس الشكل اللي التطبيق بيحفظه');
+    try{ if(JSON.stringify(JSON.parse(JSON.stringify(plan)))!==JSON.stringify(plan)) errs.push('الخطة المقترحة مش قابلة للحفظ'); }catch(e){ errs.push('الخطة المقترحة مش قابلة للحفظ'); }
+  }
+  return errs;
+}
+
+function s5bFoodBudgetCheck(weeklyCost, weeklyIncomplete){
+  // The only existing "max" in the app that applies to a plan: the monthly Food category budget (Budget mode).
+  try{
+    if(!budgetSettings) return null;
+    const y = weekStart.getFullYear(), m0 = weekStart.getMonth(), tag = y+'-'+pad(m0+1);
+    const food = Number((getCategoryBudgetsForMonth(tag)||{}).food)||0;
+    if(!(food>0)) return {set:false};
+    const dim = new Date(y, m0+1, 0).getDate();
+    const monthly = weeklyCost/7*dim; // same formula computeMonthBudget uses for the planned food cost
+    return {set:true, budget:food, monthly, over: monthly>food, incomplete:weeklyIncomplete, tag};
+  }catch(e){ return null; }
+}
+
+function s5bGenerate(){
+  const res = {ok:false, errors:[], warnings:[], infos:[], days:[], plan:null, week:null};
+  const T = resolveTargets(nutritionTargets);
+  if(!(T.calories>0)){ res.errors.push('هدف السعرات اليومي صفر أو مش متحدد — حدده من إعدادات أهداف التغذية الأول.'); return res; }
+  if(!(T.protein>0)) res.infos.push('هدف البروتين صفر — اتخطّى معيار البروتين ونسبته.');
+  res.infos.push('المغذيات الدقيقة: التطبيق مفيهوش أهداف يومية ليها، فاتخطّاها.');
+  const notes = {replaced:[], dropped:[], merged:[]}, swaps = [], budget = {solves:0, hit:false};
+  const pb = {solves:0, hit:false}, priceMoves = [], priceSkipped = [];
+  const plan = [], dayLines = [];
+  for(let d=0; d<PLAN.length; d++){
+    const dn = {replaced:[], dropped:[], merged:[]};
+    const built = s5bBuildDayLines(d, dn);
+    built.emptyMeals.forEach(lbl=> res.errors.push(PLAN[d].name+' / '+lbl+': مفيش أي مكوّن بياناته مكتملة أقدر أستخدمه.'));
+    ['replaced','dropped','merged'].forEach(k=> notes[k] = notes[k].concat(dn[k]));
+    if(built.emptyMeals.length){ dayLines.push(null); continue; }
+    let cur = s5bSettle(built.lines, T); budget.solves++;
+    const base0 = cur; // the day's own price-blind solution: reference for the calorie/protein guard
+    cur = s5bPriceChoicePass(cur, T, base0, pb, priceMoves, d); // Stage 5B.1: price takes part in the base plan (not tied to the optional swaps)
+    if(s5bEl('s5bSwaps') && s5bEl('s5bSwaps').checked){
+      for(let i=0;i<cur.lines.length;i++){
+        const L = cur.lines[i], fd = FOOD_DB[L.f];
+        const cands = s5bCandidates(fd.cat, fd.unit).filter(k=> k!==L.f && !cur.lines.some(x=> x.mi===L.mi && x.f===k) && !(L.u==='g' && loafGramsOf(k)===null)).slice(0,S5B_MAX_SWAP_CANDIDATES);
+        const vkey = fd.cat==='protein' ? 'protein' : 'kcal', uL = s5bUnitVals(L);
+        let best = cur, bestTo = null;
+        for(const k of cands){
+          if(budget.solves>=S5B_MAX_SOLVES){ budget.hit = true; break; }
+          const uC = s5bUnitVals({f:k,u:L.u,q:1});
+          if(!(uC[vkey]>0) || !(L.q*uL[vkey]>0)) continue;
+          const q0 = Math.max(s5bStep(k,L.u), L.q*uL[vkey]/uC[vkey]);
+          const trial = cur.lines.map((x,j)=> j===i ? {mi:x.mi, f:k, u:L.u, cat:fd.cat, q:q0} : x);
+          budget.solves++;
+          const r = s5bSolveDay(trial, T);
+          if(s5bChoiceBetter(r, best, base0, T, true)){ best = r; bestTo = k; }
+        }
+        if(bestTo){ swaps.push({day:PLAN[d].name, meal:PLAN[d].meals[L.mi].label, from:fd.name, to:FOOD_DB[bestTo].name}); cur = best; }
+      }
+      if(swaps.length) cur = s5bSettle(cur.lines, T);
+    }
+    if(cur.priceUnknown) priceSkipped.push(PLAN[d].name); // some price unknown -> price criterion not comparable for this day
+    dayLines.push({cur, dn});
+  }
+  if(res.errors.length) return res;
+  // assemble the candidate plan (separate object graph — PLAN itself is never touched)
+  for(let d=0; d<PLAN.length; d++){
+    const meals = PLAN[d].meals.map((m,mi)=>{
+      const ing = dayLines[d].cur.lines.filter(l=> l.mi===mi).map(s5bItem);
+      return Object.assign({}, JSON.parse(JSON.stringify(m)), {ing});
+    });
+    plan.push(Object.assign({}, JSON.parse(JSON.stringify(PLAN[d])), {meals}));
+  }
+  const errs = s5bValidatePlan(plan);
+  if(errs.length){ res.errors = errs; return res; }
+  // report: every number below comes from computeIngredients() on the exact items that would be saved
+  let wCost = 0, wIncomplete = false, wK = 0, wP = 0, wC = 0, wF = 0, wFi = 0;
+  plan.forEach((day,d)=>{
+    const tot = computeIngredients([].concat.apply([], day.meals.map(m=> m.ing)));
+    const tolK = T.calories*S5B_TOL_PCT/100, tolP = T.protein*S5B_TOL_PCT/100;
+    const dn = dayLines[d].dn, dayNotes = [];
+    const dataGap = dn.replaced.length>0 || dn.dropped.length>0;
+    const kMet = Math.abs(tot.kcal-T.calories)<=tolK;
+    const pMet = T.protein>0 ? Math.abs(tot.protein-T.protein)<=tolP : null;
+    const cur = dayLines[d].cur;
+    if(T.protein>0 && pMet===false){
+      dayNotes.push(!cur.hasP ? 'مفيش مصدر بروتين مكتمل البيانات في اليوم ده، فالبروتين مش متحكّم فيه'
+        : !cur.hasO ? 'اليوم كله مصادر بروتين، فمقدرتش أفصل ضبط السعرات عن البروتين'
+        : cur.mode!=='two-group' ? 'مقدرتش أحقق السعرات والبروتين مع بعض بأطعمة اليوم ده (السعرات ليها الأولوية)'
+        : 'تقريب الكميات لخطوات التطبيق منع الوصول للهدف بدقة أكتر');
+    }
+    if(dataGap) dayNotes.push('اتعدّلت أطعمة بياناتها ناقصة في اليوم ده — الهدف ممكن مايكونش دقيق');
+    res.days.push({name:day.name, gym:day.gym, tot, kMet, pMet, dataGap, kDelta:tot.kcal-T.calories, pDelta:tot.protein-T.protein,
+      ratio: tot.kcal>0?tot.protein*4/tot.kcal:0, notes:dayNotes});
+    wCost += tot.price; if(tot.priceIncomplete) wIncomplete = true; wK += tot.kcal; wP += tot.protein; wC += tot.carb; wF += tot.fat; wFi += tot.fiber;
+  });
+  res.week = {cost:wCost, incomplete:wIncomplete, avgK:wK/PLAN.length, avgP:wP/PLAN.length, avgC:wC/PLAN.length, avgF:wF/PLAN.length, avgFi:wFi/PLAN.length, T, ratioT: T.protein*4/T.calories, budget:s5bFoodBudgetCheck(wCost,wIncomplete)};
+  res.days.forEach(r=>{
+    if(!r.kMet) res.warnings.push(r.name+': السعرات '+Math.round(r.tot.kcal)+' مقابل الهدف '+Math.round(T.calories)+'.');
+    if(r.pMet===false) res.warnings.push(r.name+': البروتين '+round1(r.tot.protein)+' جم مقابل الهدف '+round1(T.protein)+' جم.');
+    r.notes.forEach(n=> res.warnings.push(r.name+': '+n+'.'));
+  });
+  notes.replaced.forEach(n=> res.warnings.push(n.day+' / '+n.meal+': اتبدّل "'+n.from+'" بـ "'+n.to+'" ('+n.reason+').'));
+  notes.dropped.forEach(n=> res.warnings.push(n.day+' / '+n.meal+': اتشال "'+n.food+'" ('+n.reason+').'));
+  notes.merged.forEach(n=> res.infos.push(n.day+' / '+n.meal+': اتدمج تكرار "'+n.food+'" في مكوّن واحد.'));
+  swaps.forEach(n=> res.infos.push('تبديل: '+n.day+' / '+n.meal+': "'+n.from+'" ← "'+n.to+'".'));
+  priceMoves.forEach(n=> res.infos.push('تبديل لتقليل السعر: '+n.day+' / '+n.meal+': "'+n.from+'" ← "'+n.to+'".'));
+  if(pb.hit) res.warnings.push('اختيار الأطعمة بالسعر وقف عند حد الشغل المسموح (حد ثابت مش وقت) — النتيجة لسه صالحة.');
+  if(priceSkipped.length) res.warnings.push('سعر بعض الأطعمة غير متوفر في: '+priceSkipped.join('، ')+' — معيار السعر اتخطّى في اختيار أطعمة الأيام دي.');
+  res.infos.push(priceSkipped.length===PLAN.length ? 'بيانات الأسعار مش كافية للمقارنة — اتخطّيت معيار السعر.' : 'السعر دخل في اختيار الأطعمة بعد السعرات والبروتين ونسبته (تبديلات للسعر: '+priceMoves.length+'). ده مش ضمان إن دي أقل خطة سعرًا.');
+  if(budget.hit) res.warnings.push('التحسين بالتبديل وقف عند حد الشغل المسموح (حد ثابت مش وقت) — النتيجة لسه صالحة.');
+  if(wIncomplete) res.warnings.push('فيه أطعمة سعرها غير متوفر: التكلفة الأسبوعية جزئية (المعروف سعره بس) ومش رقم كامل.');
+  const b = res.week.budget;
+  if(b && b.set){
+    if(b.over) res.warnings.push('تكلفة الأكل المقدّرة للشهر '+fmtMoney(b.monthly)+' ج'+(b.incomplete?' (جزئية)':'')+' أعلى من ميزانية الأكل المحددة '+fmtMoney(b.budget)+' ج.');
+    else if(b.incomplete) res.infos.push('مقدرش أتأكد من ميزانية الأكل لأن بعض الأسعار ناقصة (الجزئي لحد دلوقتي '+fmtMoney(b.monthly)+' ج من '+fmtMoney(b.budget)+' ج).');
+  } else if(b && !b.set) res.infos.push('مفيش ميزانية أكل محددة للشهر ده، فاتخطّيت مقارنة السعر بالميزانية.');
+  res.priceChoice = {moves:priceMoves, skippedDays:priceSkipped, solves:pb.solves, hit:pb.hit};
+  res.plan = plan; res.ok = true;
+  return res;
+}
+
+/* ---------- planner UI ---------- */
+function s5bRenderPool(){
+  const el = s5bEl('s5bPool'); if(!el) return;
+  const keys = Object.keys(FOOD_DB).sort((a,b)=> FOOD_DB[a].name.localeCompare(FOOD_DB[b].name,'ar'));
+  const ok = keys.filter(k=> !foodNutritionUnknown(FOOD_DB[k])), bad = keys.filter(k=> foodNutritionUnknown(FOOD_DB[k]));
+  el.innerHTML = (ok.length ? ok.map(k=> `<label style="display:inline-flex;align-items:center;gap:6px;margin:3px 10px 3px 0;font-size:.78rem;">
+      <input type="checkbox" class="s5b-pool-cb" data-key="${k}" ${s5bFoodSel[k]===false?'':'checked'}> ${escapeHtml(FOOD_DB[k].name)}${FOOD_DB[k].price==null?' <span style="color:var(--bad);">(سعر غير متوفر)</span>':''}</label>`).join('') : '<div class="empty-note">مفيش أطعمة بياناتها الغذائية مكتملة</div>')
+    + (bad.length ? `<div class="section-hint" style="margin:8px 0 0;padding:0;">مستبعدة تلقائيًا (قيم غذائية غير محددة — مش هتتحسب صفر): ${bad.map(k=> escapeHtml(FOOD_DB[k].name)).join('، ')}</div>` : '');
+  el.querySelectorAll('.s5b-pool-cb').forEach(cb=> cb.addEventListener('change', ()=>{
+    if(cb.checked) delete s5bFoodSel[cb.dataset.key]; else s5bFoodSel[cb.dataset.key] = false;
+  }));
+}
+function s5bSetStatus(html, kind){
+  const el = s5bEl('s5bStatus'); if(!el) return;
+  el.className = kind==='bad' ? 'conflict-banner' : kind==='good' ? 'fallback-note' : 'section-hint';
+  el.style.margin = '10px 0 0';
+  el.innerHTML = html; el.classList.toggle('hidden', !html);
+}
+function s5bHidePreview(){ s5bPending = null; const p = s5bEl('s5bPreview'); if(p){ p.classList.add('hidden'); p.innerHTML = ''; } }
+function s5bRenderPreview(res){
+  const p = s5bEl('s5bPreview'); if(!p) return;
+  const T = res.week.T;
+  const rows = res.days.map(r=> `<tr style="border-bottom:1px solid var(--line);">
+      <td style="padding:6px 4px;">${escapeHtml(r.name)}</td>
+      <td class="mono" style="padding:6px 4px;white-space:nowrap;">${Math.round(r.tot.kcal)} / ${Math.round(T.calories)} <span title="${r.kMet&&!r.dataGap?'ضمن هامش ±'+S5B_TOL_PCT+'٪':(r.kMet?'ضمن الهامش بس بيانات ناقصة':'خارج الهامش')}">${r.kMet&&!r.dataGap?'✔':'⚠️'}</span></td>
+      <td class="mono" style="padding:6px 4px;white-space:nowrap;">${round1(r.tot.protein)} / ${round1(T.protein)} ${r.pMet===null?'':(r.pMet&&!r.dataGap?'✔':'⚠️')}</td>
+      <td class="mono" style="padding:6px 4px;white-space:nowrap;">${Math.round(r.ratio*100)}٪</td>
+      <td class="mono" style="padding:6px 4px;white-space:nowrap;">${r.tot.priceIncomplete?'≥ ':''}${round1(r.tot.price)} ج</td></tr>
+    <tr><td colspan="5" style="padding:0 4px 8px;"><details><summary style="cursor:pointer;color:var(--muted);font-size:.7rem;">تفاصيل الوجبات</summary>
+      ${res.plan[res.days.indexOf(r)].meals.map(m=> `<div style="font-size:.72rem;color:var(--muted);line-height:1.7;"><b style="color:var(--text);">${escapeHtml(m.label)}:</b> ${escapeHtml(mealItemsText(m.ing))}</div>`).join('')}</details></td></tr>`).join('');
+  const w = res.week;
+  p.innerHTML = `<div class="info-card" style="margin-top:12px;">
+      <h4>👀 معاينة الخطة الأسبوعية (لسه ما اتحفظتش)</h4>
+      <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:.74rem;">
+        <thead><tr style="color:var(--muted);text-align:right;"><th style="padding:4px;">اليوم</th><th style="padding:4px;">سعرات (فعلي/هدف)</th><th style="padding:4px;">بروتين جم (فعلي/هدف)</th><th style="padding:4px;">نسبة البروتين</th><th style="padding:4px;">السعر</th></tr></thead>
+        <tbody>${rows}</tbody></table></div>
+      <p style="margin-top:8px;">المتوسط اليومي: <b class="mono">${Math.round(w.avgK)}</b> سعرة · <b class="mono">${round1(w.avgP)}</b> جم بروتين (نسبة الهدف ${Math.round(w.ratioT*100)}٪) · كارب <b class="mono">${round1(w.avgC)}</b>/${round1(T.carb)} · دهون <b class="mono">${round1(w.avgF)}</b>/${round1(T.fat)} · ألياف <b class="mono">${round1(w.avgFi)}</b>/${round1(T.fiber)} (للعرض — مش بتتضبط بالكميات) · التكلفة الأسبوعية: <b class="mono">${w.incomplete?'≥ ':''}${fmtMoney(w.cost)}</b> ج${w.incomplete?' (جزئية — أسعار ناقصة)':''}</p>
+      ${res.warnings.length ? `<div class="conflict-banner" style="margin-top:10px;"><div class="cb-title">⚠️ تنبيهات</div><ul style="margin:0;padding-right:18px;">${res.warnings.map(x=> '<li>'+escapeHtml(x)+'</li>').join('')}</ul></div>` : '<div class="fallback-note" style="margin-top:10px;">كل الأيام ضمن هامش ±'+S5B_TOL_PCT+'٪ للسعرات والبروتين وبيانات الأطعمة مكتملة.</div>'}
+      ${res.infos.length ? `<div class="section-hint" style="margin:8px 0 0;padding:0;">${res.infos.map(x=> escapeHtml(x)).join('<br>')}</div>` : ''}
+      <div class="section-hint" style="margin:10px 0 0;padding:0;">لو أكدت: الخطة الحالية هتتبدّل بالكامل، والاستبدالات اليدوية (Substitutions) هتتمسح لأنها مربوطة بمواضع الخطة القديمة، وأي تسجيل قديم لوجبات نفس الأيام ممكن يتزاح مكانه (نفس تحذير تعديل الوجبات). نسخة من الخطة القديمة بتتحفظ تلقائيًا قبل الاستبدال.</div>
+      <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:12px; flex-wrap:wrap;">
+        <button class="reset-btn" id="s5bCancel">إلغاء</button>
+        <button class="reset-btn" id="s5bConfirm" style="border-color:var(--good); color:var(--good); font-weight:700;">✅ تأكيد واستبدال الخطة</button>
+      </div></div>`;
+  p.classList.remove('hidden');
+  s5bEl('s5bCancel').addEventListener('click', ()=>{ s5bHidePreview(); s5bSetStatus('اتلغت المعاينة — الخطة الحالية زي ما هي.', 'info'); });
+  s5bEl('s5bConfirm').addEventListener('click', s5bCommit);
+}
+function s5bOnGenerate(){
+  if(s5bBusy) return;
+  s5bBusy = true; s5bEl('s5bGenerate').disabled = true;
+  s5bHidePreview(); s5bSetStatus('جاري توليد الخطة…', 'info');
+  setTimeout(()=>{ // yield once so the status paints; the work itself is bounded (see header)
+    try{
+      s5bRenderPool();
+      const T = resolveTargets(nutritionTargets);
+      s5bEl('s5bTargetsLine').textContent = `الأهداف اليومية الفعلية: ${Math.round(T.calories)} سعرة · ${round1(T.protein)} جم بروتين · كارب ${round1(T.carb)} · دهون ${round1(T.fat)} · ألياف ${round1(T.fiber)}`;
+      const res = s5bGenerate();
+      if(!res.ok){
+        s5bSetStatus('<div class="cb-title">❌ التوليد فشل — الخطة الحالية ما اتغيّرتش</div><ul style="margin:0;padding-right:18px;">'+res.errors.map(e=> '<li>'+escapeHtml(e)+'</li>').join('')+'</ul>', 'bad');
+      } else {
+        s5bPending = {plan:res.plan, baseSig:JSON.stringify(PLAN), baseSubsSig:JSON.stringify(subsOverride), result:res};
+        s5bSetStatus('', 'info');
+        s5bRenderPreview(res);
+      }
+    }catch(err){
+      s5bHidePreview();
+      s5bSetStatus('<div class="cb-title">❌ حصل خطأ غير متوقع — الخطة الحالية ما اتغيّرتش</div>'+escapeHtml(String(err && err.message || err)), 'bad');
+    }finally{ s5bBusy = false; s5bEl('s5bGenerate').disabled = false; }
+  }, 0);
+}
+function s5bCommit(){
+  const p = s5bPending; if(!p) return;
+  if(JSON.stringify(PLAN)!==p.baseSig || JSON.stringify(subsOverride)!==p.baseSubsSig){
+    s5bHidePreview(); s5bSetStatus('<div class="cb-title">الخطة اتغيّرت بعد المعاينة</div>اتلغى الاستبدال — ولّد الخطة تاني.', 'bad'); return;
+  }
+  const errs = s5bValidatePlan(p.plan);
+  if(errs.length){ s5bHidePreview(); s5bSetStatus('<div class="cb-title">❌ التحقق فشل — الخطة الحالية ما اتغيّرتش</div>'+errs.map(escapeHtml).join('<br>'), 'bad'); return; }
+  const r = s5bAtomicWrite([
+    {key:'plan-prev-5b', value:JSON.stringify({savedAt:new Date().toISOString(), plan:PLAN, subs:subsOverride})},
+    {key:'user-plan', value:JSON.stringify(p.plan)},
+    {key:'subs', value:'{}'},
+  ]);
+  if(!r.ok){ s5bSetStatus('<div class="cb-title">❌ الحفظ فشل — الخطة الحالية ما اتغيّرتش</div>'+escapeHtml(String(r.error && r.error.message || r.error)), 'bad'); return; }
+  PLAN = JSON.parse(JSON.stringify(p.plan)); subsOverride = {};
+  s5bHidePreview();
+  renderTabs(); renderMeals(); renderSummary(); renderShopping(); renderHeaderStamps(); renderTargetProgress();
+  s5bSetStatus('✅ اتحفظت الخطة الأسبوعية الجديدة.', 'good');
+}
+
+/* ---------- Dietary JSON import ("رفع نظام غذائي") ---------- */
+const S5B_UNITS = ['g','ml','egg','loaf','can','unit'];              // the units the Food DB editor offers
+const S5B_CATS = ['protein','carb','fruit','veg','fat','dairy','other']; // the categories the Food DB editor offers
+const S5B_NUM_FIELDS = ['kcal','protein','carb','fat','fiber','price'];  // number >= 0, or null = unknown (as the Stage 5A defaults use)
+const S5B_REQUIRED = ['name','unit','cat'].concat(S5B_NUM_FIELDS);
+const S5B_OPTIONAL = ['loafGrams','micros','notes'];
+const S5B_MICROS = ['sodium','potassium','calcium','iron'];
+const S5B_IMPORT_EXAMPLE = `{
+  "my_food_key": { "name": "اسم الطعام", "unit": "g", "cat": "carb", "kcal": null, "protein": null, "carb": null, "fat": null, "fiber": null, "price": null },
+  "my_loaf_key": { "name": "اسم العيش", "unit": "loaf", "cat": "carb", "kcal": null, "protein": null, "carb": null, "fat": null, "fiber": null, "price": null, "loafGrams": null }
+}`;
+function s5bFindDuplicateKeys(text){ // JSON.parse silently keeps the last of two equal keys, so duplicates are found on the raw text
+  const dups = []; let i = 0; const n = text.length;
+  const ws = ()=>{ while(i<n && ' \t\r\n'.indexOf(text[i])>=0) i++; };
+  const str = ()=>{ let j=i+1; while(j<n && text[j]!=='"'){ if(text[j]==='\\') j++; j++; } const s = JSON.parse(text.slice(i,j+1)); i=j+1; return s; };
+  const val = path=>{
+    ws(); const c = text[i];
+    if(c==='{'){
+      i++; const seen = new Set(); ws(); if(text[i]==='}'){ i++; return; }
+      for(;;){ ws(); const k = str(); if(seen.has(k)) dups.push((path+'/'+k)||k); seen.add(k); ws(); i++; val(path+'/'+k); ws(); if(text[i]===','){ i++; continue; } i++; return; }
+    } else if(c==='['){
+      i++; ws(); if(text[i]===']'){ i++; return; }
+      let idx = 0; for(;;){ val(path+'['+idx+']'); idx++; ws(); if(text[i]===','){ i++; continue; } i++; return; }
+    } else if(c==='"'){ str(); }
+    else { while(i<n && ',}] \t\r\n'.indexOf(text[i])<0) i++; }
+  };
+  val(''); return dups;
+}
+function s5bIsPlainObject(v){ return v!==null && typeof v==='object' && !Array.isArray(v); }
+function s5bFoodSig(e){ // canonical form used ONLY to decide "identical"; an absent optional field equals an empty/null one
+  const o = {name:String(e.name||'').trim(), unit:e.unit, cat:e.cat};
+  S5B_NUM_FIELDS.forEach(k=> o[k] = (e[k]===undefined ? null : e[k]));
+  if(e.unit==='loaf') o.loafGrams = (e.loafGrams==null ? null : e.loafGrams);
+  if(s5bIsPlainObject(e.micros) && Object.keys(e.micros).length){ o.micros = {}; Object.keys(e.micros).sort().forEach(k=> o.micros[k] = e.micros[k]); }
+  if(typeof e.notes==='string' && e.notes.trim()) o.notes = e.notes.trim();
+  return JSON.stringify(o);
+}
+function s5bValidateFoodImport(rawText){
+  const fail = errors=> ({ok:false, errors});
+  let text = String(rawText==null?'':rawText).replace(/^\uFEFF/,'');
+  if(!text.trim()) return fail(['الصندوق فاضي — الصق JSON الأول.']);
+  let data;
+  try{ data = JSON.parse(text); }catch(e){ return fail(['JSON مش قابل للتحليل: '+e.message]); }
+  if(!s5bIsPlainObject(data)) return fail(['الشكل العام غلط: لازم يكون كائن {"مفتاح_الطعام": {...}} مش مصفوفة أو قيمة مفردة.']);
+  const keys = Object.keys(data);
+  if(keys.length===0) return fail(['الكائن فاضي — مفيش أطعمة للاستيراد.']);
+  const errors = [];
+  let dups = [];
+  try{ dups = s5bFindDuplicateKeys(text); }catch(e){ return fail(['مقدرتش أفحص المفاتيح المكررة في الملف — اتلغى الاستيراد.']); }
+  dups.forEach(d=> errors.push('مفتاح مكرر داخل الملف: '+d));
+  const norm = {};
+  keys.forEach(key=>{
+    const e = data[key], at = '"'+key+'": ';
+    if(!/^[A-Za-z][A-Za-z0-9_]{0,63}$/.test(key) || key in Object.prototype){ errors.push(at+'المفتاح لازم يبدأ بحرف إنجليزي ويحتوي حروف/أرقام/_ بس (حتى ٦٤ حرف) وميكونش اسم محجوز.'); return; }
+    if(!s5bIsPlainObject(e)){ errors.push(at+'قيمة الطعام لازم تكون كائن.'); return; }
+    const miss = S5B_REQUIRED.filter(f=> !Object.prototype.hasOwnProperty.call(e,f));
+    if(miss.length) errors.push(at+'حقول مطلوبة ناقصة: '+miss.join('، ')+'.');
+    const extra = Object.keys(e).filter(f=> S5B_REQUIRED.indexOf(f)<0 && S5B_OPTIONAL.indexOf(f)<0);
+    if(extra.length) errors.push(at+'حقول غير معروفة في بنية قاعدة الأطعمة: '+extra.join('، ')+'.');
+    if(miss.length) return;
+    if(typeof e.name!=='string' || !e.name.trim()) errors.push(at+'name لازم يكون نص مش فاضي.');
+    if(S5B_UNITS.indexOf(e.unit)<0) errors.push(at+'unit لازم يكون واحد من: '+S5B_UNITS.join(' / ')+'.');
+    if(S5B_CATS.indexOf(e.cat)<0) errors.push(at+'cat لازم يكون واحد من: '+S5B_CATS.join(' / ')+'.');
+    S5B_NUM_FIELDS.forEach(f=>{ if(!(e[f]===null || (typeof e[f]==='number' && Number.isFinite(e[f]) && e[f]>=0))) errors.push(at+f+' لازم يكون رقم ≥ 0 أو null (غير معروف).'); });
+    if(Object.prototype.hasOwnProperty.call(e,'loafGrams')){
+      if(e.unit!=='loaf') errors.push(at+'loafGrams مسموح بس لما unit = loaf.');
+      else if(!(e.loafGrams===null || (typeof e.loafGrams==='number' && Number.isFinite(e.loafGrams) && e.loafGrams>0))) errors.push(at+'loafGrams لازم يكون رقم أكبر من صفر أو null.');
+    }
+    if(Object.prototype.hasOwnProperty.call(e,'micros')){
+      if(!s5bIsPlainObject(e.micros)) errors.push(at+'micros لازم يكون كائن.');
+      else Object.keys(e.micros).forEach(m=>{
+        if(S5B_MICROS.indexOf(m)<0) errors.push(at+'micros.'+m+' حقل غير معروف (المسموح: '+S5B_MICROS.join('، ')+').');
+        else if(!(typeof e.micros[m]==='number' && Number.isFinite(e.micros[m]) && e.micros[m]>=0)) errors.push(at+'micros.'+m+' لازم يكون رقم ≥ 0.');
+      });
+    }
+    if(Object.prototype.hasOwnProperty.call(e,'notes') && typeof e.notes!=='string') errors.push(at+'notes لازم يكون نص.');
+    norm[key] = Object.assign({}, e, {name: typeof e.name==='string' ? e.name.trim() : e.name});
+  });
+  if(errors.length) return fail(errors);
+  // conflicts against what already exists — checked for the WHOLE file before anything is written
+  const add = {}, skipped = [], notes = [], sigToKey = {};
+  const existingSigs = {};
+  Object.keys(FOOD_DB).forEach(k=>{ existingSigs[s5bFoodSig(FOOD_DB[k])] = existingSigs[s5bFoodSig(FOOD_DB[k])] || k; });
+  Object.keys(norm).forEach(key=>{
+    const e = norm[key], sig = s5bFoodSig(e), at = '"'+key+'": ';
+    const isDefaultKey = Object.prototype.hasOwnProperty.call(FOOD_DB_DEFAULTS, key);
+    const inCustom = Object.prototype.hasOwnProperty.call(customFoods, key);
+    const inDB = Object.prototype.hasOwnProperty.call(FOOD_DB, key);
+    if(isDefaultKey || inCustom || inDB){
+      if(inDB && s5bFoodSig(FOOD_DB[key])===sig){ skipped.push({key, reason:'مكرر مطابق تمامًا لطعام موجود بنفس المفتاح'}); return; }
+      errors.push(at+'المفتاح موجود بالفعل'+(isDefaultKey?' (مفتاح طعام افتراضي)':'')+' ببيانات مختلفة — اتلغى الاستيراد عشان ما نبدّلش حاجة بصمت.'); return;
+    }
+    FOOD_DEFAULTS_ADDED_5A.forEach(dk=>{
+      if(FOOD_DB[dk] && FOOD_DB_DEFAULTS[dk].name===e.name) errors.push(at+'الاسم "'+e.name+'" نفس اسم طعام افتراضي ('+dk+') وهيخفيه من القايمة — اتلغى الاستيراد.');
+    });
+    if(existingSigs[sig]){ skipped.push({key, reason:'مطابق تمامًا لـ"'+FOOD_DB[existingSigs[sig]].name+'" الموجود بمفتاح تاني'}); return; }
+    if(sigToKey[sig]){ skipped.push({key, reason:'مطابق تمامًا لعنصر تاني في نفس الملف ('+sigToKey[sig]+')'}); return; }
+    const sameName = Object.keys(FOOD_DB).find(k=> String(FOOD_DB[k].name).trim()===e.name);
+    if(sameName) notes.push('"'+key+'": الاسم "'+e.name+'" موجود بالفعل بمفتاح تاني وببيانات مختلفة — اتضاف برضه.');
+    sigToKey[sig] = key; add[key] = e;
+  });
+  if(errors.length) return fail(errors);
+  return {ok:true, add, skipped, notes};
+}
+function s5bShowImportResult(kind, html){
+  const el = s5bEl('s5bImportResult'); if(!el) return;
+  el.className = kind==='bad' ? 'conflict-banner' : kind==='good' ? 'fallback-note' : 'section-hint';
+  el.style.margin = '10px 0 0'; el.innerHTML = html; el.classList.toggle('hidden', !html);
+}
+function s5bOnImportFoods(){
+  const v = s5bValidateFoodImport(s5bEl('s5bImportText').value);
+  if(!v.ok){
+    s5bShowImportResult('bad', '<div class="cb-title">❌ الاستيراد فشل — قاعدة الأطعمة ما اتغيّرتش</div><ul style="margin:0;padding-right:18px;">'+v.errors.map(e=> '<li>'+escapeHtml(e)+'</li>').join('')+'</ul>');
+    return;
+  }
+  const addKeys = Object.keys(v.add);
+  const skippedHtml = v.skipped.length ? '<br>اتخطّى '+v.skipped.length+' مكرر: '+v.skipped.map(s=> escapeHtml(s.key)+' ('+escapeHtml(s.reason)+')').join('، ') : '';
+  const notesHtml = v.notes.length ? '<br>'+v.notes.map(escapeHtml).join('<br>') : '';
+  if(addKeys.length===0){
+    s5bShowImportResult('good', 'مفيش جديد يتضاف — كل العناصر موجودة بالفعل (قاعدة الأطعمة ما اتغيّرتش).'+skippedHtml);
+    return;
+  }
+  const merged = Object.assign({}, customFoods);
+  addKeys.forEach(k=> merged[k] = v.add[k]);
+  const r = s5bAtomicWrite([{key:'custom-foods', value:JSON.stringify(merged)}]);
+  if(!r.ok){
+    s5bShowImportResult('bad', '<div class="cb-title">❌ الحفظ فشل — قاعدة الأطعمة ما اتغيّرتش</div>'+escapeHtml(String(r.error && r.error.message || r.error)));
+    return;
+  }
+  customFoods = merged;
+  afterFoodDbChange();
+  s5bRenderPool();
+  s5bShowImportResult('good', '✅ اتضاف '+addKeys.length+' طعام جديد: '+addKeys.map(k=> escapeHtml(v.add[k].name)).join('، ')+'.'+skippedHtml+notesHtml);
+}
+function s5bEl(id){ return document.getElementById(id); }
+if(!s5bEl('s5bGenerate').__s5b){ // single wiring (the script block runs once; guard keeps accidental re-evaluation harmless)
+  s5bEl('s5bGenerate').__s5b = true;
+  s5bEl('s5bGenerate').addEventListener('click', s5bOnGenerate);
+  s5bEl('s5bPoolDetails').addEventListener('toggle', ()=>{ if(s5bEl('s5bPoolDetails').open) s5bRenderPool(); });
+  s5bEl('s5bImportBtn').addEventListener('click', s5bOnImportFoods);
+  s5bEl('s5bImportClear').addEventListener('click', ()=>{ s5bEl('s5bImportText').value = ''; s5bShowImportResult('info',''); });
+  s5bEl('s5bImportFile').addEventListener('change', (e)=>{
+    const f = e.target.files && e.target.files[0]; if(!f) return;
+    const rd = new FileReader();
+    rd.onload = ()=>{ s5bEl('s5bImportText').value = String(rd.result||''); s5bShowImportResult('info','اتحمّل الملف في الصندوق — دوس "استيراد" عشان يتفحص ويتدمج.'); };
+    rd.onerror = ()=> s5bShowImportResult('bad','<div class="cb-title">❌ مقدرتش أقرأ الملف</div>');
+    rd.readAsText(f); e.target.value = '';
+  });
+  s5bEl('s5bImportText').placeholder = S5B_IMPORT_EXAMPLE;
 }
 
 
@@ -2862,6 +4116,10 @@ function renderPrayerTimes(){
   const el = document.getElementById('prayerTimes');
   el.innerHTML = '';
   const iso = toISO(weekDates[selectedIdx]);
+  const city = loadPrayerCity();
+  const citySel = document.getElementById('prayerCitySelect');
+  if(citySel && citySel.value !== city) citySel.value = city;
+  updatePrayerApiStatusUI();
   PRAYERS.forEach(p=>{
     const row = document.createElement('div');
     row.className = 'check-row';
@@ -2870,8 +4128,17 @@ function renderPrayerTimes(){
       <input type="time" class="weight-input" data-key="${p.key}" style="max-width:120px;" value="${escapeHtml(prayerTimesState[p.key]||'')}">
     `;
     row.querySelector('input').addEventListener('change', (e)=>{
-      prayerTimesState[p.key] = e.target.value;
+      const clean = cleanPrayerTime(e.target.value);
+      if(clean) prayerTimesState[p.key] = clean;
+      else delete prayerTimesState[p.key];
+      prayerTimesState.city = loadPrayerCity();
       savePrayerTimes(iso, prayerTimesState);
+      if(hasValidPrayerTimes(prayerTimesState)){
+        saveCachedPrayerTimes(prayerTimesState.city, iso, prayerTimesState);
+        recalculateDay(iso, selectedIdx, scheduleSettings);
+      }
+      renderPrayerTimes();
+      if(mode==='schedule') renderSchedule();
     });
     el.appendChild(row);
   });
@@ -2977,6 +4244,13 @@ const SCHED_DEFAULTS = {
   gymWorkoutDuration:50, // Session 2 completion: source of truth for the gym block's duration in the generated schedule
   mealEnabled:{breakfast:true, lunch:true, dinner:true}, // Session 2 completion: meal-time slots in the generated schedule
   mealDuration:{breakfast:20, lunch:35, dinner:30},       // (independent of the actual Meal Plan/Food DB — see note in buildDaySchedule)
+  // Stage 3A: prayer-anchored sleep/nap. loadScheduleSettings() below merges these onto any
+  // pre-existing stored settings object, so existing users get these defaults automatically
+  // with no migration and no data loss — the exact same pattern already used for every other
+  // field added here over time (gymWorkoutDuration, mealEnabled, ...).
+  sleepStartOffset:30, // minutes after Isha that the main sleep block defaults to starting
+  napEnabled:false, napDuration:30, // afternoon nap: off by default; 30 or 60 minutes, starts 15 min after Dhuhr
+  prayerCity:'Minya', // Stage 3D: selected prayer city (Minya | Alexandria)
 };
 
 /* ================= SCHEDULE: STORAGE ================= */
@@ -3020,10 +4294,12 @@ function buildDaySchedule(dayIdx, settings){
   const isFriday = (day.name === 'الجمعة');
   const isCollege = !!settings.collegeDays[dayIdx];
 
+  const hasValidPrayer = hasValidPrayerTimes(pt);
   const fajrMin=schedResolvePrayer(pt,'fajr'), dhuhrMin=schedResolvePrayer(pt,'dhuhr'),
         asrMin=schedResolvePrayer(pt,'asr'), maghribMin=schedResolvePrayer(pt,'maghrib'),
         ishaMin=schedResolvePrayer(pt,'isha');
-  const usingFallback = !(pt && pt.fajr && pt.dhuhr && pt.asr && pt.maghrib && pt.isha);
+  const usingFallback = !hasValidPrayer;
+  const prayerUnavailable = !hasValidPrayer;
 
   const collegeCommute = Number(settings.collegeCommute)||0;
   const gymCommute = Number(settings.gymCommute)||0;
@@ -3042,11 +4318,16 @@ function buildDaySchedule(dayIdx, settings){
   const mealEnabled = Object.assign({breakfast:true,lunch:true,dinner:true}, settings.mealEnabled);
   const mealDur = Object.assign({breakfast:SCHED_DUR.breakfast,lunch:SCHED_DUR.lunch,dinner:SCHED_DUR.dinner}, settings.mealDuration);
   const gymWorkoutDur = Number(settings.gymWorkoutDuration)||SCHED_DUR.gymWorkout;
+  // Stage 3A (prayer-anchored sleep/nap): both read with an explicit blank/undefined check
+  // (not `||`) because 0 is a legitimate value for either and must not silently fall back.
+  const sleepStartOffsetMin = (settings.sleepStartOffset===undefined||settings.sleepStartOffset===null||settings.sleepStartOffset==='') ? 30 : Math.max(0, Number(settings.sleepStartOffset)||0);
+  const napEnabled = !!settings.napEnabled;
+  const napDurationMin = (settings.napDuration===undefined||settings.napDuration===null||settings.napDuration==='') ? 30 : Math.max(0, Number(settings.napDuration)||0);
 
   const blocks=[];
   let cursor = fajrMin - wakeOffset;
   const wakeMin = cursor;
-  const done = {dhuhr:false, asr:false};
+  const done = {dhuhr:false, asr:false, nap:false};
   let studyUsed = 0;
 
   function add(key,label,icon,dur,type){
@@ -3078,7 +4359,14 @@ function buildDaySchedule(dayIdx, settings){
     if(collegeStart!=null && atMin>=collegeStart && atMin<collegeEnd){ done[key]=true; return; }
     studyBlock(atMin, suffix);
     snapTo(atMin);
-    add(key,label,'🕌',dur,'prayer');
+    // Stage 3A fix: place the prayer at its true clock time unconditionally, not via add() (which
+    // would start it from `cursor`). Normally snapTo already brought cursor exactly to atMin, so
+    // this is identical to the old add()-based placement in every previously-working case — it only
+    // differs when something earlier (namely Nap, the only thing Stage 3A lets run this close to a
+    // prayer) has overrun past atMin, in which case Asr must still never move, only warn via the
+    // normal overlap-conflict detection (computeTimeEngine), exactly like any other clash.
+    blocks.push({key,label,icon:'🕌',start:atMin,end:atMin+dur,type:'prayer'});
+    cursor = Math.max(cursor, atMin+dur);
     done[key]=true;
   }
   function advanceThroughDhuhrOrJumuah(collegeStart, collegeEnd, suffix){
@@ -3101,7 +4389,22 @@ function buildDaySchedule(dayIdx, settings){
   }
   function checkpoint(collegeStart, collegeEnd, suffix){
     advanceThroughDhuhrOrJumuah(collegeStart, collegeEnd, suffix);
+    insertNapIfDue(); // Stage 3A: nap is anchored 15 min after Dhuhr, so it belongs right where Dhuhr
+                       // has just been resolved (by whichever path resolved it) — before Asr continues.
     advanceThroughPrayer('asr', asrMin, SCHED_DUR.asr, 'صلاة العصر', collegeStart, collegeEnd, suffix);
+  }
+  // Stage 3A: nap (priority tier 2, same as Sleep/Wake — a fixed constraint, not moved by cascade).
+  // Guarded by done.nap so calling checkpoint() multiple times in one day (college/gym/rest all do)
+  // never inserts it twice. If Dhuhr itself fell inside College (no explicit prayer block — see the
+  // college branch below), done.dhuhr is already true but the cursor is still wherever College/commute
+  // left it, so nap naturally lands right after that instead of literally mid-class — never silently
+  // dropped, never forced into class time, no special-casing needed beyond this one guard.
+  function insertNapIfDue(){
+    if(done.nap || !napEnabled || napDurationMin<=0) return;
+    if(!done.dhuhr) return;
+    done.nap = true;
+    snapTo(dhuhrMin+15);
+    add('nap','قيلولة','😴',napDurationMin,'nap');
   }
   function gymTrip(){
     add('gymPrep','تجهيز هدوم الجيم','🎽',SCHED_DUR.gymPrep,'gym');
@@ -3129,6 +4432,7 @@ function buildDaySchedule(dayIdx, settings){
     if(dhuhrMin>=collegeStartMin && dhuhrMin<collegeEndMin){ inline.push(isFriday ? 'الجمعة' : 'الظهر'); done.dhuhr=true; }
     if(asrMin>=collegeStartMin && asrMin<collegeEndMin){ inline.push('العصر'); done.asr=true; }
     add('college','الكلية'+(inline.length?' (فيها استراحة لصلاة '+inline.join(' و')+')':''),'🎓', collegeEndMin-cursor, 'college');
+    if(inline.length) blocks[blocks.length-1].inlinePrayers = inline.slice(); // Stage 3A: structured data for the timeline badge (renderScheduleActivities), same info already in the label above
     add('commuteBack','الرجوع من الكلية','🚌',collegeCommute,'commute');
     checkpoint(collegeStartMin,collegeEndMin,' (بعد الكلية)');
     if(isGym){ gymTrip(); checkpoint(collegeStartMin,collegeEndMin,' (بعد الكلية)'); }
@@ -3144,6 +4448,7 @@ function buildDaySchedule(dayIdx, settings){
     snapTo(jumuahLeave);
     add('jumuah','خطبة وصلاة الجمعة','🕌',45,'prayer');
     done.dhuhr=true;
+    insertNapIfDue(); // Stage 3A: Friday's own dhuhr-equivalent (Jumu'ah) resolves outside checkpoint()
     add('lunch','تحضير وأكل الغدا + غسيل المواعين','🍛', mealEnabled.lunch?mealDur.lunch:0,'meal');
     checkpoint(null,null,' (بعد الجمعة)');
     studyBlock(maghribMin-15, ' (بعد الجمعة)');
@@ -3172,9 +4477,15 @@ function buildDaySchedule(dayIdx, settings){
   snapTo(ishaMin);
   add('isha','صلاة العشاء (فرض + سنة)','🕌',SCHED_DUR.isha,'prayer');
 
-  const bedtimeTarget = wakeMin+1440-sleepTargetMin;
-  studyBlock(bedtimeTarget-entertainmentBase-bufferBase, ' (بالليل)');
-  snapTo(bedtimeTarget-entertainmentBase-bufferBase);
+  const bedtimeTarget = wakeMin+1440-sleepTargetMin; // still computed (unused for placement now — see below)
+                                                       // so this stays a minimal, easily-revertible diff.
+  // Stage 3A: sleep now defaults to Isha + sleepStartOffsetMin (30 min) instead of being derived
+  // backward from the sleepHours duration target. settings.sleepHours keeps its original meaning
+  // everywhere else (the Overview/analytics comparison against actually-logged sleep — untouched),
+  // it just no longer drives *where* the schedule places the sleep block.
+  const sleepStartTarget = ishaMin + sleepStartOffsetMin;
+  studyBlock(sleepStartTarget-entertainmentBase-bufferBase, ' (بالليل)');
+  snapTo(sleepStartTarget-entertainmentBase-bufferBase);
 
   const preLeisureCursor = cursor;
   let ent=entertainmentBase, buf=bufferBase;
@@ -3210,6 +4521,7 @@ function buildDaySchedule(dayIdx, settings){
   return {
     name:day.name, blocks:merged, wakeMin, sleepStart, sleepDuration,
     studyUsed, studyTarget, conflicts, autoTrimmed, usingFallback,
+    hasValidPrayer, prayerUnavailable,
     isCollege, isGym, isFriday,
   };
 }
@@ -3242,6 +4554,7 @@ const SCHED_TYPE_META = {
   meal:{label:'أكل', icon:'🍽️'}, college:{label:'كلية', icon:'🎓'}, commute:{label:'تنقل', icon:'🚌'},
   gym:{label:'جيم', icon:'🏋️'}, study:{label:'مذاكرة', icon:'📚'}, faith:{label:'قرآن / أذكار', icon:'📖'},
   break:{label:'استراحة', icon:'☕'}, leisure:{label:'ترفيه', icon:'📱'}, rest:{label:'راحة/وقت حر', icon:'🛌'}, other:{label:'أخرى', icon:'📌'},
+  nap:{label:'قيلولة', icon:'😴'}, // Stage 3A
 };
 function schedPriorityFor(type){ return SCHED_PRIORITY[type] || {lvl:'flexible', label:'مرن', color:'var(--good)'}; }
 
@@ -3257,8 +4570,12 @@ function schedPriorityFor(type){ return SCHED_PRIORITY[type] || {lvl:'flexible',
                     (act.timeLocked) — respected exactly, never moved by cascade.
      - 'flexible' : everything else (meals, gym trip, study/break, leisure,
                     routine steps, plain custom activities) — eligible to shift
-                    forward when something earlier in the day pushes into it. */
-const SCHED_CASCADE_FIXED_TYPES = new Set(['prayer','sleep','college','commute']);
+                    forward when something earlier in the day pushes into it.
+   Stage 3A adds 'nap' here too: priority-wise it sits with sleep/wake (fixed
+   constraint, never pushed), and mechanically the cascade model only has
+   fixed/manual/flexible — so "more fixed than fixed" isn't a separate tier,
+   it just means nap joins the same never-moved set as prayer/sleep/college. */
+const SCHED_CASCADE_FIXED_TYPES = new Set(['prayer','sleep','college','commute','nap']);
 function schedMoveClass(act){
   if(SCHED_CASCADE_FIXED_TYPES.has(act.type)) return 'fixed';
   if(act.timeLocked) return 'manual';
@@ -3343,7 +4660,9 @@ function compactGapAfterRemoval(rec, removedStart, removedEnd){
   return moved;
 }
 
-function materializeDaySchedule(iso, dayIdx, settings){
+function buildMaterializedActs(dayIdx, settings){
+  // Pure — no storage write. Everything materializeDaySchedule() used to do in one step, split so a
+  // full {rec, sched} preview can be built and inspected (Stage 3B) before anything is persisted.
   const sched = buildDaySchedule(dayIdx, settings);
   const seriesOv = loadSeriesOverrides()[dayIdx] || {};
   const counts = {};
@@ -3359,6 +4678,7 @@ function materializeDaySchedule(iso, dayIdx, settings){
       name:(ov&&ov.name!=null)?ov.name:b.label, type:b.type, icon:(SCHED_TYPE_META[b.type]||{}).icon||b.icon||'📌',
       start:(ov&&ov.start!=null)?ov.start:b.start, end:(ov&&ov.end!=null)?ov.end:b.end,
       notes:(ov&&ov.notes!=null)?ov.notes:'',
+      ...(b.inlinePrayers && b.inlinePrayers.length ? {inlinePrayers:b.inlinePrayers} : {}), // Stage 3A: badge data (e.g. College swallowing Dhuhr) — display-only, no override support needed
     });
   });
   // Sleep is the implicit remainder in buildDaySchedule (never a `blocks` entry) — materialize it too so it's just as editable.
@@ -3378,6 +4698,10 @@ function materializeDaySchedule(iso, dayIdx, settings){
   acts.sort((a,b)=>a.start-b.start);
   const rec = { anchor: sched.wakeMin, acts, edited:false };
   applyCascade(rec, cascadeResolveOverlaps(rec)); // self-heals any overlap a series override/recurring def introduced
+  return {rec, sched};
+}
+function materializeDaySchedule(iso, dayIdx, settings){
+  const {rec} = buildMaterializedActs(dayIdx, settings);
   saveDayActs(iso, rec);
   return rec;
 }
@@ -3579,10 +4903,7 @@ function recalculateDay(iso, dayIdx, settings){
     if(a.source==='custom' && !a.defId) oneTimeCustom.push(a);
   });
   const deletedGenKeys = current.deletedGenKeys||[], deletedDefIds = current.deletedDefIds||[];
-  const fresh = materializeDaySchedule(iso, dayIdx, settings); // recomputes acts[] from scratch (generated + recurring defs)
-  // Session 3.1: never resurrect a this-occurrence delete — drop it again exactly
-  // like a live delete would, closing the gap it leaves the same way. One at a
-  // time in start order, so re-running this repeatedly stays fully idempotent.
+  const {rec: fresh, sched} = buildMaterializedActs(dayIdx, settings); // in-memory candidate (Stage 3D atomic generation)
   fresh.acts
     .filter(a=>(a.genKey && deletedGenKeys.includes(a.genKey)) || (a.defId && deletedDefIds.includes(a.defId)))
     .sort((a,b)=>a.start-b.start)
@@ -3596,9 +4917,23 @@ function recalculateDay(iso, dayIdx, settings){
   });
   fresh.acts.push(...oneTimeCustom);
   fresh.acts.sort((a,b)=>a.start-b.start);
+  applyCascade(fresh, cascadeResolveOverlaps(fresh));
   fresh.deletedGenKeys = deletedGenKeys;
   fresh.deletedDefIds = deletedDefIds;
-  fresh.edited = true; // this date now has a deliberate recalculation on it; don't let a later unrelated settings tweak silently blow it away again
+  // Stage 3D: atomic validation before commit
+  const val = validateGeneratedSchedule(fresh, sched);
+  if(!val.ok){
+    if(current && current.acts && current.acts.length){
+      current.ok = false;
+      current.validationErrors = val.reasons;
+      return current;
+    }
+    fresh.ok = false;
+    fresh.validationErrors = val.reasons;
+    return fresh;
+  }
+  fresh.edited = true;
+  fresh.ok = true;
   saveDayActs(iso, fresh);
   return fresh;
 }
@@ -3637,6 +4972,39 @@ function computeTimeEngine(rec){
   }
   return {total, committed, free, conflicts, items};
 }
+/* ================= SCHEDULE: GAP DETECTION (Session 4) =================
+   Materialized activities can leave real, uncovered time between them — a pre-existing
+   'free' slack window from generation (buildDaySchedule's own snapTo(), silently dropped
+   by materializeDaySchedule), a slot a deletion couldn't fully compact away
+   (compactGapAfterRemoval only pulls CONTIGUOUS flexible activities forward, so it
+   correctly leaves an already-existing or wall-bounded gap alone), or several such gaps at
+   once. This is purely a READ, reusing the same unwrap+merge technique computeTimeEngine
+   already uses: it derives gap segments fresh from the current rec.acts every call and
+   never writes anything anywhere, so a gap can never "duplicate" in storage — it simply
+   stops being computed once whatever created it is filled in. */
+function computeScheduleGaps(rec){
+  const items = schedUnwrap(rec);
+  const merged = [];
+  items.forEach(it=>{
+    const last = merged[merged.length-1];
+    if(last && it.relStart < last.end) last.end = Math.max(last.end, it.relEnd);
+    else merged.push({start:it.relStart, end:it.relEnd});
+  });
+  const anchor = rec.anchor||0;
+  const gaps = [];
+  let cursor = 0;
+  merged.forEach(m=>{
+    if(m.start>cursor) gaps.push({start:cursor, end:m.start});
+    cursor = Math.max(cursor, m.end);
+  });
+  if(cursor<1440) gaps.push({start:cursor, end:1440});
+  const MIN_GAP = 1; // ignore sub-minute rounding slivers
+  return gaps.filter(g=>(g.end-g.start)>=MIN_GAP).map(g=>({
+    id:'gap_'+(anchor+g.start)+'_'+(anchor+g.end),
+    source:'gap', type:'free', icon:'🌿', name:'فراغ / وقت اختياري',
+    start:anchor+g.start, end:anchor+g.end, notes:'',
+  }));
+}
 function computeStudyTarget(rec, settings){
   const te = computeTimeEngine(rec);
   const scheduled = te.items.filter(a=>a.type==='study').reduce((s,a)=>s+a.dur,0);
@@ -3647,9 +5015,180 @@ function computeStudyTarget(rec, settings){
   return {target, scheduled, remaining, available, shortage, free:te.free};
 }
 
+/* ================= SCHEDULE: FULL GENERATOR (Stage 3B) =================
+   "بناء الجدول من الأول" — a deliberate, explicit full rebuild of ONE day's schedule from the
+   goals already exposed in Schedule Settings above (study/sleep/entertainment/gym/college/meals —
+   every field here IS the "general time goal" the user sets; no second/duplicate input form).
+   Reuses buildDaySchedule() + buildMaterializedActs() exactly as every other schedule generation
+   in the app does — no parallel scheduler. The only new thing is the generate → validate → commit
+   contract: both of those are pure (no storage write), so a full preview can be built and checked
+   BEFORE anything is persisted. Respect order is inherited entirely from buildDaySchedule/the
+   cascade: prayer/sleep/wake/nap-if-enabled/college/commute are FIXED (never moved), then
+   FLEXIBLE/optional (study, gym trip, meals, leisure, routine) are packed around them with the
+   same duration/break/transition handling already used everywhere else. */
+function generateFullSchedulePreview(dayIdx, settings){
+  // GENERATE — pure, in-memory only.
+  return buildMaterializedActs(dayIdx, settings);
+}
+function validateGeneratedSchedule(rec, sched){
+  const reasons = [];
+  if(sched && (sched.prayerUnavailable || sched.hasValidPrayer === false)){
+    return {ok:false, reasons:['مواقيت الصلاة غير متاحة لهذه المدينة والتاريخ — تأكد من الاتصال بالإنترنت أو وجود كاش محفوظ.']};
+  }
+  const numbersValid = [sched.wakeMin, sched.sleepStart, sched.sleepDuration].every(n=>typeof n==='number' && !isNaN(n));
+  if(!numbersValid){
+    return {ok:false, reasons:['تعذّر حساب الجدول — تأكد من صحة مواقيت الصلاة المسجّلة لليوم ده.']};
+  }
+  // 1) the one HARD, essential constraint: sleep must never be squeezed below the floor. (A "مهم" not
+  //    "أساسي" goal — like the study target — falling short on its own is expected/normal on a busy day
+  //    and is already surfaced separately by the Study card after a successful commit; it doesn't block
+  //    a full rebuild by itself, matching its own priority tier.)
+  if(sched.sleepDuration<SCHED_DUR.sleepFloor){
+    reasons.push(`مش هيبقى فيه وقت كفاية للنوم (${schedFmtHours(sched.sleepDuration)}، والمفروض ٧ ساعات على الأقل) لو استخدمنا الأهداف دي — جرّب تقلل هدف الجيم أو المذاكرة أو الترفيه من الإعدادات فوق.`);
+  }
+  // 2) genuine activity overlaps (e.g. Stage 3A's nap-overrunning-into-Asr case, or any FIXED items
+  //    that collide) — reuses the exact same overlap engine the Time Engine card already shows.
+  computeTimeEngine(rec).conflicts.forEach(c=>{
+    reasons.push(`"${c.aName}" بيتداخل مع "${c.bName}" لمدة ${schedFmtHours(c.overlap)}.`);
+  });
+  // 3) structural sanity on every generated activity (defensive — should always hold by construction;
+  //    guards against a future regression rather than a case reachable today).
+  rec.acts.forEach(a=>{
+    if(!(typeof a.start==='number' && typeof a.end==='number' && a.end>a.start)){
+      reasons.push(`نشاط "${a.name}" له وقت غير صالح.`);
+    }
+  });
+  // 4) never silently extend past one full day cycle (wake → next wake) without an explicit setting —
+  //    buildDaySchedule already guarantees this by construction; this only catches a regression.
+  if(sched.sleepStart+sched.sleepDuration !== sched.wakeMin+1440){
+    reasons.push('الجدول بيتعدى حدود اليوم (منتصف الليل) من غير إعداد صريح لده.');
+  }
+  return {ok:reasons.length===0, reasons};
+}
+function commitFullSchedule(iso, rec){
+  // COMMIT — only ever called after validateGeneratedSchedule() returns ok:true.
+  rec.edited = true; // a deliberate full rebuild — freeze it (same convention recalculateDay uses) so a later unrelated settings tweak can't silently blow it away
+  saveDayActs(iso, rec);
+  return rec;
+}
+
+/* ================= SCHEDULE: COPY DAY (Stage 3C) =================
+   "نسخ جدول اليوم" — an EXACT structural copy of one day's persisted schedule onto one or more
+   other days (never generation): every activity's name/type/duration/order/timeLocked/notes/
+   source/genKey/defId is deep-cloned verbatim from the source, with zero shared object/array
+   references. The one deliberate exception is prayer-related/date-specific data (the actual
+   prayer blocks, the wake/qiyam pair that chains directly off Fajr, sleep, and an optional nap):
+   for exactly those entries, the SOURCE's baked-in clock time is never copied as a fixed value —
+   only their POSITION is re-resolved against the TARGET day's own prayer times (their COPIED
+   duration is still preserved exactly), so the target's prayer times stay linked to its own
+   date, never frozen to the source's. Everything else (study, gym, meals, college, commute,
+   routine, leisure, custom/recurring activities, and any gap between them — gaps are never
+   materialized objects in this app to begin with, so copying the activities alone reproduces
+   the same spacing with no risk of a duplicate) is copied at its exact original clock time.
+   The one-time reference schedule built for the target below (via the existing, unchanged
+   buildMaterializedActs()) is used ONLY to look up those few date-specific anchors — its own
+   activities are discarded; the committed result's structure comes entirely from the source. */
+const SCHED_DATE_SPECIFIC_GENKEYS = new Set(['wake','qiyam','fajr','dhuhr','asr','maghrib','isha','jumuahPrep','jumuah','nap','sleep']);
+function isDateSpecificCopiedAct(clone){
+  return !!(clone.genKey && SCHED_DATE_SPECIFIC_GENKEYS.has(clone.genKey.replace(/#\d+$/,'')));
+}
+function prepareCopiedDaySchedule(sourceRec, targetDayIdx, settings){
+  // PREPARE — pure, in-memory only; no storage write.
+  const targetNatural = buildMaterializedActs(targetDayIdx, settings); // reference only, for date-specific anchors
+  const byGenKey = {};
+  targetNatural.rec.acts.forEach(a=>{ if(a.genKey) byGenKey[a.genKey] = a; });
+
+  const acts = sourceRec.acts.map(srcAct=>{
+    const clone = JSON.parse(JSON.stringify(srcAct)); // deep clone — zero shared references with the source
+    if(isDateSpecificCopiedAct(clone)){
+      const ref = byGenKey[clone.genKey];
+      if(ref){
+        const dur = clone.end - clone.start; // the SOURCE's own duration is still preserved exactly
+        clone.start = ref.start;
+        clone.end = clone.start + dur;
+      }
+      // else: no matching anchor on the target's own day (e.g. a Friday-only Jumu'ah block copied
+      // onto a non-Friday target) — nothing correct to resolve against, so this one entry keeps its
+      // raw copied time rather than being dropped or invented.
+    }
+    return clone;
+  });
+  acts.sort((a,b)=>a.start-b.start);
+  const rec = { anchor: targetNatural.rec.anchor, acts, edited:false };
+  if(sourceRec.deletedGenKeys) rec.deletedGenKeys = JSON.parse(JSON.stringify(sourceRec.deletedGenKeys));
+  if(sourceRec.deletedDefIds) rec.deletedDefIds = JSON.parse(JSON.stringify(sourceRec.deletedDefIds));
+  applyCascade(rec, cascadeResolveOverlaps(rec)); // same self-heal pass already used after every other mutation
+  return rec;
+}
+function validateScheduleRecord(rec){
+  // VALIDATE — a sibling of Stage 3B's validateGeneratedSchedule(), for callers (like this copy
+  // flow) that have only a `rec` and no separate `sched` object to derive bounds from. Stage 3B's
+  // own function is left completely untouched; this derives the same bounds straight from `rec`
+  // itself (rec.anchor is the day's wake time; the 'sleep' activity gives sleepStart/duration).
+  const reasons = [];
+  const sleepAct = rec.acts.find(a=>a.genKey==='sleep');
+  const anchorValid = typeof rec.anchor==='number' && !isNaN(rec.anchor);
+  const sleepValid = sleepAct && typeof sleepAct.start==='number' && typeof sleepAct.end==='number' && !isNaN(sleepAct.start) && !isNaN(sleepAct.end);
+  if(!anchorValid || !sleepValid){
+    return {ok:false, reasons:['تعذّر حساب الجدول — تأكد من صحة مواقيت الصلاة المسجّلة لليوم ده.']};
+  }
+  const sleepDuration = sleepAct.end>sleepAct.start ? sleepAct.end-sleepAct.start : (1440-sleepAct.start+sleepAct.end);
+  if(sleepDuration<SCHED_DUR.sleepFloor){
+    reasons.push(`مش هيبقى فيه وقت كفاية للنوم بعد النسخ (${schedFmtHours(sleepDuration)}، والمفروض ٧ ساعات على الأقل) — مواقيت الصلاة مختلفة كفاية إن الجدول محتاج تعديل يدوي.`);
+  }
+  computeTimeEngine(rec).conflicts.forEach(c=>{
+    reasons.push(`"${c.aName}" بيتداخل مع "${c.bName}" لمدة ${schedFmtHours(c.overlap)}.`);
+  });
+  rec.acts.forEach(a=>{
+    if(!(typeof a.start==='number' && typeof a.end==='number' && a.end>a.start)){
+      reasons.push(`نشاط "${a.name}" له وقت غير صالح بعد النسخ.`);
+    }
+  });
+  if(sleepAct.start+sleepDuration !== rec.anchor+1440){
+    reasons.push('الجدول بعد النسخ بيتعدى حدود اليوم (منتصف الليل) من غير إعداد صريح لده.');
+  }
+  return {ok:reasons.length===0, reasons};
+}
+function commitCopiedSchedule(targetIso, rec){
+  // COMMIT — only ever called after every prepared target has passed validateScheduleRecord().
+  rec.edited = true; // a deliberate explicit copy — freeze it, same convention as commitFullSchedule()
+  saveDayActs(targetIso, rec);
+  return rec;
+}
+function copyDaySchedule(sourceDayIdx, targetIsoList){
+  // Multi-day ATOMIC copy: prepare every target fully in memory, validate every one, and only
+  // ever commit if every single target passed — a failure on any one of them changes nothing at all.
+  const sourceIso = toISO(weekDates[sourceDayIdx]);
+  targetIsoList = targetIsoList.filter(iso=>iso!==sourceIso); // the source is never its own target, enforced here too — not just left to the UI
+  const sourceRec = getDaySchedRecord(sourceIso, sourceDayIdx, scheduleSettings); // lazily materializes the source if it has never been opened — same as viewing it would
+
+  const prepared = targetIsoList.map(targetIso=>({
+    iso: targetIso,
+    hadExisting: loadDayActs(targetIso) !== null,
+    rec: prepareCopiedDaySchedule(sourceRec, isoDayIdx(targetIso), scheduleSettings),
+  }));
+
+  const withOverwrite = prepared.filter(p=>p.hadExisting);
+  if(withOverwrite.length){
+    const list = withOverwrite.map(p=>p.iso).join('، ');
+    if(!confirm(`الأيام دي عندها جدول موجود بالفعل وهيتم استبداله بالكامل بنسخة من جدول ${sourceIso}: ${list}. تكمل؟`)){
+      return {aborted:'cancelled'};
+    }
+  }
+
+  const failures = prepared.map(p=>({iso:p.iso, val:validateScheduleRecord(p.rec)})).filter(x=>!x.val.ok);
+  if(failures.length){
+    return {aborted:'validation', failures: failures.map(f=>({iso:f.iso, reasons:f.val.reasons}))};
+  }
+
+  prepared.forEach(p=> commitCopiedSchedule(p.iso, p.rec));
+  return {ok:true, copiedIsos: prepared.map(p=>p.iso)};
+}
+
 /* ================= SCHEDULE: WEEKLY BUDGET ================= */
 const SCHED_CATS = [
   {key:'sleep', label:'النوم', color:'var(--teal)'},
+  {key:'nap', label:'القيلولة', color:'#F97316'}, // Stage 3A — own bucket so it never double-counts into 'sleep' (sched.sleepDuration is added separately below)
   {key:'study', label:'المذاكرة', color:'var(--accent)'},
   {key:'college', label:'الكلية', color:'var(--good)'},
   {key:'gym', label:'الجيم (كامل)', color:'#EF4444'},
@@ -3767,6 +5306,40 @@ function renderScheduleSettingsForm(){
   document.getElementById('scMealDurLunch').value = scheduleSettings.mealDuration.lunch;
   document.getElementById('scMealEnDinner').checked = !!scheduleSettings.mealEnabled.dinner;
   document.getElementById('scMealDurDinner').value = scheduleSettings.mealDuration.dinner;
+
+  // Stage 3A: sleep/wake/nap, anchored to prayer times (loadPrayerTimes/buildDaySchedule already
+  // resolve the actual clock times — this section only edits the offsets/durations around them).
+  document.getElementById('scSleepStartOffset').value = scheduleSettings.sleepStartOffset;
+  const scCityEl = document.getElementById('scPrayerCity');
+  if(scCityEl) scCityEl.value = loadPrayerCity();
+
+  const wakeWrap = document.getElementById('scWakePresetRow');
+  wakeWrap.innerHTML = [30,60].map(v=>
+    `<div class="day-chip ${Number(scheduleSettings.wakeOffset)===v?'on':''}" data-val="${v}" style="flex:0 0 auto; min-width:64px;">${v} د</div>`
+  ).join('');
+  wakeWrap.querySelectorAll('.day-chip').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      scheduleSettings.wakeOffset = Number(chip.dataset.val); // same setting as the advanced scWakeOffset field below — just a quick preset, not a duplicate
+      saveScheduleSettings(scheduleSettings);
+      renderScheduleSettingsForm();
+      if(mode==='schedule') renderSchedule();
+    });
+  });
+
+  document.getElementById('scNapEnabled').checked = !!scheduleSettings.napEnabled;
+  const napWrap = document.getElementById('scNapDurationRow');
+  napWrap.innerHTML = [30,60].map(v=>
+    `<div class="day-chip ${Number(scheduleSettings.napDuration)===v?'on':''}" data-val="${v}" style="flex:0 0 auto; min-width:64px;">${v} د</div>`
+  ).join('');
+  napWrap.querySelectorAll('.day-chip').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      scheduleSettings.napDuration = Number(chip.dataset.val);
+      saveScheduleSettings(scheduleSettings);
+      renderScheduleSettingsForm();
+      if(mode==='schedule') renderSchedule();
+    });
+  });
+  document.getElementById('scNapDurationWrap').style.opacity = scheduleSettings.napEnabled ? '1' : '.5';
 }
 
 function onScheduleSettingChange(){
@@ -3789,13 +5362,22 @@ function onScheduleSettingChange(){
     lunch: Math.max(1, Number(document.getElementById('scMealDurLunch').value)||SCHED_DUR.lunch),
     dinner: Math.max(1, Number(document.getElementById('scMealDurDinner').value)||SCHED_DUR.dinner),
   };
+  scheduleSettings.sleepStartOffset = Math.max(0, Number(document.getElementById('scSleepStartOffset').value)||0);
+  scheduleSettings.napEnabled = document.getElementById('scNapEnabled').checked;
+  const scCityEl = document.getElementById('scPrayerCity');
+  if(scCityEl && scCityEl.value){
+    scheduleSettings.prayerCity = scCityEl.value;
+    storageSet('prayer-city', scCityEl.value);
+  }
   saveScheduleSettings(scheduleSettings);
+  renderScheduleSettingsForm(); // Stage 3A: keeps the nap-duration row's enabled/disabled look in sync
   if(mode==='schedule') renderSchedule();
 }
 
 /* ================= RENDER: SCHEDULE DAY VIEW ================= */
 const SCHED_PRIORITY = {
   sleep:{lvl:'must', label:'أساسي', color:'var(--bad)'},
+  nap:{lvl:'must', label:'أساسي', color:'var(--bad)'}, // Stage 3A: same tier as sleep/wake — a fixed constraint
   routine:{lvl:'must', label:'أساسي', color:'var(--bad)'},
   prayer:{lvl:'must', label:'أساسي', color:'var(--bad)'},
   meal:{lvl:'must', label:'أساسي', color:'var(--bad)'},
@@ -3812,8 +5394,19 @@ function schedMinToHHMM(min){ min=((Math.round(min)%1440)+1440)%1440; const h=Ma
 
 function renderScheduleActivities(rec, dayIdx, iso){
   const el = document.getElementById('scheduleTimeline');
-  const sorted = rec.acts.slice().sort((a,b)=>a.start-b.start);
+  const sorted = rec.acts.slice().concat(computeScheduleGaps(rec)).sort((a,b)=>a.start-b.start);
   el.innerHTML = sorted.map(act=>{
+    if(act.source==='gap'){
+      return `
+    <div class="tl-item type-${act.type}">
+      <div class="tl-rail"><div class="tl-dot"></div><div class="tl-line"></div></div>
+      <div class="tl-body">
+        <div class="tl-time mono">${schedMinToTime12(act.start)} – ${schedMinToTime12(act.end)}</div>
+        <div class="tl-label">${act.icon} ${escapeHtml(act.name)}</div>
+      </div>
+    </div>
+  `;
+    }
     const pri = schedPriorityFor(act.type);
     const seriesEligible = act.source==='generated' || !!act.defId;
     const confirming = scheduleActDeleteConfirmId===act.id;
@@ -3837,7 +5430,7 @@ function renderScheduleActivities(rec, dayIdx, iso){
       <div class="tl-rail"><div class="tl-dot"></div><div class="tl-line"></div></div>
       <div class="tl-body">
         <div class="tl-time mono">${schedMinToTime12(act.start)} – ${schedMinToTime12(act.end)}</div>
-        <div class="tl-label">${act.icon||'📌'} ${escapeHtml(act.name)} ${pri.label ? `<span style="font-size:.62rem; font-weight:700; color:${pri.color}; border:1px solid ${pri.color}; border-radius:999px; padding:1px 7px; margin-right:6px;">${pri.label}</span>` : ''}${act.source==='custom' ? ' <span class="opt-badge" style="margin-right:4px;">مخصّص</span>' : ''}${act.defId ? ' <span class="opt-badge" style="margin-right:4px; border-color:var(--teal); color:var(--teal);">متكرر</span>' : ''}${act.timeLocked ? ' <span class="opt-badge" style="margin-right:4px; border-color:var(--accent); color:var(--accent);">✋ يدوي</span>' : ''}</div>
+        <div class="tl-label">${act.icon||'📌'} ${escapeHtml(act.name)} ${pri.label ? `<span style="font-size:.62rem; font-weight:700; color:${pri.color}; border:1px solid ${pri.color}; border-radius:999px; padding:1px 7px; margin-right:6px;">${pri.label}</span>` : ''}${act.source==='custom' ? ' <span class="opt-badge" style="margin-right:4px;">مخصّص</span>' : ''}${act.defId ? ' <span class="opt-badge" style="margin-right:4px; border-color:var(--teal); color:var(--teal);">متكرر</span>' : ''}${act.timeLocked ? ' <span class="opt-badge" style="margin-right:4px; border-color:var(--accent); color:var(--accent);">✋ يدوي</span>' : ''}${(act.inlinePrayers||[]).map(p=>` <span class="opt-badge" style="margin-right:4px; border-color:var(--accent-dim); color:var(--accent-dim);">🕌 ${escapeHtml(p)} أثناء النشاط</span>`).join('')}</div>
         ${act.notes ? `<div class="tl-note">${escapeHtml(act.notes)}</div>` : ''}
         <div style="display:flex; gap:6px; margin-top:8px; flex-wrap:wrap;">
           <button class="reset-btn act-edit-btn" data-id="${act.id}" style="font-size:.68rem; padding:4px 9px;">✏️ تعديل</button>
@@ -3850,7 +5443,7 @@ function renderScheduleActivities(rec, dayIdx, iso){
     </div>
   `;}).join('') || `<p style="color:var(--muted); font-size:.8rem; text-align:center; padding:20px 0;">مفيش أنشطة النهاردة — دوس "➕ إضافة نشاط" عشان تبدأ.</p>`;
 
-  el.querySelectorAll('.act-edit-btn').forEach(b=> b.addEventListener('click', ()=>{ scheduleActEditingId=b.dataset.id; scheduleActDeleteConfirmId=null; renderSchedule(); }));
+  el.querySelectorAll('.act-edit-btn').forEach(b=> b.addEventListener('click', ()=>{ scheduleActEditingId=b.dataset.id; scheduleActDeleteConfirmId=null; scheduleCopyOpen=false; scheduleCopyTargets=[]; renderSchedule(); }));
   el.querySelectorAll('.act-dup-btn').forEach(b=> b.addEventListener('click', ()=>{
     duplicateActivity(iso, dayIdx, scheduleSettings, b.dataset.id);
     weekDotsSchedule[iso] = computeDotClassSchedule(scheduleCheckState, scheduleChecklistItems(dayIdx, scheduleSettings).length);
@@ -3932,6 +5525,85 @@ function renderScheduleActEditForm(rec, dayIdx, iso){
   });
 }
 
+function renderScheduleCopyCard(){
+  const card = document.getElementById('scheduleCopyCard');
+  if(!scheduleCopyOpen){ card.classList.add('hidden'); card.innerHTML=''; return; }
+  card.classList.remove('hidden');
+  const sourceIso = toISO(weekDates[selectedIdx]);
+  const weekChips = weekDates.map((d,i)=>{
+    if(i===selectedIdx) return '';
+    const iso = toISO(d);
+    const on = scheduleCopyTargets.includes(iso);
+    return `<div class="day-chip ${on?'on':''}" data-iso="${escapeHtml(iso)}">${escapeHtml(PLAN[i].name)}<br><span class="mono" style="font-size:.62rem;">${fmtDate(d)}</span></div>`;
+  }).join('');
+  const extraIsos = scheduleCopyTargets.filter(iso=> !weekDates.some(d=>toISO(d)===iso));
+  const extraChips = extraIsos.map(iso=>`<div class="day-chip on" data-remove-extra="${escapeHtml(iso)}">${escapeHtml(iso)} ✕</div>`).join('');
+  card.innerHTML = `
+    <div class="sc-title">📋 نسخ جدول ${escapeHtml(PLAN[selectedIdx].name)} (${sourceIso}) لأيام تانية</div>
+    <div class="section-hint" style="padding:0; margin:4px 0 10px;">اختار الأيام اللي عايز تبقى نسخة طبق الأصل من الجدول ده. مواقيت الصلاة والنوم والقيلولة هتتربط بتاريخ كل يوم هدف لوحده، وباقي الأنشطة هتتنسخ بنفس أوقاتها بالظبط. لو يوم فيه جدول موجود، هيتستبدل بالكامل بعد تأكيدك.</div>
+    <div class="day-toggle-row">${weekChips}</div>
+    <button class="reset-btn" id="copySelectRestBtn" style="margin-top:10px;">☑️ تحديد باقي أيام الأسبوع</button>
+    <div style="margin-top:14px;">
+      <label style="display:block; color:var(--muted); font-size:.72rem; margin-bottom:4px;">إضافة تاريخ من شهر تاني</label>
+      <div style="display:flex; gap:8px;">
+        <input type="date" id="copyExtraDateInput" class="weight-input" style="flex:1;">
+        <button class="reset-btn" id="copyAddExtraDateBtn">➕ إضافة</button>
+      </div>
+      ${extraChips ? `<div class="day-toggle-row" style="margin-top:8px;">${extraChips}</div>` : ''}
+    </div>
+    <div id="copyHint" class="section-hint hidden" style="margin:10px 0 0; padding:0;"></div>
+    <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:14px;">
+      <button class="reset-btn" id="copyCancelBtn">إلغاء</button>
+      <button class="reset-btn" id="copyConfirmBtn" style="border-color:var(--good); color:var(--good); font-weight:700;">📋 نسخ</button>
+    </div>
+  `;
+  function showCopyHint(msg){ const h=document.getElementById('copyHint'); h.textContent=msg; h.classList.remove('hidden'); }
+  card.querySelectorAll('.day-chip[data-iso]').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      const iso = chip.dataset.iso;
+      scheduleCopyTargets = scheduleCopyTargets.includes(iso) ? scheduleCopyTargets.filter(x=>x!==iso) : scheduleCopyTargets.concat([iso]);
+      renderScheduleCopyCard();
+    });
+  });
+  card.querySelectorAll('[data-remove-extra]').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      scheduleCopyTargets = scheduleCopyTargets.filter(x=>x!==chip.dataset.removeExtra);
+      renderScheduleCopyCard();
+    });
+  });
+  document.getElementById('copySelectRestBtn').addEventListener('click', ()=>{
+    weekDates.forEach((d,i)=>{ if(i!==selectedIdx){ const iso=toISO(d); if(!scheduleCopyTargets.includes(iso)) scheduleCopyTargets.push(iso); } });
+    renderScheduleCopyCard();
+  });
+  document.getElementById('copyAddExtraDateBtn').addEventListener('click', ()=>{
+    const val = document.getElementById('copyExtraDateInput').value;
+    if(!val) return;
+    if(val===sourceIso){ showCopyHint('التاريخ ده هو يوم المصدر نفسه — مينفعش يبقى هدف كمان.'); return; }
+    if(!scheduleCopyTargets.includes(val)) scheduleCopyTargets.push(val);
+    renderScheduleCopyCard();
+  });
+  document.getElementById('copyCancelBtn').addEventListener('click', ()=>{
+    scheduleCopyOpen=false; scheduleCopyTargets=[];
+    renderScheduleCopyCard();
+  });
+  document.getElementById('copyConfirmBtn').addEventListener('click', ()=>{
+    if(scheduleCopyTargets.length===0){ showCopyHint('اختار يوم واحد على الأقل تنسخله الجدول.'); return; }
+    const result = copyDaySchedule(selectedIdx, scheduleCopyTargets.slice());
+    if(result.aborted==='cancelled') return; // overwrite confirm was cancelled — nothing changed
+    if(result.aborted==='validation'){
+      const msg = result.failures.map(f=>`📅 ${f.iso}:\n`+f.reasons.map(r=>'• '+r).join('\n')).join('\n\n');
+      alert('❌ مقدرش أنسخ الجدول للأيام دي:\n\n'+msg+'\n\nمفيش أي يوم اتغيّر.');
+      return;
+    }
+    scheduleCopyOpen=false; scheduleCopyTargets=[];
+    result.copiedIsos.forEach(iso=>{
+      weekDotsSchedule[iso] = computeDotClassSchedule(loadScheduleCheck(iso), scheduleChecklistItems(isoDayIdx(iso), scheduleSettings).length);
+    });
+    renderSchedule();
+  });
+}
+
+
 function renderScheduleTimeEngineCard(rec){
   const te = computeTimeEngine(rec);
   const el = document.getElementById('scheduleTimeEngineCard');
@@ -3990,7 +5662,10 @@ function renderScheduleSleepBlock(rec){
 
 function renderScheduleBanners(sched){
   const fb = document.getElementById('scheduleFallbackNote');
-  if(sched.usingFallback){
+  if(sched.prayerUnavailable){
+    fb.classList.remove('hidden');
+    fb.innerHTML = '⚠️ مواقيت الصلاة غير متاحة لهذه المدينة والتاريخ (غير متصل بالإنترنت ولا يوجد كاش محفوظ). الجدول الحالي محفوظ ومستقر.';
+  } else if(sched.usingFallback){
     fb.classList.remove('hidden');
     fb.innerHTML = '⏰ مواعيد الصلاة مش متسجلة ليومك ده، فالجدول مستخدم مواعيد تقريبية. سجّل مواعيد الصلاة الحقيقية من تاب "الصلاة" عشان الجدول يبقى مضبوط بالظبط.';
   } else fb.classList.add('hidden');
@@ -4043,6 +5718,7 @@ function renderSchedule(){
   renderScheduleTimeEngineCard(rec);
   renderScheduleStudyCard(rec, scheduleSettings);
   renderScheduleActEditForm(rec, selectedIdx, iso);
+  renderScheduleCopyCard();
   renderScheduleActivities(rec, selectedIdx, iso);
   renderScheduleSleepBlock(rec);
   renderScheduleChecklist(selectedIdx, scheduleSettings);
@@ -5208,6 +6884,36 @@ function budgetStatusForCategory(amount, budget){
   if(pct>=80) return {label:'قريب من الحد', color:'var(--accent-dim)'};
   return {label:'طبيعي', color:'var(--good)'};
 }
+
+/* ---- Stage 2: overspend transition alert ----
+   Fires ONLY as a direct side effect of registering a brand-new expense (see onSaveExpense),
+   never from a render pass, page load, or reload. Detects the exact moment a category's status
+   (via the existing budgetStatusForCategory — no new budget math) crosses from "not over" into
+   "تجاوزت الميزانية" for the FIRST time. Because it re-derives both the before and after amounts
+   live from budget-expenses on every call (no separate "already alerted" flag/storage key), a
+   category that was already over budget before this expense simply never re-alerts — the before-
+   status check short-circuits it. No existing data or calculation is touched. */
+function categorySpentForMonth(monthTag, catKey){
+  return loadExpenses().filter(e=> e.date && e.date.slice(0,7)===monthTag && e.category===catKey).reduce((s,e)=>s+e.amount, 0);
+}
+function isOverBudgetStatus(status){ return !!status && status.label==='تجاوزت الميزانية'; }
+function maybeShowBudgetOverspendAlert(monthTag, catKey, beforeAmount){
+  const budget = (getCategoryBudgetsForMonth(monthTag)||{})[catKey];
+  if(isOverBudgetStatus(budgetStatusForCategory(beforeAmount, budget))) return; // already over — never repeat
+  const afterAmount = categorySpentForMonth(monthTag, catKey);
+  const afterStatus = budgetStatusForCategory(afterAmount, budget);
+  if(!isOverBudgetStatus(afterStatus)) return; // this expense didn't cause a crossing
+  showBudgetOverspendAlert(findBudgetCategory(catKey), afterAmount, budget);
+}
+function showBudgetOverspendAlert(cat, spent, budget){
+  const el = document.getElementById('budgetOverspendAlert');
+  if(!el) return;
+  el.innerHTML = `<div class="cb-title">⚠️ تجاوزت الميزانية</div>` +
+    `<div>فئة "${escapeHtml(cat.icon?cat.icon+' ':'')}${escapeHtml(cat.name)}" وصلت ${fmtMoney(spent)} ج من أصل ${fmtMoney(budget)} ج المحددة لها الشهر ده.</div>` +
+    `<button type="button" class="reset-btn" id="budgetOverspendAlertClose" style="margin-top:8px;">تمام، فهمت</button>`;
+  el.classList.remove('hidden');
+  document.getElementById('budgetOverspendAlertClose').addEventListener('click', ()=> el.classList.add('hidden'));
+}
 function computeDotClassBudget(iso){
   return loadExpenses().some(e=>e.date===iso) ? 'full' : '';
 }
@@ -5354,11 +7060,16 @@ function onSaveExpense(){
     const list = loadExpenses();
     const expId = 'rec_'+defId+'_'+monthTag;
     if(!list.some(e=>e.id===expId)){
+      const beforeAmount = categorySpentForMonth(monthTag, budgetSelectedCategory);
       list.push({id:expId, date:dateVal, amount:amountVal, category:budgetSelectedCategory, subcategory:sub, note:note?(note+' (متكرر)'):'(متكرر)', recurringId:defId, createdAt:new Date().toISOString()});
       saveExpenses(list);
+      maybeShowBudgetOverspendAlert(monthTag, budgetSelectedCategory, beforeAmount);
     }
   } else {
+    const monthTag = dateVal.slice(0,7);
+    const beforeAmount = categorySpentForMonth(monthTag, budgetSelectedCategory);
     addExpense({date:dateVal, amount:amountVal, category:budgetSelectedCategory, subcategory:sub, note});
+    maybeShowBudgetOverspendAlert(monthTag, budgetSelectedCategory, beforeAmount);
   }
 
   resetExpenseFormChrome();
@@ -5622,6 +7333,7 @@ function renderBudgetAll(){
   renderRecurringList();
   renderBudgetAnalytics(mb);
   weekDates.forEach(d=>{ const iso=toISO(d); weekDotsBudget[iso] = computeDotClassBudget(iso); });
+  renderHeaderStamps();
 }
 document.getElementById('budgetPrevMonth').addEventListener('click', ()=> shiftBudgetMonth(-1));
 document.getElementById('budgetNextMonth').addEventListener('click', ()=> shiftBudgetMonth(1));
@@ -5843,6 +7555,7 @@ function applyMode(){
   if(mode==='search') renderSearchResults();
   if(mode==='budget') renderBudgetAll();
 
+  renderHeaderStamps();
   renderTabs();
 }
 
@@ -5885,6 +7598,8 @@ function selectDay(i){
   nawafilState = loadNawafil(iso);
   quranState = loadQuran(iso);
   azkarState = loadAzkar(iso);
+  const prayerCity = loadPrayerCity();
+  ensurePrayerTimes(prayerCity, iso);
   prayerTimesState = loadPrayerTimes(iso);
   weightVal = loadWeight(iso);
   scheduleCheckState = loadScheduleCheck(iso);
@@ -5892,8 +7607,8 @@ function selectDay(i){
   dailyNoteVal = loadDailyNote(iso);
   scheduleActEditingId = null;
   scheduleActDeleteConfirmId = null;
-
-  renderTabs();
+  scheduleCopyOpen = false;
+  scheduleCopyTargets = [];
   renderCalBarLabel();
   renderSummary();
   renderMeals();
@@ -5942,6 +7657,12 @@ document.getElementById('sleepTimeStart').addEventListener('change', onSleepTime
 document.getElementById('sleepTimeEnd').addEventListener('change', onSleepTimeChange);
 document.getElementById('weightInput').addEventListener('change', onWeightChange);
 document.getElementById('recoveryNotes').addEventListener('change', onRecoveryNotesChange);
+document.querySelectorAll('#goalModeToggle .tbtn').forEach(b=>{
+  b.addEventListener('click', ()=> onGoalModeChange(b.dataset.goal));
+});
+['goalKgPerMonth','goalTargetWeight','goalMaintenanceCalories'].forEach(id=>{
+  document.getElementById(id).addEventListener('change', onGoalSettingChange);
+});
 document.getElementById('targetProtein').addEventListener('change', onTargetSettingChange);
 document.getElementById('targetWaterCups').addEventListener('change', onTargetSettingChange);
 document.getElementById('targetCalories').addEventListener('change', onTargetSettingChange);
@@ -5959,12 +7680,32 @@ document.getElementById('importDataBtn').addEventListener('click', ()=> document
 document.getElementById('importDataFile').addEventListener('change', (e)=>{
   if(e.target.files && e.target.files[0]) importAllData(e.target.files[0]);
 });
-['scCollegeStart','scCollegeEnd','scCollegeCommute','scGymCommute','scWakeOffset','scStudyHours','scSleepHours','scEntertainment','scGymWorkoutDuration','scMealEnBreakfast','scMealDurBreakfast','scMealEnLunch','scMealDurLunch','scMealEnDinner','scMealDurDinner'].forEach(id=>{
+['scCollegeStart','scCollegeEnd','scCollegeCommute','scGymCommute','scWakeOffset','scStudyHours','scSleepHours','scEntertainment','scGymWorkoutDuration','scMealEnBreakfast','scMealDurBreakfast','scMealEnLunch','scMealDurLunch','scMealEnDinner','scMealDurDinner','scSleepStartOffset','scNapEnabled'].forEach(id=>{
   document.getElementById(id).addEventListener('change', onScheduleSettingChange);
 });
 document.getElementById('scheduleAddActBtn').addEventListener('click', ()=>{
   scheduleActEditingId = scheduleActEditingId==='NEW' ? null : 'NEW';
   scheduleActDeleteConfirmId = null;
+  scheduleCopyOpen = false; scheduleCopyTargets = [];
+  renderSchedule();
+});
+document.getElementById('scheduleCopyBtn').addEventListener('click', ()=>{
+  scheduleCopyOpen = !scheduleCopyOpen;
+  scheduleCopyTargets = [];
+  scheduleActEditingId = null; scheduleActDeleteConfirmId = null;
+  renderSchedule();
+});
+document.getElementById('scheduleFullGenBtn').addEventListener('click', ()=>{
+  if(!confirm('هيبني جدول اليوم ده من الأول، باستخدام الأهداف الحالية في الإعدادات فوق (المذاكرة، النوم، الترفيه، الجيم، الكلية...). أي نشاط مخصّص أو تعديل يدوي عملته على اليوم ده هيتشال (الأنشطة المتكررة هتفضل موجودة). لو الوقت مش كفاية للأهداف دي، مش هيتغيّر أي حاجة وهتشوف السبب. تكمل؟')) return;
+  const iso = toISO(weekDates[selectedIdx]);
+  const preview = generateFullSchedulePreview(selectedIdx, scheduleSettings); // GENERATE — in-memory only
+  const val = validateGeneratedSchedule(preview.rec, preview.sched);          // VALIDATE
+  if(!val.ok){
+    alert('❌ مقدرش أبني الجدول من الأول:\n\n'+val.reasons.map(r=>'• '+r).join('\n')+'\n\nجدولك الحالي متأثرش خالص.');
+    return;
+  }
+  commitFullSchedule(iso, preview.rec); // COMMIT — only reached after validation passes
+  weekDotsSchedule[iso] = computeDotClassSchedule(scheduleCheckState, scheduleChecklistItems(selectedIdx, scheduleSettings).length);
   renderSchedule();
 });
 document.getElementById('scheduleRecalcBtn').addEventListener('click', ()=>{
@@ -5974,6 +7715,13 @@ document.getElementById('scheduleRecalcBtn').addEventListener('click', ()=>{
   weekDotsSchedule[iso] = computeDotClassSchedule(scheduleCheckState, scheduleChecklistItems(selectedIdx, scheduleSettings).length);
   renderSchedule();
 });
+
+const prayerCitySelEl = document.getElementById('prayerCitySelect');
+if(prayerCitySelEl) prayerCitySelEl.addEventListener('change', (e)=> onCityChange(e.target.value));
+const scCitySelEl = document.getElementById('scPrayerCity');
+if(scCitySelEl) scCitySelEl.addEventListener('change', (e)=> onCityChange(e.target.value));
+const prayerRefBtnEl = document.getElementById('prayerRefreshBtn');
+if(prayerRefBtnEl) prayerRefBtnEl.addEventListener('click', ()=> onPrayerRefresh());
 
 document.getElementById('dailyNotesInput').addEventListener('change', onDailyNoteChange);
 document.getElementById('clearDailyNote').addEventListener('click', onClearDailyNote);
@@ -5994,6 +7742,7 @@ document.getElementById('foodEditCancel').addEventListener('click', closeFoodEdi
 document.getElementById('foodEditSave').addEventListener('click', onSaveFood);
 document.getElementById('foodEditDelete').addEventListener('click', onDeleteFood);
 document.getElementById('foodEditDuplicate').addEventListener('click', onDuplicateFood);
+document.getElementById('foodEditUnit').addEventListener('change', syncFoodLoafFieldVisibility);
 ['foodEditUnit','foodEditPrice'].forEach(id=>{
   document.getElementById(id).addEventListener('input', ()=>{
     const raw = document.getElementById('foodEditPrice').value;
@@ -6084,6 +7833,10 @@ function init(){
   foodOverrides = loadFoodOverrides();
   deletedDefaultFoods = loadDeletedDefaultFoods();
   rebuildFoodDB();
+  if(!planFoodsResolvable(PLAN)){ // saved plan points at a food that no longer exists: every meal renderer would throw
+    console.warn('[plan] saved plan references a food that no longer exists — using the default plan for this session; the saved plan in storage was NOT changed.');
+    PLAN = JSON.parse(JSON.stringify(PLAN_DEFAULTS));
+  }
 
   scheduleSettings = loadScheduleSettings();
   renderScheduleSettingsForm();
