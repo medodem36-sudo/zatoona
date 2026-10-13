@@ -63,7 +63,7 @@
    byte on every untouched/pristine day (checked against all 7 weekday
    templates). Content-only change; no shell asset paths changed. */
 
-const CACHE_VERSION = 'v9';
+const CACHE_VERSION = 'v10';
 const SHELL_CACHE = 'zatoona-shell-' + CACHE_VERSION;
 const RUNTIME_CACHE = 'zatoona-runtime-' + CACHE_VERSION;
 const CURRENT_CACHES = [SHELL_CACHE, RUNTIME_CACHE];
