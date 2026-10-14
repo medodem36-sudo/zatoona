@@ -467,6 +467,53 @@
   .empty-note{color:var(--muted); font-size:.8rem; text-align:center; padding:22px 10px;}
   .rem-meta{display:flex; flex-wrap:wrap; gap:8px; font-size:.7rem; color:var(--muted); margin-top:3px;}
   .rem-meta b{color:var(--text);}
+
+  /* ===== SECTION NOTES (Stage 2) ===== */
+  .sec-notes-card{
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius-sm);
+    box-shadow:var(--shadow-sm); margin-bottom:14px; overflow:hidden;
+  }
+  .sec-notes-summary{
+    display:flex; align-items:center; justify-content:space-between; padding:10px 14px;
+    cursor:pointer; font-weight:700; font-size:.82rem; color:var(--text); background:var(--card);
+    user-select:none; outline:none; transition:background .15s;
+  }
+  .sec-notes-summary:hover{ background:var(--card-alt); }
+  .sec-notes-title{ display:inline-flex; align-items:center; gap:6px; }
+  .sec-notes-badge{
+    font-size:.68rem; font-weight:600; border-radius:999px; padding:2px 8px; border:1px solid var(--line);
+    transition:all .15s ease;
+  }
+  .sec-notes-body{ padding:10px 14px 12px; border-top:1px solid var(--line); background:var(--bg-2); }
+  .sec-notes-hint{ font-size:.72rem; color:var(--muted); margin-bottom:6px; }
+  .sec-notes-input{
+    width:100%; background:var(--card); border:1px solid var(--line); border-radius:8px; color:var(--text);
+    font-family:'Cairo','Segoe UI','Noto Sans Arabic',Tahoma,Arial,sans-serif; font-size:.82rem; padding:8px 10px;
+    resize:vertical; min-height:60px; box-sizing:border-box; transition:border-color .15s;
+  }
+  .sec-notes-input:focus{ outline:none; border-color:var(--primary); }
+  .sec-notes-actions{ display:flex; justify-content:space-between; align-items:center; margin-top:8px; }
+  .sec-notes-status{ font-size:.72rem; color:var(--good); font-weight:600; min-height:16px; }
+
+  /* ===== SCHEDULE ACTIVITY CLASSIFICATION BADGES (Stage 2) ===== */
+  .act-pri-badge{
+    font-size:.62rem; font-weight:700; border-radius:999px; padding:1px 7px; margin-right:6px;
+    display:inline-block; vertical-align:middle; line-height:1.4;
+  }
+  .act-pri-essential{ color:var(--primary); background:var(--primary-light); border:1px solid var(--primary); }
+  .act-pri-important{ color:var(--good); background:#EBF7F0; border:1px solid var(--good); }
+  .act-pri-optional{ color:#C78332; background:#FEF9ED; border:1px solid #E8D4A8; }
+  .act-pri-leisure{ color:var(--muted); background:var(--card-alt); border:1px solid var(--line); }
+  /* Aliases for compatibility */
+  .act-pri-high{ color:var(--primary); background:var(--primary-light); border:1px solid var(--primary); }
+  .act-pri-medium{ color:var(--good); background:#EBF7F0; border:1px solid var(--good); }
+  .act-pri-low{ color:#C78332; background:#FEF9ED; border:1px solid #E8D4A8; }
+  .ex-note-input{
+    width:100%; background:var(--card); border:1px solid var(--line); border-radius:8px; color:var(--text);
+    font-family:'Cairo','Segoe UI','Noto Sans Arabic',Tahoma,Arial,sans-serif; font-size:.82rem; padding:7px 10px;
+    box-sizing:border-box; transition:border-color .15s;
+  }
+  .ex-note-input:focus{ outline:none; border-color:var(--primary); }
 </style>
 </head>
 <body>
@@ -500,6 +547,7 @@
     <div class="hh-title">زتونة</div>
     <div class="hh-sub">خطتك المتكاملة — أكل وتمرين ونوم وصلاة وجدول وميزانية، كل حاجة في مكان واحد ومحفوظة على جهازك بس</div>
     <div class="home-stats-grid" id="homeStatsGrid"></div>
+    <div id="secNotes-home" style="margin-top:16px;"></div>
   </div>
 
   <div class="modes" id="modesBar" role="navigation" aria-label="الأقسام الرئيسية">
@@ -526,6 +574,7 @@
 
   <!-- ===== MEAL MODE ===== -->
   <div id="mealView">
+    <div id="secNotes-meal"></div>
     <details class="settings-card" style="padding:0;">
       <summary style="cursor:pointer; color:var(--accent); font-weight:700; font-size:.85rem; padding:16px;">🎯 أهداف التغذية — Settings</summary>
       <div style="padding:0 16px 16px;">
@@ -741,6 +790,7 @@
 
   <!-- ===== GYM MODE ===== -->
   <div id="gymView" class="hidden">
+    <div id="secNotes-gym"></div>
     <div id="gymRestBlock" class="hidden">
       <div class="rest-card">
         <div class="big">💤</div>
@@ -783,6 +833,7 @@
 
   <!-- ===== SLEEP MODE ===== -->
   <div id="sleepView" class="hidden">
+    <div id="secNotes-sleep"></div>
     <div class="section-title"><span class="n">١</span> ملخص النوم</div>
     <div class="summary" id="sleepSummary"></div>
 
@@ -814,6 +865,7 @@
 
   <!-- ===== PRAYER MODE ===== -->
   <div id="prayerView" class="hidden">
+    <div id="secNotes-prayer"></div>
     <div class="section-title"><span class="n">١</span> ملخص اليوم</div>
     <div class="summary" id="prayerSummary"></div>
 
@@ -851,6 +903,7 @@
 
   <!-- ===== SCHEDULE MODE ===== -->
   <div id="scheduleView" class="hidden">
+    <div id="secNotes-schedule"></div>
     <div class="section-title"><span class="n">١</span> إعدادات الجدول</div>
     <div class="section-hint">القيم دي بتتطبق على الأسبوع كله — عدّلها لما حاجة تتغيّر (ترم جديد، معاد جيم مختلف، إلخ)</div>
     <div class="settings-card">
@@ -999,6 +1052,7 @@
 
   <!-- ===== RECOVERY MODE ===== -->
   <div id="recoveryView" class="hidden">
+    <div id="secNotes-recovery"></div>
     <div class="section-title"><span class="n">١</span> حالتك النهاردة</div>
     <div class="recovery-status" id="recoveryStatusCard"></div>
 
@@ -1017,6 +1071,7 @@
 
   <!-- ===== OVERVIEW MODE ===== -->
   <div id="overviewView" class="hidden">
+    <div id="secNotes-overview"></div>
     <div class="range-tabs" id="rangeTabs"></div>
     <div id="overallConsistency" style="text-align:center; color:var(--muted); font-size:.76rem; margin:-4px 0 14px;"></div>
 
@@ -1144,6 +1199,7 @@
 
   <!-- ===== SEARCH MODE ===== -->
   <div id="searchView" class="hidden">
+    <div id="secNotes-search"></div>
     <div class="section-title"><span class="n">١</span> البحث في كل بياناتك</div>
     <div class="section-hint">دوّر بتاريخ (٢٠٢٦-٠٨-١١)، اسم وجبة أو تمرين، فئة أو مبلغ مصروف، أو أي كلمة في ملاحظاتك وتذكيراتك</div>
     <div style="display:flex; gap:8px; align-items:center; margin-bottom:6px;">
@@ -1163,6 +1219,7 @@
       <button class="cal-nav-btn" id="budgetNextMonth" title="الشهر الجاي" aria-label="الشهر الجاي">‹</button>
       <button class="cal-today-btn" id="budgetThisMonthBtn" aria-label="ارجع للشهر الحالي">الشهر ده</button>
     </div>
+    <div id="secNotes-budget"></div>
 
     <div class="section-title"><span class="n">١</span> ملخص الشهر</div>
     <div class="section-hint">الميزانية = المحدد مقدمًا، المصروف = الفعلي، والمتبقي هو اللي ممكن تدّخره — كل شهر بميزانيته الخاصة</div>
@@ -1868,6 +1925,12 @@ function initSchemaVersion(){
    for free. */
 function loadDailyNote(iso){ const v = storageGet('daynote:'+iso); return v===null ? '' : v; }
 function saveDailyNote(iso, text){ storageSet('daynote:'+iso, text||''); }
+
+/* ================= SECTION NOTES (Stage 2) =================
+   Independent notes in every section, persisted under 'secnote:'+secId.
+   Rides along with exportAllData()/importAllData() for free. */
+function loadSectionNote(secId){ const v = storageGet('secnote:'+secId); return v===null ? '' : v; }
+function saveSectionNote(secId, text){ storageSet('secnote:'+secId, text||''); }
 
 /* ================= REMINDERS (Phase 3 — data + UI only) =================
    Flat list stored under one key, same pattern as shoppingState/prepState.
@@ -3919,7 +3982,7 @@ function getExHistory(exKey){
     let obj; try{ obj = JSON.parse(localStorage.getItem(k)); }catch(e){ continue; }
     const st = obj && obj[exKey];
     if(st && st.sets && st.sets.some(Boolean) && st.weight){
-      out.push({iso, weight:parseFloat(st.weight), reps:st.reps||'', rir:st.rir||''});
+      out.push({iso, weight:parseFloat(st.weight), reps:st.reps||'', rir:st.rir||'', note:st.note||''});
     }
   }
   out.sort((a,b)=> a.iso<b.iso?1:-1);
@@ -3941,7 +4004,7 @@ function getAllExHistory(){
       const st = obj[exKey];
       if(st && st.sets && st.sets.some(Boolean) && st.weight){
         if(!out[exKey]) out[exKey] = [];
-        out[exKey].push({iso, weight:parseFloat(st.weight), reps:st.reps||'', rir:st.rir||''});
+        out[exKey].push({iso, weight:parseFloat(st.weight), reps:st.reps||'', rir:st.rir||'', note:st.note||''});
       }
     });
   }
@@ -3984,9 +4047,9 @@ function renderExercises(){
   const iso = toISO(weekDates[selectedIdx]);
 
   list.forEach(ex=>{
-    if(!exState[ex.key]) exState[ex.key] = { sets: new Array(ex.sets).fill(false), weight:'', reps:'', rir:'' };
+    if(!exState[ex.key]) exState[ex.key] = { sets: new Array(ex.sets).fill(false), weight:'', reps:'', rir:'', note:'' };
     const st = exState[ex.key];
-    if(st.reps===undefined) st.reps=''; if(st.rir===undefined) st.rir='';
+    if(st.reps===undefined) st.reps=''; if(st.rir===undefined) st.rir=''; if(st.note===undefined) st.note='';
     const card = document.createElement('div');
     card.className = 'ex-card' + (ex.optional ? ' optional' : '');
 
@@ -4029,6 +4092,9 @@ function renderExercises(){
           <input type="text" inputmode="numeric" class="weight-input ex-reps" placeholder="تكرار" value="${escapeHtml(st.reps||'')}" style="flex:1; min-width:56px;">
           <input type="text" inputmode="numeric" class="weight-input ex-rir" placeholder="RIR" value="${escapeHtml(st.rir||'')}" style="flex:1; min-width:52px;">
         </div>
+        <div style="margin-top:6px;">
+          <input type="text" class="ex-note-input ex-note" placeholder="ملاحظة لهذا التمرين (اختياري)..." value="${escapeHtml(st.note||'')}">
+        </div>
         ${suggestion ? `<div class="prog-suggest">${suggestion}</div>` : ''}
         <details class="ex-details">
           <summary>طريقة الأداء والأخطاء الشائعة</summary>
@@ -4067,6 +4133,19 @@ function renderExercises(){
       if(v!=='' && !isNaN(parseInt(v,10)) && parseInt(v,10)<0){ alert('RIR مينفعش يكون رقم سالب.'); e.target.value = st.rir||''; return; }
       st.rir = v; exState[ex.key]=st; saveEx(iso, exState); renderExercises();
     });
+    const noteEl = card.querySelector('.ex-note');
+    if(noteEl){
+      noteEl.addEventListener('input', (e)=>{
+        st.note = e.target.value;
+        exState[ex.key] = st;
+        saveEx(iso, exState);
+      });
+      noteEl.addEventListener('change', (e)=>{
+        st.note = e.target.value;
+        exState[ex.key] = st;
+        saveEx(iso, exState);
+      });
+    }
 
     el.appendChild(card);
   });
@@ -4627,6 +4706,27 @@ const SCHED_TYPE_META = {
 };
 function schedPriorityFor(type){ return SCHED_PRIORITY[type] || {lvl:'flexible', label:'مرن', color:'var(--good)'}; }
 
+/* ================= SCHEDULE: EDITABLE ACTIVITY CLASSIFICATIONS (Stage 2) =================
+   4 editable activity classifications:
+     essential (أساسي), important (مهم — safe default), optional (اختياري), leisure (ترفيهي).
+   Persisted on each activity object as act.priority. Displayed via emerald-themed compact badges. */
+const SCHED_ACTIVITY_PRIORITIES = {
+  essential: { key: 'essential', label: 'أساسي',   badgeClass: 'act-pri-essential', color: 'var(--primary)', bg: 'var(--primary-light)', border: 'var(--primary)' },
+  important: { key: 'important', label: 'مهم',     badgeClass: 'act-pri-important', color: 'var(--good)',    bg: '#EBF7F0',              border: 'var(--good)' },
+  optional:  { key: 'optional',  label: 'اختياري', badgeClass: 'act-pri-optional',  color: '#C78332',         bg: '#FEF9ED',              border: '#E8D4A8' },
+  leisure:   { key: 'leisure',   label: 'ترفيهي', badgeClass: 'act-pri-leisure',   color: 'var(--muted)',    bg: 'var(--card-alt)',      border: 'var(--line)' },
+};
+const SCHED_PRIORITY_ALIAS_MAP = {
+  high: 'essential',
+  medium: 'important',
+  low: 'optional',
+};
+function getActPriority(act){
+  let p = act && act.priority;
+  if(p && SCHED_PRIORITY_ALIAS_MAP[p]) p = SCHED_PRIORITY_ALIAS_MAP[p];
+  return (p && SCHED_ACTIVITY_PRIORITIES[p]) ? SCHED_ACTIVITY_PRIORITIES[p] : SCHED_ACTIVITY_PRIORITIES.important;
+}
+
 /* ================= SCHEDULE: DYNAMIC CASCADE (Session 2.5) =================
    Classification for cascade purposes ONLY (separate from the must/should/flexible
    priority badge above, which is about importance, not about whether something is
@@ -4747,6 +4847,7 @@ function buildMaterializedActs(dayIdx, settings){
       name:(ov&&ov.name!=null)?ov.name:b.label, type:b.type, icon:(SCHED_TYPE_META[b.type]||{}).icon||b.icon||'📌',
       start:(ov&&ov.start!=null)?ov.start:b.start, end:(ov&&ov.end!=null)?ov.end:b.end,
       notes:(ov&&ov.notes!=null)?ov.notes:'',
+      priority:(ov&&ov.priority!=null)?ov.priority:'important',
       ...(b.inlinePrayers && b.inlinePrayers.length ? {inlinePrayers:b.inlinePrayers} : {}), // Stage 3A: badge data (e.g. College swallowing Dhuhr) — display-only, no override support needed
     });
   });
@@ -4759,10 +4860,11 @@ function buildMaterializedActs(dayIdx, settings){
       start:(sleepOv&&sleepOv.start!=null)?sleepOv.start:sched.sleepStart,
       end:(sleepOv&&sleepOv.end!=null)?sleepOv.end:(sched.wakeMin+1440),
       notes:(sleepOv&&sleepOv.notes!=null)?sleepOv.notes:'',
+      priority:(sleepOv&&sleepOv.priority!=null)?sleepOv.priority:'important',
     });
   }
   loadSchedRecurringDefs().filter(d=>d.dayIdx===dayIdx && d.active).forEach(d=>{
-    acts.push({ id:'rec_'+d.id, defId:d.id, source:'custom', name:d.name, type:d.type, icon:(SCHED_TYPE_META[d.type]||{}).icon||'📌', start:d.start, end:d.end, notes:d.notes||'' });
+    acts.push({ id:'rec_'+d.id, defId:d.id, source:'custom', name:d.name, type:d.type, icon:(SCHED_TYPE_META[d.type]||{}).icon||'📌', start:d.start, end:d.end, notes:d.notes||'', priority:d.priority||'important' });
   });
   acts.sort((a,b)=>a.start-b.start);
   const rec = { anchor: sched.wakeMin, acts, edited:false };
@@ -4801,10 +4903,11 @@ function materializedFutureDatesForWeekday(dayIdx){
 function addActivity(iso, dayIdx, settings, data, recurring){
   const rec = getDaySchedRecord(iso, dayIdx, settings);
   rec.edited = true;
+  const pri = data.priority || 'important';
   if(recurring){
-    const def = { id:schedUid(), dayIdx, name:data.name, type:data.type, start:data.start, end:data.end, notes:data.notes||'', active:true };
+    const def = { id:schedUid(), dayIdx, name:data.name, type:data.type, priority:pri, start:data.start, end:data.end, notes:data.notes||'', active:true };
     const defs = loadSchedRecurringDefs(); defs.push(def); saveSchedRecurringDefs(defs);
-    const act = { id:'rec_'+def.id, defId:def.id, source:'custom', name:def.name, type:def.type, icon:(SCHED_TYPE_META[def.type]||{}).icon||'📌', start:def.start, end:def.end, notes:def.notes };
+    const act = { id:'rec_'+def.id, defId:def.id, source:'custom', name:def.name, type:def.type, priority:pri, icon:(SCHED_TYPE_META[def.type]||{}).icon||'📌', start:def.start, end:def.end, notes:def.notes };
     rec.acts.push(act); rec.acts.sort((a,b)=>a.start-b.start); saveDayActs(iso, rec);
     materializedFutureDatesForWeekday(dayIdx).forEach(otherIso=>{
       if(otherIso===iso) return;
@@ -4812,7 +4915,7 @@ function addActivity(iso, dayIdx, settings, data, recurring){
       orec.acts.push(Object.assign({},act)); orec.acts.sort((a,b)=>a.start-b.start); saveDayActs(otherIso, orec);
     });
   } else {
-    const act = { id:'one_'+schedUid(), source:'custom', name:data.name, type:data.type, icon:(SCHED_TYPE_META[data.type]||{}).icon||'📌', start:data.start, end:data.end, notes:data.notes||'' };
+    const act = { id:'one_'+schedUid(), source:'custom', name:data.name, type:data.type, priority:pri, icon:(SCHED_TYPE_META[data.type]||{}).icon||'📌', start:data.start, end:data.end, notes:data.notes||'' };
     rec.acts.push(act); rec.acts.sort((a,b)=>a.start-b.start); saveDayActs(iso, rec);
   }
   return rec;
@@ -4911,7 +5014,7 @@ function deleteActivity(iso, dayIdx, settings, actId, scope){
 function duplicateActivity(iso, dayIdx, settings, actId){
   const rec = getDaySchedRecord(iso, dayIdx, settings);
   const act = findAct(rec, actId); if(!act) return rec;
-  const copy = { id:'one_'+schedUid(), source:'custom', name:act.name+' (نسخة)', type:act.type, icon:act.icon, start:act.start, end:act.end, notes:act.notes };
+  const copy = { id:'one_'+schedUid(), source:'custom', name:act.name+' (نسخة)', type:act.type, icon:act.icon, priority:act.priority||'important', start:act.start, end:act.end, notes:act.notes };
   rec.acts.push(copy); rec.edited = true; rec.acts.sort((a,b)=>a.start-b.start); saveDayActs(iso, rec);
   return rec;
 }
@@ -4966,8 +5069,11 @@ function resetActivityToAuto(iso, dayIdx, settings, actId){
 function recalculateDay(iso, dayIdx, settings){
   const current = loadDayActs(iso) || { acts: [] };
   const lockedByGenKey = {}, lockedByDefId = {};
+  const currentByGenKey = {}, currentByDefId = {};
   const oneTimeCustom = [];
   current.acts.forEach(a=>{
+    if(a.genKey) currentByGenKey[a.genKey] = a;
+    if(a.defId) currentByDefId[a.defId] = a;
     if(a.timeLocked){ if(a.genKey) lockedByGenKey[a.genKey]=a; else if(a.defId) lockedByDefId[a.defId]=a; }
     if(a.source==='custom' && !a.defId) oneTimeCustom.push(a);
   });
@@ -4981,6 +5087,8 @@ function recalculateDay(iso, dayIdx, settings){
       applyCascade(fresh, compactGapAfterRemoval(fresh, a.start, a.end));
     });
   fresh.acts.forEach(a=>{
+    const prev = (a.genKey && currentByGenKey[a.genKey]) || (a.defId && currentByDefId[a.defId]);
+    if(prev && prev.priority) a.priority = prev.priority;
     if(a.genKey && lockedByGenKey[a.genKey]){ a.start=lockedByGenKey[a.genKey].start; a.end=lockedByGenKey[a.genKey].end; a.name=lockedByGenKey[a.genKey].name; a.notes=lockedByGenKey[a.genKey].notes; a.timeLocked=true; }
     else if(a.defId && lockedByDefId[a.defId]){ a.start=lockedByDefId[a.defId].start; a.end=lockedByDefId[a.defId].end; a.timeLocked=true; }
   });
@@ -5477,6 +5585,7 @@ function renderScheduleActivities(rec, dayIdx, iso){
   `;
     }
     const pri = schedPriorityFor(act.type);
+    const actPri = getActPriority(act);
     const seriesEligible = act.source==='generated' || !!act.defId;
     const confirming = scheduleActDeleteConfirmId===act.id;
     let extra = '';
@@ -5499,7 +5608,7 @@ function renderScheduleActivities(rec, dayIdx, iso){
       <div class="tl-rail"><div class="tl-dot"></div><div class="tl-line"></div></div>
       <div class="tl-body">
         <div class="tl-time mono">${schedMinToTime12(act.start)} – ${schedMinToTime12(act.end)}</div>
-        <div class="tl-label">${act.icon||'📌'} ${escapeHtml(act.name)} ${pri.label ? `<span style="font-size:.62rem; font-weight:700; color:${pri.color}; border:1px solid ${pri.color}; border-radius:999px; padding:1px 7px; margin-right:6px;">${pri.label}</span>` : ''}${act.source==='custom' ? ' <span class="opt-badge" style="margin-right:4px;">مخصّص</span>' : ''}${act.defId ? ' <span class="opt-badge" style="margin-right:4px; border-color:var(--teal); color:var(--teal);">متكرر</span>' : ''}${act.timeLocked ? ' <span class="opt-badge" style="margin-right:4px; border-color:var(--accent); color:var(--accent);">✋ يدوي</span>' : ''}${(act.inlinePrayers||[]).map(p=>` <span class="opt-badge" style="margin-right:4px; border-color:var(--accent-dim); color:var(--accent-dim);">🕌 ${escapeHtml(p)} أثناء النشاط</span>`).join('')}</div>
+        <div class="tl-label">${act.icon||'📌'} ${escapeHtml(act.name)} <span class="opt-badge act-pri-badge ${actPri.badgeClass}" title="الأولوية: ${actPri.label}">${actPri.label}</span>${act.source==='custom' ? ' <span class="opt-badge" style="margin-right:4px;">مخصّص</span>' : ''}${act.defId ? ' <span class="opt-badge" style="margin-right:4px; border-color:var(--teal); color:var(--teal);">متكرر</span>' : ''}${act.timeLocked ? ' <span class="opt-badge" style="margin-right:4px; border-color:var(--accent); color:var(--accent);">✋ يدوي</span>' : ''}${(act.inlinePrayers||[]).map(p=>` <span class="opt-badge" style="margin-right:4px; border-color:var(--accent-dim); color:var(--accent-dim);">🕌 ${escapeHtml(p)} أثناء النشاط</span>`).join('')}</div>
         ${act.notes ? `<div class="tl-note">${escapeHtml(act.notes)}</div>` : ''}
         <div style="display:flex; gap:6px; margin-top:8px; flex-wrap:wrap;">
           <button class="reset-btn act-edit-btn" data-id="${act.id}" style="font-size:.68rem; padding:4px 9px;">✏️ تعديل</button>
@@ -5536,12 +5645,19 @@ function renderScheduleActEditForm(rec, dayIdx, iso){
   const act = isNew ? null : findAct(rec, scheduleActEditingId);
   if(!isNew && !act){ scheduleActEditingId=null; card.classList.add('hidden'); card.innerHTML=''; return; }
   const seriesEligible = !isNew && (act.source==='generated' || !!act.defId);
+  const curPri = isNew ? 'important' : (getActPriority(act).key);
   const typeOptions = Object.keys(SCHED_TYPE_META).map(k=>`<option value="${k}" ${(!isNew&&act.type===k)?'selected':''}>${SCHED_TYPE_META[k].icon} ${SCHED_TYPE_META[k].label}</option>`).join('');
   card.innerHTML = `
     <div class="sc-title">${isNew?'➕ نشاط جديد':'✏️ تعديل نشاط'}</div>
     <div class="sc-grid">
       <div class="sc-field" style="flex:1 1 100%;"><label>الاسم</label><input type="text" id="actFormName" class="weight-input" style="width:100%;" value="${isNew?'':escapeHtml(act.name)}"></div>
       <div class="sc-field"><label>النوع</label><select id="actFormType" class="weight-input" style="width:100%;">${typeOptions}</select></div>
+      <div class="sc-field"><label>الأولوية</label><select id="actFormPriority" class="weight-input" style="width:100%;">
+        <option value="essential" ${curPri==='essential'?'selected':''}>أساسي</option>
+        <option value="important" ${curPri==='important'?'selected':''}>مهم</option>
+        <option value="optional" ${curPri==='optional'?'selected':''}>اختياري</option>
+        <option value="leisure" ${curPri==='leisure'?'selected':''}>ترفيهي</option>
+      </select></div>
       <div class="sc-field"><label>من</label><input type="time" id="actFormStart" class="weight-input" style="width:100%;" value="${isNew?'':schedMinToHHMM(act.start)}"></div>
       <div class="sc-field"><label>إلى</label><input type="time" id="actFormEnd" class="weight-input" style="width:100%;" value="${isNew?'':schedMinToHHMM(act.end)}"></div>
     </div>
@@ -5561,6 +5677,7 @@ function renderScheduleActEditForm(rec, dayIdx, iso){
     return {
       name: document.getElementById('actFormName').value.trim(),
       type: document.getElementById('actFormType').value,
+      priority: document.getElementById('actFormPriority').value || 'important',
       start: schedTimeToMin(document.getElementById('actFormStart').value),
       end: schedTimeToMin(document.getElementById('actFormEnd').value),
       notes: document.getElementById('actFormNotes').value.trim(),
@@ -6198,6 +6315,117 @@ function onClearDailyNote(){
   renderDailyNotes();
 }
 
+/* ================= SECTION NOTES: render/handlers (Stage 2) ================= */
+const SECTION_NOTES_META = {
+  home:     { id: 'home',     name: 'الرئيسية' },
+  meal:     { id: 'meal',     name: 'التغذية' },
+  gym:      { id: 'gym',      name: 'الجيم' },
+  sleep:    { id: 'sleep',    name: 'النوم' },
+  prayer:   { id: 'prayer',   name: 'الصلاة' },
+  schedule: { id: 'schedule', name: 'الجدول اليومي' },
+  recovery: { id: 'recovery', name: 'الاستشفاء' },
+  overview: { id: 'overview', name: 'نظرة عامة' },
+  search:   { id: 'search',   name: 'البحث' },
+  budget:   { id: 'budget',   name: 'الميزانية' },
+};
+
+function updateSectionNoteBadge(secId, val){
+  const badge = document.getElementById('secNotesBadge_' + secId);
+  if(!badge) return;
+  const hasText = !!(val && val.trim());
+  badge.textContent = hasText ? 'ملاحظة مسجّلة ✍️' : 'فارغ';
+  badge.style.color = hasText ? 'var(--primary)' : 'var(--muted)';
+  badge.style.borderColor = hasText ? 'var(--primary-light)' : 'var(--line)';
+  badge.style.background = hasText ? 'var(--primary-light)' : 'var(--card-alt)';
+}
+
+function onSectionNoteInput(secId){
+  const el = document.getElementById('secNotesText_' + secId);
+  if(!el) return;
+  const val = el.value;
+  saveSectionNote(secId, val);
+  updateSectionNoteBadge(secId, val);
+  const statusEl = document.getElementById('secNotesStatus_' + secId);
+  if(statusEl){
+    statusEl.textContent = 'تم الحفظ ✓';
+    clearTimeout(statusEl._timer);
+    statusEl._timer = setTimeout(()=>{ if(statusEl) statusEl.textContent = ''; }, 2000);
+  }
+}
+
+function onSectionNoteClear(secId){
+  const el = document.getElementById('secNotesText_' + secId);
+  const current = loadSectionNote(secId);
+  if(!current || !current.trim()){
+    if(el) el.value = '';
+    saveSectionNote(secId, '');
+    updateSectionNoteBadge(secId, '');
+    return;
+  }
+  const meta = SECTION_NOTES_META[secId] || {name:'القسم'};
+  if(!confirm(`تمسح ملاحظات قسم ${meta.name}؟ الخطوة دي مش هترجع.`)) return;
+  if(el) el.value = '';
+  saveSectionNote(secId, '');
+  updateSectionNoteBadge(secId, '');
+  const statusEl = document.getElementById('secNotesStatus_' + secId);
+  if(statusEl){
+    statusEl.textContent = 'تم المسح';
+    setTimeout(()=>{ if(statusEl) statusEl.textContent = ''; }, 2000);
+  }
+}
+
+function renderSectionNotesCard(secId){
+  const meta = SECTION_NOTES_META[secId];
+  if(!meta) return '';
+  const note = loadSectionNote(secId);
+  const hasText = !!(note && note.trim());
+  return `
+    <details class="sec-notes-card" id="secNotesCard_${secId}">
+      <summary class="sec-notes-summary">
+        <span class="sec-notes-title">📝 ملاحظات القسم (${escapeHtml(meta.name)})</span>
+        <span class="sec-notes-badge" id="secNotesBadge_${secId}" style="${hasText ? 'color:var(--primary); background:var(--primary-light); border-color:var(--primary-light);' : 'color:var(--muted); background:var(--card-alt); border-color:var(--line);'}">${hasText ? 'ملاحظة مسجّلة ✍️' : 'فارغ'}</span>
+      </summary>
+      <div class="sec-notes-body">
+        <div class="sec-notes-hint">ملاحظات عامة خاصة بقسم ${escapeHtml(meta.name)} — محفوظة تلقائيًا على جهازك</div>
+        <textarea class="notes-input sec-notes-input" id="secNotesText_${secId}" placeholder="اكتب ملاحظاتك الخاصة بقسم ${escapeHtml(meta.name)} هنا..."></textarea>
+        <div class="sec-notes-actions">
+          <span class="sec-notes-status" id="secNotesStatus_${secId}"></span>
+          <button type="button" class="reset-btn sec-notes-clear-btn" id="secNotesClear_${secId}" style="border-color:var(--bad); color:var(--bad); font-size:.72rem; padding:4px 9px;">🗑 مسح الملاحظة</button>
+        </div>
+      </div>
+    </details>
+  `;
+}
+
+function initSectionNotesUI(){
+  Object.keys(SECTION_NOTES_META).forEach(secId=>{
+    const container = document.getElementById('secNotes-' + secId);
+    if(container){
+      container.innerHTML = renderSectionNotesCard(secId);
+      const txt = document.getElementById('secNotesText_' + secId);
+      if(txt){
+        txt.value = loadSectionNote(secId);
+        txt.addEventListener('input', ()=> onSectionNoteInput(secId));
+        txt.addEventListener('change', ()=> onSectionNoteInput(secId));
+      }
+      const clr = document.getElementById('secNotesClear_' + secId);
+      if(clr){
+        clr.addEventListener('click', ()=> onSectionNoteClear(secId));
+      }
+    }
+  });
+}
+
+function updateSectionNotesUI(secId){
+  const txt = document.getElementById('secNotesText_' + secId);
+  if(!txt) return;
+  const currentVal = loadSectionNote(secId);
+  if(txt.value !== currentVal){
+    txt.value = currentVal;
+  }
+  updateSectionNoteBadge(secId, currentVal);
+}
+
 /* ================= WORKOUT HISTORY: render (Phase 3 — reuses getExHistory/exProgression as-is) ================= */
 function renderWorkoutHistory(){
   const picker = document.getElementById('workoutHistoryPicker');
@@ -6238,6 +6466,7 @@ function renderWorkoutHistory(){
     return `<div class="check-row"><div class="check-left">
       <div class="cname mono">${h.iso}${dayName?' — '+dayName:''}</div>
       <div class="cqty">${h.weight} كجم${h.reps?' × '+h.reps+' تكرار':''}${h.rir?' · RIR '+h.rir:''}</div>
+      ${h.note ? `<div class="tl-note" style="margin-top:2px;">📝 ${escapeHtml(h.note)}</div>` : ''}
     </div></div>`;
   }).join('');
 
@@ -6483,6 +6712,15 @@ function runGlobalSearch(queryRaw){
     push({iso, category:'ملاحظة يوم', icon:'📝', text: text.length>90?text.slice(0,90)+'…':text, mode:'overview', source:'notes', rank});
   });
 
+  (buckets['secnote']||[]).forEach(secId=>{
+    const text = loadSectionNote(secId);
+    if(!text) return;
+    const rank = textRank(q, text, false);
+    if(rank===null) return;
+    const meta = SECTION_NOTES_META[secId] || {name:secId};
+    push({iso:'', category:'ملاحظة قسم ('+meta.name+')', icon:'📝', text: text.length>90?text.slice(0,90)+'…':text, mode:secId, source:'notes', rank});
+  });
+
   (buckets['recovery']||[]).forEach(iso=>{
     let obj; try{ obj = JSON.parse(storageGet('recovery:'+iso)||'{}'); }catch(e){ obj = {}; }
     const text = obj && obj.notes;
@@ -6528,11 +6766,27 @@ function runGlobalSearch(queryRaw){
     const nameMatches = nameNorm.indexOf(q)>=0;
     const nameExact = nameNorm===q;
     (allExHist[ex.key]||[]).forEach(h=>{
+      const noteHit = h.note && normalizeSearchText(h.note).indexOf(q)>=0;
       const recordMatches = String(h.weight).indexOf(q)>=0 || String(h.reps||'').toLowerCase().indexOf(q)>=0 || String(h.rir||'').toLowerCase().indexOf(q)>=0;
       const dateHit = isoDateMatchesQuery(h.iso,q);
-      if(!nameMatches && !recordMatches && !dateHit) return;
-      const rank = nameExact ? 0 : nameMatches ? 1 : 2;
-      push({iso:h.iso, category:'تمرين', icon:'🏋️', text: `${ex.name} — ${h.weight}كجم${h.reps?' × '+h.reps:''}`, mode:'gym', source:'workout', rank});
+      if(!nameMatches && !recordMatches && !dateHit && !noteHit) return;
+      const rank = nameExact ? 0 : (nameMatches || noteHit) ? 1 : 2;
+      push({iso:h.iso, category:'تمرين', icon:'🏋️', text: `${ex.name} — ${h.weight}كجم${h.reps?' × '+h.reps:''}${h.note?' ('+h.note+')':''}`, mode:'gym', source: noteHit ? 'notes' : 'workout', rank});
+    });
+  });
+
+  (buckets['ex']||[]).forEach(iso=>{
+    let obj; try{ obj = JSON.parse(storageGet('ex:'+iso)||'{}'); }catch(e){ obj = {}; }
+    if(!obj) return;
+    Object.keys(obj).forEach(exKey=>{
+      const st = obj[exKey];
+      if(!st || !st.note) return;
+      if(st.sets && st.sets.some(Boolean) && st.weight) return;
+      const rank = textRank(q, st.note, isoDateMatchesQuery(iso,q));
+      if(rank===null) return;
+      const exObj = [...EX_A, ...EX_B].find(x=>x.key===exKey);
+      const exName = exObj ? exObj.name : exKey;
+      push({iso, category:'ملاحظة تمرين', icon:'🏋️', text: `${exName}: ${st.note.length>80?st.note.slice(0,80)+'…':st.note}`, mode:'gym', source:'notes', rank});
     });
   });
 
@@ -7425,7 +7679,7 @@ function validateBackupData(data){
   if(data===null || typeof data!=='object' || Array.isArray(data)) return {ok:false, reason:'الملف ده مش نسخة احتياطية صحيحة (شكل البيانات مش متوقع).'};
   const keys = Object.keys(data);
   if(keys.length===0) return {ok:false, reason:'الملف فاضي — مفيش بيانات فيه أصلاً.'};
-  const KNOWN_KEY_PATTERNS = [/^schema-version$/, /^targets$/, /^schedule-settings$/, /^shopping$/, /^prep$/, /^subs$/, /^meals:/, /^sched-acts:/, /^water:/, /^weight:/, /^budget-/, /^custom-foods$/, /^food-overrides$/];
+  const KNOWN_KEY_PATTERNS = [/^schema-version$/, /^targets$/, /^schedule-settings$/, /^shopping$/, /^prep$/, /^subs$/, /^meals:/, /^sched-acts:/, /^water:/, /^weight:/, /^budget-/, /^custom-foods$/, /^food-overrides$/, /^secnote:/, /^ex:/];
   const looksLikeOurs = keys.some(k=> KNOWN_KEY_PATTERNS.some(re=>re.test(k)));
   if(!looksLikeOurs) return {ok:false, reason:'الملف ده متبقاش شكل نسخة زتونة الاحتياطية — متأكد إنك اخترت الملف الصح؟'};
   for(const k of keys){
@@ -7695,6 +7949,8 @@ function applyMode(){
   if(mode==='search') renderSearchResults();
   if(mode==='budget') renderBudgetAll();
   if(isHome) renderHomeDashboard();
+
+  updateSectionNotesUI(mode);
 
   renderHeaderStamps();
   renderTabs();
@@ -8005,6 +8261,7 @@ function init(){
   renderCalBarLabel();
   renderShopping();
   renderPrep();
+  initSectionNotesUI();
   // Deep-link/refresh safety: honor #schedule (etc.) if present, otherwise land on Home.
   // replaceState (not pushState) so this initial entry doesn't add an extra Back step.
   const hashMode = location.hash ? location.hash.slice(1) : '';
