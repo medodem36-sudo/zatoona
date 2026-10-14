@@ -61,9 +61,14 @@
    drift/duplicates), safe around FIXED/MANUAL walls and pre-existing free
    time, safe across midnight-adjacent activities, and a no-op byte-for-
    byte on every untouched/pristine day (checked against all 7 weekday
-   templates). Content-only change; no shell asset paths changed. */
+   templates). Content-only change; no shell asset paths changed.
 
-const CACHE_VERSION = 'v11';
+   v12: Stage 3 — Gym Management, Exercise Editing, and Schedule
+   Synchronization. Editable weekly gym schedule, pause/resume gym,
+   per-date gym overrides, custom exercises, exercise overrides/exclusions,
+   and schedule/gym bidirectional synchronization. */
+
+const CACHE_VERSION = 'v12';
 const SHELL_CACHE = 'zatoona-shell-' + CACHE_VERSION;
 const RUNTIME_CACHE = 'zatoona-runtime-' + CACHE_VERSION;
 const CURRENT_CACHES = [SHELL_CACHE, RUNTIME_CACHE];

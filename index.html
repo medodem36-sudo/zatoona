@@ -514,6 +514,28 @@
     box-sizing:border-box; transition:border-color .15s;
   }
   .ex-note-input:focus{ outline:none; border-color:var(--primary); }
+  /* ===== GYM MANAGEMENT & STAGE 3 UI ===== */
+  .gym-pause-banner{
+    background:#FEF3F2; border:1px solid #FECDCA; border-radius:12px; padding:12px 14px;
+    margin-bottom:14px; display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+  }
+  .gym-pause-title{ font-weight:700; font-size:.86rem; color:#B42318; display:flex; align-items:center; gap:6px; }
+  .gym-pause-sub{ font-size:.76rem; color:#7A271A; margin-top:2px; }
+  .gym-day-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(130px, 1fr)); gap:8px; margin-top:10px; }
+  .gym-day-card{
+    background:var(--card); border:1px solid var(--line); border-radius:10px; padding:8px 10px;
+    display:flex; flex-direction:column; gap:6px; transition:.15s;
+  }
+  .gym-day-card.active-gym{ border-color:var(--primary); background:var(--primary-light); }
+  .gym-day-card.active-rest{ border-color:var(--line); opacity:.85; }
+  .gym-day-header{ display:flex; justify-content:space-between; align-items:center; font-size:.82rem; font-weight:700; }
+  .gym-split-select{ width:100%; font-size:.76rem; padding:4px 6px; border-radius:6px; border:1px solid var(--line); background:var(--card); color:var(--text); }
+  .gym-mgr-item{
+    background:var(--card); border:1px solid var(--line); border-radius:10px; padding:10px 12px;
+    margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;
+  }
+  .gym-mgr-title{ font-weight:700; font-size:.84rem; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+  .gym-mgr-meta{ font-size:.74rem; color:var(--muted); margin-top:2px; }
 </style>
 </head>
 <body>
@@ -791,6 +813,10 @@
   <!-- ===== GYM MODE ===== -->
   <div id="gymView" class="hidden">
     <div id="secNotes-gym"></div>
+    <div id="gymPauseBanner" class="hidden"></div>
+    <div id="gymSettingsContainer" style="margin-bottom:12px;"></div>
+    <div id="gymDayOverrideContainer" style="margin-bottom:12px;"></div>
+    <div id="gymExManagerContainer" style="margin-bottom:14px;"></div>
     <div id="gymRestBlock" class="hidden">
       <div class="rest-card">
         <div class="big">💤</div>
@@ -1627,7 +1653,7 @@ const COOLDOWN = [
     img:'https://commons.wikimedia.org/wiki/Special:FilePath/Jogging_couple.jpg', credit:'Wikimedia Commons · CC BY-SA 2.0' },
 ];
 
-const EX_A = [
+const EX_A_DEFAULTS = [
   { key:'squat', name:'سكوات بالدمبل (Goblet Squat)', equip:'دمبل واحد (أو كيتل بيل)', target:'الفخذ الأمامي، المؤخرة، وثباتًا أسفل الظهر والبطن', sets:3, reps:'8-10',
     steps:['امسك دمبل واحد بإيدين على مستوى الصدر زي ما بتمسك كوب كبير','وقف برجلين بعرض الكتفين تقريبًا، صوابع الرجل متجهة لبره شوية','انزل بثني الوراك للخلف مع ثني الركبة، وضهرك مفرود طول الوقت','انزل لحد ما فخدك يبقى موازي للأرض تقريبًا','ادفع من كعب رجلك وارجع لفوق لحد ما رجلك تتفرد تمامًا'],
     breath:'شهيق وانت نازل، زفير وانت بتدفع لفوق',
@@ -1672,7 +1698,7 @@ const EX_A = [
     img:'https://commons.wikimedia.org/wiki/Special:FilePath/Rear_deltoid_row_barbell_1.svg', credit:'Wikimedia Commons · CC BY-SA 3.0' },
 ];
 
-const EX_B = [
+const EX_B_DEFAULTS = [
   { key:'rdl', name:'ديدليفت روماني (Romanian Deadlift)', equip:'بار أو زوج دمبل', target:'الفخذ الخلفي، المؤخرة، أسفل الظهر كثبات', sets:3, reps:'8',
     steps:['وقف وامسك البار أو الدمبلز قدام فخدك، رجليك بعرض الكتفين تقريبًا','مع ركبة مثنية بسيط بس ثابتة، انزل بالوزن لتحت بدفع الوراك للخلف','خلي الوزن قريب من رجلك طول النزول وضهرك مفرود تمامًا','انزل لحد ما تحس بشد في الفخذ الخلفي (مش لازم توصل الأرض)','ادفع من وراكك لقدام وارجع لوضع الوقوف'],
     breath:'شهيق وانت نازل، زفير وانت بترجع لفوق',
@@ -1716,6 +1742,54 @@ const EX_B = [
     link:'https://exrx.net/WeightExercises/Quadriceps/BWLunge',
     img:'https://commons.wikimedia.org/wiki/Special:FilePath/Lunge-CDC_strength_training_for_older_adults.gif', credit:'CDC · Public Domain' },
 ];
+
+let EX_A = [];
+let EX_B = [];
+let customExercises = {};     // storage: 'custom-exercises' -> { [key]: { key, split:'A'|'B', name, equip, target, sets, reps, optional, optNote, tip, steps, breath, mistakes, link, img, credit } }
+let exerciseOverrides = {};   // storage: 'exercise-overrides' -> { [key]: { ...partial overrides for default exercise... } }
+let excludedExercises = {};   // storage: 'excluded-exercises' -> { [key]: true }
+
+function loadCustomExercises(){ const raw = storageGet('custom-exercises'); if(!raw) return {}; try{ const v = JSON.parse(raw); return (v&&typeof v==='object')?v:{}; }catch(e){ return {}; } }
+function saveCustomExercises(obj){ storageSet('custom-exercises', JSON.stringify(obj)); }
+function loadExerciseOverrides(){ const raw = storageGet('exercise-overrides'); if(!raw) return {}; try{ const v = JSON.parse(raw); return (v&&typeof v==='object')?v:{}; }catch(e){ return {}; } }
+function saveExerciseOverrides(obj){ storageSet('exercise-overrides', JSON.stringify(obj)); }
+function loadExcludedExercises(){ const raw = storageGet('excluded-exercises'); if(!raw) return {}; try{ const v = JSON.parse(raw); return (v&&typeof v==='object')?v:{}; }catch(e){ return {}; } }
+function saveExcludedExercises(obj){ storageSet('excluded-exercises', JSON.stringify(obj)); }
+
+function rebuildExercises(){
+  const a = [];
+  EX_A_DEFAULTS.forEach(ex=>{
+    if(excludedExercises[ex.key]) return;
+    a.push(Object.assign({}, ex, exerciseOverrides[ex.key]||{}));
+  });
+  const b = [];
+  EX_B_DEFAULTS.forEach(ex=>{
+    if(excludedExercises[ex.key]) return;
+    b.push(Object.assign({}, ex, exerciseOverrides[ex.key]||{}));
+  });
+  Object.keys(customExercises).forEach(k=>{
+    if(excludedExercises[k]) return;
+    const cex = customExercises[k];
+    if(cex.split === 'B') b.push(cex);
+    else a.push(cex);
+  });
+  EX_A = a;
+  EX_B = b;
+}
+rebuildExercises();
+
+function getAllExerciseDefinitions(){
+  const map = {};
+  EX_A_DEFAULTS.forEach(ex=> { map[ex.key] = Object.assign({split:'A'}, ex, exerciseOverrides[ex.key]||{}); });
+  EX_B_DEFAULTS.forEach(ex=> { map[ex.key] = Object.assign({split:'B'}, ex, exerciseOverrides[ex.key]||{}); });
+  Object.keys(customExercises).forEach(k=> { map[k] = Object.assign({split:'A'}, customExercises[k]); });
+  return map;
+}
+function getExerciseDef(key){
+  const all = getAllExerciseDefinitions();
+  return all[key] || null;
+}
+function isCustomExerciseKey(key){ return Object.prototype.hasOwnProperty.call(customExercises, key); }
 
 /* ================= SLEEP DATA ================= */
 const SLEEP_HABITS = [
@@ -1836,6 +1910,7 @@ let searchDebounceTimer = null;
 
 function storageGet(key){ try{ const v = localStorage.getItem(STORAGE_PREFIX+key); return v===null?null:v; }catch(e){ return null; } }
 function storageSet(key, value){ try{ localStorage.setItem(STORAGE_PREFIX+key, value); }catch(e){} }
+function storageRemove(key){ try{ localStorage.removeItem(STORAGE_PREFIX+key); }catch(e){} }
 /* Session 3: a malformed individual value (truncated write, manual tampering, a future bug) must
    never crash the whole app — every loadX() that used to do its own `JSON.parse(raw)` inline now
    goes through this, which is identical for any value that was always valid, and only changes
@@ -2014,6 +2089,107 @@ function loadCooldown(iso){ return storageGetJSON('cooldown:'+iso, {}); }
 function saveCooldown(iso,obj){ storageSet('cooldown:'+iso, JSON.stringify(obj)); }
 function loadEx(iso){ return storageGetJSON('ex:'+iso, {}); }
 function saveEx(iso,obj){ storageSet('ex:'+iso, JSON.stringify(obj)); }
+
+/* ================= GYM SETTINGS, PAUSE/RESUME & DATE OVERRIDES (Stage 3) ================= */
+const GYM_SETTINGS_DEFAULTS = {
+  enabled: true,
+  paused: false,
+};
+function loadGymSettings(){
+  const raw = storageGet('gym-settings');
+  if(!raw) return Object.assign({}, GYM_SETTINGS_DEFAULTS);
+  try{
+    const v = JSON.parse(raw);
+    return Object.assign({}, GYM_SETTINGS_DEFAULTS, v);
+  }catch(e){
+    return Object.assign({}, GYM_SETTINGS_DEFAULTS);
+  }
+}
+function saveGymSettings(obj){ storageSet('gym-settings', JSON.stringify(obj)); }
+let gymSettings = loadGymSettings();
+
+function isGymPaused(){ return !!(gymSettings && gymSettings.paused); }
+function isGymEnabled(){ return !(gymSettings && gymSettings.enabled === false); }
+
+function loadGymDateOverride(iso){ return storageGetJSON('gym-date-ov:'+iso, null); }
+function saveGymDateOverride(iso, ov){
+  if(ov === null) storageRemove('gym-date-ov:'+iso);
+  else storageSet('gym-date-ov:'+iso, JSON.stringify(ov));
+}
+
+function getEffectiveGymDay(iso, dayIdx){
+  const base = PLAN[dayIdx] || PLAN_DEFAULTS[dayIdx];
+  const ov = iso ? loadGymDateOverride(iso) : null;
+  if(ov && ov.gymType !== undefined){
+    const ovGym = ov.gymType !== 'rest' && isGymEnabled() && !isGymPaused();
+    return {
+      name: base.name,
+      gym: ovGym,
+      gymType: (isGymPaused() || !isGymEnabled()) ? 'rest' : ov.gymType,
+      isOverridden: true,
+      rawGymType: ov.gymType,
+    };
+  }
+  const isGym = base.gym && isGymEnabled() && !isGymPaused();
+  const gymType = (isGymPaused() || !isGymEnabled()) ? 'rest' : base.gymType;
+  return {
+    name: base.name,
+    gym: isGym,
+    gymType: gymType,
+    isOverridden: false,
+    rawGymType: base.gymType,
+  };
+}
+
+function syncGymWeeklySchedule(updatedPlan){
+  if(Array.isArray(updatedPlan)){
+    for(let i=0; i<Math.min(7, updatedPlan.length); i++){
+      if(updatedPlan[i]){
+        PLAN[i].gym = !!updatedPlan[i].gym;
+        PLAN[i].gymType = updatedPlan[i].gymType || (PLAN[i].gym ? 'A' : 'rest');
+      }
+    }
+    persistPlanChange();
+  }
+  const futureIsos = new Set();
+  const prefix = STORAGE_PREFIX + 'sched-acts:';
+  for(let i=0; i<localStorage.length; i++){
+    const k = localStorage.key(i);
+    if(!k || k.indexOf(prefix)!==0) continue;
+    const iso = k.slice(prefix.length);
+    if(iso >= todayISO) futureIsos.add(iso);
+  }
+  if(typeof weekDates !== 'undefined' && Array.isArray(weekDates)){
+    weekDates.forEach(d=>{
+      const iso = toISO(d);
+      if(iso >= todayISO) futureIsos.add(iso);
+    });
+  }
+
+  futureIsos.forEach(iso=>{
+    const [y,mo,da] = iso.split('-').map(Number);
+    const dIdx = (new Date(y,mo-1,da).getDay()+1)%7;
+    const rec = loadDayActs(iso);
+    if(!rec || !rec.edited){
+      materializeDaySchedule(iso, dIdx, scheduleSettings);
+    } else {
+      recalculateDay(iso, dIdx, scheduleSettings);
+    }
+  });
+}
+function toggleGymPause(paused){
+  gymSettings.paused = !!paused;
+  saveGymSettings(gymSettings);
+  syncGymWeeklySchedule(PLAN);
+  recomputeWeekDots();
+  renderTabs();
+  renderExercises();
+  if(mode==='schedule') renderSchedule();
+}
+function syncGymScheduleForDate(iso, dayIdx){
+  if(!iso || dayIdx == null) return;
+  recalculateDay(iso, dayIdx, scheduleSettings);
+}
 
 function loadSleepTimes(iso){ return storageGetJSON('sleeptime:'+iso, {start:'', end:''}); }
 function saveSleepTimes(iso,obj){ storageSet('sleeptime:'+iso, JSON.stringify(obj)); }
@@ -2414,10 +2590,11 @@ function renderTabs(){
     tab.className = 'tab' + (i===selectedIdx ? ' active' : '');
     const dotMap = { meal: weekDotsMeal, gym: weekDotsGym, sleep: weekDotsSleep, prayer: weekDotsPrayer, schedule: weekDotsSchedule, recovery: weekDotsRecovery, budget: weekDotsBudget };
     const dotClass = (dotMap[mode] && dotMap[mode][iso]) || '';
+    const eff = getEffectiveGymDay(iso, i);
     tab.innerHTML = `
       <div class="dname">${day.name}</div>
       <div class="ddate mono">${fmtDate(weekDates[i])}</div>
-      <div class="dgym">${day.gym ? '🏋️' : '💤'}</div>
+      <div class="dgym">${eff.gym ? '🏋️' : '💤'}</div>
       <div class="dot ${dotClass}"></div>
     `;
     tab.addEventListener('click', ()=> selectDay(i));
@@ -4027,24 +4204,638 @@ function suggestProgression(ex, st){
   }
   return null;
 }
+/* ================= GYM MANAGEMENT UI (Stage 3) ================= */
+let gymSettingsOpen = false;
+let gymExManagerOpen = false;
+let gymExManagerFilter = 'all'; // 'all' | 'A' | 'B' | 'excluded'
+let editingExKey = null; // null | 'NEW' | existing key
+
+function renderGymPauseBanner(){
+  const el = document.getElementById('gymPauseBanner');
+  if(!el) return;
+  if(!isGymPaused()){
+    el.classList.add('hidden');
+    el.innerHTML = '';
+    return;
+  }
+  el.classList.remove('hidden');
+  el.innerHTML = `
+    <div class="gym-pause-banner">
+      <div>
+        <div class="gym-pause-title">⏸️ تمرين الجيم موقوف مؤقتًا</div>
+        <div class="gym-pause-sub">لن تظهر تمارين الجيم في الجداول اليومية القادمة. جميع أوزانك وسجلاتك وتمارينك محفوظة بالكامل.</div>
+      </div>
+      <div>
+        <button class="reset-btn" id="gymResumeBtn" style="border-color:#B42318; color:#B42318; font-weight:700; background:#fff;">▶️ استئناف التمرين</button>
+      </div>
+    </div>
+  `;
+  const btn = document.getElementById('gymResumeBtn');
+  if(btn){
+    btn.addEventListener('click', ()=>{
+      toggleGymPause(false);
+    });
+  }
+}
+
+function renderGymDayOverride(){
+  const el = document.getElementById('gymDayOverrideContainer');
+  if(!el) return;
+  const iso = toISO(weekDates[selectedIdx]);
+  const eff = getEffectiveGymDay(iso, selectedIdx);
+  const base = PLAN[selectedIdx];
+  const isPaused = isGymPaused();
+
+  const currentBadge = eff.gymType === 'A' ? '<span class="opt-badge" style="background:var(--primary-light); color:var(--primary); font-weight:700;">🅰️ تمرينة A</span>' :
+                       eff.gymType === 'B' ? '<span class="opt-badge" style="background:#EFF8FF; color:#175CD3; font-weight:700;">🅱️ تمرينة B</span>' :
+                       '<span class="opt-badge" style="background:var(--card-alt); color:var(--muted); font-weight:700;">💤 راحة</span>';
+
+  const overrideNote = eff.isOverridden ? '<span class="opt-badge" style="border-color:var(--accent); color:var(--accent); margin-right:6px;">تعديل خاص بهذا اليوم</span>' : '';
+  const pausedNote = isPaused ? '<span class="opt-badge" style="border-color:#FECDCA; color:#B42318; margin-right:6px;">الجيم موقوف مؤقتًا</span>' : '';
+
+  el.innerHTML = `
+    <div style="background:var(--card); border:1px solid var(--line); border-radius:10px; padding:10px 12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+      <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+        <span style="font-weight:700; font-size:.84rem;">تمرينة ${escapeHtml(base.name)} (${fmtDate(weekDates[selectedIdx])}):</span>
+        ${currentBadge}
+        ${overrideNote}
+        ${pausedNote}
+      </div>
+      <div style="display:flex; align-items:center; gap:6px;">
+        <select id="gymDayOverrideSelect" class="weight-input" style="font-size:.76rem; padding:4px 8px;">
+          <option value="default" ${!eff.isOverridden?'selected':''}>الجدول الأسبوعي (${base.gymType==='A'?'🅰️ تمرينة A':base.gymType==='B'?'🅱️ تمرينة B':'💤 راحة'})</option>
+          <option value="A" ${eff.isOverridden&&eff.rawGymType==='A'?'selected':''}>🅰️ تمرينة A لهذا اليوم فقط</option>
+          <option value="B" ${eff.isOverridden&&eff.rawGymType==='B'?'selected':''}>🅱️ تمرينة B لهذا اليوم فقط</option>
+          <option value="rest" ${eff.isOverridden&&eff.rawGymType==='rest'?'selected':''}>💤 راحة لهذا اليوم فقط</option>
+        </select>
+      </div>
+    </div>
+  `;
+
+  const sel = document.getElementById('gymDayOverrideSelect');
+  if(sel){
+    sel.addEventListener('change', (e)=>{
+      const val = e.target.value;
+      if(val === 'default'){
+        saveGymDateOverride(iso, null);
+      } else {
+        saveGymDateOverride(iso, { gymType: val });
+      }
+      recalculateDay(iso, selectedIdx, scheduleSettings);
+      recomputeWeekDots();
+      renderTabs();
+      renderExercises();
+      if(mode==='schedule') renderSchedule();
+    });
+  }
+}
+
+function renderGymSettings(){
+  const el = document.getElementById('gymSettingsContainer');
+  if(!el) return;
+
+  if(!gymSettingsOpen){
+    el.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <button class="reset-btn" id="gymToggleSettingsBtn" style="font-size:.82rem; padding:6px 12px; display:flex; align-items:center; gap:6px;">
+          ⚙️ إعدادات الجدول الأسبوعي للجيم
+        </button>
+        <span style="font-size:.78rem; color:var(--muted);">
+          ${isGymPaused() ? '⏸️ الجيم موقوف' : (!isGymEnabled() ? '❌ الجيم معطل' : '🟢 الجيم نشط')}
+        </span>
+      </div>
+    `;
+    const openBtn = document.getElementById('gymToggleSettingsBtn');
+    if(openBtn) openBtn.addEventListener('click', ()=>{ gymSettingsOpen = true; renderGymSettings(); });
+    return;
+  }
+
+  const dayCardsHtml = PLAN.map((d, i)=>{
+    const isGymDay = d.gym;
+    return `
+      <div class="gym-day-card ${isGymDay?'active-gym':'active-rest'}" data-day-idx="${i}">
+        <div class="gym-day-header">
+          <span>${escapeHtml(d.name)}</span>
+          <label style="cursor:pointer; display:flex; align-items:center; gap:4px; font-weight:normal; font-size:.76rem;">
+            <input type="checkbox" class="gym-day-active-cb" data-day-idx="${i}" ${isGymDay?'checked':''}>
+            جيم
+          </label>
+        </div>
+        <div>
+          <select class="gym-split-select" data-day-idx="${i}">
+            <option value="A" ${d.gymType==='A'?'selected':''}>🅰️ تمرينة A</option>
+            <option value="B" ${d.gymType==='B'?'selected':''}>🅱️ تمرينة B</option>
+            <option value="rest" ${d.gymType==='rest'?'selected':''}>💤 راحة</option>
+          </select>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  const activeDays = PLAN.filter(d=>d.gym);
+  const previewText = activeDays.length === 0
+    ? 'مفيش أيام جيم محددة (راحة طول الأسبوع)'
+    : `أيام التمرين (${activeDays.length}): ` + activeDays.map(d=>`${d.name} (${d.gymType==='A'?'🅰️ A':'🅱️ B'})`).join('، ');
+
+  el.innerHTML = `
+    <div style="background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px; margin-bottom:12px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+        <div style="font-weight:700; font-size:.92rem; display:flex; align-items:center; gap:6px;">
+          ⚙️ إعدادات الجدول الأسبوعي للجيم
+        </div>
+        <button class="reset-btn" id="gymCloseSettingsBtn" style="font-size:.76rem; padding:4px 8px;">إغلاق ✕</button>
+      </div>
+
+      <div style="display:flex; gap:16px; align-items:center; flex-wrap:wrap; margin-bottom:12px; padding:10px; background:var(--card-alt); border-radius:8px;">
+        <label style="display:flex; align-items:center; gap:6px; font-size:.82rem; cursor:pointer;">
+          <input type="checkbox" id="gymMasterEnabledCb" ${isGymEnabled()?'checked':''}>
+          تفعيل تمرين الجيم بالكامل
+        </label>
+        <label style="display:flex; align-items:center; gap:6px; font-size:.82rem; cursor:pointer; color:${isGymPaused()?'#B42318':'var(--text)'}; font-weight:${isGymPaused()?'700':'normal'};">
+          <input type="checkbox" id="gymMasterPausedCb" ${isGymPaused()?'checked':''}>
+          ⏸️ إيقاف مؤقت للجيم (Pause)
+        </label>
+      </div>
+
+      <div style="display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap;">
+        <button class="reset-btn" id="gymQuickDefaultBtn" style="font-size:.74rem; padding:4px 8px;">النمط الافتراضي (سبت، إثنين، أربعاء)</button>
+        <button class="reset-btn" id="gymQuickAllBtn" style="font-size:.74rem; padding:4px 8px;">تحديد كل الأيام</button>
+        <button class="reset-btn" id="gymQuickClearBtn" style="font-size:.74rem; padding:4px 8px;">إلغاء كل الأيام</button>
+      </div>
+
+      <div class="gym-day-grid" id="gymDayGrid">
+        ${dayCardsHtml}
+      </div>
+
+      <div style="margin-top:12px; padding:8px 10px; background:var(--card-alt); border-radius:8px; font-size:.78rem; color:var(--text);">
+        <strong>معاينة الجدول:</strong> <span id="gymPreviewText">${previewText}</span>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:14px;">
+        <button class="reset-btn" id="gymSaveSettingsBtn" style="border-color:var(--primary); color:var(--primary); font-weight:700; font-size:.82rem; padding:6px 14px;">
+          💾 حفظ الجدول وتحديث المواعيد
+        </button>
+      </div>
+    </div>
+  `;
+
+  const closeBtn = document.getElementById('gymCloseSettingsBtn');
+  if(closeBtn) closeBtn.addEventListener('click', ()=>{ gymSettingsOpen = false; renderGymSettings(); });
+
+  const grid = document.getElementById('gymDayGrid');
+  function updatePreview(){
+    const parts = [];
+    grid.querySelectorAll('.gym-day-card').forEach(card=>{
+      const dIdx = parseInt(card.dataset.dayIdx, 10);
+      const cb = card.querySelector('.gym-day-active-cb');
+      const sel = card.querySelector('.gym-split-select');
+      if(cb.checked && sel.value !== 'rest'){
+        parts.push(`${PLAN[dIdx].name} (${sel.value==='A'?'🅰️ A':'🅱️ B'})`);
+      }
+    });
+    const pt = document.getElementById('gymPreviewText');
+    if(pt){
+      pt.textContent = parts.length === 0 ? 'مفيش أيام جيم محددة (راحة طول الأسبوع)' : `أيام التمرين (${parts.length}): ` + parts.join('، ');
+    }
+  }
+
+  grid.querySelectorAll('.gym-day-active-cb').forEach(cb=>{
+    cb.addEventListener('change', (e)=>{
+      const dIdx = parseInt(e.target.dataset.dayIdx, 10);
+      const card = grid.querySelector(`.gym-day-card[data-day-idx="${dIdx}"]`);
+      const sel = card.querySelector('.gym-split-select');
+      if(e.target.checked){
+        card.classList.add('active-gym'); card.classList.remove('active-rest');
+        if(sel.value === 'rest') sel.value = 'A';
+      } else {
+        card.classList.remove('active-gym'); card.classList.add('active-rest');
+        sel.value = 'rest';
+      }
+      updatePreview();
+    });
+  });
+
+  grid.querySelectorAll('.gym-split-select').forEach(sel=>{
+    sel.addEventListener('change', (e)=>{
+      const dIdx = parseInt(e.target.dataset.dayIdx, 10);
+      const card = grid.querySelector(`.gym-day-card[data-day-idx="${dIdx}"]`);
+      const cb = card.querySelector('.gym-day-active-cb');
+      if(e.target.value === 'rest'){
+        cb.checked = false;
+        card.classList.remove('active-gym'); card.classList.add('active-rest');
+      } else {
+        cb.checked = true;
+        card.classList.add('active-gym'); card.classList.remove('active-rest');
+      }
+      updatePreview();
+    });
+  });
+
+  document.getElementById('gymQuickDefaultBtn').addEventListener('click', ()=>{
+    grid.querySelectorAll('.gym-day-card').forEach(card=>{
+      const dIdx = parseInt(card.dataset.dayIdx, 10);
+      const cb = card.querySelector('.gym-day-active-cb');
+      const sel = card.querySelector('.gym-split-select');
+      const def = PLAN_DEFAULTS[dIdx];
+      cb.checked = def.gym;
+      sel.value = def.gymType;
+      card.classList.toggle('active-gym', def.gym);
+      card.classList.toggle('active-rest', !def.gym);
+    });
+    updatePreview();
+  });
+
+  document.getElementById('gymQuickAllBtn').addEventListener('click', ()=>{
+    grid.querySelectorAll('.gym-day-card').forEach(card=>{
+      const dIdx = parseInt(card.dataset.dayIdx, 10);
+      const cb = card.querySelector('.gym-day-active-cb');
+      const sel = card.querySelector('.gym-split-select');
+      cb.checked = true;
+      if(sel.value === 'rest') sel.value = (dIdx % 2 === 0 ? 'A' : 'B');
+      card.classList.add('active-gym'); card.classList.remove('active-rest');
+    });
+    updatePreview();
+  });
+
+  document.getElementById('gymQuickClearBtn').addEventListener('click', ()=>{
+    grid.querySelectorAll('.gym-day-card').forEach(card=>{
+      const cb = card.querySelector('.gym-day-active-cb');
+      const sel = card.querySelector('.gym-split-select');
+      cb.checked = false;
+      sel.value = 'rest';
+      card.classList.remove('active-gym'); card.classList.add('active-rest');
+    });
+    updatePreview();
+  });
+
+  document.getElementById('gymSaveSettingsBtn').addEventListener('click', ()=>{
+    const enabled = document.getElementById('gymMasterEnabledCb').checked;
+    const paused = document.getElementById('gymMasterPausedCb').checked;
+    gymSettings = { enabled, paused };
+    saveGymSettings(gymSettings);
+
+    const updatedPlan = [];
+    grid.querySelectorAll('.gym-day-card').forEach(card=>{
+      const dIdx = parseInt(card.dataset.dayIdx, 10);
+      const cb = card.querySelector('.gym-day-active-cb');
+      const sel = card.querySelector('.gym-split-select');
+      const isGym = cb.checked && sel.value !== 'rest';
+      const gymType = isGym ? sel.value : 'rest';
+      updatedPlan[dIdx] = { gym: isGym, gymType };
+    });
+
+    syncGymWeeklySchedule(updatedPlan);
+    gymSettingsOpen = false;
+    recomputeWeekDots();
+    renderTabs();
+    renderExercises();
+    if(mode==='schedule') renderSchedule();
+  });
+}
+
+function renderGymExManager(){
+  const el = document.getElementById('gymExManagerContainer');
+  if(!el) return;
+
+  if(!gymExManagerOpen){
+    el.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <button class="reset-btn" id="gymToggleExMgrBtn" style="font-size:.82rem; padding:6px 12px; display:flex; align-items:center; gap:6px;">
+          🏋️ إدارة التمارين وتعديل البرامج (A / B)
+        </button>
+      </div>
+    `;
+    const openBtn = document.getElementById('gymToggleExMgrBtn');
+    if(openBtn) openBtn.addEventListener('click', ()=>{ gymExManagerOpen = true; renderGymExManager(); });
+    return;
+  }
+
+  const allDefs = getAllExerciseDefinitions();
+  const allKeys = Object.keys(allDefs);
+
+  const filterTabs = `
+    <div class="day-toggle-row" style="margin-bottom:12px; flex-wrap:wrap;">
+      <button class="day-chip ${gymExManagerFilter==='all'?'on':''}" data-filter="all">الكل (${allKeys.length})</button>
+      <button class="day-chip ${gymExManagerFilter==='A'?'on':''}" data-filter="A">تمرينة 🅰️</button>
+      <button class="day-chip ${gymExManagerFilter==='B'?'on':''}" data-filter="B">تمرينة 🅱️</button>
+      <button class="day-chip ${gymExManagerFilter==='excluded'?'on':''}" data-filter="excluded">المستبعدة (${Object.keys(excludedExercises).length})</button>
+    </div>
+  `;
+
+  const filteredKeys = allKeys.filter(k=>{
+    const ex = allDefs[k];
+    const isExcluded = !!excludedExercises[k];
+    if(gymExManagerFilter === 'excluded') return isExcluded;
+    if(isExcluded) return false;
+    if(gymExManagerFilter === 'A') return ex.split === 'A';
+    if(gymExManagerFilter === 'B') return ex.split === 'B';
+    return true;
+  });
+
+  const exItemsHtml = filteredKeys.map(k=>{
+    const ex = allDefs[k];
+    const isCustom = isCustomExerciseKey(k);
+    const isExcluded = !!excludedExercises[k];
+    const hasOverride = !isCustom && !!exerciseOverrides[k];
+    const splitBadge = ex.split === 'A' ? '<span class="opt-badge" style="background:var(--primary-light); color:var(--primary);">🅰️ تمرينة A</span>' : '<span class="opt-badge" style="background:#EFF8FF; color:#175CD3;">🅱️ تمرينة B</span>';
+    const customBadge = isCustom ? '<span class="opt-badge" style="border-color:var(--teal); color:var(--teal);">مخصّص</span>' : '';
+    const overrideBadge = hasOverride ? '<span class="opt-badge" style="border-color:var(--accent); color:var(--accent);">معدّل</span>' : '';
+    const excludedBadge = isExcluded ? '<span class="opt-badge" style="border-color:var(--bad); color:var(--bad);">مستبعد</span>' : '';
+
+    return `
+      <div class="gym-mgr-item" data-key="${k}">
+        <div style="flex:1; min-width:200px;">
+          <div class="gym-mgr-title">
+            <span>${escapeHtml(ex.name)}</span>
+            ${splitBadge}
+            ${customBadge}
+            ${overrideBadge}
+            ${excludedBadge}
+            ${ex.optional ? '<span class="opt-badge">⭐ اختياري</span>' : ''}
+          </div>
+          <div class="gym-mgr-meta">
+            ${escapeHtml(ex.equip||'—')} · ${ex.sets} مجموعات × ${escapeHtml(ex.reps||'—')} · 🎯 ${escapeHtml(ex.target||'—')}
+          </div>
+        </div>
+        <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+          <button class="reset-btn ex-mgr-edit-btn" data-key="${k}" style="font-size:.72rem; padding:4px 8px;">✏️ تعديل</button>
+          ${isCustom ? `
+            <button class="reset-btn ex-mgr-del-btn" data-key="${k}" style="font-size:.72rem; padding:4px 8px; border-color:var(--bad); color:var(--bad);">🗑️ حذف</button>
+          ` : (isExcluded ? `
+            <button class="reset-btn ex-mgr-restore-btn" data-key="${k}" style="font-size:.72rem; padding:4px 8px; border-color:var(--good); color:var(--good);">↺ استعادة</button>
+          ` : `
+            <button class="reset-btn ex-mgr-exclude-btn" data-key="${k}" style="font-size:.72rem; padding:4px 8px; border-color:var(--bad); color:var(--bad);">🚫 استبعاد</button>
+          `)}
+          ${hasOverride ? `
+            <button class="reset-btn ex-mgr-reset-btn" data-key="${k}" style="font-size:.72rem; padding:4px 8px; border-color:var(--accent); color:var(--accent);">↺ إعادة للأصل</button>
+          ` : ''}
+        </div>
+      </div>
+    `;
+  }).join('') || '<div class="empty-note" style="padding:14px; text-align:center; color:var(--muted); font-size:.8rem;">مفيش تمارين مطابقة للفلتر ده</div>';
+
+  let editFormHtml = '';
+  if(editingExKey !== null){
+    const isNew = editingExKey === 'NEW';
+    const curEx = isNew ? { name:'', split:'A', equip:'', target:'', sets:3, reps:'10', optional:false, optNote:'', tip:'', breath:'' } : (allDefs[editingExKey] || {});
+    editFormHtml = `
+      <div style="background:var(--card-alt); border:1px solid var(--primary); border-radius:12px; padding:14px; margin-bottom:14px;">
+        <div style="font-weight:700; font-size:.88rem; margin-bottom:10px; color:var(--primary);">
+          ${isNew ? '➕ إضافة تمرين مخصص جديد' : '✏️ تعديل تمرين: ' + escapeHtml(curEx.name)}
+        </div>
+        <div class="sc-grid">
+          <div class="sc-field" style="flex:1 1 100%;">
+            <label>اسم التمرين</label>
+            <input type="text" id="exFormName" class="weight-input" style="width:100%;" value="${escapeHtml(curEx.name||'')}">
+          </div>
+          <div class="sc-field">
+            <label>التمرينة (Split)</label>
+            <select id="exFormSplit" class="weight-input" style="width:100%;">
+              <option value="A" ${curEx.split==='A'?'selected':''}>🅰️ تمرينة A</option>
+              <option value="B" ${curEx.split==='B'?'selected':''}>🅱️ تمرينة B</option>
+            </select>
+          </div>
+          <div class="sc-field">
+            <label>عدد المجموعات (Sets)</label>
+            <input type="number" min="1" max="10" step="1" id="exFormSets" class="weight-input" style="width:100%;" value="${curEx.sets||3}">
+          </div>
+          <div class="sc-field">
+            <label>التكرارات (Reps)</label>
+            <input type="text" id="exFormReps" class="weight-input" style="width:100%;" value="${escapeHtml(curEx.reps||'10')}" placeholder="مثلاً 8-10 أو 12">
+          </div>
+          <div class="sc-field">
+            <label>الأجهزة / المعدات</label>
+            <input type="text" id="exFormEquip" class="weight-input" style="width:100%;" value="${escapeHtml(curEx.equip||'')}" placeholder="دمبل، بار، ماكينة...">
+          </div>
+          <div class="sc-field" style="flex:1 1 100%;">
+            <label>العضلات المستهدفة</label>
+            <input type="text" id="exFormTarget" class="weight-input" style="width:100%;" value="${escapeHtml(curEx.target||'')}" placeholder="الصدر، البايسبس...">
+          </div>
+        </div>
+        <div style="display:flex; gap:12px; margin-top:10px; flex-wrap:wrap;">
+          <label style="display:flex; align-items:center; gap:6px; font-size:.8rem; cursor:pointer;">
+            <input type="checkbox" id="exFormOptional" ${curEx.optional?'checked':''}>
+            ⭐ تمرين اختياري
+          </label>
+        </div>
+        <div class="sc-grid" style="margin-top:10px;">
+          <div class="sc-field">
+            <label>نصيحة أداء (اختياري)</label>
+            <input type="text" id="exFormTip" class="weight-input" style="width:100%;" value="${escapeHtml(curEx.tip||'')}">
+          </div>
+          <div class="sc-field">
+            <label>طريقة التنفس (اختياري)</label>
+            <input type="text" id="exFormBreath" class="weight-input" style="width:100%;" value="${escapeHtml(curEx.breath||'')}">
+          </div>
+        </div>
+        <div id="exFormHint" class="section-hint hidden" style="margin:8px 0 0; padding:0; color:var(--bad);"></div>
+        <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:12px;">
+          <button class="reset-btn" id="exFormCancelBtn">إلغاء</button>
+          <button class="reset-btn" id="exFormSaveBtn" style="border-color:var(--primary); color:var(--primary); font-weight:700;">💾 حفظ التمرين</button>
+        </div>
+      </div>
+    `;
+  }
+
+  el.innerHTML = `
+    <div style="background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+        <div style="font-weight:700; font-size:.92rem; display:flex; align-items:center; gap:6px;">
+          🏋️ إدارة التمارين وتعديل البرامج
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button class="reset-btn" id="gymAddExBtn" style="border-color:var(--primary); color:var(--primary); font-size:.76rem; padding:4px 10px; font-weight:700;">➕ إضافة تمرين</button>
+          <button class="reset-btn" id="gymCloseExMgrBtn" style="font-size:.76rem; padding:4px 8px;">إغلاق ✕</button>
+        </div>
+      </div>
+
+      ${filterTabs}
+      ${editFormHtml}
+      <div id="gymExList">${exItemsHtml}</div>
+    </div>
+  `;
+
+  document.getElementById('gymCloseExMgrBtn').addEventListener('click', ()=>{ gymExManagerOpen = false; editingExKey = null; renderGymExManager(); });
+  document.getElementById('gymAddExBtn').addEventListener('click', ()=>{ editingExKey = 'NEW'; renderGymExManager(); });
+
+  el.querySelectorAll('.day-chip[data-filter]').forEach(b=>{
+    b.addEventListener('click', ()=>{ gymExManagerFilter = b.dataset.filter; renderGymExManager(); });
+  });
+
+  el.querySelectorAll('.ex-mgr-edit-btn').forEach(b=>{
+    b.addEventListener('click', ()=>{ editingExKey = b.dataset.key; renderGymExManager(); });
+  });
+
+  el.querySelectorAll('.ex-mgr-exclude-btn').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      const k = b.dataset.key;
+      excludedExercises[k] = true;
+      saveExcludedExercises(excludedExercises);
+      rebuildExercises();
+      recomputeWeekDots();
+      renderTabs();
+      renderGymExManager();
+      renderExercises();
+    });
+  });
+
+  el.querySelectorAll('.ex-mgr-restore-btn').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      const k = b.dataset.key;
+      delete excludedExercises[k];
+      saveExcludedExercises(excludedExercises);
+      rebuildExercises();
+      recomputeWeekDots();
+      renderTabs();
+      renderGymExManager();
+      renderExercises();
+    });
+  });
+
+  el.querySelectorAll('.ex-mgr-reset-btn').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      const k = b.dataset.key;
+      delete exerciseOverrides[k];
+      saveExerciseOverrides(exerciseOverrides);
+      rebuildExercises();
+      renderGymExManager();
+      renderExercises();
+    });
+  });
+
+  el.querySelectorAll('.ex-mgr-del-btn').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      const k = b.dataset.key;
+      if(confirm('متأكد إنك عايز تحذف التمرين المخصص ده؟')){
+        delete customExercises[k];
+        delete excludedExercises[k];
+        saveCustomExercises(customExercises);
+        saveExcludedExercises(excludedExercises);
+        rebuildExercises();
+        recomputeWeekDots();
+        renderTabs();
+        renderGymExManager();
+        renderExercises();
+      }
+    });
+  });
+
+  if(editingExKey !== null){
+    const cancelBtn = document.getElementById('exFormCancelBtn');
+    if(cancelBtn) cancelBtn.addEventListener('click', ()=>{ editingExKey = null; renderGymExManager(); });
+
+    const saveBtn = document.getElementById('exFormSaveBtn');
+    if(saveBtn) saveBtn.addEventListener('click', ()=>{
+      const name = document.getElementById('exFormName').value.trim();
+      const split = document.getElementById('exFormSplit').value;
+      const sets = parseInt(document.getElementById('exFormSets').value, 10);
+      const reps = document.getElementById('exFormReps').value.trim();
+      const equip = document.getElementById('exFormEquip').value.trim();
+      const target = document.getElementById('exFormTarget').value.trim();
+      const optional = document.getElementById('exFormOptional').checked;
+      const tip = document.getElementById('exFormTip').value.trim();
+      const breath = document.getElementById('exFormBreath').value.trim();
+      const hint = document.getElementById('exFormHint');
+
+      if(!name){
+        hint.textContent = 'محتاج تكتب اسم للتمرين.';
+        hint.classList.remove('hidden');
+        return;
+      }
+      if(isNaN(sets) || sets <= 0){
+        hint.textContent = 'عدد المجموعات لازم يكون رقم أكبر من صفر.';
+        hint.classList.remove('hidden');
+        return;
+      }
+
+      if(editingExKey === 'NEW'){
+        const newKey = 'cex_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+        customExercises[newKey] = {
+          key: newKey,
+          split,
+          name,
+          equip,
+          target,
+          sets,
+          reps: reps || '10',
+          optional,
+          optNote: optional ? 'تمرين اختياري' : '',
+          tip,
+          breath,
+          steps: [],
+          mistakes: [],
+          link: '',
+          img: '',
+          credit: ''
+        };
+        saveCustomExercises(customExercises);
+      } else {
+        const k = editingExKey;
+        if(isCustomExerciseKey(k)){
+          customExercises[k] = Object.assign({}, customExercises[k], {
+            split,
+            name,
+            equip,
+            target,
+            sets,
+            reps: reps || '10',
+            optional,
+            tip,
+            breath,
+          });
+          saveCustomExercises(customExercises);
+        } else {
+          exerciseOverrides[k] = Object.assign({}, exerciseOverrides[k]||{}, {
+            name,
+            equip,
+            target,
+            sets,
+            reps: reps || '10',
+            optional,
+            tip,
+            breath,
+          });
+          saveExerciseOverrides(exerciseOverrides);
+        }
+      }
+
+      rebuildExercises();
+      editingExKey = null;
+      recomputeWeekDots();
+      renderTabs();
+      renderGymExManager();
+      renderExercises();
+    });
+  }
+}
+
 function renderExercises(){
   renderWorkoutHistory(); // cross-day view, unaffected by whether the selected day is a rest day
-  const day = PLAN[selectedIdx];
+  renderGymPauseBanner();
+  renderGymSettings();
+  renderGymDayOverride();
+  renderGymExManager();
+
+  const iso = toISO(weekDates[selectedIdx]);
+  const eff = getEffectiveGymDay(iso, selectedIdx);
   const restBlock = document.getElementById('gymRestBlock');
   const workoutBlock = document.getElementById('gymWorkoutBlock');
-  if(day.gymType === 'rest'){
+  if(eff.gymType === 'rest'){
     restBlock.classList.remove('hidden');
     workoutBlock.classList.add('hidden');
+    const restTitle = restBlock.querySelector('.t');
+    if(restTitle){
+      restTitle.textContent = isGymPaused() ? 'الجيم موقوف مؤقتًا ⏸️' : 'النهاردة يوم راحة';
+    }
     return;
   }
   restBlock.classList.add('hidden');
   workoutBlock.classList.remove('hidden');
 
-  const list = day.gymType === 'A' ? EX_A : EX_B;
-  document.getElementById('exHint').textContent = `يوم ${day.gymType==='A'?'🅰️':'🅱️'} — علّم كل مجموعة خلصتها ودوّن الوزن والتكرار وRIR`;
+  const list = eff.gymType === 'A' ? EX_A : EX_B;
+  document.getElementById('exHint').textContent = `يوم ${eff.gymType==='A'?'🅰️':'🅱️'} — علّم كل مجموعة خلصتها ودوّن الوزن والتكرار وRIR`;
   const el = document.getElementById('exercises');
   el.innerHTML = '';
-  const iso = toISO(weekDates[selectedIdx]);
 
   list.forEach(ex=>{
     if(!exState[ex.key]) exState[ex.key] = { sets: new Array(ex.sets).fill(false), weight:'', reps:'', rir:'', note:'' };
@@ -4057,8 +4848,8 @@ function renderExercises(){
     for(let s=0;s<ex.sets;s++){
       chips += `<button class="set-chip ${st.sets[s]?'done':''}" data-set="${s}">${s+1}</button>`;
     }
-    const mistakesHtml = ex.mistakes.map(m=>`<li>${m}</li>`).join('');
-    const stepsHtml = ex.steps.map(s=>`<li>${s}</li>`).join('');
+    const mistakesHtml = (ex.mistakes||[]).map(m=>`<li>${m}</li>`).join('');
+    const stepsHtml = (ex.steps||[]).map(s=>`<li>${s}</li>`).join('');
 
     const prog = exProgression(ex.key, iso);
     const lastStr = prog.last ? `${prog.last.weight}كجم×${prog.last.reps||'؟'}${prog.last.rir?' (RIR'+prog.last.rir+')':''}` : '—';
@@ -4073,9 +4864,9 @@ function renderExercises(){
         <div class="ex-icon">${ICONS[ex.key]||''}</div>
         <div>
           <div class="ex-name">${ex.name} ${ex.optional ? '<span class="opt-badge">⭐ اختياري</span>' : ''}</div>
-          <div class="ex-meta">${ex.equip} — ${ex.sets} مجموعات × ${ex.reps}</div>
-          <div class="ex-target">🎯 ${ex.target}</div>
-          ${ex.optional ? `<div class="ex-optnote">${ex.optNote}</div>` : ''}
+          <div class="ex-meta">${ex.equip||'—'} — ${ex.sets} مجموعات × ${ex.reps||'—'}</div>
+          <div class="ex-target">🎯 ${ex.target||'—'}</div>
+          ${ex.optional ? `<div class="ex-optnote">${ex.optNote||''}</div>` : ''}
         </div>
       </div>
       <div class="ex-body">
@@ -4096,14 +4887,15 @@ function renderExercises(){
           <input type="text" class="ex-note-input ex-note" placeholder="ملاحظة لهذا التمرين (اختياري)..." value="${escapeHtml(st.note||'')}">
         </div>
         ${suggestion ? `<div class="prog-suggest">${suggestion}</div>` : ''}
+        ${(stepsHtml || mistakesHtml || ex.breath || ex.tip || ex.link) ? `
         <details class="ex-details">
           <summary>طريقة الأداء والأخطاء الشائعة</summary>
-          <ol class="ex-steps">${stepsHtml}</ol>
-          <div class="ex-breath">🫁 التنفس: ${ex.breath}</div>
-          <ul class="ex-mistakes">${mistakesHtml}</ul>
+          ${stepsHtml ? `<ol class="ex-steps">${stepsHtml}</ol>` : ''}
+          ${ex.breath ? `<div class="ex-breath">🫁 التنفس: ${ex.breath}</div>` : ''}
+          ${mistakesHtml ? `<ul class="ex-mistakes">${mistakesHtml}</ul>` : ''}
           ${ex.tip ? `<div class="ex-tip">💡 ${ex.tip}</div>` : ''}
-          <a class="ex-link" href="${ex.link}" target="_blank" rel="noopener">🔗 شرح مصور وفيديو توضيحي (ExRx.net)</a>
-        </details>
+          ${ex.link ? `<a class="ex-link" href="${ex.link}" target="_blank" rel="noopener">🔗 شرح مصور وفيديو توضيحي (ExRx.net)</a>` : ''}
+        </details>` : ''}
       </div>
     `;
 
@@ -4434,11 +5226,12 @@ function schedFmtHours(min){
 function schedResolvePrayer(pt,key){ return (pt && pt[key]) ? schedTimeToMin(pt[key]) : schedTimeToMin(SCHED_FALLBACK[key]); }
 
 /* ================= SCHEDULE: CORE ALGORITHM ================= */
-function buildDaySchedule(dayIdx, settings){
+function buildDaySchedule(dayIdx, settings, explicitIso){
   const day = PLAN[dayIdx];
-  const iso = toISO(weekDates[dayIdx]);
+  const iso = explicitIso || (typeof weekDates !== 'undefined' && weekDates[dayIdx] ? toISO(weekDates[dayIdx]) : null);
   const pt = loadPrayerTimes(iso);
-  const isGym = day.gym;
+  const effGym = getEffectiveGymDay(iso, dayIdx);
+  const isGym = effGym.gym;
   const isFriday = (day.name === 'الجمعة');
   const isCollege = !!settings.collegeDays[dayIdx];
 
@@ -4557,7 +5350,8 @@ function buildDaySchedule(dayIdx, settings){
   function gymTrip(){
     add('gymPrep','تجهيز هدوم الجيم','🎽',SCHED_DUR.gymPrep,'gym');
     add('gymGo','التنقل للجيم','🚗',gymCommute,'gym');
-    add('gymWorkout','التمرين (بالإحماء والتبريد)','🏋️',gymWorkoutDur,'gym');
+    const workoutLabel = effGym.gymType==='B' ? 'التمرين (تمرينة B — بالإحماء والتبريد)' : 'التمرين (تمرينة A — بالإحماء والتبريد)';
+    add('gymWorkout', workoutLabel, '🏋️', gymWorkoutDur, 'gym');
     add('gymBack','الرجوع من الجيم','🚗',gymCommute,'gym');
     add('gymShower','استحمام وتغيير بعد الجيم','🚿',SCHED_DUR.gymPost,'gym');
   }
@@ -4829,10 +5623,10 @@ function compactGapAfterRemoval(rec, removedStart, removedEnd){
   return moved;
 }
 
-function buildMaterializedActs(dayIdx, settings){
+function buildMaterializedActs(dayIdx, settings, explicitIso){
   // Pure — no storage write. Everything materializeDaySchedule() used to do in one step, split so a
   // full {rec, sched} preview can be built and inspected (Stage 3B) before anything is persisted.
-  const sched = buildDaySchedule(dayIdx, settings);
+  const sched = buildDaySchedule(dayIdx, settings, explicitIso);
   const seriesOv = loadSeriesOverrides()[dayIdx] || {};
   const counts = {};
   const acts = [];
@@ -4872,7 +5666,7 @@ function buildMaterializedActs(dayIdx, settings){
   return {rec, sched};
 }
 function materializeDaySchedule(iso, dayIdx, settings){
-  const {rec} = buildMaterializedActs(dayIdx, settings);
+  const {rec} = buildMaterializedActs(dayIdx, settings, iso);
   saveDayActs(iso, rec);
   return rec;
 }
@@ -4979,10 +5773,18 @@ function deleteActivity(iso, dayIdx, settings, actId, scope){
     // Day" would regenerate this activity from scratch and silently resurrect it.
     if(act.genKey && !(rec.deletedGenKeys||[]).includes(act.genKey)) rec.deletedGenKeys = (rec.deletedGenKeys||[]).concat(act.genKey);
     if(act.defId && !(rec.deletedDefIds||[]).includes(act.defId)) rec.deletedDefIds = (rec.deletedDefIds||[]).concat(act.defId);
+    if(act.genKey === 'gymWorkout' || (act.type === 'gym' && act.genKey)){
+      saveGymDateOverride(iso, { gymType: 'rest' });
+    }
   }
   rec.edited = true;
   saveDayActs(iso, rec);
   if(scope==='series'){
+    if(act.genKey === 'gymWorkout' || (act.type === 'gym' && act.genKey)){
+      PLAN[dayIdx].gym = false;
+      PLAN[dayIdx].gymType = 'rest';
+      persistPlanChange();
+    }
     if(act.source==='generated'){
       const all = loadSeriesOverrides();
       all[dayIdx] = Object.assign({}, all[dayIdx]);
@@ -5078,7 +5880,7 @@ function recalculateDay(iso, dayIdx, settings){
     if(a.source==='custom' && !a.defId) oneTimeCustom.push(a);
   });
   const deletedGenKeys = current.deletedGenKeys||[], deletedDefIds = current.deletedDefIds||[];
-  const {rec: fresh, sched} = buildMaterializedActs(dayIdx, settings); // in-memory candidate (Stage 3D atomic generation)
+  const {rec: fresh, sched} = buildMaterializedActs(dayIdx, settings, iso); // in-memory candidate (Stage 3D atomic generation)
   fresh.acts
     .filter(a=>(a.genKey && deletedGenKeys.includes(a.genKey)) || (a.defId && deletedDefIds.includes(a.defId)))
     .sort((a,b)=>a.start-b.start)
@@ -5089,8 +5891,9 @@ function recalculateDay(iso, dayIdx, settings){
   fresh.acts.forEach(a=>{
     const prev = (a.genKey && currentByGenKey[a.genKey]) || (a.defId && currentByDefId[a.defId]);
     if(prev && prev.priority) a.priority = prev.priority;
+    if(prev && prev.notes) a.notes = prev.notes;
     if(a.genKey && lockedByGenKey[a.genKey]){ a.start=lockedByGenKey[a.genKey].start; a.end=lockedByGenKey[a.genKey].end; a.name=lockedByGenKey[a.genKey].name; a.notes=lockedByGenKey[a.genKey].notes; a.timeLocked=true; }
-    else if(a.defId && lockedByDefId[a.defId]){ a.start=lockedByDefId[a.defId].start; a.end=lockedByDefId[a.defId].end; a.timeLocked=true; }
+    else if(a.defId && lockedByDefId[a.defId]){ a.start=lockedByDefId[a.defId].start; a.end=lockedByDefId[a.defId].end; if(lockedByDefId[a.defId].notes) a.notes=lockedByDefId[a.defId].notes; a.timeLocked=true; }
   });
   fresh.acts.push(...oneTimeCustom);
   fresh.acts.sort((a,b)=>a.start-b.start);
@@ -5391,9 +6194,11 @@ function computeWeeklyBudget(settings){
   return totals;
 }
 /* ================= SCHEDULE: CHECKLIST ITEMS ================= */
-function scheduleChecklistItems(dayIdx, settings){
+function scheduleChecklistItems(dayIdx, settings, explicitIso){
   const day = PLAN[dayIdx];
-  const isGym = day.gym;
+  const iso = explicitIso || (typeof weekDates !== 'undefined' && weekDates[dayIdx] ? toISO(weekDates[dayIdx]) : null);
+  const effGym = getEffectiveGymDay(iso, dayIdx);
+  const isGym = effGym.gym;
   const isFriday = (day.name === 'الجمعة');
   const isCollege = !!settings.collegeDays[dayIdx];
   const items = [];
@@ -5968,9 +6773,10 @@ function computeAnalyticsForDates(dateList){
     if(dayEaten>0){ nut.kcalTargetSum+=tgt.kcal; nut.proteinTargetSum+=tgt.protein; }
     if(hasLog) nut.daysLogged++;
 
-    if(plan.gym){
+    const effGym = getEffectiveGymDay(iso, dayIdx);
+    if(effGym.gym){
       train.gymDaysPossible++;
-      const list = plan.gymType==='A'?EX_A:EX_B;
+      const list = effGym.gymType==='A'?EX_A:EX_B;
       const core = list.filter(e=>!e.optional);
       const ex = loadEx(iso);
       let tot=0,done=0; core.forEach(e=>{ tot+=e.sets; const s=ex[e.key]; if(s&&s.sets) done+=s.sets.filter(Boolean).length; });
@@ -6784,7 +7590,7 @@ function runGlobalSearch(queryRaw){
       if(st.sets && st.sets.some(Boolean) && st.weight) return;
       const rank = textRank(q, st.note, isoDateMatchesQuery(iso,q));
       if(rank===null) return;
-      const exObj = [...EX_A, ...EX_B].find(x=>x.key===exKey);
+      const exObj = [...EX_A, ...EX_B].find(x=>x.key===exKey) || getExerciseDef(exKey);
       const exName = exObj ? exObj.name : exKey;
       push({iso, category:'ملاحظة تمرين', icon:'🏋️', text: `${exName}: ${st.note.length>80?st.note.slice(0,80)+'…':st.note}`, mode:'gym', source:'notes', rank});
     });
@@ -7679,7 +8485,7 @@ function validateBackupData(data){
   if(data===null || typeof data!=='object' || Array.isArray(data)) return {ok:false, reason:'الملف ده مش نسخة احتياطية صحيحة (شكل البيانات مش متوقع).'};
   const keys = Object.keys(data);
   if(keys.length===0) return {ok:false, reason:'الملف فاضي — مفيش بيانات فيه أصلاً.'};
-  const KNOWN_KEY_PATTERNS = [/^schema-version$/, /^targets$/, /^schedule-settings$/, /^shopping$/, /^prep$/, /^subs$/, /^meals:/, /^sched-acts:/, /^water:/, /^weight:/, /^budget-/, /^custom-foods$/, /^food-overrides$/, /^secnote:/, /^ex:/];
+  const KNOWN_KEY_PATTERNS = [/^schema-version$/, /^targets$/, /^schedule-settings$/, /^shopping$/, /^prep$/, /^subs$/, /^meals:/, /^sched-acts:/, /^water:/, /^weight:/, /^budget-/, /^custom-foods$/, /^food-overrides$/, /^secnote:/, /^ex:/, /^gym-settings$/, /^gym-date-ov:/, /^custom-exercises$/, /^exercise-overrides$/, /^excluded-exercises$/];
   const looksLikeOurs = keys.some(k=> KNOWN_KEY_PATTERNS.some(re=>re.test(k)));
   if(!looksLikeOurs) return {ok:false, reason:'الملف ده متبقاش شكل نسخة زتونة الاحتياطية — متأكد إنك اخترت الملف الصح؟'};
   for(const k of keys){
@@ -7739,7 +8545,8 @@ function recomputeWeekDots(){
     const status = loadDayStatus(iso);
     weekDotsMeal[iso] = computeDotClassMeal(status, PLAN[idx].meals.length);
     const ex = loadEx(iso);
-    const list = PLAN[idx].gymType==='A' ? EX_A : PLAN[idx].gymType==='B' ? EX_B : [];
+    const eff = getEffectiveGymDay(iso, idx);
+    const list = eff.gymType==='A' ? EX_A : eff.gymType==='B' ? EX_B : [];
     weekDotsGym[iso] = computeDotClassGym(ex, list);
     weekDotsSleep[iso] = computeDotClassSleep(loadSleepTimes(iso), loadSleepHabits(iso));
     weekDotsPrayer[iso] = computeDotClassPrayer(loadPrayer(iso));
@@ -7837,8 +8644,9 @@ function renderHomeDashboard(){
   const waterPct = Math.min(100, Math.round((water / waterTarget) * 100));
 
   // 3. Gym workout of today
-  const isGym = dayPlan ? dayPlan.gym : false;
-  const gymText = isGym ? (dayPlan.gymType==='A' ? 'تمرين 🅰️ اليوم' : 'تمرين 🅱️ اليوم') : 'راحة اليوم 🛋️';
+  const effToday = getEffectiveGymDay(todayIso, dayIdx);
+  const isGym = effToday.gym;
+  const gymText = isGym ? (effToday.gymType==='A' ? 'تمرين 🅰️ اليوم' : 'تمرين 🅱️ اليوم') : (isGymPaused() ? 'الجيم موقوف مؤقتًا ⏸️' : 'راحة اليوم 🛋️');
 
   // 4. Schedule Checklist
   const schedCheck = loadScheduleCheck(todayIso);
@@ -8234,6 +9042,12 @@ function init(){
     console.warn('[plan] saved plan references a food that no longer exists — using the default plan for this session; the saved plan in storage was NOT changed.');
     PLAN = JSON.parse(JSON.stringify(PLAN_DEFAULTS));
   }
+
+  gymSettings = loadGymSettings();
+  customExercises = loadCustomExercises();
+  exerciseOverrides = loadExerciseOverrides();
+  excludedExercises = loadExcludedExercises();
+  rebuildExercises();
 
   scheduleSettings = loadScheduleSettings();
   renderScheduleSettingsForm();
