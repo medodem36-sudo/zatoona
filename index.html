@@ -369,6 +369,10 @@
   .tl-item.type-gym .tl-dot, .tl-item.type-college .tl-dot{background:var(--good);}
   .tl-item.type-gym .tl-body, .tl-item.type-college .tl-body{border-color:#D1FAE5;}
   .tl-item.type-free .tl-body, .tl-item.type-leisure .tl-body{opacity:.8; border-style:dashed;}
+  .tl-item.has-conflict .tl-body{border-color:var(--bad); background:rgba(214,69,69,.04);}
+  .tl-item.has-conflict .tl-dot{background:var(--bad) !important;}
+  .tl-conflict-box{margin-top:6px; padding:6px 10px; background:rgba(214,69,69,.08); border:1px solid rgba(214,69,69,.25); border-radius:8px; font-size:.72rem; line-height:1.6; color:var(--text);}
+  .tl-conflict-label{color:var(--bad); font-weight:700;}
 
   .sleep-block{
     display:flex; align-items:center; gap:12px; background:linear-gradient(150deg, var(--card), var(--card-alt));
@@ -5694,7 +5698,188 @@ function materializedFutureDatesForWeekday(dayIdx){
   }
   return out;
 }
-function addActivity(iso, dayIdx, settings, data, recurring){
+/* ================= SCHEDULE: PRE-SAVE CONFLICT VALIDATOR (Stage 4 Step 4) =================
+   Validates proposed additions or edits to schedule activities BEFORE persistence.
+   Constructs an in-memory candidate schedule, isolates newly introduced or worsened conflicts
+   involving the target activity, and determines whether the save should be blocked (hard conflicts:
+   prayer, sleep, locked), require explicit confirmation (flexible overlaps), or proceed safely.
+   For recurring/series edits, inspects all materialized future dates to prevent partial persistence. */
+function validateActivityPreSave(iso, dayIdx, settings, actId, data, scope){
+  if(!data) return { ok: false, blocked: true, message: 'بيانات النشاط غير صالحة.' };
+
+  let currentRec = loadDayActs(iso);
+  if(!currentRec){
+    const mat = buildMaterializedActs(dayIdx, settings, iso);
+    currentRec = mat.rec;
+  }
+  if(!currentRec || !Array.isArray(currentRec.acts)){
+    return { ok: false, blocked: true, message: 'تعذّر فحص جدول اليوم.' };
+  }
+
+  const candRec = JSON.parse(JSON.stringify(currentRec));
+  const isNew = (!actId || actId === 'NEW');
+  let candAct = null;
+
+  if(isNew){
+    candAct = {
+      id: 'cand_' + schedUid(),
+      source: 'custom',
+      name: data.name,
+      type: data.type,
+      priority: data.priority || 'important',
+      icon: (SCHED_TYPE_META[data.type] || {}).icon || '📌',
+      start: data.start,
+      end: data.end,
+      notes: data.notes || ''
+    };
+    candRec.acts.push(candAct);
+  } else {
+    candAct = candRec.acts.find(a => a.id === actId);
+    if(!candAct){
+      return { ok: false, blocked: true, message: 'النشاط المراد تعديله غير موجود في جدول اليوم.' };
+    }
+    Object.assign(candAct, data);
+  }
+  candRec.acts.sort((a,b) => a.start - b.start);
+
+  const beforeAnalysis = analyzeScheduleConflicts(currentRec);
+  const afterAnalysis = analyzeScheduleConflicts(candRec);
+
+  const candConflicts = (afterAnalysis.byActId && afterAnalysis.byActId[candAct.id]) ? afterAnalysis.byActId[candAct.id] : [];
+  const oldConflicts = (!isNew && beforeAnalysis.byActId && beforeAnalysis.byActId[candAct.id]) ? beforeAnalysis.byActId[candAct.id] : [];
+
+  const newlyIntroduced = candConflicts.filter(c => {
+    const prev = oldConflicts.find(oc => oc.conflictingId === c.conflictingId);
+    if(!prev) return true;
+    return c.overlapMinutes > prev.overlapMinutes;
+  });
+
+  const hardConflict = newlyIntroduced.find(c => c.classification === 'prayer' || c.classification === 'sleep' || c.classification === 'locked');
+  if(hardConflict){
+    return {
+      ok: false,
+      blocked: true,
+      requiresConfirmation: false,
+      classification: hardConflict.classification,
+      conflictingName: hardConflict.conflictingName,
+      overlapMinutes: hardConflict.overlapMinutes,
+      message: `لا يمكن حفظ النشاط بهذا التوقيت لأنه يتعارض مع ${hardConflict.conflictingName}. غيّر التوقيت أو المدة ثم حاول مجددًا.`
+    };
+  }
+
+  const softConflict = newlyIntroduced.find(c => c.classification === 'overlap');
+  if(softConflict){
+    return {
+      ok: false,
+      blocked: false,
+      requiresConfirmation: true,
+      classification: 'overlap',
+      conflictingName: softConflict.conflictingName,
+      overlapMinutes: softConflict.overlapMinutes,
+      message: `يوجد تداخل لمدة ${softConflict.overlapMinutes} دقيقة مع ${softConflict.conflictingName}. هل تريد تعديل التوقيت أم الحفظ رغم التداخل؟`
+    };
+  }
+
+  // Multi-date / recurring series validation
+  const isSeries = (scope === 'series' || scope === true);
+  if(isSeries){
+    const futureDates = materializedFutureDatesForWeekday(dayIdx);
+    for(const otherIso of futureDates){
+      if(otherIso === iso) continue;
+      const orec = loadDayActs(otherIso);
+      if(!orec || !Array.isArray(orec.acts) || orec.acts.length === 0) continue;
+
+      if(isNew){
+        const candOrec = JSON.parse(JSON.stringify(orec));
+        const candOAct = {
+          id: 'cand_series_' + schedUid(),
+          source: 'custom',
+          name: data.name,
+          type: data.type,
+          priority: data.priority || 'important',
+          icon: (SCHED_TYPE_META[data.type] || {}).icon || '📌',
+          start: data.start,
+          end: data.end,
+          notes: data.notes || ''
+        };
+        candOrec.acts.push(candOAct);
+        candOrec.acts.sort((a,b) => a.start - b.start);
+        const oAfter = analyzeScheduleConflicts(candOrec);
+        const oCandConflicts = (oAfter.byActId && oAfter.byActId[candOAct.id]) ? oAfter.byActId[candOAct.id] : [];
+        const oHard = oCandConflicts.find(c => c.classification === 'prayer' || c.classification === 'sleep' || c.classification === 'locked');
+        if(oHard){
+          return {
+            ok: false,
+            blocked: true,
+            requiresConfirmation: false,
+            targetIso: otherIso,
+            classification: oHard.classification,
+            conflictingName: oHard.conflictingName,
+            overlapMinutes: oHard.overlapMinutes,
+            message: `تعذّر حفظ التعديل على جميع الأسابيع القادمة لوجود تعارض في تاريخ ${otherIso} مع ${oHard.conflictingName}. لم يتم تعديل أي يوم.`
+          };
+        }
+      } else {
+        const origAct = findAct(currentRec, actId);
+        if(!origAct) continue;
+        const oact = orec.acts.find(a => (origAct.source === 'generated' ? a.genKey === origAct.genKey : a.defId === origAct.defId));
+        if(!oact) continue;
+
+        if(oact.timeLocked){
+          return {
+            ok: false,
+            blocked: true,
+            requiresConfirmation: false,
+            targetIso: otherIso,
+            message: `تعذّر حفظ التعديل على جميع الأسابيع القادمة لأن النشاط في تاريخ ${otherIso} مثبت يدويًا. لم يتم تعديل أي يوم.`
+          };
+        }
+
+        const candOrec = JSON.parse(JSON.stringify(orec));
+        const candOAct = candOrec.acts.find(a => a.id === oact.id);
+        if(!candOAct) continue;
+        Object.assign(candOAct, data);
+        candOrec.acts.sort((a,b) => a.start - b.start);
+
+        const oBefore = analyzeScheduleConflicts(orec);
+        const oAfter = analyzeScheduleConflicts(candOrec);
+        const oCandConflicts = (oAfter.byActId && oAfter.byActId[candOAct.id]) ? oAfter.byActId[candOAct.id] : [];
+        const oOldConflicts = (oBefore.byActId && oBefore.byActId[candOAct.id]) ? oBefore.byActId[candOAct.id] : [];
+
+        const oNewlyIntroduced = oCandConflicts.filter(c => {
+          const prev = oOldConflicts.find(oc => oc.conflictingId === c.conflictingId);
+          if(!prev) return true;
+          return c.overlapMinutes > prev.overlapMinutes;
+        });
+
+        const oHard = oNewlyIntroduced.find(c => c.classification === 'prayer' || c.classification === 'sleep' || c.classification === 'locked');
+        if(oHard){
+          return {
+            ok: false,
+            blocked: true,
+            requiresConfirmation: false,
+            targetIso: otherIso,
+            classification: oHard.classification,
+            conflictingName: oHard.conflictingName,
+            overlapMinutes: oHard.overlapMinutes,
+            message: `تعذّر حفظ التعديل على جميع الأسابيع القادمة لوجود تعارض في تاريخ ${otherIso} مع ${oHard.conflictingName}. لم يتم تعديل أي يوم.`
+          };
+        }
+      }
+    }
+  }
+
+  return { ok: true, blocked: false, requiresConfirmation: false, message: '' };
+}
+
+function addActivity(iso, dayIdx, settings, data, recurring, confirmedOverlap){
+  if(confirmedOverlap !== true){
+    const preCheck = validateActivityPreSave(iso, dayIdx, settings, null, data, recurring ? 'series' : 'occurrence');
+    if(preCheck.blocked || preCheck.requiresConfirmation){
+      const rec = getDaySchedRecord(iso, dayIdx, settings);
+      return Object.assign(rec, { validationBlocked: preCheck.blocked, validationRequiresConfirmation: preCheck.requiresConfirmation, validationMessage: preCheck.message });
+    }
+  }
   const rec = getDaySchedRecord(iso, dayIdx, settings);
   rec.edited = true;
   const pri = data.priority || 'important';
@@ -5714,7 +5899,14 @@ function addActivity(iso, dayIdx, settings, data, recurring){
   }
   return rec;
 }
-function updateActivity(iso, dayIdx, settings, actId, patch, scope){
+function updateActivity(iso, dayIdx, settings, actId, patch, scope, confirmedOverlap){
+  if(confirmedOverlap !== true){
+    const preCheck = validateActivityPreSave(iso, dayIdx, settings, actId, patch, scope);
+    if(preCheck.blocked || preCheck.requiresConfirmation){
+      const rec = getDaySchedRecord(iso, dayIdx, settings);
+      return Object.assign(rec, { validationBlocked: preCheck.blocked, validationRequiresConfirmation: preCheck.requiresConfirmation, validationMessage: preCheck.message });
+    }
+  }
   const rec = getDaySchedRecord(iso, dayIdx, settings);
   const act = findAct(rec, actId); if(!act) return rec;
   const oldStart=act.start, oldEnd=act.end;
@@ -5813,13 +6005,124 @@ function deleteActivity(iso, dayIdx, settings, actId, scope){
   }
   return rec;
 }
+/* ================= SCHEDULE: SMART DUPLICATION (Stage 4 Step 3) =================
+   Conflict-aware activity duplication: preserves original activity duration and metadata,
+   searches for a contiguous free gap (preferably immediately after the original activity,
+   or the next available free slots in the day), validates using analyzeScheduleConflicts()
+   to guarantee zero collisions with prayer, sleep, locked, or other occupied activities,
+   and persists as a clean one-time custom activity. If no suitable gap exists, leaves the
+   schedule completely unchanged and informs the user with an Arabic alert. */
 function duplicateActivity(iso, dayIdx, settings, actId){
   const rec = getDaySchedRecord(iso, dayIdx, settings);
-  const act = findAct(rec, actId); if(!act) return rec;
-  const copy = { id:'one_'+schedUid(), source:'custom', name:act.name+' (نسخة)', type:act.type, icon:act.icon, priority:act.priority||'important', start:act.start, end:act.end, notes:act.notes };
-  rec.acts.push(copy); rec.edited = true; rec.acts.sort((a,b)=>a.start-b.start); saveDayActs(iso, rec);
+  const act = findAct(rec, actId);
+  if(!act) return rec;
+
+  const origDur = act.end > act.start ? (act.end - act.start) : (1440 - act.start + act.end);
+  if(!origDur || origDur <= 0 || isNaN(origDur)){
+    alert('لا توجد فترة زمنية متاحة تكفي لتكرار هذا النشاط دون تعارض. جرّب مدة أقصر أو اختر وقتًا آخر.');
+    return rec;
+  }
+
+  const anchor = (typeof rec.anchor === 'number' && !isNaN(rec.anchor)) ? rec.anchor : 0;
+  const items = schedUnwrap(rec);
+  const merged = [];
+  items.forEach(it => {
+    const last = merged[merged.length - 1];
+    if(last && it.relStart < last.end) last.end = Math.max(last.end, it.relEnd);
+    else merged.push({ start: it.relStart, end: it.relEnd });
+  });
+
+  const gaps = [];
+  let cursor = 0;
+  merged.forEach(m => {
+    if(m.start > cursor) gaps.push({ start: cursor, end: m.start, dur: m.start - cursor });
+    cursor = Math.max(cursor, m.end);
+  });
+  if(cursor < 1440) gaps.push({ start: cursor, end: 1440, dur: 1440 - cursor });
+
+  const validGaps = gaps.filter(g => g.dur >= origDur);
+  if(validGaps.length === 0){
+    alert('لا توجد فترة زمنية متاحة تكفي لتكرار هذا النشاط دون تعارض. جرّب مدة أقصر أو اختر وقتًا آخر.');
+    return rec;
+  }
+
+  const actItem = items.find(it => it.id === act.id);
+  const origRelEnd = actItem ? actItem.relEnd : (((act.end - anchor) % 1440 + 1440) % 1440);
+  const origRelStart = actItem ? actItem.relStart : (((act.start - anchor) % 1440 + 1440) % 1440);
+
+  const candidateSlots = [];
+
+  // 1. Preferred: contiguous gap immediately adjacent to original activity end
+  const immediateGap = validGaps.find(g => g.start <= origRelEnd && (origRelEnd + origDur) <= g.end);
+  if(immediateGap){
+    candidateSlots.push({ startRel: origRelEnd, endRel: origRelEnd + origDur });
+  }
+
+  // 2. Next gaps chronologically after original activity
+  validGaps.filter(g => g.start >= origRelEnd).forEach(g => {
+    if(!candidateSlots.some(s => s.startRel === g.start)){
+      candidateSlots.push({ startRel: g.start, endRel: g.start + origDur });
+    }
+  });
+
+  // 3. Earlier gaps from the start of the day
+  validGaps.filter(g => g.end <= origRelStart).forEach(g => {
+    if(!candidateSlots.some(s => s.startRel === g.start)){
+      candidateSlots.push({ startRel: g.start, endRel: g.start + origDur });
+    }
+  });
+
+  // 4. Any remaining valid gap
+  validGaps.forEach(g => {
+    if(!candidateSlots.some(s => s.startRel === g.start)){
+      candidateSlots.push({ startRel: g.start, endRel: g.start + origDur });
+    }
+  });
+
+  let dupAct = null;
+  const pri = (act.priority && SCHED_ACTIVITY_PRIORITIES && SCHED_ACTIVITY_PRIORITIES[act.priority])
+    ? act.priority
+    : (typeof getActPriority === 'function' ? getActPriority(act).key : 'important');
+  const icon = act.icon || ((SCHED_TYPE_META && SCHED_TYPE_META[act.type]) ? SCHED_TYPE_META[act.type].icon : '📌');
+
+  for(const slot of candidateSlots){
+    const startClock = ((Math.round(anchor + slot.startRel) % 1440) + 1440) % 1440;
+    const endClock = ((Math.round(anchor + slot.endRel) % 1440) + 1440) % 1440;
+
+    const candidate = {
+      id: 'one_' + schedUid(),
+      source: 'custom',
+      name: act.name + ' (نسخة)',
+      type: act.type,
+      icon: icon,
+      priority: pri,
+      start: startClock,
+      end: endClock,
+      notes: act.notes || ''
+    };
+
+    const testRec = { anchor: rec.anchor, acts: rec.acts.concat([candidate]) };
+    const check = analyzeScheduleConflicts(testRec);
+    const conflictsOnCandidate = (check && check.byActId && check.byActId[candidate.id]) ? check.byActId[candidate.id] : [];
+
+    if(conflictsOnCandidate.length === 0){
+      dupAct = candidate;
+      break;
+    }
+  }
+
+  if(!dupAct){
+    alert('لا توجد فترة زمنية متاحة تكفي لتكرار هذا النشاط دون تعارض. جرّب مدة أقصر أو اختر وقتًا آخر.');
+    return rec;
+  }
+
+  rec.acts.push(dupAct);
+  rec.edited = true;
+  rec.acts.sort((a,b) => a.start - b.start);
+  saveDayActs(iso, rec);
   return rec;
 }
+
 
 /* ================= SCHEDULE: RESET CONTROLS (Session 2.5) =================
    "Reset to auto" undoes a per-occurrence manual time override for ONE activity,
@@ -5952,6 +6255,125 @@ function computeTimeEngine(rec){
   }
   return {total, committed, free, conflicts, items};
 }
+
+/* ================= SCHEDULE: CONFLICT ANALYZER (Stage 4 Step 1) =================
+   Pure, read-only helper that inspects a day's schedule record for actual time overlaps
+   using computeTimeEngine(), classifies each conflict (prayer, sleep, locked, or overlap),
+   and returns structured conflict entries keyed by activity ID with concise Arabic descriptions. */
+function analyzeScheduleConflicts(rec){
+  if(!rec || !Array.isArray(rec.acts) || rec.acts.length === 0){
+    return { hasConflicts: false, totalConflicts: 0, byActId: {}, conflicts: [] };
+  }
+  // Exclude synthetic gap blocks defensively (display-only elements from computeScheduleGaps)
+  const realActs = rec.acts.filter(a => a && a.source !== 'gap' && typeof a.start === 'number' && typeof a.end === 'number' && !isNaN(a.start) && !isNaN(a.end));
+  if(realActs.length === 0){
+    return { hasConflicts: false, totalConflicts: 0, byActId: {}, conflicts: [] };
+  }
+
+  let anchor = rec.anchor;
+  if(typeof anchor !== 'number' || isNaN(anchor)){
+    const wakeAct = realActs.find(a => a.genKey === 'wake');
+    anchor = wakeAct && typeof wakeAct.start === 'number' ? wakeAct.start : (realActs[0] ? realActs[0].start : 0);
+  }
+
+  const cleanRec = { anchor, acts: realActs };
+  const te = computeTimeEngine(cleanRec);
+  const byActId = {};
+  const conflicts = [];
+
+  const items = te.items || [];
+  for(let i = 0; i < items.length; i++){
+    for(let j = i + 1; j < items.length; j++){
+      const a = items[i], b = items[j];
+      const ov = Math.min(a.relEnd, b.relEnd) - Math.max(a.relStart, b.relStart);
+      if(ov <= 0) continue;
+
+      const aId = String(a.id != null ? a.id : (a.genKey || ('act_' + i)));
+      const bId = String(b.id != null ? b.id : (b.genKey || ('act_' + j)));
+      const aName = a.name || 'نشاط بدون اسم';
+      const bName = b.name || 'نشاط بدون اسم';
+
+      // Conflict classification precedence:
+      // 1. prayer: either activity is a prayer block
+      // 2. sleep: either activity is a sleep block
+      // 3. locked: either activity is manually time-locked
+      // 4. overlap: general overlap between activities
+      let classification = 'overlap';
+      if(a.type === 'prayer' || b.type === 'prayer'){
+        classification = 'prayer';
+      } else if(a.type === 'sleep' || b.type === 'sleep'){
+        classification = 'sleep';
+      } else if(a.timeLocked || b.timeLocked){
+        classification = 'locked';
+      }
+
+      function buildMsg(self, peer, peerName, selfName){
+        if(peer.type === 'prayer') return `يوجد تداخل مع وقت الصلاة: ${peerName}.`;
+        if(self.type === 'prayer') return `يوجد تداخل في وقت الصلاة مع: ${peerName}.`;
+        if(peer.type === 'sleep') return `يوجد تداخل مع موعد النوم: ${peerName}.`;
+        if(self.type === 'sleep') return `يوجد تداخل في موعد النوم مع: ${peerName}.`;
+        if(peer.timeLocked) return `يوجد تداخل مع نشاط مثبت يدويًا: ${peerName}.`;
+        if(self.timeLocked) return `يوجد تداخل مع نشاط مثبت يدويًا: ${selfName} مع ${peerName}.`;
+        return `يوجد تداخل زمني مع: ${peerName} (${ov} دقيقة).`;
+      }
+
+      const msgForA = buildMsg(a, b, bName, aName);
+      const msgForB = buildMsg(b, a, aName, bName);
+
+      const entryForA = {
+        activityId: aId,
+        activityName: aName,
+        conflictingId: bId,
+        conflictingName: bName,
+        overlapMinutes: ov,
+        classification,
+        message: msgForA
+      };
+
+      const entryForB = {
+        activityId: bId,
+        activityName: bName,
+        conflictingId: aId,
+        conflictingName: aName,
+        overlapMinutes: ov,
+        classification,
+        message: msgForB
+      };
+
+      if(!byActId[aId]) byActId[aId] = [];
+      byActId[aId].push(entryForA);
+
+      if(!byActId[bId]) byActId[bId] = [];
+      byActId[bId].push(entryForB);
+
+      conflicts.push({
+        aId,
+        bId,
+        aName,
+        bName,
+        overlapMinutes: ov,
+        classification,
+        messageA: msgForA,
+        messageB: msgForB
+      });
+    }
+  }
+
+  const result = {
+    hasConflicts: conflicts.length > 0,
+    totalConflicts: conflicts.length,
+    byActId,
+    conflicts
+  };
+
+  // Direct ID lookup support on the result object
+  Object.keys(byActId).forEach(k => {
+    if(!(k in result)) result[k] = byActId[k];
+  });
+
+  return result;
+}
+
 /* ================= SCHEDULE: GAP DETECTION (Session 4) =================
    Materialized activities can leave real, uncovered time between them — a pre-existing
    'free' slack window from generation (buildDaySchedule's own snapTo(), silently dropped
@@ -6376,6 +6798,8 @@ function schedMinToHHMM(min){ min=((Math.round(min)%1440)+1440)%1440; const h=Ma
 
 function renderScheduleActivities(rec, dayIdx, iso){
   const el = document.getElementById('scheduleTimeline');
+  const conflictAnalysis = analyzeScheduleConflicts(rec);
+  const byActId = conflictAnalysis.byActId || {};
   const sorted = rec.acts.slice().concat(computeScheduleGaps(rec)).sort((a,b)=>a.start-b.start);
   el.innerHTML = sorted.map(act=>{
     if(act.source==='gap'){
@@ -6393,6 +6817,8 @@ function renderScheduleActivities(rec, dayIdx, iso){
     const actPri = getActPriority(act);
     const seriesEligible = act.source==='generated' || !!act.defId;
     const confirming = scheduleActDeleteConfirmId===act.id;
+    const actConflicts = (act.id != null && byActId[act.id]) ? byActId[act.id] : [];
+    const hasConflict = actConflicts.length > 0;
     let extra = '';
     if(confirming){
       extra = `<div style="margin-top:8px; padding:8px; background:var(--card-alt); border-radius:8px; font-size:.72rem; line-height:1.7;">
@@ -6401,7 +6827,7 @@ function renderScheduleActivities(rec, dayIdx, iso){
             <button class="reset-btn act-del-occ" data-id="${act.id}" style="border-color:var(--bad); color:var(--bad);">امسح المرة دي بس</button>
             <button class="reset-btn act-del-series" data-id="${act.id}" style="border-color:var(--bad); color:var(--bad);">امسح كل الأيام زي دي</button>
             <button class="reset-btn act-del-cancel">إلغاء</button>
-          </div>` : `متأكد إنك عايز تمسح "${escapeHtml(act.name)}"؟
+          </div>` : `متأكد إنك عايز تمسح "${escapeHtml(act.name)}"?
           <div style="display:flex; gap:6px; margin-top:6px;">
             <button class="reset-btn act-del-occ" data-id="${act.id}" style="border-color:var(--bad); color:var(--bad);">تأكيد الحذف</button>
             <button class="reset-btn act-del-cancel">إلغاء</button>
@@ -6409,11 +6835,17 @@ function renderScheduleActivities(rec, dayIdx, iso){
       </div>`;
     }
     return `
-    <div class="tl-item type-${act.type}">
+    <div class="tl-item type-${act.type}${hasConflict?' has-conflict':''}">
       <div class="tl-rail"><div class="tl-dot"></div><div class="tl-line"></div></div>
       <div class="tl-body">
         <div class="tl-time mono">${schedMinToTime12(act.start)} – ${schedMinToTime12(act.end)}</div>
-        <div class="tl-label">${act.icon||'📌'} ${escapeHtml(act.name)} <span class="opt-badge act-pri-badge ${actPri.badgeClass}" title="الأولوية: ${actPri.label}">${actPri.label}</span>${act.source==='custom' ? ' <span class="opt-badge" style="margin-right:4px;">مخصّص</span>' : ''}${act.defId ? ' <span class="opt-badge" style="margin-right:4px; border-color:var(--teal); color:var(--teal);">متكرر</span>' : ''}${act.timeLocked ? ' <span class="opt-badge" style="margin-right:4px; border-color:var(--accent); color:var(--accent);">✋ يدوي</span>' : ''}${(act.inlinePrayers||[]).map(p=>` <span class="opt-badge" style="margin-right:4px; border-color:var(--accent-dim); color:var(--accent-dim);">🕌 ${escapeHtml(p)} أثناء النشاط</span>`).join('')}</div>
+        <div class="tl-label">${act.icon||'📌'} ${escapeHtml(act.name)} <span class="opt-badge act-pri-badge ${actPri.badgeClass}" title="الأولوية: ${actPri.label}">${actPri.label}</span>${act.source==='custom' ? ' <span class="opt-badge" style="margin-right:4px;">مخصّص</span>' : ''}${act.defId ? ' <span class="opt-badge" style="margin-right:4px; border-color:var(--teal); color:var(--teal);">متكرر</span>' : ''}${act.timeLocked ? ' <span class="opt-badge" style="margin-right:4px; border-color:var(--accent); color:var(--accent);">✋ يدوي</span>' : ''}${hasConflict ? ' <span class="opt-badge act-conflict-badge" style="margin-right:4px; border-color:var(--bad); color:var(--bad); font-weight:700;">⚠️ تعارض</span>' : ''}${(act.inlinePrayers||[]).map(p=>` <span class="opt-badge" style="margin-right:4px; border-color:var(--accent-dim); color:var(--accent-dim);">🕌 ${escapeHtml(p)} أثناء النشاط</span>`).join('')}</div>
+        ${hasConflict ? `
+        <div class="tl-conflict-box">
+          ${actConflicts.slice(0, 3).map(c=>`<div>⚠️ <span class="tl-conflict-label">تداخل (${c.overlapMinutes} دقيقة)</span> مع: <b>${escapeHtml(c.conflictingName)}</b></div>`).join('')}
+          ${actConflicts.length > 3 ? `<div style="color:var(--muted); font-size:.68rem;">+ ${actConflicts.length - 3} تعارضات إضافية</div>` : ''}
+        </div>
+        ` : ''}
         ${act.notes ? `<div class="tl-note">${escapeHtml(act.notes)}</div>` : ''}
         <div style="display:flex; gap:6px; margin-top:8px; flex-wrap:wrap;">
           <button class="reset-btn act-edit-btn" data-id="${act.id}" style="font-size:.68rem; padding:4px 9px;">✏️ تعديل</button>
@@ -6477,7 +6909,19 @@ function renderScheduleActEditForm(rec, dayIdx, iso){
       ` : `<button class="reset-btn" id="actFormSaveOcc" style="border-color:var(--good); color:var(--good); font-weight:700;">💾 حفظ</button>`}
     </div>
   `;
-  function showActHint(msg){ const h=document.getElementById('actFormHint'); h.textContent=msg; h.classList.remove('hidden'); }
+  function showActHint(msg, isBad){
+    const h = document.getElementById('actFormHint');
+    if(!h) return;
+    h.textContent = msg;
+    if(isBad){
+      h.style.color = 'var(--bad)';
+      h.style.fontWeight = '600';
+    } else {
+      h.style.color = '';
+      h.style.fontWeight = '';
+    }
+    h.classList.remove('hidden');
+  }
   function readForm(){
     return {
       name: document.getElementById('actFormName').value.trim(),
@@ -6489,19 +6933,34 @@ function renderScheduleActEditForm(rec, dayIdx, iso){
     };
   }
   function validate(v){
-    if(!v.name){ showActHint('محتاج تكتب اسم للنشاط.'); return false; }
-    if(v.start===null || v.end===null){ showActHint('محتاج تحدد وقت البداية والنهاية.'); return false; }
-    if(v.start===v.end){ showActHint('وقت البداية والنهاية متساويين — النشاط لازم يكون له مدة.'); return false; }
+    if(!v.name){ showActHint('محتاج تكتب اسم للنشاط.', true); return false; }
+    if(v.start===null || v.end===null){ showActHint('محتاج تحدد وقت البداية والنهاية.', true); return false; }
+    if(v.start===v.end){ showActHint('وقت البداية والنهاية متساويين — النشاط لازم يكون له مدة.', true); return false; }
     return true;
   }
   document.getElementById('actFormCancel').addEventListener('click', ()=>{ scheduleActEditingId=null; renderSchedule(); });
   document.getElementById('actFormSaveOcc').addEventListener('click', ()=>{
     const v = readForm(); if(!validate(v)) return;
+    const recurring = isNew ? (document.getElementById('actFormRecurring') && document.getElementById('actFormRecurring').checked) : false;
+    const scope = isNew ? (recurring ? 'series' : 'occurrence') : 'occurrence';
+
+    const check = validateActivityPreSave(iso, dayIdx, scheduleSettings, isNew ? null : act.id, v, scope);
+    if(check.blocked){
+      showActHint(check.message, true);
+      return;
+    }
+    if(check.requiresConfirmation){
+      const confirmed = confirm(check.message);
+      if(!confirmed){
+        showActHint('تم إلغاء الحفظ. يمكنك تعديل الوقت أو المدة.', false);
+        return;
+      }
+    }
+
     if(isNew){
-      const recurring = document.getElementById('actFormRecurring').checked;
-      addActivity(iso, dayIdx, scheduleSettings, v, recurring);
+      addActivity(iso, dayIdx, scheduleSettings, v, recurring, true);
     } else {
-      updateActivity(iso, dayIdx, scheduleSettings, act.id, v, 'occurrence');
+      updateActivity(iso, dayIdx, scheduleSettings, act.id, v, 'occurrence', true);
     }
     scheduleActEditingId=null;
     weekDotsSchedule[iso] = computeDotClassSchedule(scheduleCheckState, scheduleChecklistItems(dayIdx, scheduleSettings).length);
@@ -6510,7 +6969,21 @@ function renderScheduleActEditForm(rec, dayIdx, iso){
   const seriesBtn = document.getElementById('actFormSaveSeries');
   if(seriesBtn) seriesBtn.addEventListener('click', ()=>{
     const v = readForm(); if(!validate(v)) return;
-    updateActivity(iso, dayIdx, scheduleSettings, act.id, v, 'series');
+
+    const check = validateActivityPreSave(iso, dayIdx, scheduleSettings, act.id, v, 'series');
+    if(check.blocked){
+      showActHint(check.message, true);
+      return;
+    }
+    if(check.requiresConfirmation){
+      const confirmed = confirm(check.message);
+      if(!confirmed){
+        showActHint('تم إلغاء الحفظ. يمكنك تعديل الوقت أو المدة.', false);
+        return;
+      }
+    }
+
+    updateActivity(iso, dayIdx, scheduleSettings, act.id, v, 'series', true);
     scheduleActEditingId=null;
     renderSchedule();
   });
@@ -6651,24 +7124,49 @@ function renderScheduleSleepBlock(rec){
   `;
 }
 
-function renderScheduleBanners(sched){
+function renderScheduleBanners(sched, rec){
   const fb = document.getElementById('scheduleFallbackNote');
-  if(sched.prayerUnavailable){
+  if(sched && sched.prayerUnavailable){
     fb.classList.remove('hidden');
     fb.innerHTML = '⚠️ مواقيت الصلاة غير متاحة لهذه المدينة والتاريخ (غير متصل بالإنترنت ولا يوجد كاش محفوظ). الجدول الحالي محفوظ ومستقر.';
-  } else if(sched.usingFallback){
+  } else if(sched && sched.usingFallback){
     fb.classList.remove('hidden');
     fb.innerHTML = '⏰ مواعيد الصلاة مش متسجلة ليومك ده، فالجدول مستخدم مواعيد تقريبية. سجّل مواعيد الصلاة الحقيقية من تاب "الصلاة" عشان الجدول يبقى مضبوط بالظبط.';
   } else fb.classList.add('hidden');
 
   const cb = document.getElementById('scheduleConflictBanner');
-  if(sched.conflicts.length){
+  const genConflicts = (sched && sched.conflicts) ? sched.conflicts : [];
+  const analysis = rec ? analyzeScheduleConflicts(rec) : { hasConflicts: false, conflicts: [] };
+  const hasActConflicts = analysis.hasConflicts && analysis.conflicts && analysis.conflicts.length > 0;
+
+  if(genConflicts.length || hasActConflicts){
     cb.classList.remove('hidden');
-    cb.innerHTML = '<div class="cb-title">⚠️ لاحظ</div>' + sched.conflicts.map(c=>`<div>• ${c}</div>`).join('');
-  } else cb.classList.add('hidden');
+    let html = '';
+
+    // 1. Actual activity overlaps from analyzeScheduleConflicts(rec)
+    if(hasActConflicts){
+      const count = analysis.conflicts.length;
+      html += `<div class="cb-title">⚠️ يوجد ${count} ${count===1?'تعارض زمني':'تعارضات زمنية'} في جدول اليوم. راجع الأنشطة المحددة أدناه:</div>`;
+      html += analysis.conflicts.map(c => {
+        return `<div>• <b>${escapeHtml(c.aName)}</b> متعارض مع <b>${escapeHtml(c.bName)}</b> (تداخل ${c.overlapMinutes} دقيقة)</div>`;
+      }).join('');
+    }
+
+    // 2. Systemic schedule generation notices from sched.conflicts (sleep floor / study goal shortage)
+    if(genConflicts.length){
+      if(hasActConflicts) html += `<div style="margin-top:8px; padding-top:6px; border-top:1px dashed var(--bad);"></div>`;
+      html += `<div class="cb-title" style="margin-top:${hasActConflicts?'4px':'0'};">⚠️ لاحظ</div>`;
+      html += genConflicts.map(c => `<div>• ${escapeHtml(c)}</div>`).join('');
+    }
+
+    cb.innerHTML = html;
+  } else {
+    cb.classList.add('hidden');
+    cb.innerHTML = '';
+  }
 
   const tn = document.getElementById('scheduleTrimNote');
-  if(sched.autoTrimmed){
+  if(sched && sched.autoTrimmed){
     tn.classList.remove('hidden');
     tn.innerHTML = '🔧 قلّلنا وقت الترفيه/الاحتياطي تلقائيًا شوية النهارده عشان نحافظ على ٧ ساعات نوم على الأقل — عدّل الإعدادات لو عايز توازن مختلف.';
   } else tn.classList.add('hidden');
@@ -6704,8 +7202,8 @@ function renderSchedule(){
   // sleep-floor conflicts, auto-trim notices), which reflect current SETTINGS, independent of
   // whatever the user has manually edited into their actual (materialized) schedule below.
   const sched = buildDaySchedule(selectedIdx, scheduleSettings);
-  renderScheduleBanners(sched);
   const rec = getDaySchedRecord(iso, selectedIdx, scheduleSettings); // the real, editable, persisted schedule
+  renderScheduleBanners(sched, rec);
   renderScheduleTimeEngineCard(rec);
   renderScheduleStudyCard(rec, scheduleSettings);
   renderScheduleActEditForm(rec, selectedIdx, iso);

@@ -66,9 +66,14 @@
    v12: Stage 3 — Gym Management, Exercise Editing, and Schedule
    Synchronization. Editable weekly gym schedule, pause/resume gym,
    per-date gym overrides, custom exercises, exercise overrides/exclusions,
-   and schedule/gym bidirectional synchronization. */
+   and schedule/gym bidirectional synchronization.
 
-const CACHE_VERSION = 'v12';
+   v13: Stage 4 Step 1 — Schedule Conflict Analyzer. Added pure read-only
+   helper analyzeScheduleConflicts() for detecting and classifying schedule
+   time overlaps (prayer, sleep, locked, overlap). Content-only change;
+   no shell asset paths changed. */
+
+const CACHE_VERSION = 'v13';
 const SHELL_CACHE = 'zatoona-shell-' + CACHE_VERSION;
 const RUNTIME_CACHE = 'zatoona-runtime-' + CACHE_VERSION;
 const CURRENT_CACHES = [SHELL_CACHE, RUNTIME_CACHE];
