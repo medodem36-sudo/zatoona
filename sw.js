@@ -71,9 +71,34 @@
    v13: Stage 4 Step 1 — Schedule Conflict Analyzer. Added pure read-only
    helper analyzeScheduleConflicts() for detecting and classifying schedule
    time overlaps (prayer, sleep, locked, overlap). Content-only change;
-   no shell asset paths changed. */
+   no shell asset paths changed.
 
-const CACHE_VERSION = 'v13';
+   v14: Stage 5 Step 5B — Micronutrient Support & Targets in Weekly Meal Planner.
+   Expanded schema to 11 micronutrients (sodium, potassium, calcium, iron,
+   magnesium, zinc, vitaminA, vitaminC, vitaminD, vitaminB12, folate). Added
+   optional user daily targets, food editor fields, safe aggregation in
+   computeIngredients without treating missing data as zero, and Priority 5
+   planner optimization without altering portion-solver constraints. Content-only
+   change; no shell asset paths changed.
+
+   v15: Stage 5 Step 5C — Verified Micronutrient Food Dataset. Enriched
+   FOOD_DB_DEFAULTS with 11 USDA FoodData Central micronutrients for 15 standard
+   food items on exact base-unit measurement basis, while safely preserving 5
+   unverified/Egyptian items without fabricated values. Content-only change;
+   no shell asset paths changed.
+
+   v16: Stage 5 Step 5E — Micronutrient Reference Target Presets. Added
+   demographic-based reference daily intake (DRI/RDA/AI) presets for 11
+   micronutrients based on NASEM and NIH ODS standards, requiring explicit user
+   approval, with safe unset-only and replace-all application modes. Content-only
+   change; no shell asset paths changed.
+
+   v17: Phase 1 — Visual Identity Foundation, Tajawal local WOFF2 typography,
+   and framed botanical logo. Added local Tajawal WOFF2 font files and SVG icons
+   to SHELL_ASSETS so the entire visual identity is completely self-contained and
+   offline-first without external font dependencies. */
+
+const CACHE_VERSION = 'v17';
 const SHELL_CACHE = 'zatoona-shell-' + CACHE_VERSION;
 const RUNTIME_CACHE = 'zatoona-runtime-' + CACHE_VERSION;
 const CURRENT_CACHES = [SHELL_CACHE, RUNTIME_CACHE];
@@ -85,11 +110,19 @@ const SHELL_ASSETS = [
   './',
   './index.html',
   './manifest.json',
+  './icons/icon-any.svg',
+  './icons/icon-maskable.svg',
   './icons/icon-192.png',
   './icons/icon-512.png',
   './icons/icon-maskable-512.png',
   './icons/icon-apple-touch-180.png',
   './icons/favicon-32.png',
+  './assets/fonts/tajawal-v12-arabic-400.woff2',
+  './assets/fonts/tajawal-v12-latin-400.woff2',
+  './assets/fonts/tajawal-v12-arabic-500.woff2',
+  './assets/fonts/tajawal-v12-latin-500.woff2',
+  './assets/fonts/tajawal-v12-arabic-700.woff2',
+  './assets/fonts/tajawal-v12-latin-700.woff2',
 ];
 const SHELL_FALLBACK = './'; // what to serve for any in-scope navigation that isn't individually cached
 
