@@ -96,9 +96,13 @@
    v17: Phase 1 — Visual Identity Foundation, Tajawal local WOFF2 typography,
    and framed botanical logo. Added local Tajawal WOFF2 font files and SVG icons
    to SHELL_ASSETS so the entire visual identity is completely self-contained and
-   offline-first without external font dependencies. */
+   offline-first without external font dependencies.
 
-const CACHE_VERSION = 'v17';
+   v18: Phase 3B — Local Exercise Encyclopedia. Added local standalone
+   exercise catalog (assets/data/exercise-catalog.js) to SHELL_ASSETS for
+   reliable, fast, 100% offline access. */
+
+const CACHE_VERSION = 'v18';
 const SHELL_CACHE = 'zatoona-shell-' + CACHE_VERSION;
 const RUNTIME_CACHE = 'zatoona-runtime-' + CACHE_VERSION;
 const CURRENT_CACHES = [SHELL_CACHE, RUNTIME_CACHE];
@@ -123,6 +127,7 @@ const SHELL_ASSETS = [
   './assets/fonts/tajawal-v12-latin-500.woff2',
   './assets/fonts/tajawal-v12-arabic-700.woff2',
   './assets/fonts/tajawal-v12-latin-700.woff2',
+  './assets/data/exercise-catalog.js',
 ];
 const SHELL_FALLBACK = './'; // what to serve for any in-scope navigation that isn't individually cached
 
