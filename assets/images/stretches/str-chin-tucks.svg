@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%" role="img" aria-label="تمرين سحب الذقن لتصحيح قوام الرقبة وتنشيط عضلاتها العميقة">
+  <defs>
+    <linearGradient id="bgGrad-str-chin-tucks" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="maleMuscles-str-chin-tucks" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569"/>
+      <stop offset="100%" stop-color="#334155"/>
+    </linearGradient>
+    <filter id="glow-str-chin-tucks" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="400" height="300" rx="16" fill="url(#bgGrad-str-chin-tucks)"/>
+
+  <!-- Gym floor grid lines for spatial reference -->
+  <line x1="30" y1="240" x2="370" y2="240" stroke="#334155" stroke-width="2" stroke-dasharray="6,4"/>
+  <circle cx="200" cy="240" r="3" fill="#64748b"/>
+
+  <!-- Target Muscle Highlight Indicator Banner -->
+  <rect x="24" y="20" width="120" height="24" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <circle cx="36" cy="32" r="4" fill="#f59e0b"/>
+  <text x="46" y="36" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="11" font-weight="600">JOINT MOBILITY</text>
+
+  <!-- Male Athletic Figure Group -->
+  <g id="maleFigure-str-chin-tucks" transform="translate(0, 0)">
+
+    <!-- Male Athletic Neck & Upper Cervical Region Portrait Alignment -->
+    <!-- Athletic Upper Chest & Traps Profile -->
+    <path d="M130 240 L160 180 L200 170 L240 180 L270 240 Z" fill="url(#maleMuscles-str-chin-tucks)" stroke="#64748b" stroke-width="2"/>
+    <!-- Broad Neck Column -->
+    <rect x="186" y="125" width="28" height="48" rx="4" fill="#475569" stroke="#64748b" stroke-width="1.5"/>
+    <!-- Highlighted Cervical / Upper Traps Zone -->
+    <path d="M175 160 Q200 150 225 160 L235 180 L165 180 Z" fill="#f59e0b" opacity="0.85" filter="url(#glow-str-chin-tucks)"/>
+    <!-- Strong Male Head Profile / Jawline -->
+    <path d="M185 85 Q200 70 218 85 Q225 105 215 125 L188 125 Z" fill="#475569" stroke="#64748b" stroke-width="2"/>
+    <!-- Hand guiding gently (if applicable) -->
+    <path d="M160 210 Q145 140 185 85" fill="none" stroke="#64748b" stroke-width="6" stroke-linecap="round" stroke-dasharray="4,3"/>
+    <!-- Dynamic Alignment Vector -->
+    <path d="M240 95 L260 95" fill="none" stroke="#38bdf8" stroke-width="3"/>
+    <polygon points="265,95 257,90 257,100" fill="#38bdf8"/>
+
+  </g>
+
+  <!-- Clean Descriptive Watermark Badge -->
+  <text x="375" y="278" text-anchor="end" fill="#64748b" font-family="system-ui, sans-serif" font-size="10" font-weight="500">ZATOONA MOBILITY</text>
+  <text x="24" y="278" fill="#475569" font-family="system-ui, sans-serif" font-size="10" font-weight="500">STRICT MALES-ONLY VECTOR</text>
+</svg>

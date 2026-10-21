@@ -2111,6 +2111,156 @@
       grid-template-columns: 1fr 1fr;
     }
   }
+
+  /* ================= PHASE 9C.1: STRETCH & MOBILITY ENCYCLOPEDIA ================= */
+  .str-search-row{
+    display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap;
+  }
+  .str-search-input{
+    flex:1; min-width:200px; padding:10px 14px; border-radius:var(--radius);
+    border:1px solid var(--line); background:var(--card); color:var(--text);
+    font-family:inherit; font-size:.92rem;
+  }
+  .str-search-input::placeholder{ color:var(--muted); }
+  .str-filter-bar{
+    display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px;
+  }
+  .str-filter-chip{
+    padding:5px 12px; border-radius:20px; border:1px solid var(--line);
+    background:var(--card); color:var(--text); font-size:.78rem; font-weight:600;
+    cursor:pointer; user-select:none; transition:all .15s ease;
+    font-family:inherit; white-space:nowrap;
+  }
+  .str-filter-chip:hover{ border-color:var(--accent); }
+  .str-filter-chip.active{
+    background:linear-gradient(135deg, var(--accent), var(--accent-dim));
+    color:var(--btn-active-text); border-color:var(--accent);
+  }
+  .str-filter-dropdown{
+    padding:6px 10px; border-radius:var(--radius); border:1px solid var(--line);
+    background:var(--card); color:var(--text); font-family:inherit; font-size:.82rem;
+    min-width:100px; cursor:pointer;
+  }
+  .str-count-bar{
+    font-size:.82rem; color:var(--muted); font-weight:500; margin-bottom:10px;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .str-grid{
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
+    gap:14px; margin-bottom:20px;
+  }
+  .str-card{
+    border:1px solid var(--line); border-radius:var(--radius); background:var(--card);
+    overflow:hidden; box-shadow:var(--shadow); transition:transform .15s ease, box-shadow .15s ease;
+    cursor:pointer;
+  }
+  .str-card:hover{
+    transform:translateY(-2px); box-shadow:var(--shadow-md); border-color:var(--accent);
+  }
+  .str-card-img{
+    width:100%; height:160px; object-fit:cover; background:var(--card-alt);
+    display:block; border-bottom:1px solid var(--line);
+  }
+  .str-card-body{
+    padding:12px 14px;
+  }
+  .str-card-title{
+    font-weight:800; font-size:.95rem; color:var(--text); margin-bottom:4px;
+    line-height:1.4;
+  }
+  .str-card-name-en{
+    font-size:.78rem; color:var(--muted); margin-bottom:6px; font-weight:500;
+  }
+  .str-card-meta{
+    display:flex; gap:6px; flex-wrap:wrap; align-items:center;
+  }
+  .str-card-tag{
+    font-size:.7rem; padding:2px 8px; border-radius:10px; font-weight:600;
+    background:var(--card-alt); color:var(--muted); border:1px solid var(--line);
+  }
+  .str-card-tag.type-tag{
+    background:var(--accent); color:var(--btn-active-text); border-color:var(--accent);
+  }
+  .str-empty-state{
+    text-align:center; padding:40px 20px; color:var(--muted);
+  }
+  .str-empty-state .str-empty-icon{ font-size:3rem; margin-bottom:12px; display:block; }
+  .str-empty-state .str-empty-text{ font-size:.95rem; margin-bottom:14px; line-height:1.6; }
+  .str-reset-btn{
+    padding:8px 20px; border-radius:var(--radius); border:1px solid var(--accent);
+    background:transparent; color:var(--accent); font-weight:700; font-size:.85rem;
+    cursor:pointer; font-family:inherit;
+  }
+  .str-reset-btn:hover{ background:var(--accent); color:var(--btn-active-text); }
+
+  /* Detail Modal Overlay */
+  .str-modal-overlay{
+    position:fixed; top:0; left:0; width:100%; height:100%; z-index:1200;
+    background:rgba(0,0,0,.55); display:flex; align-items:center; justify-content:center;
+    padding:16px; opacity:0; pointer-events:none; transition:opacity .2s ease;
+  }
+  .str-modal-overlay.open{ opacity:1; pointer-events:auto; }
+  .str-modal{
+    background:var(--card); border-radius:var(--radius); width:100%; max-width:640px;
+    max-height:85vh; overflow-y:auto; box-shadow:var(--shadow-lg); position:relative;
+    scrollbar-width:thin;
+  }
+  .str-modal-header{
+    position:sticky; top:0; background:var(--card); z-index:2; padding:16px 18px 10px;
+    border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:flex-start;
+  }
+  .str-modal-close{
+    background:none; border:none; font-size:1.5rem; cursor:pointer; color:var(--muted);
+    padding:4px 8px; border-radius:6px; line-height:1;
+  }
+  .str-modal-close:hover{ background:var(--card-alt); color:var(--text); }
+  .str-modal-img{
+    width:100%; max-height:220px; object-fit:contain; background:var(--card-alt);
+    display:block;
+  }
+  .str-modal-body{ padding:16px 18px 20px; }
+  .str-modal-title{ font-weight:800; font-size:1.1rem; color:var(--text); margin-bottom:2px; }
+  .str-modal-subtitle{ font-size:.85rem; color:var(--muted); margin-bottom:10px; }
+  .str-modal-section{ margin-bottom:14px; }
+  .str-modal-section-title{
+    font-weight:700; font-size:.88rem; color:var(--accent); margin-bottom:6px;
+    display:flex; align-items:center; gap:6px;
+  }
+  .str-modal-section ol,
+  .str-modal-section ul{
+    margin:0; padding-right:22px; padding-left:0; list-style-position:outside;
+  }
+  .str-modal-section li{
+    font-size:.85rem; color:var(--text); line-height:1.7; margin-bottom:4px;
+  }
+  .str-modal-info-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:8px;
+  }
+  .str-modal-info-item{
+    background:var(--card-alt); border-radius:8px; padding:8px 10px;
+    border:1px solid var(--line);
+  }
+  .str-modal-info-label{ font-size:.72rem; color:var(--muted); font-weight:600; }
+  .str-modal-info-value{ font-size:.88rem; color:var(--text); font-weight:700; margin-top:2px; }
+  .str-modal-safety{
+    background:rgba(245,158,11,.08); border:1px solid rgba(245,158,11,.25);
+    border-radius:8px; padding:10px 12px; font-size:.82rem; color:var(--text); line-height:1.6;
+  }
+  .str-modal-related{
+    display:flex; gap:6px; flex-wrap:wrap;
+  }
+  .str-modal-related-chip{
+    padding:4px 10px; border-radius:10px; font-size:.75rem; font-weight:600;
+    background:var(--card-alt); border:1px solid var(--line); color:var(--text);
+    cursor:default;
+  }
+  @media (max-width: 480px) {
+    .str-grid{ grid-template-columns:1fr; }
+    .str-card-img{ height:140px; }
+    .str-modal-info-grid{ grid-template-columns:1fr; }
+    .str-modal{ max-height:92vh; }
+  }
+
 </style>
 </head>
 <body>
@@ -2135,6 +2285,7 @@
   </div>
   <div id="inAppRemBody" style="margin-top:10px; font-size:.82rem; line-height:1.6; color:var(--text);"></div>
   <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:14px;">
+    <button type="button" id="inAppRemGo" class="reset-btn" style="border-color:var(--accent); color:var(--accent); font-weight:700; font-size:.78rem; padding:6px 14px;">عرض الآن ↗</button>
     <button type="button" id="inAppRemDone" class="reset-btn" style="border-color:var(--good); color:var(--good); font-weight:700; font-size:.78rem; padding:6px 16px;">✓ تم / حسناً</button>
   </div>
 </div>
@@ -2222,6 +2373,20 @@
       <div class="dnb-text">
         <span class="dnb-label">الميزانية</span>
         <span class="dnb-desc">المصروفات الشهرية والميزانية</span>
+      </div>
+    </button>
+    <button type="button" class="drawer-nav-btn" data-nav="notes" id="drawNav-notes">
+      <span class="dnb-icon" aria-hidden="true">📝</span>
+      <div class="dnb-text">
+        <span class="dnb-label">الملاحظات</span>
+        <span class="dnb-desc">دفتر الملاحظات الموحد والمرفقات</span>
+      </div>
+    </button>
+    <button type="button" class="drawer-nav-btn" data-nav="stretches" id="drawNav-stretches">
+      <span class="dnb-icon" aria-hidden="true">🧘</span>
+      <div class="dnb-text">
+        <span class="dnb-label">الاستطالات والمرونة</span>
+        <span class="dnb-desc">موسوعة حركات الإطالة والتحضير</span>
       </div>
     </button>
   </nav>
@@ -2316,6 +2481,20 @@
           <span class="snb-desc">المصروفات الشهرية والميزانية</span>
         </div>
       </button>
+      <button type="button" class="sidebar-nav-btn" data-nav="notes" id="sideNav-notes" title="الملاحظات">
+        <span class="snb-icon" aria-hidden="true">📝</span>
+        <div class="snb-text">
+          <span class="snb-label">الملاحظات</span>
+          <span class="snb-desc">دفتر الملاحظات الموحد</span>
+        </div>
+      </button>
+      <button type="button" class="sidebar-nav-btn" data-nav="stretches" id="sideNav-stretches" title="الاستطالات">
+        <span class="snb-icon" aria-hidden="true">🧘</span>
+        <div class="snb-text">
+          <span class="snb-label">الاستطالات</span>
+          <span class="snb-desc">موسوعة الحركات والمرونة</span>
+        </div>
+      </button>
     </nav>
     <div class="sidebar-footer">
       🌿 زتونة • تخطيط شخصي
@@ -2376,6 +2555,8 @@
     <div class="mode-btn" id="modeOverview" role="button" tabindex="0" aria-label="نظرة عامة"><span class="mb-ico">📊</span><span class="mb-label">نظرة عامة</span><span class="mb-desc">تحليلاتك واتجاهاتك بمرور الوقت</span></div>
     <div class="mode-btn" id="modeSearch" role="button" tabindex="0" aria-label="بحث"><span class="mb-ico">🔍</span><span class="mb-label">بحث</span><span class="mb-desc">دوّر في يومياتك القديمة كلها</span></div>
     <div class="mode-btn" id="modeBudget" role="button" tabindex="0" aria-label="الميزانية"><span class="mb-ico">💰</span><span class="mb-label">الميزانية</span><span class="mb-desc">مصروفاتك الشهرية وميزانيتك</span></div>
+    <div class="mode-btn" id="modeNotes" role="button" tabindex="0" aria-label="الملاحظات"><span class="mb-ico">📝</span><span class="mb-label">الملاحظات</span><span class="mb-desc">دفتر الملاحظات الموحد والمرفقات</span></div>
+    <div class="mode-btn" id="modeStretches" role="button" tabindex="0" aria-label="الاستطالات"><span class="mb-ico">🧘</span><span class="mb-label">الاستطالات</span><span class="mb-desc">موسوعة حركات الإطالة والمرونة</span></div>
   </div>
 
   <div class="cal-bar" id="weekCalBar">
@@ -2390,6 +2571,9 @@
 
   <!-- ===== MEAL MODE ===== -->
   <div id="mealView">
+    <div style="display:flex; justify-content:flex-end; margin:4px 0 10px;">
+      <button type="button" class="reset-btn" id="jumpToShoppingBtn" style="border-color:var(--accent); color:var(--accent); font-weight:700; display:inline-flex; align-items:center; gap:6px;">🛒 الانتقال السريع لقائمة المشتريات</button>
+    </div>
     <div id="secNotes-meal"></div>
     <details class="settings-card" style="padding:0;">
       <summary style="cursor:pointer; color:var(--accent); font-weight:700; font-size:.85rem; padding:16px;">🎯 أهداف التغذية — Settings</summary>
@@ -2612,9 +2796,19 @@
     <div class="section-hint">علّم اللي اشتريته فعلاً — الليستة دي مخصصة لوجبات الأسبوع المعروض</div>
     <div id="shoppingOverrideNotice" class="conflict-banner hidden" style="margin:6px 0 10px; padding:6px 10px; font-size:.78rem; background:rgba(6,170,196,0.12); border-color:var(--teal); color:var(--teal); font-weight:600;">📋 يتضمن خططاً مخصصة لبعض الأيام</div>
     <div class="checklist" id="shopping"></div>
-    <div class="list-footer">
-      <button class="reset-btn" id="resetShopping">↻ بداية أسبوع جديد</button>
-      <span class="list-total mono" id="shoppingTotal">الإجمالي: 0.00 ج</span>
+    <div class="list-footer" style="flex-wrap:wrap; gap:10px;">
+      <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+        <button class="reset-btn" id="resetShopping" type="button">↻ بداية أسبوع جديد</button>
+        <button class="reset-btn" id="migrateShoppingToBudgetBtn" type="button" style="border-color:var(--good); color:var(--good); font-weight:700;">💰 ترحيل للميزانية كمصروف</button>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:flex-end; gap:2px;">
+        <span class="list-total mono" id="shoppingTotal" style="font-size:.85rem;">الإجمالي التقديري: 0.00 ج</span>
+        <span class="mono" id="shoppingActualTotal" style="font-size:.85rem; font-weight:700; color:var(--good);">المدفوع فعلاً: 0.00 ج</span>
+      </div>
+    </div>
+    <div id="shoppingBudgetStatusBanner" class="hidden" style="margin:8px 0 12px; padding:8px 12px; border-radius:8px; font-size:.8rem; background:rgba(46,204,113,0.1); border:1px solid var(--good); color:var(--good); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+      <span id="shoppingBudgetStatusText"></span>
+      <button id="shoppingBudgetGoBtn" type="button" class="reset-btn" style="padding:3px 8px; font-size:.72rem; border-color:var(--good); color:var(--good);">عرض في الميزانية ↗</button>
     </div>
 
     <div class="section-title"><span class="n">٥</span> تحضير الوجبات (Meal Prep)</div>
@@ -3254,12 +3448,177 @@
     <div class="info-card" id="budgetAnalyticsCard"></div>
   </div>
 
+  <!-- ===== UNIFIED NOTES HUB MODE (Phase 9B.1) ===== -->
+  <div id="notesView" class="hidden">
+    <div class="section-title"><span class="n">📝</span> دفتر الملاحظات الموحد</div>
+    <div class="section-hint">سجل شامل لملاحظاتك اليومية وملاحظات التمارين والاستشفاء والأقسام ومرفقاتها، مع إمكانية الفلترة والبحث السريع</div>
+
+    <!-- Summary Stats Bar -->
+    <div class="stat-grid" id="notesStatsGrid" style="margin-bottom:12px;">
+      <div class="stat-mini"><div class="smv mono" id="notesStatTotal">0</div><div class="sml">إجمالي الملاحظات</div></div>
+      <div class="stat-mini"><div class="smv mono" id="notesStatDated">0</div><div class="sml">ملاحظات مؤرخة</div></div>
+      <div class="stat-mini"><div class="smv mono" id="notesStatSection">0</div><div class="sml">ملاحظات أقسام</div></div>
+      <div class="stat-mini"><div class="smv mono" id="notesStatWithAtt">0</div><div class="sml">بها مرفقات</div></div>
+    </div>
+
+    <!-- Search input row -->
+    <div style="display:flex; gap:8px; align-items:center; margin-bottom:10px;">
+      <input type="text" id="notesSearchInput" class="weight-input" style="flex:1; font-size:.88rem; padding:10px 14px;" placeholder="ابحث في نص الملاحظات أو اسم التمرين أو القسم...">
+      <button class="tbtn-lg hidden" id="notesSearchClearBtn" type="button" title="مسح البحث" aria-label="مسح البحث">✕</button>
+    </div>
+
+    <!-- Type filter chips row -->
+    <div style="margin-bottom:10px;">
+      <div style="font-size:.74rem; font-weight:700; color:var(--muted); margin-bottom:4px;">نوع الملاحظة:</div>
+      <div class="day-toggle-row" id="notesTypeFilterRow" style="flex-wrap:wrap; gap:6px;">
+        <button type="button" class="day-chip on" data-type="all">📝 الكل</button>
+        <button type="button" class="day-chip" data-type="daily">📅 يومية</button>
+        <button type="button" class="day-chip" data-type="recovery">🩺 استشفاء</button>
+        <button type="button" class="day-chip" data-type="exercise">🏋️ تمارين</button>
+        <button type="button" class="day-chip" data-type="section">📑 أقسام عامة</button>
+      </div>
+    </div>
+
+    <!-- Time & Attachment filter chips row -->
+    <div style="margin-bottom:14px; display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between;">
+      <div>
+        <div style="font-size:.74rem; font-weight:700; color:var(--muted); margin-bottom:4px;">الفترة الزمنية (للملاحظات المؤرخة):</div>
+        <div class="day-toggle-row" id="notesTimeFilterRow" style="gap:6px; flex-wrap:wrap;">
+          <button type="button" class="day-chip on" data-time="all">الكل</button>
+          <button type="button" class="day-chip" data-time="7d">آخر 7 أيام</button>
+          <button type="button" class="day-chip" data-time="30d">آخر 30 يوم</button>
+          <button type="button" class="day-chip" data-time="month">هذا الشهر</button>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:.74rem; font-weight:700; color:var(--muted); margin-bottom:4px;">فلتر المرفقات:</div>
+        <button type="button" class="day-chip" id="notesHasAttBtn" data-has-att="false">📷 بها مرفقات فقط</button>
+      </div>
+    </div>
+
+    <!-- Filter Feedback Meta & Controls -->
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin:4px 0 10px;">
+      <div id="notesFilterMeta" style="color:var(--muted); font-size:.76rem;"></div>
+      <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+        <button type="button" class="day-chip" id="notesSortToggle" data-sort="desc" title="تغيير الترتيب الزمني (الأحدث أو الأقدم)">⬇️ الأحدث أولاً</button>
+        <button type="button" class="day-chip hidden" id="notesResetFiltersBtn" style="color:var(--accent); font-weight:700; border-color:var(--accent); background:rgba(230,126,34,0.08);" title="مسح جميع الفلاتر المطبقة">↺ مسح جميع الفلاتر</button>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div id="notesEmptyState" class="empty-note hidden" style="text-align:center; padding:32px 16px;">
+      <div style="font-size:2rem; margin-bottom:6px;">📝</div>
+      <div style="font-weight:700; color:var(--text); margin-bottom:4px;" id="notesEmptyTitle">لا توجد ملاحظات مطابقة</div>
+      <div style="font-size:.8rem; color:var(--muted);" id="notesEmptyDesc">جرّب تغيير خيارات الفلترة أو مسح كلمة البحث</div>
+    </div>
+
+    <!-- Timeline of Dated Notes -->
+    <div id="notesTimelineSection">
+      <div class="section-title" style="margin-top:8px;"><span class="n">١</span> سجل الملاحظات الزمني (<span id="notesDatedCount">0</span>)</div>
+      <div id="notesTimelineList" style="display:flex; flex-direction:column; gap:10px;"></div>
+    </div>
+
+    <!-- Undated Section Notes Group -->
+    <div id="notesUndatedSection" style="margin-top:20px;">
+      <div class="section-title"><span class="n">٢</span> ملاحظات الأقسام العامة — غير مرتبطة بتاريخ (<span id="notesSectionCount">0</span>)</div>
+      <div class="section-hint">مسودات مستمرة وملاحظات عامة خاصة بأقسام التطبيق</div>
+      <div id="notesSectionList" style="display:flex; flex-direction:column; gap:10px;"></div>
+    </div>
+  </div>
+
+
+  <!-- ===== STRETCH & MOBILITY ENCYCLOPEDIA (Phase 9C.1) ===== -->
+  <div id="stretchesView" class="hidden">
+    <div class="section-title"><span class="n">🧘</span> موسوعة الاسترتشات والمرونة</div>
+    <div class="section-hint">حركات إطالة وتحضير مفصلي وتنشيط عضلي مبنية على أسس تشريحية — للإحماء والتهدئة والاستشفاء الحركي</div>
+
+    <!-- Search Bar -->
+    <div class="str-search-row">
+      <input type="search" class="str-search-input" id="stretchSearchInput" placeholder="ابحث باسم الحركة أو العضلة (عربي / إنجليزي)..." autocomplete="off">
+    </div>
+
+    <!-- Filter Chips Row -->
+    <div class="str-filter-bar" id="stretchFilterBar">
+      <select class="str-filter-dropdown" id="strFilterType" aria-label="نوع الحركة">
+        <option value="">كل الأنواع</option>
+        <option value="static_stretch">إطالة ثابتة</option>
+        <option value="dynamic_stretch">إطالة ديناميكية</option>
+        <option value="joint_mobility">مرونة مفصلية</option>
+        <option value="activation">تنشيط عضلي</option>
+        <option value="warmup_drill">إحماء تحضيري</option>
+      </select>
+      <select class="str-filter-dropdown" id="strFilterRegion" aria-label="منطقة الجسم">
+        <option value="">كل المناطق</option>
+        <option value="chest_shoulders">الصدر والكتفين</option>
+        <option value="back_lats">الظهر واللاتس</option>
+        <option value="neck_upper_back">الرقبة وأعلى الظهر</option>
+        <option value="hips_pelvis">الورك والحوض</option>
+        <option value="thighs_legs">الفخذين والساقين</option>
+        <option value="glutes">المؤخرة</option>
+        <option value="calves_ankles">السمانة والكاحل</option>
+        <option value="wrists_forearms">الرسغ والساعد</option>
+        <option value="spine_rotation">العمود الفقري والدوران</option>
+        <option value="full_body">كامل الجسم</option>
+      </select>
+      <select class="str-filter-dropdown" id="strFilterEquipment" aria-label="المعدات">
+        <option value="">كل المعدات</option>
+        <option value="none">بدون معدات</option>
+        <option value="mat">بساط تمرين</option>
+        <option value="wall">حائط / جدار</option>
+        <option value="band">شريط مقاومة</option>
+      </select>
+      <select class="str-filter-dropdown" id="strFilterLevel" aria-label="المستوى">
+        <option value="">كل المستويات</option>
+        <option value="beginner">مبتدئ</option>
+        <option value="intermediate">متوسط</option>
+        <option value="advanced">متقدم</option>
+      </select>
+      <select class="str-filter-dropdown" id="strFilterPurpose" aria-label="الغرض">
+        <option value="">كل الأغراض</option>
+        <option value="warmup">إحماء</option>
+        <option value="cooldown">تهدئة</option>
+        <option value="mobility">مرونة وحركة</option>
+      </select>
+    </div>
+
+    <!-- Count Bar -->
+    <div class="str-count-bar">
+      <span id="stretchCountLabel">34 حركة</span>
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="str-grid" id="stretchesGrid"></div>
+
+    <!-- Empty State -->
+    <div class="str-empty-state hidden" id="stretchesEmptyState">
+      <span class="str-empty-icon">🔍</span>
+      <div class="str-empty-text">لم يتم العثور على حركات تطابق معايير البحث والفلترة الحالية</div>
+      <button class="str-reset-btn" id="stretchesResetBtn" type="button">مسح الفلاتر والبحث</button>
+    </div>
+  </div>
+
+  <!-- Stretch Detail Modal -->
+  <div class="str-modal-overlay" id="stretchDetailModal" role="dialog" aria-modal="true" aria-label="تفاصيل الحركة">
+    <div class="str-modal">
+      <div class="str-modal-header">
+        <div>
+          <div class="str-modal-title" id="strModalTitle"></div>
+          <div class="str-modal-subtitle" id="strModalSubtitle"></div>
+        </div>
+        <button class="str-modal-close" id="strModalCloseBtn" aria-label="إغلاق" type="button">&times;</button>
+      </div>
+      <img class="str-modal-img" id="strModalImg" alt="" loading="lazy">
+      <div class="str-modal-body" id="strModalBody"></div>
+    </div>
+  </div>
+
   <footer>البيانات محفوظة في متصفحك على الجهاز ده بس — افتح نفس الملف من نفس المتصفح عشان ترجعلك.</footer>
 </div>
 </div><!-- /appMain -->
 </div><!-- /appLayout -->
 
 <script src="./assets/data/exercise-catalog.js"></script>
+<script src="./assets/data/stretch-catalog.js"></script>
 <script>
 /* ================= PHASE 4: UNIFIED SVG ICONS ================= */
 const ZATOONA_ICONS = {
@@ -3273,6 +3632,7 @@ const ZATOONA_ICONS = {
   overview: '<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
   search: '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
   budget: '<rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>',
+  notes: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>',
   water: '<path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>',
   flame: '<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>',
   protein: '<ellipse cx="12" cy="12" rx="9" ry="6"/><circle cx="9" cy="12" r="2"/>',
@@ -4241,32 +4601,32 @@ let nutritionTargets = {}; // full {calories,protein,carbs,fat,fiber,water,macro
 /* ================= GYM DATA ================= */
 const WARMUP = [
   { text:'5 دقايق مشي سريع / جري خفيف / دراجة أو نط حبل — عشان تعرق شوية ويزيد نبضك',
-    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Jogging_couple.jpg', credit:'Wikimedia Commons · CC BY-SA 2.0' },
+    img:'./assets/images/warmup/warmup-01-cardio.svg', credit:'رسم أصلي محلي' },
   { text:'دوران الذراعين للأمام وللخلف — 15 مرة كل اتجاه',
-    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Girl_exercising_shoulders.jpg', credit:'Wikimedia Commons · CC BY 2.0' },
+    img:'./assets/images/warmup/warmup-02-arm-circles.svg', credit:'رسم أصلي محلي' },
   { text:'تأرجح الرجل للأمام والخلف وجانبي — 10 لكل رجل',
-    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Woman_stretching_her_hamstrings_and_glutes_on_a_log_in_nature.jpg', credit:'Wikimedia Commons · CC BY 2.0' },
+    img:'./assets/images/warmup/warmup-03-leg-swings.svg', credit:'رسم أصلي محلي' },
   { text:'دوران الحوض — 10 لكل اتجاه',
-    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Back_stretch_workout_session.jpg', credit:'Wikimedia Commons · CC BY 2.0' },
+    img:'./assets/images/warmup/warmup-04-hip-circles.svg', credit:'رسم أصلي محلي' },
   { text:'سكوات وزن الجسم بطيء ومتحكم — 10 مرات من غير وزن',
-    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Squat-CDC_strength_training_for_older_adults.gif', credit:'CDC · Public Domain' },
+    img:'./assets/images/warmup/warmup-05-bodyweight-squat.svg', credit:'رسم أصلي محلي' },
   { text:'سيت تسخين خفيف (نص الوزن أو أقل) لأول تمرين في اليوم',
-    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Squat-CDC_strength_training_for_older_adults.gif', credit:'CDC · Public Domain' },
+    img:'./assets/images/warmup/warmup-06-warmup-set.svg', credit:'رسم أصلي محلي' },
 ];
 
 const COOLDOWN = [
   { text:'استرتش الكتف: مد دراعك أفقي قدام صدرك وامسكه بالدراع التانية — 20-30 ثانية لكل جانب',
-    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Stretching_(7559234072).jpg', credit:'Wikimedia Commons · CC BY 2.0' },
+    img:'./assets/images/cooldown/cooldown-01-shoulder-stretch.svg', credit:'رسم أصلي محلي' },
   { text:'استرتش الصدر: حط دراعك على الحيط بزاوية 90 درجة ولف جسمك بعيد عنه برفق',
-    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Chest_stretch-CDC_strength_training_for_older_adults.gif', credit:'CDC · Public Domain' },
+    img:'./assets/images/cooldown/cooldown-02-chest-stretch.svg', credit:'رسم أصلي محلي' },
   { text:'استرتش أسفل الظهر والوراك: نايم على ضهرك واسحب ركبة لصدرك — 20-30 ثانية لكل رجل',
-    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Backstretch-CDC_strength_training_for_older_adults.gif', credit:'CDC · Public Domain' },
+    img:'./assets/images/cooldown/cooldown-03-lower-back-stretch.svg', credit:'رسم أصلي محلي' },
   { text:'استرتش الفخذ الخلفي: قاعد ومد رجل واحدة وحاول توصل لصوابعك برفق',
-    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Hamstring_stretch-CDC_strength_training_for_older_adults.gif', credit:'CDC · Public Domain' },
+    img:'./assets/images/cooldown/cooldown-04-hamstring-stretch.svg', credit:'رسم أصلي محلي' },
   { text:'استرتش الفخذ الأمامي: واقف، امسك كاحلك واسحبه لورا لحد ما تحس بشد',
-    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Quad_stretch-CDC_strength_training_for_older_adults.gif', credit:'CDC · Public Domain' },
+    img:'./assets/images/cooldown/cooldown-05-quad-stretch.svg', credit:'رسم أصلي محلي' },
   { text:'مشي هادي 3-5 دقايق عشان نبضك يرجع لطبيعته تدريجيًا',
-    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Jogging_couple.jpg', credit:'Wikimedia Commons · CC BY-SA 2.0' },
+    img:'./assets/images/cooldown/cooldown-06-calm-walk.svg', credit:'رسم أصلي محلي' },
 ];
 
 const EX_A_DEFAULTS = [
@@ -4276,42 +4636,42 @@ const EX_A_DEFAULTS = [
     mistakes:['الركبة بتتقفل لجوه — خليها في نفس اتجاه صوابع رجلك','الكعب بيرتفع عن الأرض — وزّع وزنك بالتساوي','الضهر بينحني — ثبّت نظرك لقدام وشد بطنك'],
     tip:'لو مش قادر تنزل عميق من غير ما ضهرك ينحني، انزل لحد ما تقدر بفورم صح بس، وزوّد العمق تدريجيًا.',
     link:'https://exrx.net/WeightExercises/Kettlebell/KBGobletSquat',
-    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Kettle_bell_squats.jpg', credit:'Wikimedia Commons · CC BY 2.0' },
+    img:'./assets/images/exercises/ex-a01-goblet-squat.svg', credit:'رسم أصلي محلي' },
   { key:'bench', name:'بنش برس بار / دمبل', equip:'بار + بنش، أو زوج دمبل + بنش', target:'الصدر، الكتف الأمامي، الترايسبس', sets:3, reps:'8-10',
     steps:['نام على البنش وقدميك ثابتة على الأرض','امسك البار أعرض شوية من الكتفين، أو دمبل في كل إيد فوق الصدر','نزّل الوزن ببطء لحد ما يوصل قريب من صدرك، والكوع بزاوية 45 درجة تقريبًا','ادفع الوزن لفوق لحد ما دراعك تتفرد من غير قفل عنيف للمرفق'],
     breath:'شهيق وانت نازل، زفير وانت بتدفع لفوق',
     mistakes:['رفع الوراك عن البنش — خلي وراكك وضهرك ملاصقين البنش','نزول الوزن بسرعة أو بارتطاط على الصدر','فتح الكوع بزاوية 90 درجة كاملة — بيزود الضغط على الكتف'],
     tip:'لو مبتدئ، ابدأ بالدمبل بدل البار — توازن أسهل وميحتاجش سبوتر.',
     link:'https://exrx.net/WeightExercises/PectoralSternal/DBBenchPress',
-    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Bench_press_dumbbell_1.svg', credit:'Wikimedia Commons · CC BY-SA 3.0' },
+    img:'./assets/images/exercises/ex-a02-bench-press.svg', credit:'رسم أصلي محلي' },
   { key:'pulldown', name:'سحب لأسفل (Lat Pulldown) أو عقلة', equip:'ماكينة Lat Pulldown أو بار عقلة', target:'الظهر العريضة، الباي، الكتف الخلفي', sets:3, reps:'8-10',
     steps:['امسك البار أعرض من الكتفين (أو علّق نفسك في بار العقلة)','اسحب البار لصدرك العلوي، مركّز إن الكتف بيشتغل مش الدراع بس','ارجع ببطء لحد ما دراعك تتفرد تمامًا','كرر مع الحفاظ على ضهرك مفرود وصدرك لفوق'],
     breath:'زفير وانت بتسحب، شهيق وانت بترجع',
     mistakes:['استخدام تأرجح الجسم بدل قوة الظهر','سحب البار خلف الرقبة — بيضغط على الكتف من غير داعي','عدم فرد الدراع بالكامل آخر الحركة'],
     tip:'جرّب عقلة حرة كل شوية بدل الماكينة، وارجع للماكينة لو حسيت بتعب زيادة.',
     link:'https://exrx.net/WeightExercises/LatissimusDorsi/CBFrontPulldown',
-    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Girl_doing_lat_pulldown_exercise.jpg', credit:'Wikimedia Commons · CC BY 2.0' },
+    img:'./assets/images/exercises/ex-a03-lat-pulldown.svg', credit:'رسم أصلي محلي' },
   { key:'press', name:'شولدر برس بالدمبل', equip:'زوج دمبل (وبنش لو حابب قاعد)', target:'الكتف الأمامي والجانبي، الترايسبس', sets:3, reps:'10',
     steps:['امسك دمبل في كل إيد على مستوى الكتف، الكوع لتحت وشوية لقدام','ادفع الدمبلز لفوق لحد ما دراعك تتفرد فوق دماغك','ارجع ببطء للوضع الأول عند الكتف','كرر مع الحفاظ على جذعك ثابت'],
     breath:'زفير وانت بتدفع لفوق، شهيق وانت نازل',
     mistakes:['قوس الضهر بزيادة عشان تدفع وزن أتقل من قدرتك','قفل المرفق بعنف في أعلى نقطة','عدم التحكم في النزول'],
     tip:'',
     link:'https://exrx.net/WeightExercises/DeltoidAnterior/DBShoulderPress',
-    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Girl_doing_dumbbell_shoulder_press_02.jpg', credit:'Wikimedia Commons · CC BY 2.0' },
+    img:'./assets/images/exercises/ex-a04-overhead-press.svg', credit:'رسم أصلي محلي' },
   { key:'plank', name:'بلانك (Plank)', equip:'من غير أجهزة — أرضية أو مضرب يوجا', target:'عضلات البطن العميقة، أسفل الظهر كثبات، الكتف', sets:3, reps:'30-45 ثانية',
     steps:['انبطح على بطنك وارفع جسمك على الساعدين وأصابع رجلك','خلي جسمك في خط مستقيم من دماغك لكعبك','شد عضلات بطنك ومؤخرتك وثبّت الوضع للمدة المطلوبة','تنفس بشكل طبيعي طول المدة'],
     breath:'تنفس طبيعي — من غير ما تحبس نفسك',
     mistakes:['رفع المؤخرة لفوق — بيقلل الفايدة على البطن','هبوط الوراك لتحت — بيحمّل أسفل الظهر بزيادة','حبس النفس بدل التنفس الطبيعي'],
     tip:'',
     link:'https://exrx.net/WeightExercises/RectusAbdominis/BWFrontPlank',
-    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Girl_exercising_doing_a_plank.jpg', credit:'Wikimedia Commons · CC BY 2.0' },
+    img:'./assets/images/exercises/ex-a05-plank.svg', credit:'رسم أصلي محلي' },
   { key:'facepull', name:'فيس بول (Face Pull / Band Pull-Apart)', equip:'باند مطاطي أو ماكينة كابل بحبل', target:'الكتف الخلفي، عضلات الظهر العلوية — بيوازن الكتف بعد كل دفع كتير', sets:2, reps:'12-15', optional:true, optNote:'اختياري — أضفه بعد شهر تقريبًا من بداية البرنامج',
     steps:['امسك الباند بإيدين على مستوى الكتف، وامدها لقدامك','اسحب الباند لبره بفرد إيديك جانبًا، مع تقريب لوحي الكتف من بعض','خلي الكوع أعلى شوية من الكتف طول الحركة','ارجع ببطء للوضع الأول وكرر'],
     breath:'زفير وانت بتسحب لبره، شهيق وانت بترجع',
     mistakes:['سحب الباند بالدراع بس من غير تحريك لوح الكتف','استخدام وزن/مقاومة تقيلة زيادة بتخلي الحركة سريعة وغير متحكم فيها'],
     tip:'تمرين خفيف الوزن ومقصود إنه يفضل كده — الهدف توازن العضلة مش الحمل.',
     link:'https://exrx.net/WeightExercises/DeltoidPosterior/CBFacePull',
-    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Rear_deltoid_row_barbell_1.svg', credit:'Wikimedia Commons · CC BY-SA 3.0' },
+    img:'./assets/images/exercises/ex-a06-face-pull.svg', credit:'رسم أصلي محلي' },
 ];
 
 const EX_B_DEFAULTS = [
@@ -4321,42 +4681,42 @@ const EX_B_DEFAULTS = [
     mistakes:['تقويس الضهر أو انحناءه — لو حسيت بضهرك بينحني قلل الوزن فورًا','ثني الركبة بزيادة — بيحول الحركة لسكوات','إبعاد البار عن الجسم — خليه يلامس رجلك تقريبًا'],
     tip:'لو مش واثق من الفورم، ابدأ بالدمبل بدل البار.',
     link:'https://exrx.net/WeightExercises/OlympicLifts/RomanianDeadlift',
-    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Barbell_dead_lifts_1.svg', credit:'Wikimedia Commons · CC BY-SA 3.0' },
+    img:'./assets/images/exercises/ex-b01-romanian-deadlift.svg', credit:'رسم أصلي محلي' },
   { key:'row', name:'رو بار (Barbell Bent-over Row)', equip:'بار، أو ماكينة Cable Seated Row كبديل', target:'الظهر الوسطى، Lats، الكتف الخلفي، الباي', sets:3, reps:'10',
     steps:['امسك البار أعرض شوية من الكتفين','اثني ركبتك شوية وانحني لقدام من الوراك لحد ما جذعك يبقى قريب من الأفقي','اسحب البار لبطنك السفلي مع تقريب لوحي الكتف من بعض','نزّل البار ببطء لحد ما دراعك تتفرد تمامًا'],
     breath:'زفير وانت بتسحب، شهيق وانت بتنزل',
     mistakes:['الوقوف بشكل مستقيم بدل الانحناء — بيقلل شغل الظهر','استخدام هزة الجسم بدل قوة الظهر','تقويس أسفل الظهر — جرب Cable Seated Row لو ضهرك تعبان'],
     tip:'',
     link:'https://exrx.net/WeightExercises/BackGeneral/BBBentOverRow',
-    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Reverse_grips_bent_over_barbell_rows_1.svg', credit:'Wikimedia Commons · CC BY-SA 3.0' },
+    img:'./assets/images/exercises/ex-b02-barbell-row.svg', credit:'رسم أصلي محلي' },
   { key:'pushup', name:'ضغط (Push-ups)', equip:'من غير أجهزة', target:'الصدر، الكتف الأمامي، الترايسبس، البطن كثبات', sets:3, reps:'لآخر تكرار كويس',
     steps:['انبطح على بطنك وحط ايديك على الأرض أعرض شوية من الكتفين','ارفع جسمك على ايديك وأصابع رجلك في خط مستقيم من دماغك لكعبك','انزل ببطء لحد ما صدرك يقرب من الأرض، والكوع بزاوية 45 درجة تقريبًا','ادفع لفوق لحد ما دراعك تتفرد'],
     breath:'شهيق وانت نازل، زفير وانت بتدفع لفوق',
     mistakes:['هبوط الوراك أو ارتفاعه — حافظ على الخط المستقيم','فتح الكوع بزاوية 90 درجة كاملة — بيحمّل الكتف بزيادة','عدم النزول لمدى كافي'],
     tip:'لما تقدر تعدي 15-20 تكرار بسهولة وفورم صح، زوّد الصعوبة برجليك مرفوعة أو بحمل شنطة ضهر خفيفة.',
     link:'https://exrx.net/WeightExercises/PectoralSternal/BWPushup',
-    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Exercise_Press_Up.png', credit:'Wikimedia Commons · CC BY-SA 4.0' },
+    img:'./assets/images/exercises/ex-b03-push-up.svg', credit:'رسم أصلي محلي' },
   { key:'pullup', name:'عقلة (Pull-ups)', equip:'بار عقلة (وممكن باند مساعد لو متاح)', target:'الظهر العريضة (Lats)، الباي، الكتف الخلفي', sets:3, reps:'لآخر تكرار كويس',
     steps:['علّق نفسك في البار بقبضة أعرض شوية من الكتفين، كف ايدك متجه لقدام','اسحب جسمك لفوق لحد ما دقنك يعدي مستوى البار','انزل ببطء تمامًا لحد ما دراعك تتفرد بالكامل','كرر من غير ما تتأرجح بجسمك'],
     breath:'زفير وانت بتسحب لفوق، شهيق وانت نازل',
     mistakes:['استخدام تأرجح الجسم (Kipping) بدل قوة الظهر','عدم الوصول لمدى حركة كامل','النزول بسرعة بدل التحكم فيه'],
     tip:'لو صعبة، استخدم ماكينة Assisted Pull-up بدل ما توقف، وارجع تدريجيًا للعقلة الحرة. عشان تزوّد العدد، ضيف Negatives: اطلع فوق البار بأي طريقة وانزل ببطء شديد (4-5 ثواني).',
     link:'https://exrx.net/WeightExercises/LatissimusDorsi/BWPullup',
-    img:'https://commons.wikimedia.org/wiki/Special:FilePath/U.S._Air_Force_Senior_Airman_Brandon_Stout_performs_pull-ups.jpg', credit:'U.S. Air Force · Public Domain' },
+    img:'./assets/images/exercises/ex-b04-pull-up.svg', credit:'رسم أصلي محلي' },
   { key:'crunch', name:'كرانش للبطن (Crunch)', equip:'من غير أجهزة — مضرب يوجا', target:'عضلات البطن العلوية', sets:3, reps:'15',
     steps:['نام على ضهرك وثني ركبتك، رجليك ثابتة على الأرض','حط ايديك خلف دماغك أو مطوية على صدرك (من غير ما تشد رقبتك)','ارفع كتفك عن الأرض بس عن طريق شد عضلة البطن','انزل ببطء وكرر'],
     breath:'زفير وانت بترفع، شهيق وانت بتنزل',
     mistakes:['شد الرقبة بالإيدين لرفع الجسم بدل استخدام البطن','رفع الجسم بالكامل زي Sit-up كامل — مش ده المطلوب'],
     tip:'',
     link:'https://exrx.net/WeightExercises/RectusAbdominis/BWCrunch',
-    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Abdominal_curl-CDC_strength_training_for_older_adults.gif', credit:'CDC · Public Domain' },
+    img:'./assets/images/exercises/ex-b05-abdominal-crunch.svg', credit:'رسم أصلي محلي' },
   { key:'lunge', name:'لنجز (Lunges)', equip:'من غير أجهزة، أو زوج دمبل خفيف لو حابب زيادة الحمل', target:'الفخذ الأمامي والخلفي، المؤخرة — كل رجل لوحدها لتوازن أفضل', sets:2, reps:'10 لكل رجل', optional:true, optNote:'اختياري — أضفه بعد شهر تقريبًا من بداية البرنامج',
     steps:['وقف باعتدال ورجليك بعرض الوراك','اخطُ خطوة لقدام برجل واحدة وانزل لحد ما الركبتين يبقوا بزاوية 90 درجة تقريبًا','خلي ركبة رجلك اللي لورا قريبة من الأرض من غير ما تلمسها','ادفع من رجلك اللي قدام وارجع لوضع الوقوف','كرر بنفس الرجل العدد المطلوب، وبعدين بدّل للرجل التانية'],
     breath:'شهيق وانت نازل، زفير وانت بترجع لفوق',
     mistakes:['الركبة اللي قدام بتتقدم قدام صوابع رجلك زيادة — خليها فوق الكاحل تقريبًا','الجذع بيميل لقدام — خليه معتدل طول الحركة','خطوة قصيرة زيادة بتضغط على الركبة'],
     tip:'لو التوازن صعب عليك في الأول، اتمرن جنب حيط أو كرسي تمسك بيه لحد ما تثبت.',
     link:'https://exrx.net/WeightExercises/Quadriceps/BWLunge',
-    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Lunge-CDC_strength_training_for_older_adults.gif', credit:'CDC · Public Domain' },
+    img:'./assets/images/exercises/ex-b06-lunges.svg', credit:'رسم أصلي محلي' },
 ];
 
 /* ================= GYM ROUTINE REGISTRY & EXERCISE RESOLUTION (Phase 4C.1) ================= */
@@ -6402,7 +6762,10 @@ async function requestNotificationPermission(){
   }
 }
 
+let currentInAppReminderInfo = null;
+
 function showInAppReminderModal(info){
+  currentInAppReminderInfo = info;
   if(!notificationSettings || !notificationSettings.inAppModal) return;
   const modal = document.getElementById('inAppReminderModal');
   if(!modal) return;
@@ -6424,6 +6787,109 @@ function closeInAppReminderModal(){
   if(modal) modal.classList.add('hidden');
 }
 
+/* ================= NOTIFICATION ROUTING & SAFE INTEGRATION (Phase 8B) ================= */
+function routeNotificationClick(data, opts){
+  opts = opts || {};
+  if(!data || typeof data !== 'object') data = {};
+
+  // 1. Sanitize & validate mode
+  let targetMode = data.mode || data.targetMode;
+  if(typeof targetMode !== 'string' || !NAV_MODES.includes(targetMode)){
+    targetMode = 'home';
+  }
+
+  // 2. Sanitize & validate date (YYYY-MM-DD)
+  const targetDateStr = data.date || data.targetDate || data.iso;
+  let validDate = null;
+  if(typeof targetDateStr === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(targetDateStr)){
+    const parts = targetDateStr.split('-').map(Number);
+    const d = new Date(parts[0], parts[1]-1, parts[2]);
+    if(!isNaN(d.getTime())) validDate = d;
+  }
+
+  // 3. Navigate to date first if valid
+  if(validDate && typeof goToDate === 'function'){
+    try {
+      goToDate(validDate);
+    } catch(e){
+      console.warn('[notif-route] goToDate error:', e);
+    }
+  }
+
+  // 4. Navigate to mode
+  if(typeof navigateTo === 'function'){
+    try {
+      navigateTo(targetMode, { scroll: (targetMode !== 'schedule') });
+    } catch(e){
+      console.warn('[notif-route] navigateTo error:', e);
+    }
+  }
+
+  // 5. If targetId is provided, perform deep element highlight / scroll
+  const targetId = data.targetId || data.activityId || data.id;
+  if(targetId && typeof targetId === 'string'){
+    const cleanId = String(targetId).replace(/[^a-zA-Z0-9_\-:]/g, '').slice(0, 100);
+    setTimeout(()=>{
+      try {
+        if(targetMode === 'schedule'){
+          const actBtn = document.querySelector(`.act-edit-btn[data-id="${cleanId}"]`)
+            || document.querySelector(`.act-del-btn[data-id="${cleanId}"]`);
+          const itemRow = actBtn ? actBtn.closest('.tl-item') : null;
+          if(itemRow){
+            itemRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            itemRow.style.transition = 'box-shadow 0.3s ease, outline 0.3s ease';
+            itemRow.style.outline = '2px solid var(--accent)';
+            itemRow.style.boxShadow = '0 0 12px rgba(6,170,196,0.4)';
+            setTimeout(()=>{
+              itemRow.style.outline = '';
+              itemRow.style.boxShadow = '';
+            }, 2500);
+          }
+        } else if(targetMode === 'prayer'){
+          const row = document.getElementById(`prayerRow-${cleanId}`)
+            || document.getElementById(`prayerFardRow-${cleanId}`)
+            || (document.querySelector(`input[data-key="${cleanId}"]`) ? document.querySelector(`input[data-key="${cleanId}"]`).closest('.check-row') : null)
+            || (document.querySelector(`button[data-key="${cleanId}"]`) ? document.querySelector(`button[data-key="${cleanId}"]`).closest('.check-row') : null);
+          if(row){
+            row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            row.style.transition = 'background 0.3s ease, outline 0.3s ease';
+            row.style.outline = '2px solid var(--accent)';
+            row.style.background = 'rgba(6,170,196,0.15)';
+            setTimeout(()=>{
+              row.style.outline = '';
+              row.style.background = '';
+            }, 2000);
+          }
+        }
+      } catch(e){
+        console.warn('[notif-route] highlight error:', e);
+      }
+    }, 150);
+  }
+}
+
+function tryDispatchWindowNotification(title, options){
+  if(typeof Notification === 'undefined') return null;
+  try {
+    const notif = new Notification(title, options);
+    notif.onclick = function(event){
+      try {
+        if(typeof window !== 'undefined' && window.focus) window.focus();
+      } catch(e){}
+      if(typeof routeNotificationClick === 'function'){
+        routeNotificationClick(options.data || {});
+      }
+      try {
+        notif.close();
+      } catch(e){}
+    };
+    return notif;
+  } catch(e){
+    console.warn('[notif] Window Notification constructor failed:', e);
+    return null;
+  }
+}
+
 function dispatchNotification(info){
   // 1. In-app modal
   showInAppReminderModal(info);
@@ -6432,22 +6898,29 @@ function dispatchNotification(info){
   const perm = getNotificationPermissionStatus();
   if(perm === 'granted'){
     const title = info.title || 'زتونة — تنبيه';
+    const notifData = {
+      url: './',
+      mode: info.mode || 'home',
+      date: info.date || null,
+      targetId: info.targetId || null,
+      key: info.key || null
+    };
     const options = {
       body: info.plainBody || info.sub || '',
       icon: './icons/icon-192.png',
       badge: './icons/icon-192.png',
       tag: info.key,
       renotify: false,
-      data: { url: './' }
+      data: notifData
     };
     if(typeof navigator !== 'undefined' && navigator.serviceWorker && navigator.serviceWorker.controller){
       navigator.serviceWorker.ready.then(reg => {
         reg.showNotification(title, options);
       }).catch(()=>{
-        try { new Notification(title, options); } catch(e){}
+        tryDispatchWindowNotification(title, options);
       });
     } else {
-      try { new Notification(title, options); } catch(e){}
+      tryDispatchWindowNotification(title, options);
     }
   }
 }
@@ -6491,7 +6964,10 @@ function checkAndDispatchDueReminders(overrideIso, overrideMin){
             title: `🕌 موعد أذان ${p.name}`,
             sub: `مواقيت ${city} (${timeLabel})`,
             plainBody: `حان موعد أذان ${p.name} في مدينة ${city} (${timeLabel}).`,
-            body: `حان الآن موعد أذان <b>${p.name}</b> حسب توقيت مدينة <b>${city}</b> (${timeLabel}).`
+            body: `حان الآن موعد أذان <b>${p.name}</b> حسب توقيت مدينة <b>${city}</b> (${timeLabel}).`,
+            mode: 'prayer',
+            date: iso,
+            targetId: p.key
           };
           tryTrigger(tag, info, triggerMin);
         }
@@ -6519,7 +6995,10 @@ function checkAndDispatchDueReminders(overrideIso, overrideMin){
             title: `⏰ تذكير: ${act.name}`,
             sub: `يبدأ ${timeStr}${offsetNote}`,
             plainBody: `موعد نشاط ${act.name} يبدأ ${timeStr}. الأولوية: ${pri.label}.`,
-            body: `نشاط <b>${escapeHtml(act.name)}</b> يبدأ الساعة <b>${timeStr}</b>${offsetNote}.<br><span style="font-size:.76rem;color:var(--muted);">الأولوية: <b>${pri.label}</b></span>`
+            body: `نشاط <b>${escapeHtml(act.name)}</b> يبدأ الساعة <b>${timeStr}</b>${offsetNote}.<br><span style="font-size:.76rem;color:var(--muted);">الأولوية: <b>${pri.label}</b></span>`,
+            mode: 'schedule',
+            date: iso,
+            targetId: act.id
           };
           tryTrigger(tag, info, triggerMin);
         }
@@ -6553,12 +7032,20 @@ function checkAndDispatchDueReminders(overrideIso, overrideMin){
           const tag = `rem:${iso}:${r.id}`;
           const meta = (typeof REMINDER_TYPE_META !== 'undefined' && REMINDER_TYPE_META[r.type]) || { label: r.type, icon: '⏰' };
           const timeStr = (typeof schedMinToTime12 === 'function') ? schedMinToTime12(targetMin) : `${targetMin}m`;
+          let remMode = 'schedule';
+          if(r.type === 'prayer') remMode = 'prayer';
+          else if(r.type === 'water') remMode = 'meal';
+          else if(r.type === 'gym') remMode = 'gym';
+          else if(r.type === 'sleep') remMode = 'sleep';
           const info = {
             icon: meta.icon || '⏰',
             title: `⏰ تذكير: ${r.title}`,
             sub: `الموعد: ${timeStr} (${meta.label})`,
             plainBody: `${r.title} — الموعد: ${timeStr}`,
-            body: `<b>${escapeHtml(r.title)}</b><br><span style="font-size:.76rem;color:var(--muted);">الموعد: ${timeStr} · النوع: ${meta.label}</span>`
+            body: `<b>${escapeHtml(r.title)}</b><br><span style="font-size:.76rem;color:var(--muted);">الموعد: ${timeStr} · النوع: ${meta.label}</span>`,
+            mode: remMode,
+            date: iso,
+            targetId: r.id
           };
           tryTrigger(tag, info, targetMin);
         }
@@ -6698,6 +7185,13 @@ function initNotifications(){
   if(btnCloseModal) btnCloseModal.addEventListener('click', closeInAppReminderModal);
   const btnDoneModal = document.getElementById('inAppRemDone');
   if(btnDoneModal) btnDoneModal.addEventListener('click', closeInAppReminderModal);
+  const btnGoModal = document.getElementById('inAppRemGo');
+  if(btnGoModal) btnGoModal.addEventListener('click', ()=>{
+    closeInAppReminderModal();
+    if(currentInAppReminderInfo && typeof routeNotificationClick === 'function'){
+      routeNotificationClick(currentInAppReminderInfo);
+    }
+  });
 }
 
 function fmtDate(d){ return d.toLocaleDateString('ar-EG', {day:'2-digit', month:'2-digit'}); }
@@ -6708,6 +7202,264 @@ function loadWater(iso){ const raw = storageGet('water:'+iso); return raw ? pars
 function saveWater(iso, n){ storageSet('water:'+iso, String(n)); }
 function loadShopping(){ return storageGetJSON('shopping', {}); }
 function saveShopping(obj){ storageSet('shopping', JSON.stringify(obj)); }
+
+/* ================= SHOPPING PURCHASES & BUDGET GAP CLOSURE (Phase 7A) ================= */
+const SHOPPING_PURCHASES_KEY = 'shopping-purchases-v1';
+
+function getShoppingWeekKey(dates){
+  if(Array.isArray(dates) && dates.length > 0){
+    const d0 = dates[0];
+    if(typeof d0 === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d0)) return d0;
+    if(d0 && typeof toISO === 'function') return toISO(d0);
+    if(d0 && typeof d0.getFullYear === 'function'){
+      return `${d0.getFullYear()}-${String(d0.getMonth()+1).padStart(2,'0')}-${String(d0.getDate()).padStart(2,'0')}`;
+    }
+  }
+  return 'current';
+}
+
+function loadAllShoppingPurchases(){
+  return storageGetJSON(SHOPPING_PURCHASES_KEY, {});
+}
+
+function saveAllShoppingPurchases(all){
+  storageSet(SHOPPING_PURCHASES_KEY, JSON.stringify(all));
+}
+
+function loadWeekPurchases(weekKey){
+  const all = loadAllShoppingPurchases();
+  const entry = all && all[weekKey];
+  if(entry && typeof entry === 'object' && !Array.isArray(entry)){
+    if(!entry.items || typeof entry.items !== 'object' || Array.isArray(entry.items)) entry.items = {};
+    return entry;
+  }
+  return { items:{}, expenseId:null, migratedAt:null, totalMigrated:null };
+}
+
+function saveWeekPurchases(weekKey, data){
+  const all = loadAllShoppingPurchases();
+  all[weekKey] = data;
+  saveAllShoppingPurchases(all);
+}
+
+function getShoppingItemPurchase(weekKey, foodKey, requestedQty, estimatedPrice){
+  const wp = loadWeekPurchases(weekKey);
+  let rec = wp.items[foodKey];
+  if(!rec){
+    const legacyStatus = (typeof shoppingState !== 'undefined' && shoppingState) ? shoppingState[foodKey] : null;
+    if(legacyStatus === 'right'){
+      rec = {
+        purchasedQty: requestedQty || 0,
+        actualPaid: (estimatedPrice != null && estimatedPrice > 0) ? Number(estimatedPrice.toFixed(2)) : 0,
+        status: 'completed',
+        expenseId: null,
+        migratedAt: null
+      };
+    } else if(legacyStatus === 'wrong'){
+      rec = {
+        purchasedQty: 0,
+        actualPaid: 0,
+        status: 'unbought',
+        expenseId: null,
+        migratedAt: null
+      };
+    } else {
+      rec = {
+        purchasedQty: 0,
+        actualPaid: 0,
+        status: 'unbought',
+        expenseId: null,
+        migratedAt: null
+      };
+    }
+  }
+  return rec;
+}
+
+function updateShoppingItemPurchase(foodKey, purchasedQty, actualPaid, customStatus){
+  const activeDates = (typeof weekDates !== 'undefined' && Array.isArray(weekDates)) ? weekDates : null;
+  const weekKey = getShoppingWeekKey(activeDates);
+  const wp = loadWeekPurchases(weekKey);
+  const list = (typeof computeShoppingList === 'function') ? computeShoppingList(activeDates) : [];
+  const item = list.find(it => it.food === foodKey);
+  const requestedQty = item ? item.qty : 0;
+
+  let numPurchased = Number(purchasedQty);
+  if(isNaN(numPurchased) || numPurchased < 0) numPurchased = 0;
+
+  let numPaid = Number(actualPaid);
+  if(isNaN(numPaid) || numPaid < 0) numPaid = 0;
+
+  let status = customStatus;
+  if(!status){
+    if(numPurchased >= requestedQty && requestedQty > 0){
+      status = 'completed';
+    } else if(numPurchased > 0){
+      status = 'partial';
+    } else {
+      status = 'unbought';
+    }
+  }
+
+  const existingRec = wp.items[foodKey] || {};
+  wp.items[foodKey] = Object.assign({}, existingRec, {
+    purchasedQty: numPurchased,
+    actualPaid: numPaid,
+    status: status
+  });
+
+  saveWeekPurchases(weekKey, wp);
+
+  if(typeof shoppingState !== 'undefined'){
+    if(status === 'completed'){
+      shoppingState[foodKey] = 'right';
+    } else if(status === 'partial'){
+      shoppingState[foodKey] = 'partial';
+    } else if(status === 'wrong'){
+      shoppingState[foodKey] = 'wrong';
+    } else {
+      delete shoppingState[foodKey];
+    }
+    saveShopping(shoppingState);
+  }
+
+  return wp.items[foodKey];
+}
+
+let isShoppingMigrating = false;
+
+function migrateShoppingToBudget(weekKey){
+  if(isShoppingMigrating) return false;
+
+  const activeDates = (typeof weekDates !== 'undefined' && Array.isArray(weekDates)) ? weekDates : null;
+  if(!weekKey) weekKey = getShoppingWeekKey(activeDates);
+
+  const wp = loadWeekPurchases(weekKey);
+  const list = (typeof computeShoppingList === 'function') ? computeShoppingList(activeDates) : [];
+
+  const purchasedItems = [];
+  let totalActualPaid = 0;
+
+  list.forEach(it => {
+    const rec = wp.items[it.food] || getShoppingItemPurchase(weekKey, it.food, it.qty, it.price);
+    const pQty = Number(rec.purchasedQty || 0);
+    const pPaid = Number(rec.actualPaid || 0);
+    if(pQty > 0 && pPaid > 0){
+      purchasedItems.push({
+        food: it.food,
+        name: it.name,
+        qty: pQty,
+        unit: it.unit,
+        paid: pPaid
+      });
+      totalActualPaid += pPaid;
+    }
+  });
+
+  totalActualPaid = +(totalActualPaid.toFixed(2));
+
+  if(purchasedItems.length === 0 || totalActualPaid <= 0){
+    alert('لا توجد مشتريات مسجلة بمبالغ فعلية مدفوعة لترحيلها للميزانية. يرجى إدخال الكميات والمبالغ المدفوعة أولاً.');
+    return false;
+  }
+
+  const expenses = (typeof loadExpenses === 'function') ? loadExpenses() : [];
+  const existingExp = wp.expenseId ? expenses.find(e => e.id === wp.expenseId) : null;
+
+  if(existingExp){
+    if(Math.abs(existingExp.amount - totalActualPaid) < 0.009){
+      alert(`مشتريات هذا الأسبوع مسجلة بالفعل في الميزانية بنفس المبلغ (${totalActualPaid.toFixed(2)} ج) بتاريخ ${existingExp.date}.`);
+      return false;
+    }
+    const confirmUpdate = confirm(`تم ترحيل هذا المصروف مسبقاً بمبلغ (${existingExp.amount.toFixed(2)} ج). هل تريد تحديث قيمة المصروف في الميزانية إلى المبلغ الفعلي الجديد (${totalActualPaid.toFixed(2)} ج)؟`);
+    if(!confirmUpdate) return false;
+
+    isShoppingMigrating = true;
+    try {
+      updateExpense(wp.expenseId, {
+        amount: totalActualPaid,
+        note: `مشتريات الأسبوع (${purchasedItems.length} أصناف مُحدّثة)`
+      });
+      wp.totalMigrated = totalActualPaid;
+      wp.migratedAt = new Date().toISOString();
+      saveWeekPurchases(weekKey, wp);
+      alert(`تم تحديث المصروف في الميزانية بنجاح إلى (${totalActualPaid.toFixed(2)} ج).`);
+      if(typeof renderBudgetView === 'function') renderBudgetView();
+      renderShopping();
+      return true;
+    } catch(err){
+      console.error(err);
+      alert('حدث خطأ أثناء تحديث المصروف في الميزانية.');
+      return false;
+    } finally {
+      isShoppingMigrating = false;
+    }
+  }
+
+  const expenseDate = (typeof toISO === 'function' && typeof today !== 'undefined') ? toISO(today) : new Date().toISOString().slice(0, 10);
+  const confirmMsg = `هل تريد ترحيل إجمالي المشتريات الفعلية (${totalActualPaid.toFixed(2)} ج) إلى قسم "الأكل" في الميزانية بتاريخ اليوم (${expenseDate})؟`;
+  if(!confirm(confirmMsg)) return false;
+
+  isShoppingMigrating = true;
+  try {
+    const rangeEl = document.getElementById('shoppingDateRange');
+    const rangeText = (rangeEl && rangeEl.textContent) ? rangeEl.textContent.trim() : '';
+    const rec = addExpense({
+      date: expenseDate,
+      amount: totalActualPaid,
+      category: 'food',
+      subcategory: 'مشتريات الأسبوع',
+      note: `مشتريات الأسبوع ${rangeText} (${purchasedItems.length} أصناف)`
+    });
+
+    if(!rec || !rec.id){
+      throw new Error('فشل إنشاء سجل المصروف');
+    }
+
+    wp.expenseId = rec.id;
+    wp.migratedAt = new Date().toISOString();
+    wp.totalMigrated = totalActualPaid;
+
+    purchasedItems.forEach(it => {
+      if(wp.items[it.food]){
+        wp.items[it.food].expenseId = rec.id;
+        wp.items[it.food].migratedAt = wp.migratedAt;
+      }
+    });
+
+    saveWeekPurchases(weekKey, wp);
+
+    alert(`تم ترحيل مبلغ (${totalActualPaid.toFixed(2)} ج) إلى مصروفات الطعام في الميزانية بنجاح.`);
+    if(typeof renderBudgetView === 'function') renderBudgetView();
+    renderShopping();
+    return true;
+  } catch(err){
+    console.error(err);
+    alert('حدث خطأ أثناء ترحيل المشتريات إلى الميزانية: ' + (err.message || err));
+    return false;
+  } finally {
+    isShoppingMigrating = false;
+  }
+}
+
+function openShoppingList(){
+  if(typeof navigateTo === 'function'){
+    navigateTo('meal');
+  }
+  setTimeout(()=>{
+    const el = document.getElementById('shopping');
+    if(el){
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      el.style.transition = 'box-shadow 0.3s ease, border-color 0.3s ease';
+      el.style.borderColor = 'var(--accent)';
+      el.style.boxShadow = '0 0 0 3px rgba(6,170,196,0.25)';
+      setTimeout(()=>{
+        el.style.borderColor = '';
+        el.style.boxShadow = '';
+      }, 1500);
+    }
+  }, 120);
+}
 function loadPrep(){ return storageGetJSON('prep', {}); }
 function savePrep(obj){ storageSet('prep', JSON.stringify(obj)); }
 
@@ -8284,6 +9036,8 @@ function renderShopping(){
   el.innerHTML = '';
   const activeDates = (typeof weekDates !== 'undefined' && Array.isArray(weekDates)) ? weekDates : null;
   const list = computeShoppingList(activeDates);
+  const weekKey = getShoppingWeekKey(activeDates);
+  const wp = loadWeekPurchases(weekKey);
 
   const rangeEl = document.getElementById('shoppingDateRange');
   if(rangeEl && activeDates && activeDates.length === 7){
@@ -8309,31 +9063,201 @@ function renderShopping(){
     noticeEl.classList.toggle('hidden', !hasOverride);
   }
 
+  let totalActualPaid = 0;
+  let completedCount = 0;
+  let partialCount = 0;
+
   list.forEach(item=>{
-    const status = shoppingState[item.food];
+    const purchaseRec = getShoppingItemPurchase(weekKey, item.food, item.qty, item.price);
+    const purchasedQty = Number(purchaseRec.purchasedQty || 0);
+    const actualPaid = Number(purchaseRec.actualPaid || 0);
+    const legacyStatus = (typeof shoppingState !== 'undefined') ? shoppingState[item.food] : null;
+    const status = purchaseRec.status || (legacyStatus === 'right' ? 'completed' : (legacyStatus === 'wrong' ? 'wrong' : (purchasedQty >= item.qty ? 'completed' : (purchasedQty > 0 ? 'partial' : 'unbought'))));
+
+    if(status === 'completed' || legacyStatus === 'right') completedCount++;
+    else if(status === 'partial') partialCount++;
+
+    if(purchasedQty > 0 && actualPaid > 0){
+      totalActualPaid += actualPaid;
+    }
+
+    const remainingQty = Math.max(0, +(item.qty - purchasedQty).toFixed(3));
+
     const row = document.createElement('div');
-    row.className = 'check-row' + (status==='wrong' ? ' on-wrong' : '');
+    row.className = 'check-row' + (legacyStatus === 'wrong' || status === 'wrong' ? ' on-wrong' : '');
+    row.style.flexDirection = 'column';
+    row.style.alignItems = 'stretch';
+    row.style.gap = '8px';
+    row.dataset.food = item.food;
+
+    let statusBadgeHtml = '';
+    if(status === 'completed' || legacyStatus === 'right'){
+      statusBadgeHtml = '<span class="shopping-badge-status" style="background:rgba(46,204,113,0.15); color:var(--good); padding:2px 8px; border-radius:6px; font-size:.72rem; font-weight:700;">✓ مكتمل</span>';
+    } else if(status === 'partial' || (remainingQty > 0 && purchasedQty > 0)){
+      statusBadgeHtml = `<span class="shopping-badge-status" style="background:rgba(243,156,18,0.15); color:#e67e22; padding:2px 8px; border-radius:6px; font-size:.72rem; font-weight:700;">⏳ جزئي (متبقي: ${remainingQty} ${escapeHtml(item.unit||'')})</span>`;
+    } else if(legacyStatus === 'wrong' || status === 'wrong'){
+      statusBadgeHtml = '<span class="shopping-badge-status" style="background:rgba(231,76,60,0.15); color:var(--bad); padding:2px 8px; border-radius:6px; font-size:.72rem;">✗ لم يُشترَ</span>';
+    } else {
+      statusBadgeHtml = '<span class="shopping-badge-status" style="background:rgba(127,140,141,0.12); color:var(--muted); padding:2px 8px; border-radius:6px; font-size:.72rem;">لم يُشترَ</span>';
+    }
+
+    const isRightActive = status === 'completed' || legacyStatus === 'right';
+    const isWrongActive = legacyStatus === 'wrong' || status === 'wrong';
+
     row.innerHTML = `
-      <div class="check-left"><div class="cname">${escapeHtml(item.name)}</div><div class="cqty">${item.qtyLabel} — ${item.priceIncomplete ? '<span style="color:var(--bad);">⚠️ السعر غير متوفر</span>' : item.price.toFixed(2)+' ج'}</div></div>
-      <div class="toggle-group">
-        <button class="tbtn ${status==='right'?'on-right':''}" data-act="right">✓</button>
-        <button class="tbtn ${status==='wrong'?'on-wrong':''}" data-act="wrong">✗</button>
+      <div style="display:flex; justify-content:space-between; align-items:center; width:100%; gap:8px;">
+        <div class="check-left" style="flex:1;">
+          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <span class="cname" style="font-weight:700;">${escapeHtml(item.name)}</span>
+            ${statusBadgeHtml}
+          </div>
+          <div class="cqty" style="margin-top:2px;">
+            المطلوب: <strong>${item.qtyLabel}</strong> — التقديري: ${item.priceIncomplete ? '<span style="color:var(--bad);">⚠️ غير متوفر</span>' : item.price.toFixed(2)+' ج'}
+          </div>
+        </div>
+        <div class="toggle-group" style="flex-shrink:0;">
+          <button type="button" class="tbtn ${isRightActive ? 'on-right' : ''}" data-act="right" title="تم شراء الكمية بالكامل">✓</button>
+          <button type="button" class="tbtn ${isWrongActive ? 'on-wrong' : ''}" data-act="wrong" title="لم يتم الشراء">✗</button>
+        </div>
+      </div>
+      <div class="shopping-item-inputs" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; padding-top:6px; border-top:1px dashed var(--line); font-size:.78rem;">
+        <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+          <label style="color:var(--muted); font-size:.75rem;">اشترى:</label>
+          <input type="number" step="any" min="0" class="weight-input shopping-qty-input" data-food="${item.food}" value="${purchasedQty > 0 ? purchasedQty : ''}" placeholder="0" style="width:75px; height:30px; padding:2px 6px; font-size:.82rem; text-align:center;">
+          <span style="color:var(--muted); font-size:.75rem;">${escapeHtml(item.unit || '')}</span>
+          <span class="shopping-rem-display" style="font-size:.74rem; color:${remainingQty > 0 ? '#e67e22' : 'var(--good)'}; font-weight:600; margin-right:4px;">${remainingQty > 0 ? `(متبقي: ${remainingQty} ${escapeHtml(item.unit||'')})` : '✓ مكتمل'}</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <label style="color:var(--muted); font-size:.75rem;">المدفوع فعلاً:</label>
+          <input type="number" step="any" min="0" class="weight-input shopping-paid-input" data-food="${item.food}" value="${actualPaid > 0 ? actualPaid : ''}" placeholder="0" style="width:75px; height:30px; padding:2px 6px; font-size:.82rem; text-align:center;">
+          <span style="color:var(--muted); font-size:.75rem;">ج</span>
+        </div>
       </div>
     `;
+
     const [btnRight, btnWrong] = row.querySelectorAll('.tbtn');
-    btnRight.addEventListener('click', ()=> toggleShopping(item.food, 'right'));
-    btnWrong.addEventListener('click', ()=> toggleShopping(item.food, 'wrong'));
+    const qtyInput = row.querySelector('.shopping-qty-input');
+    const paidInput = row.querySelector('.shopping-paid-input');
+
+    btnRight.addEventListener('click', ()=>{
+      if(isRightActive){
+        updateShoppingItemPurchase(item.food, 0, 0, 'unbought');
+      } else {
+        const paidVal = actualPaid > 0 ? actualPaid : (item.priceIncomplete ? 0 : Number(item.price.toFixed(2)));
+        updateShoppingItemPurchase(item.food, item.qty, paidVal, 'completed');
+      }
+      renderShopping();
+    });
+
+    btnWrong.addEventListener('click', ()=>{
+      if(isWrongActive){
+        updateShoppingItemPurchase(item.food, 0, 0, 'unbought');
+      } else {
+        updateShoppingItemPurchase(item.food, 0, 0, 'wrong');
+      }
+      renderShopping();
+    });
+
+    qtyInput.addEventListener('change', (e)=>{
+      const val = parseFloat(e.target.value);
+      const safeVal = (isNaN(val) || val < 0) ? 0 : val;
+      e.target.value = safeVal > 0 ? safeVal : '';
+      const currentPaid = parseFloat(paidInput.value) || 0;
+      updateShoppingItemPurchase(item.food, safeVal, currentPaid);
+      renderShopping();
+    });
+
+    paidInput.addEventListener('change', (e)=>{
+      const val = parseFloat(e.target.value);
+      const safeVal = (isNaN(val) || val < 0) ? 0 : val;
+      e.target.value = safeVal > 0 ? safeVal : '';
+      const currentQty = parseFloat(qtyInput.value) || 0;
+      updateShoppingItemPurchase(item.food, currentQty, safeVal);
+      renderShopping();
+    });
+
     el.appendChild(row);
   });
+
   const grandTotal = list.reduce((a,item)=>a+item.price, 0);
   const anyIncomplete = list.some(item=>item.priceIncomplete);
-  document.getElementById('shoppingTotal').textContent = anyIncomplete
-    ? `الإجمالي: ${grandTotal.toFixed(2)} ج (جزئي — في أسعار غير متوفرة) ⚠️`
-    : `الإجمالي: ${grandTotal.toFixed(2)} ج`;
+  const estTotalEl = document.getElementById('shoppingTotal');
+  if(estTotalEl){
+    estTotalEl.textContent = anyIncomplete
+      ? `التقديري: ${grandTotal.toFixed(2)} ج (جزئي ⚠️)`
+      : `التقديري: ${grandTotal.toFixed(2)} ج`;
+  }
+
+  const actTotalEl = document.getElementById('shoppingActualTotal');
+  if(actTotalEl){
+    actTotalEl.textContent = `المدفوع فعلاً: ${totalActualPaid.toFixed(2)} ج (${completedCount} مكتمل / ${list.length})`;
+  }
+
+  const migrateBtn = document.getElementById('migrateShoppingToBudgetBtn');
+  const statusBanner = document.getElementById('shoppingBudgetStatusBanner');
+  const statusText = document.getElementById('shoppingBudgetStatusText');
+
+  const expenses = (typeof loadExpenses === 'function') ? loadExpenses() : [];
+  const existingExp = wp.expenseId ? expenses.find(e => e.id === wp.expenseId) : null;
+
+  if(existingExp){
+    if(statusBanner){
+      statusBanner.classList.remove('hidden');
+      if(statusText){
+        statusText.textContent = `✓ تم ترحيل مشتريات هذا الأسبوع إلى الميزانية (مبلغ ${existingExp.amount.toFixed(2)} ج بتاريخ ${existingExp.date})`;
+      }
+    }
+    if(migrateBtn){
+      if(Math.abs(existingExp.amount - totalActualPaid) >= 0.01 && totalActualPaid > 0){
+        migrateBtn.innerHTML = `🔄 تحديث المصروف (${totalActualPaid.toFixed(2)} ج)`;
+        migrateBtn.style.borderColor = 'var(--accent)';
+        migrateBtn.style.color = 'var(--accent)';
+        migrateBtn.disabled = false;
+      } else {
+        migrateBtn.innerHTML = `✓ تم الترحيل (${existingExp.amount.toFixed(2)} ج)`;
+        migrateBtn.style.borderColor = 'var(--good)';
+        migrateBtn.style.color = 'var(--good)';
+        migrateBtn.disabled = false;
+      }
+    }
+  } else {
+    if(statusBanner) statusBanner.classList.add('hidden');
+    if(migrateBtn){
+      migrateBtn.innerHTML = `💰 ترحيل للميزانية كمصروف`;
+      migrateBtn.style.borderColor = 'var(--good)';
+      migrateBtn.style.color = 'var(--good)';
+      migrateBtn.disabled = (totalActualPaid <= 0);
+    }
+  }
 }
 function toggleShopping(name, act){
-  if(shoppingState[name] === act) delete shoppingState[name]; else shoppingState[name] = act;
-  saveShopping(shoppingState); renderShopping();
+  const activeDates = (typeof weekDates !== 'undefined' && Array.isArray(weekDates)) ? weekDates : null;
+  const weekKey = getShoppingWeekKey(activeDates);
+  const list = (typeof computeShoppingList === 'function') ? computeShoppingList(activeDates) : [];
+  const item = list.find(it => it.food === name);
+  const requestedQty = item ? item.qty : 0;
+  const estPrice = item ? item.price : 0;
+
+  if(act === 'right'){
+    if(shoppingState[name] === 'right'){
+      delete shoppingState[name];
+      updateShoppingItemPurchase(name, 0, 0, 'unbought');
+    } else {
+      shoppingState[name] = 'right';
+      const paid = (estPrice != null && estPrice > 0) ? Number(estPrice.toFixed(2)) : 0;
+      updateShoppingItemPurchase(name, requestedQty, paid, 'completed');
+    }
+  } else if(act === 'wrong'){
+    if(shoppingState[name] === 'wrong'){
+      delete shoppingState[name];
+      updateShoppingItemPurchase(name, 0, 0, 'unbought');
+    } else {
+      shoppingState[name] = 'wrong';
+      updateShoppingItemPurchase(name, 0, 0, 'wrong');
+    }
+  }
+  saveShopping(shoppingState);
+  renderShopping();
 }
 
 function renderPrep(){
@@ -9569,7 +10493,6 @@ function renderSimpleChecklist(containerId, items, state, onToggle){
     const row = document.createElement('div');
     row.className = 'check-row';
     row.innerHTML = `
-      <div class="check-left"><div class="cname">${text}</div></div>
       <div class="toggle-group"><button class="tbtn ${on?'on-right':''}" data-key="${key}">✓</button></div>
     `;
     row.querySelector('.tbtn').addEventListener('click', ()=> onToggle(key));
@@ -13320,6 +14243,7 @@ function renderPrayerTimes(){
     const isBellOn = notifPrayers[p.key] !== false;
     const row = document.createElement('div');
     row.className = 'check-row';
+    row.id = 'prayerRow-' + p.key;
     row.innerHTML = `
       <div class="check-left"><div class="cname">${p.name}</div></div>
       <div style="display:flex;align-items:center;gap:6px;">
@@ -13369,6 +14293,7 @@ function renderPrayerFard(){
     const st = prayerState[p.key];
     const row = document.createElement('div');
     row.className = 'check-row';
+    row.id = 'prayerFardRow-' + p.key;
     row.innerHTML = `
       <div class="check-left"><div class="cname">${p.name}</div></div>
       <div class="toggle-group">
@@ -15485,7 +16410,6 @@ function renderScheduleChecklist(dayIdx, settings){
     const row = document.createElement('div');
     row.className = 'check-row';
     row.innerHTML = `
-      <div class="check-left"><div class="cname">${item.icon} ${item.label}</div></div>
       <div class="toggle-group"><button class="tbtn ${on?'on-right':''}" data-key="${item.key}">✓</button></div>
     `;
     row.querySelector('.tbtn').addEventListener('click', ()=>{
@@ -17821,7 +18745,7 @@ function validateBackupData(data){
   if(data===null || typeof data!=='object' || Array.isArray(data)) return {ok:false, reason:'الملف ده مش نسخة احتياطية صحيحة (شكل البيانات مش متوقع).'};
   const keys = Object.keys(data);
   if(keys.length===0) return {ok:false, reason:'الملف فاضي — مفيش بيانات فيه أصلاً.'};
-  const KNOWN_KEY_PATTERNS = [/^schema-version$/, /^theme$/, /^targets$/, /^schedule-settings$/, /^shopping$/, /^prep$/, /^subs$/, /^meals:/, /^sched-acts:/, /^water:/, /^weight:/, /^budget-/, /^custom-foods$/, /^food-overrides$/, /^secnote:/, /^ex:/, /^gym-settings$/, /^gym-date-ov:/, /^custom-exercises$/, /^exercise-overrides$/, /^excluded-exercises$/, /^meal-date-ov:/, /^notification-settings$/, /^reminders$/, /^gym-routine-order$/, /^gym-plan-config-v1$/, /^gym-custom-plans-v1$/, /^exercise-image-map-v1$/, /^note-attachments-v1$/, /^gym-sessions-v1$/, /^gym-rest-timer-v1$/, /^zatoona-media-v1$/, /^media$/];
+  const KNOWN_KEY_PATTERNS = [/^schema-version$/, /^theme$/, /^targets$/, /^schedule-settings$/, /^shopping$/, /^prep$/, /^subs$/, /^meals:/, /^sched-acts:/, /^water:/, /^weight:/, /^budget-/, /^custom-foods$/, /^food-overrides$/, /^secnote:/, /^ex:/, /^gym-settings$/, /^gym-date-ov:/, /^custom-exercises$/, /^exercise-overrides$/, /^excluded-exercises$/, /^meal-date-ov:/, /^notification-settings$/, /^reminders$/, /^gym-routine-order$/, /^gym-plan-config-v1$/, /^gym-custom-plans-v1$/, /^exercise-image-map-v1$/, /^note-attachments-v1$/, /^gym-sessions-v1$/, /^gym-rest-timer-v1$/, /^shopping-purchases-v1$/, /^zatoona-media-v1$/, /^media$/];
   const looksLikeOurs = keys.some(k=> KNOWN_KEY_PATTERNS.some(re=>re.test(k)));
   if(!looksLikeOurs) return {ok:false, reason:'الملف ده متبقاش شكل نسخة زتونة الاحتياطية — متأكد إنك اخترت الملف الصح؟'};
   for(const k of keys){
@@ -18053,6 +18977,27 @@ function validateBackupData(data){
         } catch(b64Err) {
           return { ok: false, reason: `محتوى الوسيط ${it.id} غير صالح (تشفير Base64 تالف).` };
         }
+      }
+    }
+  }
+
+  // Deep validation of shopping-purchases-v1 if present in backup
+  if(data['shopping-purchases-v1'] !== undefined && data['shopping-purchases-v1'] !== null){
+    let spMap = data['shopping-purchases-v1'];
+    if(typeof spMap === 'string'){
+      try {
+        spMap = JSON.parse(spMap);
+      } catch(e){
+        return { ok: false, reason: 'ملف النسخة الاحتياطية يحتوي على بيانات مشتريات تالفة (JSON غير صالح).' };
+      }
+    }
+    if(!spMap || typeof spMap !== 'object' || Array.isArray(spMap)){
+      return { ok: false, reason: 'بنية بيانات المشتريات غير صالحة.' };
+    }
+    for(const wk of Object.keys(spMap)){
+      const entry = spMap[wk];
+      if(!entry || typeof entry !== 'object' || Array.isArray(entry)){
+        return { ok: false, reason: `سجل مشتريات الأسبوع ${wk} غير صالح.` };
       }
     }
   }
@@ -18878,6 +19823,7 @@ function refreshActiveNoteViews(){
   if(typeof renderRecovery === 'function') renderRecovery();
   if(typeof initSectionNotesUI === 'function') initSectionNotesUI();
   if(typeof renderExercises === 'function') renderExercises();
+  if(typeof renderNotesHub === 'function' && typeof mode !== 'undefined' && mode === 'notes') renderNotesHub();
 }
 
 // Window exposures
@@ -18894,6 +19840,685 @@ window.renderNoteAttachmentsWidget = renderNoteAttachmentsWidget;
 window.openImageViewerModal = openImageViewerModal;
 window.closeImageViewerModal = closeImageViewerModal;
 window.isMediaIdInUseGlobally = isMediaIdInUseGlobally;
+
+/* ================= PHASE 9B.1: UNIFIED NOTES HUB ================= */
+
+let notesHubState = {
+  filterType: 'all',    // 'all' | 'daily' | 'recovery' | 'exercise' | 'section'
+  filterTime: 'all',    // 'all' | '7d' | '30d' | 'month'
+  filterHasAtt: false,  // boolean
+  searchQuery: '',      // string
+  sortOrder: 'desc'     // 'desc' | 'asc'
+};
+
+let notesHubSearchTimer = null;
+
+function parseIsoToDate(iso){
+  if(!iso || typeof iso !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) return null;
+  const p = iso.split('-').map(Number);
+  const d = new Date(p[0], p[1]-1, p[2]);
+  return isNaN(d.getTime()) ? null : d;
+}
+
+function collectAllUnifiedNotes(){
+  const list = [];
+  const seenKeys = new Set();
+
+  function pushNote(item){
+    if(!item || !item.noteKey) return;
+    if(seenKeys.has(item.noteKey)) return;
+    const hasText = !!(item.text && String(item.text).trim());
+    const hasAtts = Array.isArray(item.attachments) && item.attachments.length > 0;
+    if(!hasText && !hasAtts) return;
+
+    seenKeys.add(item.noteKey);
+    list.push(item);
+  }
+
+  // 1. Scan localStorage for note buckets
+  const buckets = {};
+  for(let i = 0; i < localStorage.length; i++){
+    try {
+      const fullKey = localStorage.key(i);
+      if(!fullKey || fullKey.indexOf(STORAGE_PREFIX) !== 0) continue;
+      const key = fullKey.slice(STORAGE_PREFIX.length);
+      const colon = key.indexOf(':');
+      if(colon < 0) continue;
+      const prefix = key.slice(0, colon);
+      const sub = key.slice(colon + 1);
+      (buckets[prefix] = buckets[prefix] || []).push(sub);
+    } catch(e){}
+  }
+
+  // 2. Daily Notes: daynote:{iso}
+  (buckets['daynote'] || []).forEach(iso => {
+    try {
+      if(!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return;
+      const text = (typeof loadDailyNote === 'function') ? (loadDailyNote(iso) || '') : (storageGet('daynote:'+iso) || '');
+      const atts = (typeof getNoteAttachments === 'function') ? getNoteAttachments('daynote:' + iso) : [];
+      pushNote({
+        noteKey: 'daynote:' + iso,
+        type: 'daily',
+        title: 'ملاحظة يوم ' + iso,
+        text: text,
+        iso: iso,
+        sourceMode: 'overview',
+        sourceId: 'dailyNotesInput',
+        attachments: atts
+      });
+    } catch(e){
+      console.warn('[notes-hub] error reading daily note:', iso, e);
+    }
+  });
+
+  // 3. Recovery Notes: recovery:{iso}
+  (buckets['recovery'] || []).forEach(iso => {
+    try {
+      if(!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return;
+      const rec = (typeof loadRecovery === 'function') ? (loadRecovery(iso) || {}) : storageGetJSON('recovery:'+iso, {});
+      const text = (rec && typeof rec.notes === 'string') ? rec.notes : '';
+      const atts = (typeof getNoteAttachments === 'function') ? getNoteAttachments('recovery:' + iso) : [];
+      pushNote({
+        noteKey: 'recovery:' + iso,
+        type: 'recovery',
+        title: 'ملاحظة استشفاء — ' + iso,
+        text: text,
+        iso: iso,
+        sourceMode: 'recovery',
+        sourceId: 'recoveryNotes',
+        attachments: atts
+      });
+    } catch(e){
+      console.warn('[notes-hub] error reading recovery note:', iso, e);
+    }
+  });
+
+  // 4. Exercise Notes: ex:{iso}
+  (buckets['ex'] || []).forEach(iso => {
+    try {
+      if(!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return;
+      const exMap = (typeof loadEx === 'function') ? (loadEx(iso) || {}) : storageGetJSON('ex:'+iso, {});
+      if(typeof exMap !== 'object' || !exMap) return;
+      Object.keys(exMap).forEach(exKey => {
+        try {
+          const st = exMap[exKey];
+          if(!st || typeof st !== 'object') return;
+          const text = (typeof st.note === 'string') ? st.note : '';
+          const nKey = 'exnote:' + iso + ':' + exKey;
+          const atts = (typeof getNoteAttachments === 'function') ? getNoteAttachments(nKey) : [];
+          if(!text.trim() && atts.length === 0) return;
+          const exDef = (typeof getExerciseDef === 'function') ? getExerciseDef(exKey) : null;
+          const exName = (exDef && exDef.name) ? exDef.name : exKey;
+          pushNote({
+            noteKey: nKey,
+            type: 'exercise',
+            title: 'ملاحظة تمرين: ' + exName,
+            text: text,
+            iso: iso,
+            sourceMode: 'gym',
+            sourceId: exKey,
+            exKey: exKey,
+            attachments: atts
+          });
+        } catch(exErr){
+          console.warn('[notes-hub] error parsing ex note item:', exKey, exErr);
+        }
+      });
+    } catch(e){
+      console.warn('[notes-hub] error reading ex records:', iso, e);
+    }
+  });
+
+  // 5. Section Notes: secnote:{secId}
+  if(typeof SECTION_NOTES_META === 'object' && SECTION_NOTES_META){
+    Object.keys(SECTION_NOTES_META).forEach(secId => {
+      try {
+        const meta = SECTION_NOTES_META[secId];
+        const text = (typeof loadSectionNote === 'function') ? (loadSectionNote(secId) || '') : (storageGet('secnote:'+secId) || '');
+        const atts = (typeof getNoteAttachments === 'function') ? getNoteAttachments('secnote:' + secId) : [];
+        pushNote({
+          noteKey: 'secnote:' + secId,
+          type: 'section',
+          title: 'ملاحظة قسم: ' + (meta ? meta.name : secId),
+          text: text,
+          iso: null, // strictly null for section notes
+          sourceMode: secId,
+          sourceId: 'secNotesCard_' + secId,
+          attachments: atts
+        });
+      } catch(e){
+        console.warn('[notes-hub] error reading section note:', secId, e);
+      }
+    });
+  }
+
+  // 6. Check note-attachments-v1 map for any attachment-only notes not picked up yet
+  try {
+    const attMap = (typeof loadNoteAttachmentsMap === 'function') ? loadNoteAttachmentsMap() : {};
+    for(const nKey of Object.keys(attMap)){
+      if(seenKeys.has(nKey)) continue;
+      const atts = attMap[nKey];
+      if(!Array.isArray(atts) || atts.length === 0) continue;
+
+      if(nKey.startsWith('daynote:')){
+        const iso = nKey.slice('daynote:'.length);
+        if(/^\d{4}-\d{2}-\d{2}$/.test(iso)){
+          pushNote({
+            noteKey: nKey,
+            type: 'daily',
+            title: 'ملاحظة يوم ' + iso,
+            text: '',
+            iso: iso,
+            sourceMode: 'overview',
+            sourceId: 'dailyNotesInput',
+            attachments: atts
+          });
+        }
+      } else if(nKey.startsWith('recovery:')){
+        const iso = nKey.slice('recovery:'.length);
+        if(/^\d{4}-\d{2}-\d{2}$/.test(iso)){
+          pushNote({
+            noteKey: nKey,
+            type: 'recovery',
+            title: 'ملاحظة استشفاء — ' + iso,
+            text: '',
+            iso: iso,
+            sourceMode: 'recovery',
+            sourceId: 'recoveryNotes',
+            attachments: atts
+          });
+        }
+      } else if(nKey.startsWith('secnote:')){
+        const secId = nKey.slice('secnote:'.length);
+        const meta = (typeof SECTION_NOTES_META === 'object' && SECTION_NOTES_META) ? SECTION_NOTES_META[secId] : null;
+        pushNote({
+          noteKey: nKey,
+          type: 'section',
+          title: 'ملاحظة قسم: ' + (meta ? meta.name : secId),
+          text: '',
+          iso: null,
+          sourceMode: secId,
+          sourceId: 'secNotesCard_' + secId,
+          attachments: atts
+        });
+      } else if(nKey.startsWith('exnote:')){
+        const parts = nKey.split(':');
+        if(parts.length >= 3){
+          const iso = parts[1];
+          const exKey = parts.slice(2).join(':');
+          if(/^\d{4}-\d{2}-\d{2}$/.test(iso)){
+            const exDef = (typeof getExerciseDef === 'function') ? getExerciseDef(exKey) : null;
+            const exName = (exDef && exDef.name) ? exDef.name : exKey;
+            pushNote({
+              noteKey: nKey,
+              type: 'exercise',
+              title: 'ملاحظة تمرين: ' + exName,
+              text: '',
+              iso: iso,
+              sourceMode: 'gym',
+              sourceId: exKey,
+              exKey: exKey,
+              attachments: atts
+            });
+          }
+        }
+      }
+    }
+  } catch(attErr){
+    console.warn('[notes-hub] error scanning attachment map:', attErr);
+  }
+
+  return list;
+}
+
+function openNoteInOriginalSection(note){
+  if(!note) return;
+  // 1. If dated note, navigate to date first
+  if(note.iso){
+    const d = parseIsoToDate(note.iso);
+    if(d && typeof goToDate === 'function'){
+      goToDate(d);
+    }
+  }
+
+  // 2. Navigate to source section
+  if(typeof navigateTo === 'function'){
+    navigateTo(note.sourceMode);
+  }
+
+  // Immediately expand section notes accordion
+  if(note.type === 'section'){
+    const secId = note.sourceId ? note.sourceId.replace('secNotesCard_', '') : note.sourceMode;
+    const card = document.getElementById('secNotesCard_' + secId);
+    if(card) card.open = true;
+  }
+
+  // 3. Highlight / focus target field based on type
+  setTimeout(()=>{
+    try {
+      if(note.type === 'daily'){
+        const inp = document.getElementById('dailyNotesInput');
+        const card = document.getElementById('dailyNotesCard');
+        if(card){
+          card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          card.style.transition = 'box-shadow 0.3s ease, outline 0.3s ease';
+          card.style.outline = '2px solid var(--accent)';
+          card.style.boxShadow = '0 0 12px rgba(6,170,196,0.3)';
+          setTimeout(()=>{ card.style.outline = ''; card.style.boxShadow = ''; }, 2200);
+        }
+        if(inp) inp.focus();
+      } else if(note.type === 'recovery'){
+        const inp = document.getElementById('recoveryNotes');
+        if(inp){
+          inp.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          inp.style.transition = 'box-shadow 0.3s ease, outline 0.3s ease';
+          inp.style.outline = '2px solid var(--accent)';
+          inp.style.boxShadow = '0 0 12px rgba(6,170,196,0.3)';
+          inp.focus();
+          setTimeout(()=>{ inp.style.outline = ''; inp.style.boxShadow = ''; }, 2200);
+        }
+      } else if(note.type === 'exercise'){
+        const exKey = note.exKey || note.sourceId;
+        const cleanKey = exKey ? exKey.replace(/[^a-zA-Z0-9_-]/g, '_') : '';
+        const attBox = document.getElementById('exNoteAtt_' + cleanKey);
+        const card = attBox ? attBox.closest('.card') : null;
+        if(card){
+          card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          const noteInp = card.querySelector('.ex-note');
+          if(noteInp) noteInp.focus();
+          card.style.transition = 'box-shadow 0.3s ease, outline 0.3s ease';
+          card.style.outline = '2px solid var(--accent)';
+          card.style.boxShadow = '0 0 12px rgba(6,170,196,0.3)';
+          setTimeout(()=>{ card.style.outline = ''; card.style.boxShadow = ''; }, 2200);
+        }
+      } else if(note.type === 'section'){
+        const secId = note.sourceId ? note.sourceId.replace('secNotesCard_', '') : note.sourceMode;
+        const card = document.getElementById('secNotesCard_' + secId);
+        if(card){
+          card.open = true;
+          card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          const txt = document.getElementById('secNotesText_' + secId);
+          if(txt) txt.focus();
+          card.style.transition = 'box-shadow 0.3s ease, outline 0.3s ease';
+          card.style.outline = '2px solid var(--accent)';
+          card.style.boxShadow = '0 0 12px rgba(6,170,196,0.3)';
+          setTimeout(()=>{ card.style.outline = ''; card.style.boxShadow = ''; }, 2200);
+        }
+      }
+    } catch(err){
+      console.warn('[notes-hub] deep-link focus error:', err);
+    }
+  }, 180);
+}
+
+function renderNotesHub(){
+  const container = document.getElementById('notesView');
+  if(!container) return;
+
+  const allNotes = collectAllUnifiedNotes();
+
+  // 1. Update stats
+  const totalCount = allNotes.length;
+  const datedCount = allNotes.filter(n => n.iso !== null).length;
+  const sectionCount = allNotes.filter(n => n.type === 'section').length;
+  const withAttCount = allNotes.filter(n => Array.isArray(n.attachments) && n.attachments.length > 0).length;
+
+  const statTotEl = document.getElementById('notesStatTotal');
+  const statDatEl = document.getElementById('notesStatDated');
+  const statSecEl = document.getElementById('notesStatSection');
+  const statAttEl = document.getElementById('notesStatWithAtt');
+
+  if(statTotEl) statTotEl.textContent = String(totalCount);
+  if(statDatEl) statDatEl.textContent = String(datedCount);
+  if(statSecEl) statSecEl.textContent = String(sectionCount);
+  if(statAttEl) statAttEl.textContent = String(withAttCount);
+
+  // 2. Filter list
+  const now = new Date();
+  const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  let filtered = allNotes.slice();
+
+  // Type filter
+  if(notesHubState.filterType !== 'all'){
+    filtered = filtered.filter(n => n.type === notesHubState.filterType);
+  }
+
+  // Has-attachment filter
+  if(notesHubState.filterHasAtt){
+    filtered = filtered.filter(n => Array.isArray(n.attachments) && n.attachments.length > 0);
+  }
+
+  // Time filter
+  if(notesHubState.filterTime !== 'all'){
+    filtered = filtered.filter(n => {
+      // If user selected 'section' type explicitly, keep section notes
+      if(n.type === 'section'){
+        return notesHubState.filterType === 'section';
+      }
+      if(!n.iso) return false;
+      const d = parseIsoToDate(n.iso);
+      if(!d) return false;
+      const dMidnight = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+      const diffDays = Math.round((todayMidnight.getTime() - dMidnight.getTime()) / (1000 * 60 * 60 * 24));
+
+      if(notesHubState.filterTime === '7d'){
+        return diffDays >= 0 && diffDays < 7;
+      }
+      if(notesHubState.filterTime === '30d'){
+        return diffDays >= 0 && diffDays < 30;
+      }
+      if(notesHubState.filterTime === 'month'){
+        return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+      }
+      return true;
+    });
+  }
+
+  // Search query filter
+  const qRaw = (notesHubState.searchQuery || '').trim();
+  const qNorm = (typeof normalizeSearchText === 'function') ? normalizeSearchText(qRaw) : qRaw.toLowerCase();
+  if(qNorm.length > 0){
+    filtered = filtered.filter(n => {
+      const tNorm = (typeof normalizeSearchText === 'function') ? normalizeSearchText(n.title) : (n.title || '').toLowerCase();
+      const txtNorm = (typeof normalizeSearchText === 'function') ? normalizeSearchText(n.text) : (n.text || '').toLowerCase();
+      const exKeyNorm = n.exKey ? ((typeof normalizeSearchText === 'function') ? normalizeSearchText(n.exKey) : n.exKey.toLowerCase()) : '';
+      return tNorm.indexOf(qNorm) >= 0 || txtNorm.indexOf(qNorm) >= 0 || exKeyNorm.indexOf(qNorm) >= 0;
+    });
+  }
+
+  // 3. Separate into dated timeline vs undated section notes
+  const datedNotes = filtered.filter(n => n.iso !== null);
+  const sectionNotes = filtered.filter(n => n.type === 'section');
+
+  // Sort dated notes by active sortOrder ('desc' or 'asc')
+  if(notesHubState.sortOrder === 'asc'){
+    datedNotes.sort((a,b) => (a.iso || '').localeCompare(b.iso || ''));
+  } else {
+    datedNotes.sort((a,b) => (b.iso || '').localeCompare(a.iso || ''));
+  }
+
+  // Update counters in section headers
+  const datedCountEl = document.getElementById('notesDatedCount');
+  const sectionCountEl = document.getElementById('notesSectionCount');
+  if(datedCountEl) datedCountEl.textContent = String(datedNotes.length);
+  if(sectionCountEl) sectionCountEl.textContent = String(sectionNotes.length);
+
+  // Update meta text
+  const metaEl = document.getElementById('notesFilterMeta');
+  if(metaEl){
+    if(qNorm.length > 0 || notesHubState.filterType !== 'all' || notesHubState.filterTime !== 'all' || notesHubState.filterHasAtt){
+      metaEl.textContent = `المعروض: ${filtered.length} من إجمالي ${totalCount} ملاحظة`;
+    } else {
+      metaEl.textContent = `عرض جميع الملاحظات (${totalCount})`;
+    }
+  }
+
+  // Update sort toggle button label & title
+  const sortToggleEl = document.getElementById('notesSortToggle');
+  if(sortToggleEl){
+    const isAsc = notesHubState.sortOrder === 'asc';
+    sortToggleEl.textContent = isAsc ? '⬆️ الأقدم أولاً' : '⬇️ الأحدث أولاً';
+    sortToggleEl.title = isAsc ? 'الترتيب الحالي: الأقدم أولاً — اضغط للتبديل إلى الأحدث أولاً' : 'الترتيب الحالي: الأحدث أولاً — اضغط للتبديل إلى الأقدم أولاً';
+    sortToggleEl.dataset.sort = notesHubState.sortOrder || 'desc';
+  }
+
+  // Update Reset All Filters button visibility
+  const resetFiltersBtn = document.getElementById('notesResetFiltersBtn');
+  if(resetFiltersBtn){
+    const isAnyFilterActive = (notesHubState.filterType !== 'all') ||
+                              (notesHubState.filterTime !== 'all') ||
+                              (notesHubState.filterHasAtt) ||
+                              (qNorm.length > 0);
+    resetFiltersBtn.classList.toggle('hidden', !isAnyFilterActive);
+  }
+
+  // 4. Empty state handling
+  const emptyStateEl = document.getElementById('notesEmptyState');
+  const timelineSection = document.getElementById('notesTimelineSection');
+  const undatedSection = document.getElementById('notesUndatedSection');
+
+  if(filtered.length === 0){
+    if(emptyStateEl) emptyStateEl.classList.remove('hidden');
+    if(timelineSection) timelineSection.classList.add('hidden');
+    if(undatedSection) undatedSection.classList.add('hidden');
+    return;
+  }
+
+  if(emptyStateEl) emptyStateEl.classList.add('hidden');
+  if(timelineSection) timelineSection.classList.toggle('hidden', datedNotes.length === 0);
+  if(undatedSection) undatedSection.classList.toggle('hidden', sectionNotes.length === 0);
+
+  // 5. Render card helper
+  function renderCardHtml(note){
+    const typeMeta = {
+      daily: { icon: '📅', label: 'ملاحظة يومية', color: 'var(--teal, #06aac4)', bg: 'rgba(6,170,196,0.1)' },
+      recovery: { icon: '🩺', label: 'استشفاء', color: 'var(--purple, #9b59b6)', bg: 'rgba(155,89,182,0.1)' },
+      exercise: { icon: '🏋️', label: 'تمرين', color: 'var(--accent, #e67e22)', bg: 'rgba(230,126,34,0.1)' },
+      section: { icon: '📑', label: 'قسم عام', color: 'var(--primary, #3498db)', bg: 'rgba(52,152,219,0.1)' }
+    }[note.type] || { icon: '📝', label: 'ملاحظة', color: 'var(--text)', bg: 'rgba(255,255,255,0.05)' };
+
+    const safeTitle = (typeof escapeHtml === 'function') ? escapeHtml(note.title) : note.title;
+    const safeKey = (typeof escapeHtml === 'function') ? escapeHtml(note.noteKey) : note.noteKey;
+    let bodyTextHtml = '';
+    if(note.text && note.text.trim()){
+      if(qNorm.length > 0 && typeof highlightMatch === 'function'){
+        bodyTextHtml = highlightMatch(note.text, qRaw);
+      } else {
+        bodyTextHtml = (typeof escapeHtml === 'function') ? escapeHtml(note.text) : note.text;
+      }
+    } else {
+      bodyTextHtml = '<span style="color:var(--muted); font-style:italic;">(لا يوجد نص — ملاحظة تحتوي على مرفقات صور فقط)</span>';
+    }
+
+    // Attachments row
+    let attsHtml = '';
+    if(Array.isArray(note.attachments) && note.attachments.length > 0){
+      const thumbItems = note.attachments.map(att => `
+        <div class="note-hub-thumb-wrap" data-mid="${att.mediaId}" data-key="${safeKey}" data-title="${safeTitle}" style="position:relative; width:62px; height:62px; border-radius:8px; overflow:hidden; border:1px solid var(--border); background:var(--card-alt); cursor:pointer; flex-shrink:0;" title="عرض المرفق بالحجم الكامل">
+          <img src="" class="note-hub-thumb-img" data-mid="${att.mediaId}" style="width:100%; height:100%; object-fit:cover; display:none;" alt="مرفق">
+          <div class="note-hub-thumb-ph" style="display:flex; align-items:center; justify-content:center; width:100%; height:100%; font-size:1.3rem; color:var(--muted);">📷</div>
+        </div>
+      `).join('');
+
+      attsHtml = `
+        <div class="note-hub-att-box" style="margin-top:8px; padding-top:6px; border-top:1px dashed var(--line);">
+          <div style="font-size:.72rem; color:var(--muted); margin-bottom:4px; font-weight:600;">📷 المرفقات (${note.attachments.length}):</div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+            ${thumbItems}
+          </div>
+        </div>
+      `;
+    }
+
+    return `
+      <div class="info-card note-hub-card" data-key="${safeKey}" style="margin:0; border-right:3px solid ${typeMeta.color};">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px; flex-wrap:wrap; margin-bottom:6px;">
+          <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+            <span class="day-chip on" style="font-size:.72rem; padding:2px 8px; font-weight:700; background:${typeMeta.bg}; color:${typeMeta.color}; border-color:${typeMeta.color};">${typeMeta.icon} ${typeMeta.label}</span>
+            <span style="font-weight:700; font-size:.88rem; color:var(--text);">${safeTitle}</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            ${note.iso ? `<span class="mono" style="font-size:.74rem; color:var(--muted);">${note.iso}</span>` : `<span style="font-size:.72rem; color:var(--muted); background:var(--card-alt); padding:2px 6px; border-radius:4px;">مسودة عامة</span>`}
+            <button type="button" class="reset-btn note-hub-go-btn" data-key="${safeKey}" style="padding:3px 10px; font-size:.74rem; border-color:var(--accent); color:var(--accent); font-weight:700;" title="الانتقال للتحرير في القسم الأصلي">فتح في القسم ↗</button>
+          </div>
+        </div>
+        <div style="font-size:.82rem; line-height:1.6; color:var(--text); white-space:pre-wrap; word-break:break-word;">${bodyTextHtml}</div>
+        ${attsHtml}
+      </div>
+    `;
+  }
+
+  // 6. Populate lists
+  const timelineList = document.getElementById('notesTimelineList');
+  if(timelineList){
+    timelineList.innerHTML = datedNotes.map(renderCardHtml).join('');
+  }
+
+  const sectionList = document.getElementById('notesSectionList');
+  if(sectionList){
+    sectionList.innerHTML = sectionNotes.map(renderCardHtml).join('');
+  }
+
+  // 7. Wire "فتح في القسم ↗" buttons
+  const notesLookup = new Map(allNotes.map(n => [n.noteKey, n]));
+  container.querySelectorAll('.note-hub-go-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const nKey = btn.dataset.key;
+      const targetNote = notesLookup.get(nKey);
+      if(targetNote){
+        openNoteInOriginalSection(targetNote);
+      }
+    });
+  });
+
+  // 8. Wire thumbnail clicks & load thumbnail Blob URLs
+  container.querySelectorAll('.note-hub-thumb-wrap').forEach(wrap => {
+    wrap.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const mId = wrap.dataset.mid;
+      const nKey = wrap.dataset.key;
+      const cap = wrap.dataset.title || 'معاينة المرفق';
+      if(typeof openImageViewerModal === 'function'){
+        openImageViewerModal(mId, nKey, cap);
+      }
+    });
+
+    const img = wrap.querySelector('.note-hub-thumb-img');
+    const mId = wrap.dataset.mid;
+    if(img && mId && typeof getNoteBlobUrl === 'function'){
+      getNoteBlobUrl(mId).then(url => {
+        if(url && img){
+          img.src = url;
+          img.style.display = 'block';
+          const ph = wrap.querySelector('.note-hub-thumb-ph');
+          if(ph) ph.style.display = 'none';
+        }
+      }).catch(()=>{});
+    }
+  });
+}
+
+function initNotesHubEvents(){
+  // Search input
+  const searchInp = document.getElementById('notesSearchInput');
+  const clearBtn = document.getElementById('notesSearchClearBtn');
+
+  if(searchInp){
+    searchInp.addEventListener('input', (e) => {
+      const val = e.target.value;
+      if(clearBtn) clearBtn.classList.toggle('hidden', val.trim().length === 0);
+      clearTimeout(notesHubSearchTimer);
+      notesHubSearchTimer = setTimeout(() => {
+        notesHubState.searchQuery = val;
+        renderNotesHub();
+      }, 200);
+    });
+  }
+
+  if(clearBtn){
+    clearBtn.addEventListener('click', () => {
+      if(searchInp){
+        searchInp.value = '';
+        searchInp.focus();
+      }
+      clearBtn.classList.add('hidden');
+      notesHubState.searchQuery = '';
+      renderNotesHub();
+    });
+  }
+
+  // Type filter chips
+  const typeRow = document.getElementById('notesTypeFilterRow');
+  if(typeRow){
+    typeRow.querySelectorAll('.day-chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        typeRow.querySelectorAll('.day-chip').forEach(b => b.classList.remove('on'));
+        btn.classList.add('on');
+        notesHubState.filterType = btn.dataset.type || 'all';
+        renderNotesHub();
+      });
+    });
+  }
+
+  // Time filter chips
+  const timeRow = document.getElementById('notesTimeFilterRow');
+  if(timeRow){
+    timeRow.querySelectorAll('.day-chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        timeRow.querySelectorAll('.day-chip').forEach(b => b.classList.remove('on'));
+        btn.classList.add('on');
+        notesHubState.filterTime = btn.dataset.time || 'all';
+        renderNotesHub();
+      });
+    });
+  }
+
+  // Has-attachment filter
+  const hasAttBtn = document.getElementById('notesHasAttBtn');
+  if(hasAttBtn){
+    hasAttBtn.addEventListener('click', () => {
+      notesHubState.filterHasAtt = !notesHubState.filterHasAtt;
+      hasAttBtn.classList.toggle('on', notesHubState.filterHasAtt);
+      hasAttBtn.dataset.hasAtt = String(notesHubState.filterHasAtt);
+      renderNotesHub();
+    });
+  }
+
+  // Sort toggle button
+  const sortToggleBtn = document.getElementById('notesSortToggle');
+  if(sortToggleBtn){
+    sortToggleBtn.addEventListener('click', () => {
+      notesHubState.sortOrder = (notesHubState.sortOrder === 'asc') ? 'desc' : 'asc';
+      renderNotesHub();
+    });
+  }
+
+  // Clear all filters button
+  const resetAllBtn = document.getElementById('notesResetFiltersBtn');
+  if(resetAllBtn){
+    resetAllBtn.addEventListener('click', () => {
+      // 1. Reset filter states (preserve active sortOrder)
+      notesHubState.filterType = 'all';
+      notesHubState.filterTime = 'all';
+      notesHubState.filterHasAtt = false;
+      notesHubState.searchQuery = '';
+
+      // 2. Clear search input & hide clear button
+      const sInp = document.getElementById('notesSearchInput');
+      const sClr = document.getElementById('notesSearchClearBtn');
+      if(sInp) sInp.value = '';
+      if(sClr) sClr.classList.add('hidden');
+
+      // 3. Reset type chips UI
+      const tRow = document.getElementById('notesTypeFilterRow');
+      if(tRow){
+        tRow.querySelectorAll('.day-chip').forEach(b => {
+          b.classList.toggle('on', (b.dataset.type || 'all') === 'all');
+        });
+      }
+
+      // 4. Reset time chips UI
+      const tmRow = document.getElementById('notesTimeFilterRow');
+      if(tmRow){
+        tmRow.querySelectorAll('.day-chip').forEach(b => {
+          b.classList.toggle('on', (b.dataset.time || 'all') === 'all');
+        });
+      }
+
+      // 5. Reset attachment toggle button UI
+      const aBtn = document.getElementById('notesHasAttBtn');
+      if(aBtn){
+        aBtn.classList.remove('on');
+        aBtn.dataset.hasAtt = 'false';
+      }
+
+      // 6. Re-render hub
+      renderNotesHub();
+    });
+  }
+}
 
 /* ================= CALENDAR HIERARCHY: RENDER + NAV ================= */
 function recomputeWeekDots(){
@@ -19185,6 +20810,9 @@ function renderHomeDashboard(){
       <button class="quick-act-btn" type="button" data-nav="sleep" title="الانتقال إلى النوم">
         ${getSvgIcon('sleep', 16)} <span>النوم</span>
       </button>
+      <button class="quick-act-btn" type="button" data-nav="notes" title="الانتقال إلى دفتر الملاحظات">
+        ${getSvgIcon('notes', 16)} <span>الملاحظات</span>
+      </button>
     `;
     const btnWater = quickActions.querySelector('#btnQuickAddWater');
     if(btnWater){
@@ -19303,6 +20931,8 @@ function applyMode(){
     overview: document.getElementById('overviewView'),
     search: document.getElementById('searchView'),
     budget: document.getElementById('budgetView'),
+    notes: document.getElementById('notesView'),
+    stretches: document.getElementById('stretchesView'),
   };
   const btns = {
     meal: document.getElementById('modeMeal'),
@@ -19314,6 +20944,8 @@ function applyMode(){
     overview: document.getElementById('modeOverview'),
     search: document.getElementById('modeSearch'),
     budget: document.getElementById('modeBudget'),
+    notes: document.getElementById('modeNotes'),
+    stretches: document.getElementById('modeStretches'),
   };
   Object.keys(views).forEach(k=>{
     views[k].classList.toggle('hidden', k!==mode);
@@ -19336,17 +20968,18 @@ function applyMode(){
     overview: ['📊 نظرة عامة وتحليلات', 'اتجاهاتك الحقيقية بمرور الوقت — مش يوم واحد بس'],
     search: ['🔍 البحث', 'دوّر في يومياتك القديمة كلها من مكان واحد'],
     budget: ['💰 الميزانية الشهرية', 'الأكل بيتحسب أوتوماتيك من خطتك، وهنا بتضيف باقي مصروفاتك وتتابع ميزانيتك أول بأول'],
+    notes: ['📝 دفتر الملاحظات الموحد', 'سجل شامل لملاحظاتك اليومية وملاحظات التمارين والاستشفاء والأقسام ومرفقاتها'],
+    stretches: ['🧘 موسوعة الاسترتشات والمرونة', 'حركات إطالة وتحضير مفصلي وتنشيط عضلي — للإحماء والتهدئة والاستشفاء الحركي'],
   };
   if(titles[mode]){
     document.getElementById('pageTitle').textContent = titles[mode][0];
     document.getElementById('pageSub').textContent = titles[mode][1];
   }
 
-  // Budget has its own month navigator, and Home has no date context at all — the shared week
-  // calendar/day-tabs don't apply to either, so hide them to avoid clutter/competing navigators.
+  // Budget, Notes, and Home have no single-day context: hide week calendar / day tabs
   const weekCalBar = document.getElementById('weekCalBar');
   const tabsEl = document.getElementById('tabs');
-  if(mode==='budget' || isHome){
+  if(mode==='budget' || mode==='notes' || mode==='stretches' || isHome){
     if(weekCalBar) weekCalBar.classList.add('hidden');
     if(tabsEl) tabsEl.classList.add('hidden');
     calOpen = false;
@@ -19360,6 +20993,8 @@ function applyMode(){
   if(mode==='schedule') renderSchedule();
   if(mode==='search') renderSearchResults();
   if(mode==='budget') renderBudgetAll();
+  if(mode==='notes') renderNotesHub();
+  if(mode==='stretches') renderStretchesView();
   if(isHome) renderHomeDashboard();
 
   updateSectionNotesUI(mode);
@@ -19375,7 +21010,7 @@ function applyMode(){
    History API (pushState/popstate) with the mode name as the hash, so Back genuinely
    works and a refreshed/shared link with #schedule (etc.) opens straight to that
    section — no router library involved. */
-const NAV_MODES = ['home','meal','gym','sleep','prayer','schedule','recovery','overview','search','budget'];
+const NAV_MODES = ['home','meal','gym','sleep','prayer','schedule','recovery','overview','search','budget','notes','stretches'];
 function navigateTo(newMode, opts){
   opts = opts || {};
   mode = NAV_MODES.includes(newMode) ? newMode : 'home';
@@ -19453,6 +21088,8 @@ wireActivate(document.getElementById('modeRecovery'), ()=> navigateTo('recovery'
 wireActivate(document.getElementById('modeOverview'), ()=> navigateTo('overview'));
 wireActivate(document.getElementById('modeSearch'), ()=> navigateTo('search'));
 wireActivate(document.getElementById('modeBudget'), ()=> navigateTo('budget'));
+wireActivate(document.getElementById('modeNotes'), ()=> navigateTo('notes'));
+wireActivate(document.getElementById('modeStretches'), ()=> navigateTo('stretches'));
 document.getElementById('homeBtn').addEventListener('click', ()=> navigateTo('home'));
 
 /* ================= NAVIGATION SYNC & CONTROLS (Phase 3) ================= */
@@ -19602,7 +21239,22 @@ document.getElementById('calOpenBtn').addEventListener('click', ()=>{
 
 document.getElementById('waterPlus').addEventListener('click', ()=> changeWater(1));
 document.getElementById('waterMinus').addEventListener('click', ()=> changeWater(-1));
-document.getElementById('resetShopping').addEventListener('click', ()=>{ shoppingState={}; saveShopping(shoppingState); renderShopping(); });
+document.getElementById('resetShopping').addEventListener('click', ()=>{
+  if(!confirm('هل أنت متأكد من تصفير قائمة المشتريات لهذا الأسبوع؟')) return;
+  shoppingState = {};
+  saveShopping(shoppingState);
+  const activeDates = (typeof weekDates !== 'undefined' && Array.isArray(weekDates)) ? weekDates : null;
+  const weekKey = getShoppingWeekKey(activeDates);
+  const wp = loadWeekPurchases(weekKey);
+  wp.items = {};
+  saveWeekPurchases(weekKey, wp);
+  renderShopping();
+});
+document.getElementById('migrateShoppingToBudgetBtn')?.addEventListener('click', ()=> migrateShoppingToBudget());
+document.getElementById('shoppingBudgetGoBtn')?.addEventListener('click', ()=>{
+  if(typeof navigateTo === 'function') navigateTo('budget');
+});
+document.getElementById('jumpToShoppingBtn')?.addEventListener('click', openShoppingList);
 document.getElementById('resetPrep').addEventListener('click', ()=>{ prepState={}; savePrep(prepState); renderPrep(); });
 document.getElementById('sleepTimeStart').addEventListener('change', onSleepTimeChange);
 document.getElementById('sleepTimeEnd').addEventListener('change', onSleepTimeChange);
@@ -19785,6 +21437,15 @@ function initServiceWorker(){
   if(!('serviceWorker' in navigator)) return;
   let userRequestedUpdate = false; // only true after the user clicks the update banner button
 
+  // Handle incoming notification click messages from service worker (Phase 8B)
+  navigator.serviceWorker.addEventListener('message', function(event){
+    if(event && event.data && event.data.type === 'ZATOONA_NOTIFICATION_CLICK'){
+      if(typeof routeNotificationClick === 'function'){
+        routeNotificationClick(event.data.data);
+      }
+    }
+  });
+
   navigator.serviceWorker.register('./sw.js', {scope: './'}).then(function(reg){
     // A worker was already installed and waiting from a previous visit.
     if(reg.waiting && navigator.serviceWorker.controller) showUpdateBanner();
@@ -19875,12 +21536,28 @@ function init(){
   renderPrep();
   initSectionNotesUI();
   initPhase3Navigation();
+  initNotesHubEvents();
   // Deep-link/refresh safety: honor #schedule (etc.) if present, otherwise land on Home.
   // replaceState (not pushState) so this initial entry doesn't add an extra Back step.
   const hashMode = location.hash ? location.hash.slice(1) : '';
   mode = NAV_MODES.includes(hashMode) ? hashMode : 'home';
   history.replaceState({mode}, '', location.hash || '#');
   applyMode();
+
+  // Notification routing on cold-start via query parameters (Phase 8B)
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+    const nMode = urlParams.get('notif_mode');
+    const nDate = urlParams.get('notif_date');
+    const nAct = urlParams.get('notif_act');
+    if(nMode || nDate || nAct){
+      routeNotificationClick({ mode: nMode, date: nDate, targetId: nAct });
+      const cleanUrl = window.location.pathname + (window.location.hash || '#' + (mode || 'home'));
+      window.history.replaceState({mode}, '', cleanUrl);
+    }
+  } catch(e){
+    console.warn('[notif-route] init query routing error:', e);
+  }
 
   // PWA hooks run last and are fully isolated from the rest of startup —
   // any failure here is caught and logged, never thrown, so a broken/unsupported
@@ -20190,11 +21867,297 @@ function refreshExerciseViewsAfterImageChange(){
 window.openExerciseImageModal = openExerciseImageModal;
 window.closeExerciseImageModal = closeExerciseImageModal;
 window.refreshExerciseViewsAfterImageChange = refreshExerciseViewsAfterImageChange;
+window.getShoppingWeekKey = getShoppingWeekKey;
+window.loadWeekPurchases = loadWeekPurchases;
+window.saveWeekPurchases = saveWeekPurchases;
+window.getShoppingItemPurchase = getShoppingItemPurchase;
+window.updateShoppingItemPurchase = updateShoppingItemPurchase;
+window.migrateShoppingToBudget = migrateShoppingToBudget;
+window.openShoppingList = openShoppingList;
+window.routeNotificationClick = routeNotificationClick;
+window.tryDispatchWindowNotification = tryDispatchWindowNotification;
+window.collectAllUnifiedNotes = collectAllUnifiedNotes;
+window.renderNotesHub = renderNotesHub;
+window.openNoteInOriginalSection = openNoteInOriginalSection;
+window.notesHubState = notesHubState;
 
 
 initExerciseImageModalEvents();
 initImageViewerModalEvents();
 init();
+
+
+/* ================= PHASE 9C.1: STRETCH & MOBILITY ENCYCLOPEDIA CONTROLLER ================= */
+function renderStretchesView(){
+  const catalog = window.ZATOONA_STRETCH_CATALOG || [];
+  const grid = document.getElementById('stretchesGrid');
+  const emptyState = document.getElementById('stretchesEmptyState');
+  const countLabel = document.getElementById('stretchCountLabel');
+  const searchInput = document.getElementById('stretchSearchInput');
+  const filterType = document.getElementById('strFilterType');
+  const filterRegion = document.getElementById('strFilterRegion');
+  const filterEquipment = document.getElementById('strFilterEquipment');
+  const filterLevel = document.getElementById('strFilterLevel');
+  const filterPurpose = document.getElementById('strFilterPurpose');
+  const resetBtn = document.getElementById('stretchesResetBtn');
+
+  if(!grid) return;
+
+  const TYPE_LABELS = {
+    'static_stretch': 'إطالة ثابتة',
+    'dynamic_stretch': 'إطالة ديناميكية',
+    'joint_mobility': 'مرونة مفصلية',
+    'activation': 'تنشيط عضلي',
+    'warmup_drill': 'إحماء تحضيري'
+  };
+
+  const REGION_LABELS = {
+    'chest_shoulders': 'الصدر والكتفين',
+    'back_lats': 'الظهر واللاتس',
+    'neck_upper_back': 'الرقبة وأعلى الظهر',
+    'hips_pelvis': 'الورك والحوض',
+    'thighs_legs': 'الفخذين والساقين',
+    'glutes': 'المؤخرة',
+    'calves_ankles': 'السمانة والكاحل',
+    'wrists_forearms': 'الرسغ والساعد',
+    'spine_rotation': 'العمود الفقري',
+    'full_body': 'كامل الجسم'
+  };
+
+  const EQUIPMENT_LABELS = {
+    'none': 'بدون معدات',
+    'mat': 'بساط تمرين',
+    'wall': 'حائط',
+    'band': 'شريط مقاومة'
+  };
+
+  const LEVEL_LABELS = {
+    'beginner': 'مبتدئ',
+    'intermediate': 'متوسط',
+    'advanced': 'متقدم'
+  };
+
+  function normalizeArabicSearch(s){
+    return String(s||'').toLowerCase()
+      .replace(/[أإآٱ]/g, 'ا')
+      .replace(/[ؤ]/g, 'و')
+      .replace(/[ئ]/g, 'ي')
+      .replace(/[ة]/g, 'ه')
+      .replace(/[ى]/g, 'ي')
+      .replace(/[\u064B-\u065F\u0670]/g, '')
+      .trim();
+  }
+
+  function getSearchableText(m){
+    const parts = [
+      m.name, m.nameAr,
+      ...(m.aliases || []),
+      ...(m.primaryMuscles || []),
+      ...(m.secondaryMuscles || []),
+      ...(m.bodyRegions || []),
+      m.equipment || '',
+      TYPE_LABELS[m.type] || m.type || '',
+      REGION_LABELS[(m.bodyRegions||[])[0]] || ''
+    ];
+    return normalizeArabicSearch(parts.join(' '));
+  }
+
+  function applyFilters(){
+    const q = normalizeArabicSearch(searchInput.value);
+    const tVal = filterType.value;
+    const rVal = filterRegion.value;
+    const eVal = filterEquipment.value;
+    const lVal = filterLevel.value;
+    const pVal = filterPurpose.value;
+
+    const results = catalog.filter(m => {
+      if(q && !getSearchableText(m).includes(q)) return false;
+      if(tVal && m.type !== tVal) return false;
+      if(rVal && !(m.bodyRegions||[]).includes(rVal)) return false;
+      if(eVal && m.equipment !== eVal) return false;
+      if(lVal && m.level !== lVal) return false;
+      if(pVal && !(m.suitableFor||[]).includes(pVal)) return false;
+      return true;
+    });
+
+    renderCards(results);
+  }
+
+  function renderCards(items){
+    grid.innerHTML = '';
+    if(items.length === 0){
+      grid.classList.add('hidden');
+      emptyState.classList.remove('hidden');
+      countLabel.textContent = 'لا توجد نتائج';
+    } else {
+      grid.classList.remove('hidden');
+      emptyState.classList.add('hidden');
+      countLabel.textContent = items.length + ' حركة';
+      items.forEach(m => {
+        const card = document.createElement('div');
+        card.className = 'str-card';
+        card.setAttribute('role','button');
+        card.setAttribute('tabindex','0');
+        card.setAttribute('aria-label', m.nameAr);
+
+        const durationText = m.durationSeconds
+          ? m.durationSeconds + ' ث'
+          : (m.recommendedReps || '');
+        const regionLabel = REGION_LABELS[(m.bodyRegions||[])[0]] || '';
+        const typeLabel = TYPE_LABELS[m.type] || m.type;
+
+        card.innerHTML = '<img class="str-card-img" src="' + (m.image || '') + '" alt="' + (m.nameAr||'') + '" loading="lazy" onerror="this.style.display=\'none\'">' +
+          '<div class="str-card-body">' +
+          '<div class="str-card-title">' + (m.nameAr||'') + '</div>' +
+          '<div class="str-card-name-en">' + (m.name||'') + '</div>' +
+          '<div class="str-card-meta">' +
+          '<span class="str-card-tag type-tag">' + typeLabel + '</span>' +
+          (regionLabel ? '<span class="str-card-tag">' + regionLabel + '</span>' : '') +
+          (durationText ? '<span class="str-card-tag">' + durationText + '</span>' : '') +
+          '</div></div>';
+
+        card.addEventListener('click', () => openStretchModal(m));
+        card.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openStretchModal(m); }});
+        grid.appendChild(card);
+      });
+    }
+  }
+
+  function openStretchModal(m){
+    const overlay = document.getElementById('stretchDetailModal');
+    const title = document.getElementById('strModalTitle');
+    const subtitle = document.getElementById('strModalSubtitle');
+    const img = document.getElementById('strModalImg');
+    const body = document.getElementById('strModalBody');
+
+    title.textContent = m.nameAr || '';
+    subtitle.textContent = m.name || '';
+    img.src = m.image || '';
+    img.alt = m.nameAr || '';
+    img.onerror = function(){ this.style.display='none'; };
+
+    let html = '';
+
+    // Type & Tags
+    const typeLabel = TYPE_LABELS[m.type] || m.type;
+    const regionLabel = REGION_LABELS[(m.bodyRegions||[])[0]] || '';
+    html += '<div class="str-modal-section"><div class="str-modal-info-grid">';
+    html += '<div class="str-modal-info-item"><div class="str-modal-info-label">نوع الحركة</div><div class="str-modal-info-value">' + typeLabel + '</div></div>';
+    html += '<div class="str-modal-info-item"><div class="str-modal-info-label">المنطقة</div><div class="str-modal-info-value">' + regionLabel + '</div></div>';
+    html += '<div class="str-modal-info-item"><div class="str-modal-info-label">المستوى</div><div class="str-modal-info-value">' + (LEVEL_LABELS[m.level]||m.level||'') + '</div></div>';
+    html += '<div class="str-modal-info-item"><div class="str-modal-info-label">المعدات</div><div class="str-modal-info-value">' + (EQUIPMENT_LABELS[m.equipment]||m.equipment||'بدون') + '</div></div>';
+    if(m.durationSeconds){
+      html += '<div class="str-modal-info-item"><div class="str-modal-info-label">المدة</div><div class="str-modal-info-value">' + m.durationSeconds + ' ثانية</div></div>';
+    }
+    if(m.recommendedReps){
+      html += '<div class="str-modal-info-item"><div class="str-modal-info-label">التكرارات</div><div class="str-modal-info-value">' + m.recommendedReps + '</div></div>';
+    }
+    html += '</div></div>';
+
+    // Muscles
+    const primaryAr = (m.primaryMuscles||[]).join('، ');
+    const secondaryAr = (m.secondaryMuscles||[]).join('، ');
+    if(primaryAr || secondaryAr){
+      html += '<div class="str-modal-section"><div class="str-modal-section-title">💪 العضلات المستهدفة</div>';
+      if(primaryAr) html += '<div style="font-size:.85rem;color:var(--text);margin-bottom:4px"><strong>أساسية:</strong> ' + primaryAr + '</div>';
+      if(secondaryAr) html += '<div style="font-size:.85rem;color:var(--muted)"><strong>ثانوية:</strong> ' + secondaryAr + '</div>';
+      html += '</div>';
+    }
+
+    // Instructions
+    if(m.instructions && m.instructions.length){
+      html += '<div class="str-modal-section"><div class="str-modal-section-title">📋 خطوات التنفيذ</div><ol>';
+      m.instructions.forEach(step => { html += '<li>' + step + '</li>'; });
+      html += '</ol></div>';
+    }
+
+    // Breathing
+    if(m.breathing){
+      html += '<div class="str-modal-section"><div class="str-modal-section-title">🌬️ التنفس</div>';
+      html += '<div style="font-size:.85rem;color:var(--text);line-height:1.7">' + m.breathing + '</div></div>';
+    }
+
+    // Common mistakes
+    if(m.commonMistakes && m.commonMistakes.length){
+      html += '<div class="str-modal-section"><div class="str-modal-section-title">⚠️ أخطاء شائعة</div><ul>';
+      m.commonMistakes.forEach(err => { html += '<li>' + err + '</li>'; });
+      html += '</ul></div>';
+    }
+
+    // Safety notes
+    if(m.safetyNotes){
+      html += '<div class="str-modal-section"><div class="str-modal-section-title">🛡️ تحذيرات الأمان</div>';
+      html += '<div class="str-modal-safety">' + m.safetyNotes + '</div></div>';
+    }
+
+    // Suitable for
+    if(m.suitableFor && m.suitableFor.length){
+      const purposeLabels = {'warmup':'إحماء','cooldown':'تهدئة','mobility':'مرونة وحركة'};
+      html += '<div class="str-modal-section"><div class="str-modal-section-title">🎯 مناسبة لـ</div>';
+      html += '<div class="str-modal-related">';
+      m.suitableFor.forEach(p => { html += '<span class="str-modal-related-chip">' + (purposeLabels[p]||p) + '</span>'; });
+      html += '</div></div>';
+    }
+
+    // Related exercises
+    if(m.relatedExerciseIds && m.relatedExerciseIds.length){
+      const exCatalog = window.ZATOONA_EXERCISE_CATALOG || [];
+      html += '<div class="str-modal-section"><div class="str-modal-section-title">🔗 تمارين مقاومة مرتبطة</div>';
+      html += '<div class="str-modal-related">';
+      m.relatedExerciseIds.forEach(eid => {
+        const ex = exCatalog.find(e => e.id === eid);
+        const label = ex ? (ex.nameAr || ex.name) : eid;
+        html += '<span class="str-modal-related-chip">' + label + '</span>';
+      });
+      html += '</div></div>';
+    }
+
+    body.innerHTML = html;
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  // Close modal
+  function closeStretchModal(){
+    const overlay = document.getElementById('stretchDetailModal');
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('strModalCloseBtn').addEventListener('click', closeStretchModal);
+  document.getElementById('stretchDetailModal').addEventListener('click', function(e){
+    if(e.target === this) closeStretchModal();
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){
+      const overlay = document.getElementById('stretchDetailModal');
+      if(overlay && overlay.classList.contains('open')) closeStretchModal();
+    }
+  });
+
+  // Wire filters
+  searchInput.addEventListener('input', applyFilters);
+  filterType.addEventListener('change', applyFilters);
+  filterRegion.addEventListener('change', applyFilters);
+  filterEquipment.addEventListener('change', applyFilters);
+  filterLevel.addEventListener('change', applyFilters);
+  filterPurpose.addEventListener('change', applyFilters);
+
+  // Reset
+  resetBtn.addEventListener('click', function(){
+    searchInput.value = '';
+    filterType.value = '';
+    filterRegion.value = '';
+    filterEquipment.value = '';
+    filterLevel.value = '';
+    filterPurpose.value = '';
+    applyFilters();
+  });
+
+  // Initial render
+  applyFilters();
+}
+/* ================= END PHASE 9C.1 ================= */
 </script>
 
 

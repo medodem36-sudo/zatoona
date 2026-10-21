@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGradW5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0fdf4"/>
+      <stop offset="100%" stop-color="#e2f7ec"/>
+    </linearGradient>
+    <linearGradient id="maleGradW5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1b5e20"/>
+      <stop offset="100%" stop-color="#0d3b13"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="16" fill="url(#bgGradW5)"/>
+  
+  <!-- Down/Up Motion Arrows -->
+  <path d="M 36 85 L 36 125" stroke="#e65100" stroke-width="2.5" stroke-linecap="round"/>
+  <polygon points="36,132 30,122 42,122" fill="#e65100"/>
+  <polygon points="36,78 30,88 42,88" fill="#e65100"/>
+
+  <!-- Male Athletic Figure in Parallel Squat -->
+  <!-- Head -->
+  <circle cx="106" cy="58" r="14" fill="url(#maleGradW5)"/>
+  <!-- Torso (flat back, angled forward 45°) -->
+  <path d="M 104 70 L 78 114" stroke="url(#maleGradW5)" stroke-width="14" stroke-linecap="round"/>
+  <!-- Arms extended forward for balance -->
+  <path d="M 100 80 L 148 80" stroke="url(#maleGradW5)" stroke-width="8" stroke-linecap="round"/>
+  <!-- Thigh (Parallel to ground) -->
+  <path d="M 78 114 L 126 116" stroke="url(#maleGradW5)" stroke-width="12" stroke-linecap="round"/>
+  <!-- Shin (45° angle) -->
+  <path d="M 126 116 L 114 166" stroke="url(#maleGradW5)" stroke-width="10" stroke-linecap="round"/>
+  <!-- Foot flat on ground -->
+  <path d="M 108 166 L 132 166" stroke="url(#maleGradW5)" stroke-width="8" stroke-linecap="round"/>
+  
+  <!-- Ground Line -->
+  <line x1="50" y1="168" x2="160" y2="168" stroke="#a5d6a7" stroke-width="3" stroke-linecap="round"/>
+</svg>

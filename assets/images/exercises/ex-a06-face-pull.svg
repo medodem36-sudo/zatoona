@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgExA6" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0fdf4"/>
+      <stop offset="100%" stop-color="#e2f7ec"/>
+    </linearGradient>
+    <linearGradient id="maleGradA6" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1b5e20"/>
+      <stop offset="100%" stop-color="#0a3310"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="200" rx="14" fill="url(#bgExA6)"/>
+  
+  <!-- Floor line -->
+  <line x1="25" y1="172" x2="275" y2="172" stroke="#a5d6a7" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Badge -->
+  <rect x="18" y="16" width="86" height="22" rx="6" fill="#e8f5e9" stroke="#81c784" stroke-width="1.2"/>
+  <text x="61" y="31" font-family="'IBM Plex Mono', system-ui, sans-serif" font-size="9" font-weight="bold" fill="#1b5e20" text-anchor="middle">FACE PULL</text>
+
+  <!-- High Cable Pulley Post on Left -->
+  <rect x="36" y="30" width="10" height="142" rx="2" fill="#455a64"/>
+  <circle cx="41" cy="74" r="8" fill="#263238"/>
+  
+  <!-- Cable taut to face height -->
+  <line x1="41" y1="74" x2="132" y2="76" stroke="#37474f" stroke-width="2.5"/>
+  <!-- Rope Attachment split -->
+  <path d="M 132 76 L 146 64 M 132 76 L 146 88" stroke="#78909c" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- High Elbow Pull Arrows -->
+  <path d="M 138 60 Q 152 54 165 60" fill="none" stroke="#e65100" stroke-width="2.5" stroke-linecap="round"/>
+  <polygon points="168,63 158,58 162,68" fill="#e65100"/>
+
+  <!-- Male Athletic Figure Standing Pulling to Eyes -->
+  <!-- Head -->
+  <circle cx="170" cy="54" r="14" fill="url(#maleGradA4)"/>
+  <!-- Torso leaned slightly back for balance -->
+  <path d="M 170 68 L 180 124" stroke="url(#maleGradA6)" stroke-width="14" stroke-linecap="round"/>
+  <!-- Rear Delts / Upper Back highlight -->
+  <circle cx="180" cy="74" r="6" fill="#e65100"/>
+  
+  <!-- High flaring elbows pulling rope to face -->
+  <path d="M 174 72 L 188 64 L 146 64" fill="none" stroke="url(#maleGradA6)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 174 74 L 186 86 L 146 88" fill="none" stroke="url(#maleGradA6)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Staggered athletic stance -->
+  <path d="M 180 124 L 166 172" stroke="url(#maleGradA6)" stroke-width="10" stroke-linecap="round"/>
+  <path d="M 180 124 L 204 172" stroke="url(#maleGradA6)" stroke-width="10" stroke-linecap="round"/>
+  <path d="M 166 172 L 154 172 M 204 172 L 216 172" stroke="url(#maleGradA6)" stroke-width="8" stroke-linecap="round"/>
+</svg>

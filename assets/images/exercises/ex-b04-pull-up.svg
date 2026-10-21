@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgExB4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0f7ff"/>
+      <stop offset="100%" stop-color="#e3f0fd"/>
+    </linearGradient>
+    <linearGradient id="maleGradB4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0d47a1"/>
+      <stop offset="100%" stop-color="#1565c0"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="200" rx="14" fill="url(#bgExB4)"/>
+  
+  <!-- Floor line -->
+  <line x1="25" y1="172" x2="275" y2="172" stroke="#90caf9" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Badge -->
+  <rect x="18" y="16" width="76" height="22" rx="6" fill="#e3f2fd" stroke="#90caf9" stroke-width="1.2"/>
+  <text x="56" y="31" font-family="'IBM Plex Mono', system-ui, sans-serif" font-size="9" font-weight="bold" fill="#0d47a1" text-anchor="middle">PULL-UPS</text>
+
+  <!-- Pull-up Rig & Bar at Top -->
+  <line x1="60" y1="36" x2="240" y2="36" stroke="#263238" stroke-width="5" stroke-linecap="round"/>
+  <rect x="75" y="24" width="8" height="20" fill="#455a64"/>
+  <rect x="215" y="24" width="8" height="20" fill="#455a64"/>
+
+  <!-- Upward pull motion arrows -->
+  <path d="M 120 75 L 120 52 M 180 75 L 180 52" stroke="#e65100" stroke-width="2.5" stroke-linecap="round"/>
+  <polygon points="120,46 115,56 125,56" fill="#e65100"/>
+  <polygon points="180,46 175,56 185,56" fill="#e65100"/>
+
+  <!-- Male Athletic Figure at Top of Pull-up (Chin over bar) -->
+  <!-- Head clearing bar -->
+  <circle cx="150" cy="30" r="14" fill="url(#maleGradB4)"/>
+  <!-- Torso -->
+  <path d="M 132 50 Q 150 44 168 50 L 160 98 L 140 98 Z" fill="url(#maleGradB4)"/>
+  
+  <!-- Latissimus dorsi & Bicep highlight -->
+  <path d="M 132 52 Q 150 58 168 52" stroke="#e65100" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- Arms flexed pulling body up -->
+  <path d="M 134 50 L 118 42 L 122 36" fill="none" stroke="url(#maleGradB4)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 166 50 L 182 42 L 178 36" fill="none" stroke="url(#maleGradB4)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Hanging Legs slightly crossed at ankles -->
+  <path d="M 145 98 L 144 150 L 150 165" fill="none" stroke="url(#maleGradB4)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 155 98 L 156 148 L 150 165" fill="none" stroke="url(#maleGradB4)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

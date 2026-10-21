@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGradC5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0f7ff"/>
+      <stop offset="100%" stop-color="#e3f0fd"/>
+    </linearGradient>
+    <linearGradient id="maleGradC5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0d47a1"/>
+      <stop offset="100%" stop-color="#1565c0"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="16" fill="url(#bgGradC5)"/>
+  
+  <!-- Balance Support Wall / Post on left -->
+  <line x1="36" y1="35" x2="36" y2="175" stroke="#90caf9" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- Stretch tension highlight on front of thigh -->
+  <path d="M 112 115 Q 120 135 116 148" fill="none" stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Male Athletic Figure Standing Upright -->
+  <!-- Hand on wall for support -->
+  <line x1="36" y1="84" x2="74" y2="84" stroke="url(#maleGradC5)" stroke-width="7" stroke-linecap="round"/>
+  <!-- Head -->
+  <circle cx="88" cy="46" r="14" fill="url(#maleGradC5)"/>
+  <!-- Torso tall and upright -->
+  <path d="M 88 58 L 88 114" stroke="url(#maleGradC5)" stroke-width="13" stroke-linecap="round"/>
+  <!-- Standing Support Leg straight -->
+  <path d="M 86 114 L 86 168" stroke="url(#maleGradC5)" stroke-width="10" stroke-linecap="round"/>
+  <path d="M 86 168 L 74 172" stroke="url(#maleGradC5)" stroke-width="7" stroke-linecap="round"/>
+  
+  <!-- Bent Quad Leg: Knee down, heel to glute -->
+  <path d="M 90 114 L 110 148 L 114 104" fill="none" stroke="#1e88e5" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Right Arm reaching behind holding ankle -->
+  <path d="M 90 74 L 114 88 L 114 104" fill="none" stroke="url(#maleGradC5)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Floor line -->
+  <line x1="45" y1="172" x2="145" y2="172" stroke="#90caf9" stroke-width="2.5" stroke-linecap="round"/>
+</svg>

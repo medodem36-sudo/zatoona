@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%" role="img" aria-label="تمرين القطة والبقرة لتحريك وتليين العمود الفقري كاملاً">
+  <defs>
+    <linearGradient id="bgGrad-str-cat-cow-mobility" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="maleMuscles-str-cat-cow-mobility" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569"/>
+      <stop offset="100%" stop-color="#334155"/>
+    </linearGradient>
+    <filter id="glow-str-cat-cow-mobility" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="400" height="300" rx="16" fill="url(#bgGrad-str-cat-cow-mobility)"/>
+
+  <!-- Gym floor grid lines for spatial reference -->
+  <line x1="30" y1="240" x2="370" y2="240" stroke="#334155" stroke-width="2" stroke-dasharray="6,4"/>
+  <circle cx="200" cy="240" r="3" fill="#64748b"/>
+
+  <!-- Target Muscle Highlight Indicator Banner -->
+  <rect x="24" y="20" width="120" height="24" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <circle cx="36" cy="32" r="4" fill="#f59e0b"/>
+  <text x="46" y="36" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="11" font-weight="600">JOINT MOBILITY</text>
+
+  <!-- Male Athletic Figure Group -->
+  <g id="maleFigure-str-cat-cow-mobility" transform="translate(0, 0)">
+
+    <!-- Male Athletic Cat-Cow Spinal Articulation Drill -->
+    <rect x="50" y="235" width="300" height="8" rx="2" fill="#1e293b"/>
+    <!-- Vertical Arms bracings under shoulders -->
+    <path d="M130 160 L130 235" fill="none" stroke="#64748b" stroke-width="10" stroke-linecap="round"/>
+    <!-- Vertical Thighs under hips -->
+    <path d="M260 170 L260 235" fill="none" stroke="#64748b" stroke-width="11" stroke-linecap="round"/>
+    <!-- Articulated Flexed / Extended Spine Curve -->
+    <path d="M130 160 Q195 125 260 170" fill="none" stroke="url(#maleMuscles-str-cat-cow-mobility)" stroke-width="20" stroke-linecap="round"/>
+    <!-- Target Spine Vertebral Column Highlight -->
+    <path d="M140 158 Q195 128 250 167" fill="none" stroke="#f59e0b" stroke-width="7" opacity="0.9" filter="url(#glow-str-cat-cow-mobility)"/>
+    <!-- Head moving with spine -->
+    <ellipse cx="105" cy="170" rx="14" ry="14" fill="#475569" stroke="#64748b" stroke-width="2"/>
+    <!-- Upward / Downward Wave Motion Vectors -->
+    <path d="M195 110 L195 125" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
+    <polygon points="195,105 190,113 200,113" fill="#38bdf8"/>
+
+  </g>
+
+  <!-- Clean Descriptive Watermark Badge -->
+  <text x="375" y="278" text-anchor="end" fill="#64748b" font-family="system-ui, sans-serif" font-size="10" font-weight="500">ZATOONA MOBILITY</text>
+  <text x="24" y="278" fill="#475569" font-family="system-ui, sans-serif" font-size="10" font-weight="500">STRICT MALES-ONLY VECTOR</text>
+</svg>

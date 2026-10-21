@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%" role="img" aria-label="وضعية الحمامة لإطالة عضلات الإلية والورك الخارجية">
+  <defs>
+    <linearGradient id="bgGrad-str-pigeon-pose" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="maleMuscles-str-pigeon-pose" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569"/>
+      <stop offset="100%" stop-color="#334155"/>
+    </linearGradient>
+    <filter id="glow-str-pigeon-pose" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="400" height="300" rx="16" fill="url(#bgGrad-str-pigeon-pose)"/>
+
+  <!-- Gym floor grid lines for spatial reference -->
+  <line x1="30" y1="240" x2="370" y2="240" stroke="#334155" stroke-width="2" stroke-dasharray="6,4"/>
+  <circle cx="200" cy="240" r="3" fill="#64748b"/>
+
+  <!-- Target Muscle Highlight Indicator Banner -->
+  <rect x="24" y="20" width="120" height="24" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <circle cx="36" cy="32" r="4" fill="#f59e0b"/>
+  <text x="46" y="36" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="11" font-weight="600">STATIC STRETCH</text>
+
+  <!-- Male Athletic Figure Group -->
+  <g id="maleFigure-str-pigeon-pose" transform="translate(0, 0)">
+
+    <!-- Male Athletic Pigeon Pose / Figure 4 Glute Stretch -->
+    <rect x="50" y="235" width="300" height="8" rx="2" fill="#1e293b"/>
+    <!-- Folded Front Leg -->
+    <path d="M130 235 Q170 210 200 215" fill="none" stroke="#64748b" stroke-width="13" stroke-linecap="round"/>
+    <!-- Target Gluteus Max/Med Glow Area -->
+    <circle cx="175" cy="215" r="16" fill="#f59e0b" opacity="0.9" filter="url(#glow-str-pigeon-pose)"/>
+    <!-- Rear Leg Extended back on floor -->
+    <path d="M190 215 L285 235" fill="none" stroke="#64748b" stroke-width="11" stroke-linecap="round"/>
+    <!-- Torso leaning forward over folded leg -->
+    <path d="M185 215 L125 170" fill="none" stroke="url(#maleMuscles-str-pigeon-pose)" stroke-width="19" stroke-linecap="round"/>
+    <!-- Head -->
+    <ellipse cx="115" cy="155" rx="14" ry="14" fill="#475569" stroke="#64748b" stroke-width="1.5"/>
+    <!-- Supporting Forearms on mat -->
+    <path d="M135 180 L100 225 L85 235" fill="none" stroke="#64748b" stroke-width="7" stroke-linecap="round"/>
+
+  </g>
+
+  <!-- Clean Descriptive Watermark Badge -->
+  <text x="375" y="278" text-anchor="end" fill="#64748b" font-family="system-ui, sans-serif" font-size="10" font-weight="500">ZATOONA MOBILITY</text>
+  <text x="24" y="278" fill="#475569" font-family="system-ui, sans-serif" font-size="10" font-weight="500">STRICT MALES-ONLY VECTOR</text>
+</svg>

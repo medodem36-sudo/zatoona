@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGradW6" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0fdf4"/>
+      <stop offset="100%" stop-color="#e2f7ec"/>
+    </linearGradient>
+    <linearGradient id="maleGradW6" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1b5e20"/>
+      <stop offset="100%" stop-color="#0d3b13"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="16" fill="url(#bgGradW6)"/>
+  
+  <!-- Warmup Light Set Badge: 50% -->
+  <rect x="22" y="24" width="58" height="24" rx="6" fill="#e8f5e9" stroke="#81c784" stroke-width="1.5"/>
+  <text x="51" y="40" font-family="'IBM Plex Mono', monospace, sans-serif" font-size="11" font-weight="bold" fill="#1b5e20" text-anchor="middle">50% W.T</text>
+
+  <!-- Male Athletic Figure Lifting Barbell -->
+  <!-- Head -->
+  <circle cx="100" cy="48" r="14" fill="url(#maleGradW6)"/>
+  <!-- Torso -->
+  <path d="M 80 74 Q 100 68 120 74 L 112 120 L 88 120 Z" fill="url(#maleGradW6)"/>
+  <!-- Arms holding barbell at chest level -->
+  <path d="M 82 74 L 64 96 L 76 96" stroke="url(#maleGradW6)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 118 74 L 136 96 L 124 96" stroke="url(#maleGradW6)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Barbell with small warmup plates -->
+  <line x1="30" y1="96" x2="170" y2="96" stroke="#455a64" stroke-width="5" stroke-linecap="round"/>
+  <!-- Light small plates on sides -->
+  <rect x="38" y="82" width="8" height="28" rx="2" fill="#78909c"/>
+  <rect x="154" y="82" width="8" height="28" rx="2" fill="#78909c"/>
+
+  <!-- Legs athletic stance -->
+  <path d="M 92 120 L 82 168" stroke="url(#maleGradW6)" stroke-width="11" stroke-linecap="round"/>
+  <path d="M 108 120 L 118 168" stroke="url(#maleGradW6)" stroke-width="11" stroke-linecap="round"/>
+  <path d="M 82 168 L 70 172 M 118 168 L 130 172" stroke="url(#maleGradW6)" stroke-width="8" stroke-linecap="round"/>
+  
+  <line x1="45" y1="172" x2="155" y2="172" stroke="#a5d6a7" stroke-width="2.5" stroke-linecap="round"/>
+</svg>

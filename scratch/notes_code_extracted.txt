@@ -1,0 +1,746 @@
+Total lines: 21630
+=== Found #notesView at line 3287 ===3287:   <div id="notesView" class="hidden">
+3288:     <div class="section-title"><span class="n">📝</span> دفتر الملاحظات الموحد</div>
+3289:     <div class="section-hint">سجل شامل لملاحظاتك اليومية وملاحظات التمارين والاستشفاء والأقسام ومرفقاتها، مع إمكانية الفلترة والبحث السريع</div>
+3290: 
+3291:     <!-- Summary Stats Bar -->
+3292:     <div class="stat-grid" id="notesStatsGrid" style="margin-bottom:12px;">
+3293:       <div class="stat-mini"><div class="smv mono" id="notesStatTotal">0</div><div class="sml">إجمالي الملاحظات</div></div>
+3294:       <div class="stat-mini"><div class="smv mono" id="notesStatDated">0</div><div class="sml">ملاحظات مؤرخة</div></div>
+3295:       <div class="stat-mini"><div class="smv mono" id="notesStatSection">0</div><div class="sml">ملاحظات أقسام</div></div>
+3296:       <div class="stat-mini"><div class="smv mono" id="notesStatWithAtt">0</div><div class="sml">بها مرفقات</div></div>
+3297:     </div>
+3298: 
+3299:     <!-- Search input row -->
+3300:     <div style="display:flex; gap:8px; align-items:center; margin-bottom:10px;">
+3301:       <input type="text" id="notesSearchInput" class="weight-input" style="flex:1; font-size:.88rem; padding:10px 14px;" placeholder="ابحث في نص الملاحظات أو اسم التمرين أو القسم...">
+3302:       <button class="tbtn-lg hidden" id="notesSearchClearBtn" type="button" title="مسح البحث" aria-label="مسح البحث">✕</button>
+3303:     </div>
+3304: 
+3305:     <!-- Type filter chips row -->
+3306:     <div style="margin-bottom:10px;">
+3307:       <div style="font-size:.74rem; font-weight:700; color:var(--muted); margin-bottom:4px;">نوع الملاحظة:</div>
+3308:       <div class="day-toggle-row" id="notesTypeFilterRow" style="flex-wrap:wrap; gap:6px;">
+3309:         <button type="button" class="day-chip on" data-type="all">📝 الكل</button>
+3310:         <button type="button" class="day-chip" data-type="daily">📅 يومية</button>
+3311:         <button type="button" class="day-chip" data-type="recovery">🩺 استشفاء</button>
+3312:         <button type="button" class="day-chip" data-type="exercise">🏋️ تمارين</button>
+3313:         <button type="button" class="day-chip" data-type="section">📑 أقسام عامة</button>
+3314:       </div>
+3315:     </div>
+3316: 
+3317:     <!-- Time & Attachment filter chips row -->
+3318:     <div style="margin-bottom:14px; display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between;">
+3319:       <div>
+3320:         <div style="font-size:.74rem; font-weight:700; color:var(--muted); margin-bottom:4px;">الفترة الزمنية (للملاحظات المؤرخة):</div>
+3321:         <div class="day-toggle-row" id="notesTimeFilterRow" style="gap:6px; flex-wrap:wrap;">
+3322:           <button type="button" class="day-chip on" data-time="all">الكل</button>
+3323:           <button type="button" class="day-chip" data-time="7d">آخر 7 أيام</button>
+3324:           <button type="button" class="day-chip" data-time="30d">آخر 30 يوم</button>
+3325:           <button type="button" class="day-chip" data-time="month">هذا الشهر</button>
+3326:         </div>
+3327:       </div>
+3328:       <div>
+3329:         <div style="font-size:.74rem; font-weight:700; color:var(--muted); margin-bottom:4px;">فلتر المرفقات:</div>
+3330:         <button type="button" class="day-chip" id="notesHasAttBtn" data-has-att="false">📷 بها مرفقات فقط</button>
+3331:       </div>
+3332:     </div>
+3333: 
+3334:     <!-- Filter Feedback Meta -->
+3335:     <div id="notesFilterMeta" style="color:var(--muted); font-size:.76rem; margin:4px 0 10px;"></div>
+3336: 
+3337:     <!-- Empty State -->
+3338:     <div id="notesEmptyState" class="empty-note hidden" style="text-align:center; padding:32px 16px;">
+3339:       <div style="font-size:2rem; margin-bottom:6px;">📝</div>
+3340:       <div style="font-weight:700; color:var(--text); margin-bottom:4px;" id="notesEmptyTitle">لا توجد ملاحظات مطابقة</div>
+3341:       <div style="font-size:.8rem; color:var(--muted);" id="notesEmptyDesc">جرّب تغيير خيارات الفلترة أو مسح كلمة البحث</div>
+3342:     </div>
+3343: 
+3344:     <!-- Timeline of Dated Notes -->
+3345:     <div id="notesTimelineSection">
+3346:       <div class="section-title" style="margin-top:8px;"><span class="n">١</span> سجل الملاحظات الزمني (<span id="notesDatedCount">0</span>)</div>
+3347:       <div id="notesTimelineList" style="display:flex; flex-direction:column; gap:10px;"></div>
+3348:     </div>
+3349: 
+3350:     <!-- Undated Section Notes Group -->
+3351:     <div id="notesUndatedSection" style="margin-top:20px;">
+3352:       <div class="section-title"><span class="n">٢</span> ملاحظات الأقسام العامة — غير مرتبطة بتاريخ (<span id="notesSectionCount">0</span>)</div>
+3353:       <div class="section-hint">مسودات مستمرة وملاحظات عامة خاصة بأقسام التطبيق</div>
+3354:       <div id="notesSectionList" style="display:flex; flex-direction:column; gap:10px;"></div>
+3355:     </div>
+3356:   </div>
+3357: 
+3358:   <footer>البيانات محفوظة في متصفحك على الجهاز ده بس — افتح نفس الملف من نفس المتصفح عشان ترجعلك.</footer>
+3359: </div>
+3360: </div><!-- /appMain -->
+3361: </div><!-- /appLayout -->
+3362: 
+3363: <script src="./assets/data/exercise-catalog.js"></script>
+3364: <script>
+3365: /* ================= PHASE 4: UNIFIED SVG ICONS ================= */
+3366: const ZATOONA_ICONS = {
+3367:   home: '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+3368:   meal: '<path d="M18 2v20M6 2v6a3 3 0 0 0 6 0V2M9 11v11"/>',
+3369:   gym: '<path d="M6 5v14M18 5v14M3 9v6M21 9v6M6 12h12M3 12h3M18 12h3"/>',
+3370:   sleep: '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>',
+3371:   prayer: '<path d="M12 2v3M4 10a8 8 0 0 1 16 0v11H4V10zM9 21v-5a3 3 0 0 1 6 0v5"/>',
+3372:   schedule: '<rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
+3373:   recovery: '<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>',
+3374:   overview: '<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
+3375:   search: '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
+3376:   budget: '<rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>',
+3377:   notes: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>',
+3378:   water: '<path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>',
+3379:   flame: '<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>',
+3380:   protein: '<ellipse cx="12" cy="12" rx="9" ry="6"/><circle cx="9" cy="12" r="2"/>',
+3381:   plus: '<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
+3382:   check: '<polyline points="20 6 9 17 4 12"/>',
+3383:   sparkle: '<path d="M12 3l1.9 5.8a2 2 0 0 0 1.3 1.3L21 12l-5.8 1.9a2 2 0 0 0-1.3 1.3L12 21l-1.9-5.8a2 2 0 0 0-1.3-1.3L3 12l5.8-1.9a2 2 0 0 0 1.3-1.3z"/>',
+3384:   sun: '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>',
+3385:   moon: '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>',
+3386:   arrowLeft: '<line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>',
+3387:   chevronRight: '<polyline points="9 18 15 12 9 6"/>',
+3388:   chevronLeft: '<polyline points="15 18 9 12 15 6"/>'
+3389: };
+3390: 
+3391: function getSvgIcon(name, size=20, extraClass=''){
+3392:   const path = ZATOONA_ICONS[name] || ZATOONA_ICONS['sparkle'];
+3393:   return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" class="z-svg-icon ${extraClass}" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${path}</svg>`;
+3394: }
+3395: 
+3396: /* ================= ICONS (original simple line-art, no external images) ================= */
+3397: const ICONS = {
+3398:   squat: `<svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle cx="30" cy="10" r="6"/><path d="M30 16v14"/><path d="M22 24h16v6h-16z"/><path d="M30 30l-9 10-3 12M30 30l9 10 3 12"/></svg>`,
+3399:   bench: `<svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle cx="12" cy="42" r="6"/><path d="M18 42h24"/><path d="M42 42l6-8-6-10"/><path d="M27 42V14M27 14h16"/></svg>`,
+3400:   pulldown: `<svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 10h36"/><circle cx="30" cy="20" r="6"/><path d="M30 26v18"/><path d="M18 12l12 8 12-8"/><path d="M30 44l-8 10M30 44l8 10"/></svg>`,
+3401:   press: `<svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle cx="30" cy="10" r="6"/><path d="M30 16v20"/><path d="M18 18l-2-10M42 18l2-10"/><path d="M30 36l-9 12M30 36l9 12"/></svg>`,
+3402:   plank: `<svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle cx="10" cy="26" r="6"/><path d="M16 28l32 8"/><path d="M18 30v14"/><path d="M48 36l6 6"/></svg>`,
+3403:   rdl: `<svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle cx="16" cy="14" r="6"/><path d="M20 18l18 12"/><path d="M22 20l4 30"/><path d="M38 30l2 22"/><path d="M20 42h14"/></svg>`,
+3404:   row: `<svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle cx="14" cy="12" r="6"/><path d="M18 16l20 14"/><path d="M20 18l4 30"/><path d="M38 32l2 20"/><path d="M20 32l12-2"/></svg>`,
+3405:   pushup: `<svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle cx="10" cy="30" r="6"/><path d="M16 32l32 6"/><path d="M20 34v14"/><path d="M46 36v14"/></svg>`,
+3406:   pullup: `<svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M10 10h40"/><circle cx="30" cy="20" r="6"/><path d="M30 26v22"/><path d="M16 12l14 8 14-8"/></svg>`,
+3407:   crunch: `<svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle cx="12" cy="24" r="6"/><path d="M17 27l16 4"/><path d="M33 31l8-12 8 4"/><path d="M33 31l4 12"/></svg>`,
+3408:   facepull: `<svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle cx="30" cy="10" r="6"/><path d="M30 16v14"/><path d="M46 14l-16 8-16-8"/><path d="M30 30l-8 12M30 30l8 12"/></svg>`,
+3409:   lunge: `<svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle cx="24" cy="10" r="6"/><path d="M24 16v14"/><path d="M18 20l-4-8M30 20l4-8"/><path d="M24 30l-14 8M24 30l10 4v14"/></svg>`,
+3410: };
+3411: 
+3412: /* ================= FOOD DATABASE (per base-unit: kcal/protein/carb/fat/fiber(g)/price(EGP)) =================
+3413:    Reverse-engineered + validated against the previous shopping totals (all matched exactly before the
+3414:    chicken price update — only chicken's price/kg changed, per the 160ج/كجم instruction). This is now the
+3415:    single source of truth: meals reference ingredients+qty, everything else (macros, cost, shopping list)
+3416:    is computed from here so a price/recipe edit flows through the whole app automatically.
+3417: 
+3418:    SESSION 1: Food DB is now user-editable (add/edit/delete/duplicate). To keep every existing reference
+3419:    working unchanged (FOOD_DB[key] is read directly in ~15 functions across the app), the hardcoded table
+3420:    below is kept as FOOD_DB_DEFAULTS and FOOD_DB itself becomes a rebuilt object: defaults, with any saved
+3421:    per-key overrides applied, plus user-added custom foods, minus any soft-deleted default keys. Nothing
+3422:    below this block needs to know editing exists at all. */
+3423: const FOOD_DB_DEFAULTS = {
+3424:   chicken:{name:'صدور دجاج فيليه نيء', unit:'g', cat:'protein', kcal:1.20, protein:.225, carb:0, fat:.026, fiber:0, price:.16, micros:{sodium:.45, potassium:3.34, calcium:.05, iron:.0037, magnesium:.28, zinc:.0068, vitaminA:.09, vitaminC:0, vitaminD:0, vitaminB12:.0021, folate:.09}},
+3425:   liver:{name:'كبدة بقري نيئة', unit:'g', cat:'protein', kcal:1.35, protein:.20, carb:.039, fat:.039, fiber:0, price:.18, micros:{sodium:.69, potassium:3.13, calcium:.05, iron:.049, magnesium:.18, zinc:.04, vitaminA:49.68, vitaminC:.013, vitaminD:.012, vitaminB12:.593, folate:2.90}},
+3426:   cheese:{name:'جبنة قريش', unit:'g', cat:'protein', kcal:.98, protein:.11, carb:.055, fat:.035, fiber:0, price:.10},
+
+=== Found notesHubState at line 19588 ===19588: let notesHubState = {
+19589:   filterType: 'all',    // 'all' | 'daily' | 'recovery' | 'exercise' | 'section'
+19590:   filterTime: 'all',    // 'all' | '7d' | '30d' | 'month'
+19591:   filterHasAtt: false,  // boolean
+19592:   searchQuery: ''       // string
+19593: };
+19594: 
+19595: let notesHubSearchTimer = null;
+19596: 
+19597: function parseIsoToDate(iso){
+19598:   if(!iso || typeof iso !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) return null;
+19599:   const p = iso.split('-').map(Number);
+19600:   const d = new Date(p[0], p[1]-1, p[2]);
+19601:   return isNaN(d.getTime()) ? null : d;
+19602: }
+19603: 
+19604: function collectAllUnifiedNotes(){
+19605:   const list = [];
+19606:   const seenKeys = new Set();
+19607: 
+19608:   function pushNote(item){
+19609:     if(!item || !item.noteKey) return;
+19610:     if(seenKeys.has(item.noteKey)) return;
+19611:     const hasText = !!(item.text && String(item.text).trim());
+19612:     const hasAtts = Array.isArray(item.attachments) && item.attachments.length > 0;
+19613:     if(!hasText && !hasAtts) return;
+19614: 
+19615:     seenKeys.add(item.noteKey);
+19616:     list.push(item);
+19617:   }
+19618: 
+19619:   // 1. Scan localStorage for note buckets
+19620:   const buckets = {};
+19621:   for(let i = 0; i < localStorage.length; i++){
+19622:     try {
+19623:       const fullKey = localStorage.key(i);
+19624:       if(!fullKey || fullKey.indexOf(STORAGE_PREFIX) !== 0) continue;
+19625:       const key = fullKey.slice(STORAGE_PREFIX.length);
+19626:       const colon = key.indexOf(':');
+19627:       if(colon < 0) continue;
+19628:       const prefix = key.slice(0, colon);
+19629:       const sub = key.slice(colon + 1);
+19630:       (buckets[prefix] = buckets[prefix] || []).push(sub);
+19631:     } catch(e){}
+19632:   }
+19633: 
+19634:   // 2. Daily Notes: daynote:{iso}
+19635:   (buckets['daynote'] || []).forEach(iso => {
+19636:     try {
+19637:       if(!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return;
+19638:       const text = (typeof loadDailyNote === 'function') ? (loadDailyNote(iso) || '') : (storageGet('daynote:'+iso) || '');
+19639:       const atts = (typeof getNoteAttachments === 'function') ? getNoteAttachments('daynote:' + iso) : [];
+19640:       pushNote({
+19641:         noteKey: 'daynote:' + iso,
+19642:         type: 'daily',
+19643:         title: 'ملاحظة يوم ' + iso,
+19644:         text: text,
+19645:         iso: iso,
+19646:         sourceMode: 'overview',
+19647:         sourceId: 'dailyNotesInput',
+19648:         attachments: atts
+19649:       });
+19650:     } catch(e){
+19651:       console.warn('[notes-hub] error reading daily note:', iso, e);
+19652:     }
+19653:   });
+19654: 
+19655:   // 3. Recovery Notes: recovery:{iso}
+19656:   (buckets['recovery'] || []).forEach(iso => {
+19657:     try {
+19658:       if(!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return;
+19659:       const rec = (typeof loadRecovery === 'function') ? (loadRecovery(iso) || {}) : storageGetJSON('recovery:'+iso, {});
+19660:       const text = (rec && typeof rec.notes === 'string') ? rec.notes : '';
+19661:       const atts = (typeof getNoteAttachments === 'function') ? getNoteAttachments('recovery:' + iso) : [];
+19662:       pushNote({
+19663:         noteKey: 'recovery:' + iso,
+19664:         type: 'recovery',
+19665:         title: 'ملاحظة استشفاء — ' + iso,
+19666:         text: text,
+19667:         iso: iso,
+19668:         sourceMode: 'recovery',
+19669:         sourceId: 'recoveryNotes',
+19670:         attachments: atts
+19671:       });
+19672:     } catch(e){
+19673:       console.warn('[notes-hub] error reading recovery note:', iso, e);
+19674:     }
+19675:   });
+19676: 
+19677:   // 4. Exercise Notes: ex:{iso}
+19678:   (buckets['ex'] || []).forEach(iso => {
+19679:     try {
+19680:       if(!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return;
+19681:       const exMap = (typeof loadEx === 'function') ? (loadEx(iso) || {}) : storageGetJSON('ex:'+iso, {});
+19682:       if(typeof exMap !== 'object' || !exMap) return;
+19683:       Object.keys(exMap).forEach(exKey => {
+19684:         try {
+19685:           const st = exMap[exKey];
+19686:           if(!st || typeof st !== 'object') return;
+19687:           const text = (typeof st.note === 'string') ? st.note : '';
+19688:           const nKey = 'exnote:' + iso + ':' + exKey;
+19689:           const atts = (typeof getNoteAttachments === 'function') ? getNoteAttachments(nKey) : [];
+19690:           if(!text.trim() && atts.length === 0) return;
+19691:           const exDef = (typeof getExerciseDef === 'function') ? getExerciseDef(exKey) : null;
+19692:           const exName = (exDef && exDef.name) ? exDef.name : exKey;
+19693:           pushNote({
+19694:             noteKey: nKey,
+19695:             type: 'exercise',
+19696:             title: 'ملاحظة تمرين: ' + exName,
+19697:             text: text,
+19698:             iso: iso,
+19699:             sourceMode: 'gym',
+19700:             sourceId: exKey,
+19701:             exKey: exKey,
+19702:             attachments: atts
+19703:           });
+19704:         } catch(exErr){
+19705:           console.warn('[notes-hub] error parsing ex note item:', exKey, exErr);
+19706:         }
+19707:       });
+
+=== Found function collectAllUnifiedNotes at line 19604 ===19604: function collectAllUnifiedNotes(){
+19605:   const list = [];
+19606:   const seenKeys = new Set();
+19607: 
+19608:   function pushNote(item){
+19609:     if(!item || !item.noteKey) return;
+19610:     if(seenKeys.has(item.noteKey)) return;
+19611:     const hasText = !!(item.text && String(item.text).trim());
+19612:     const hasAtts = Array.isArray(item.attachments) && item.attachments.length > 0;
+19613:     if(!hasText && !hasAtts) return;
+19614: 
+19615:     seenKeys.add(item.noteKey);
+19616:     list.push(item);
+19617:   }
+19618: 
+19619:   // 1. Scan localStorage for note buckets
+19620:   const buckets = {};
+19621:   for(let i = 0; i < localStorage.length; i++){
+19622:     try {
+19623:       const fullKey = localStorage.key(i);
+19624:       if(!fullKey || fullKey.indexOf(STORAGE_PREFIX) !== 0) continue;
+19625:       const key = fullKey.slice(STORAGE_PREFIX.length);
+19626:       const colon = key.indexOf(':');
+19627:       if(colon < 0) continue;
+19628:       const prefix = key.slice(0, colon);
+19629:       const sub = key.slice(colon + 1);
+19630:       (buckets[prefix] = buckets[prefix] || []).push(sub);
+19631:     } catch(e){}
+19632:   }
+19633: 
+19634:   // 2. Daily Notes: daynote:{iso}
+19635:   (buckets['daynote'] || []).forEach(iso => {
+19636:     try {
+19637:       if(!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return;
+19638:       const text = (typeof loadDailyNote === 'function') ? (loadDailyNote(iso) || '') : (storageGet('daynote:'+iso) || '');
+19639:       const atts = (typeof getNoteAttachments === 'function') ? getNoteAttachments('daynote:' + iso) : [];
+19640:       pushNote({
+19641:         noteKey: 'daynote:' + iso,
+19642:         type: 'daily',
+19643:         title: 'ملاحظة يوم ' + iso,
+19644:         text: text,
+19645:         iso: iso,
+19646:         sourceMode: 'overview',
+19647:         sourceId: 'dailyNotesInput',
+19648:         attachments: atts
+19649:       });
+19650:     } catch(e){
+19651:       console.warn('[notes-hub] error reading daily note:', iso, e);
+19652:     }
+19653:   });
+19654: 
+19655:   // 3. Recovery Notes: recovery:{iso}
+19656:   (buckets['recovery'] || []).forEach(iso => {
+19657:     try {
+19658:       if(!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return;
+19659:       const rec = (typeof loadRecovery === 'function') ? (loadRecovery(iso) || {}) : storageGetJSON('recovery:'+iso, {});
+19660:       const text = (rec && typeof rec.notes === 'string') ? rec.notes : '';
+19661:       const atts = (typeof getNoteAttachments === 'function') ? getNoteAttachments('recovery:' + iso) : [];
+19662:       pushNote({
+19663:         noteKey: 'recovery:' + iso,
+19664:         type: 'recovery',
+19665:         title: 'ملاحظة استشفاء — ' + iso,
+19666:         text: text,
+19667:         iso: iso,
+19668:         sourceMode: 'recovery',
+19669:         sourceId: 'recoveryNotes',
+19670:         attachments: atts
+19671:       });
+19672:     } catch(e){
+19673:       console.warn('[notes-hub] error reading recovery note:', iso, e);
+19674:     }
+19675:   });
+19676: 
+19677:   // 4. Exercise Notes: ex:{iso}
+19678:   (buckets['ex'] || []).forEach(iso => {
+19679:     try {
+19680:       if(!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return;
+19681:       const exMap = (typeof loadEx === 'function') ? (loadEx(iso) || {}) : storageGetJSON('ex:'+iso, {});
+19682:       if(typeof exMap !== 'object' || !exMap) return;
+19683:       Object.keys(exMap).forEach(exKey => {
+19684:         try {
+19685:           const st = exMap[exKey];
+19686:           if(!st || typeof st !== 'object') return;
+19687:           const text = (typeof st.note === 'string') ? st.note : '';
+19688:           const nKey = 'exnote:' + iso + ':' + exKey;
+19689:           const atts = (typeof getNoteAttachments === 'function') ? getNoteAttachments(nKey) : [];
+19690:           if(!text.trim() && atts.length === 0) return;
+19691:           const exDef = (typeof getExerciseDef === 'function') ? getExerciseDef(exKey) : null;
+19692:           const exName = (exDef && exDef.name) ? exDef.name : exKey;
+19693:           pushNote({
+19694:             noteKey: nKey,
+19695:             type: 'exercise',
+19696:             title: 'ملاحظة تمرين: ' + exName,
+19697:             text: text,
+19698:             iso: iso,
+19699:             sourceMode: 'gym',
+19700:             sourceId: exKey,
+19701:             exKey: exKey,
+19702:             attachments: atts
+19703:           });
+19704:         } catch(exErr){
+19705:           console.warn('[notes-hub] error parsing ex note item:', exKey, exErr);
+19706:         }
+19707:       });
+19708:     } catch(e){
+19709:       console.warn('[notes-hub] error reading ex records:', iso, e);
+19710:     }
+19711:   });
+19712: 
+19713:   // 5. Section Notes: secnote:{secId}
+19714:   if(typeof SECTION_NOTES_META === 'object' && SECTION_NOTES_META){
+19715:     Object.keys(SECTION_NOTES_META).forEach(secId => {
+19716:       try {
+19717:         const meta = SECTION_NOTES_META[secId];
+19718:         const text = (typeof loadSectionNote === 'function') ? (loadSectionNote(secId) || '') : (storageGet('secnote:'+secId) || '');
+19719:         const atts = (typeof getNoteAttachments === 'function') ? getNoteAttachments('secnote:' + secId) : [];
+19720:         pushNote({
+19721:           noteKey: 'secnote:' + secId,
+19722:           type: 'section',
+19723:           title: 'ملاحظة قسم: ' + (meta ? meta.name : secId),
+
+=== Found function renderNotesHub at line 19895 ===19895: function renderNotesHub(){
+19896:   const container = document.getElementById('notesView');
+19897:   if(!container) return;
+19898: 
+19899:   const allNotes = collectAllUnifiedNotes();
+19900: 
+19901:   // 1. Update stats
+19902:   const totalCount = allNotes.length;
+19903:   const datedCount = allNotes.filter(n => n.iso !== null).length;
+19904:   const sectionCount = allNotes.filter(n => n.type === 'section').length;
+19905:   const withAttCount = allNotes.filter(n => Array.isArray(n.attachments) && n.attachments.length > 0).length;
+19906: 
+19907:   const statTotEl = document.getElementById('notesStatTotal');
+19908:   const statDatEl = document.getElementById('notesStatDated');
+19909:   const statSecEl = document.getElementById('notesStatSection');
+19910:   const statAttEl = document.getElementById('notesStatWithAtt');
+19911: 
+19912:   if(statTotEl) statTotEl.textContent = String(totalCount);
+19913:   if(statDatEl) statDatEl.textContent = String(datedCount);
+19914:   if(statSecEl) statSecEl.textContent = String(sectionCount);
+19915:   if(statAttEl) statAttEl.textContent = String(withAttCount);
+19916: 
+19917:   // 2. Filter list
+19918:   const now = new Date();
+19919:   const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+19920: 
+19921:   let filtered = allNotes.slice();
+19922: 
+19923:   // Type filter
+19924:   if(notesHubState.filterType !== 'all'){
+19925:     filtered = filtered.filter(n => n.type === notesHubState.filterType);
+19926:   }
+19927: 
+19928:   // Has-attachment filter
+19929:   if(notesHubState.filterHasAtt){
+19930:     filtered = filtered.filter(n => Array.isArray(n.attachments) && n.attachments.length > 0);
+19931:   }
+19932: 
+19933:   // Time filter
+19934:   if(notesHubState.filterTime !== 'all'){
+19935:     filtered = filtered.filter(n => {
+19936:       // If user selected 'section' type explicitly, keep section notes
+19937:       if(n.type === 'section'){
+19938:         return notesHubState.filterType === 'section';
+19939:       }
+19940:       if(!n.iso) return false;
+19941:       const d = parseIsoToDate(n.iso);
+19942:       if(!d) return false;
+19943:       const dMidnight = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+19944:       const diffDays = Math.round((todayMidnight.getTime() - dMidnight.getTime()) / (1000 * 60 * 60 * 24));
+19945: 
+19946:       if(notesHubState.filterTime === '7d'){
+19947:         return diffDays >= 0 && diffDays < 7;
+19948:       }
+19949:       if(notesHubState.filterTime === '30d'){
+19950:         return diffDays >= 0 && diffDays < 30;
+19951:       }
+19952:       if(notesHubState.filterTime === 'month'){
+19953:         return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+19954:       }
+19955:       return true;
+19956:     });
+19957:   }
+19958: 
+19959:   // Search query filter
+19960:   const qRaw = (notesHubState.searchQuery || '').trim();
+19961:   const qNorm = (typeof normalizeSearchText === 'function') ? normalizeSearchText(qRaw) : qRaw.toLowerCase();
+19962:   if(qNorm.length > 0){
+19963:     filtered = filtered.filter(n => {
+19964:       const tNorm = (typeof normalizeSearchText === 'function') ? normalizeSearchText(n.title) : (n.title || '').toLowerCase();
+19965:       const txtNorm = (typeof normalizeSearchText === 'function') ? normalizeSearchText(n.text) : (n.text || '').toLowerCase();
+19966:       const exKeyNorm = n.exKey ? ((typeof normalizeSearchText === 'function') ? normalizeSearchText(n.exKey) : n.exKey.toLowerCase()) : '';
+19967:       return tNorm.indexOf(qNorm) >= 0 || txtNorm.indexOf(qNorm) >= 0 || exKeyNorm.indexOf(qNorm) >= 0;
+19968:     });
+19969:   }
+19970: 
+19971:   // 3. Separate into dated timeline vs undated section notes
+19972:   const datedNotes = filtered.filter(n => n.iso !== null);
+19973:   const sectionNotes = filtered.filter(n => n.type === 'section');
+19974: 
+19975:   // Sort dated notes descending
+19976:   datedNotes.sort((a,b) => (b.iso || '').localeCompare(a.iso || ''));
+19977: 
+19978:   // Update counters in section headers
+19979:   const datedCountEl = document.getElementById('notesDatedCount');
+19980:   const sectionCountEl = document.getElementById('notesSectionCount');
+19981:   if(datedCountEl) datedCountEl.textContent = String(datedNotes.length);
+19982:   if(sectionCountEl) sectionCountEl.textContent = String(sectionNotes.length);
+19983: 
+19984:   // Update meta text
+19985:   const metaEl = document.getElementById('notesFilterMeta');
+19986:   if(metaEl){
+19987:     if(qNorm.length > 0 || notesHubState.filterType !== 'all' || notesHubState.filterTime !== 'all' || notesHubState.filterHasAtt){
+19988:       metaEl.textContent = `المعروض: ${filtered.length} من إجمالي ${totalCount} ملاحظة`;
+19989:     } else {
+19990:       metaEl.textContent = `عرض جميع الملاحظات (${totalCount})`;
+19991:     }
+19992:   }
+19993: 
+19994:   // 4. Empty state handling
+19995:   const emptyStateEl = document.getElementById('notesEmptyState');
+19996:   const timelineSection = document.getElementById('notesTimelineSection');
+19997:   const undatedSection = document.getElementById('notesUndatedSection');
+19998: 
+19999:   if(filtered.length === 0){
+20000:     if(emptyStateEl) emptyStateEl.classList.remove('hidden');
+20001:     if(timelineSection) timelineSection.classList.add('hidden');
+20002:     if(undatedSection) undatedSection.classList.add('hidden');
+20003:     return;
+20004:   }
+20005: 
+20006:   if(emptyStateEl) emptyStateEl.classList.add('hidden');
+20007:   if(timelineSection) timelineSection.classList.toggle('hidden', datedNotes.length === 0);
+20008:   if(undatedSection) undatedSection.classList.toggle('hidden', sectionNotes.length === 0);
+20009: 
+20010:   // 5. Render card helper
+20011:   function renderCardHtml(note){
+20012:     const typeMeta = {
+20013:       daily: { icon: '📅', label: 'ملاحظة يومية', color: 'var(--teal, #06aac4)', bg: 'rgba(6,170,196,0.1)' },
+20014:       recovery: { icon: '🩺', label: 'استشفاء', color: 'var(--purple, #9b59b6)', bg: 'rgba(155,89,182,0.1)' },
+
+=== Found function openNoteInOriginalSection at line 19815 ===19815: function openNoteInOriginalSection(note){
+19816:   if(!note) return;
+19817:   // 1. If dated note, navigate to date first
+19818:   if(note.iso){
+19819:     const d = parseIsoToDate(note.iso);
+19820:     if(d && typeof goToDate === 'function'){
+19821:       goToDate(d);
+19822:     }
+19823:   }
+19824: 
+19825:   // 2. Navigate to source section
+19826:   if(typeof navigateTo === 'function'){
+19827:     navigateTo(note.sourceMode);
+19828:   }
+19829: 
+19830:   // Immediately expand section notes accordion
+19831:   if(note.type === 'section'){
+19832:     const secId = note.sourceId ? note.sourceId.replace('secNotesCard_', '') : note.sourceMode;
+19833:     const card = document.getElementById('secNotesCard_' + secId);
+19834:     if(card) card.open = true;
+19835:   }
+19836: 
+19837:   // 3. Highlight / focus target field based on type
+19838:   setTimeout(()=>{
+19839:     try {
+19840:       if(note.type === 'daily'){
+19841:         const inp = document.getElementById('dailyNotesInput');
+19842:         const card = document.getElementById('dailyNotesCard');
+19843:         if(card){
+19844:           card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+19845:           card.style.transition = 'box-shadow 0.3s ease, outline 0.3s ease';
+19846:           card.style.outline = '2px solid var(--accent)';
+19847:           card.style.boxShadow = '0 0 12px rgba(6,170,196,0.3)';
+19848:           setTimeout(()=>{ card.style.outline = ''; card.style.boxShadow = ''; }, 2200);
+19849:         }
+19850:         if(inp) inp.focus();
+19851:       } else if(note.type === 'recovery'){
+19852:         const inp = document.getElementById('recoveryNotes');
+19853:         if(inp){
+19854:           inp.scrollIntoView({ behavior: 'smooth', block: 'center' });
+19855:           inp.style.transition = 'box-shadow 0.3s ease, outline 0.3s ease';
+19856:           inp.style.outline = '2px solid var(--accent)';
+19857:           inp.style.boxShadow = '0 0 12px rgba(6,170,196,0.3)';
+19858:           inp.focus();
+19859:           setTimeout(()=>{ inp.style.outline = ''; inp.style.boxShadow = ''; }, 2200);
+19860:         }
+19861:       } else if(note.type === 'exercise'){
+19862:         const exKey = note.exKey || note.sourceId;
+19863:         const cleanKey = exKey ? exKey.replace(/[^a-zA-Z0-9_-]/g, '_') : '';
+19864:         const attBox = document.getElementById('exNoteAtt_' + cleanKey);
+19865:         const card = attBox ? attBox.closest('.card') : null;
+19866:         if(card){
+19867:           card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+19868:           const noteInp = card.querySelector('.ex-note');
+19869:           if(noteInp) noteInp.focus();
+19870:           card.style.transition = 'box-shadow 0.3s ease, outline 0.3s ease';
+19871:           card.style.outline = '2px solid var(--accent)';
+19872:           card.style.boxShadow = '0 0 12px rgba(6,170,196,0.3)';
+19873:           setTimeout(()=>{ card.style.outline = ''; card.style.boxShadow = ''; }, 2200);
+19874:         }
+19875:       } else if(note.type === 'section'){
+19876:         const secId = note.sourceId ? note.sourceId.replace('secNotesCard_', '') : note.sourceMode;
+19877:         const card = document.getElementById('secNotesCard_' + secId);
+19878:         if(card){
+19879:           card.open = true;
+19880:           card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+19881:           const txt = document.getElementById('secNotesText_' + secId);
+19882:           if(txt) txt.focus();
+19883:           card.style.transition = 'box-shadow 0.3s ease, outline 0.3s ease';
+19884:           card.style.outline = '2px solid var(--accent)';
+19885:           card.style.boxShadow = '0 0 12px rgba(6,170,196,0.3)';
+19886:           setTimeout(()=>{ card.style.outline = ''; card.style.boxShadow = ''; }, 2200);
+19887:         }
+19888:       }
+19889:     } catch(err){
+19890:       console.warn('[notes-hub] deep-link focus error:', err);
+19891:     }
+19892:   }, 180);
+19893: }
+19894: 
+19895: function renderNotesHub(){
+19896:   const container = document.getElementById('notesView');
+19897:   if(!container) return;
+19898: 
+19899:   const allNotes = collectAllUnifiedNotes();
+19900: 
+19901:   // 1. Update stats
+19902:   const totalCount = allNotes.length;
+19903:   const datedCount = allNotes.filter(n => n.iso !== null).length;
+19904:   const sectionCount = allNotes.filter(n => n.type === 'section').length;
+19905:   const withAttCount = allNotes.filter(n => Array.isArray(n.attachments) && n.attachments.length > 0).length;
+19906: 
+19907:   const statTotEl = document.getElementById('notesStatTotal');
+19908:   const statDatEl = document.getElementById('notesStatDated');
+19909:   const statSecEl = document.getElementById('notesStatSection');
+19910:   const statAttEl = document.getElementById('notesStatWithAtt');
+19911: 
+19912:   if(statTotEl) statTotEl.textContent = String(totalCount);
+19913:   if(statDatEl) statDatEl.textContent = String(datedCount);
+19914:   if(statSecEl) statSecEl.textContent = String(sectionCount);
+19915:   if(statAttEl) statAttEl.textContent = String(withAttCount);
+19916: 
+19917:   // 2. Filter list
+19918:   const now = new Date();
+19919:   const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+19920: 
+19921:   let filtered = allNotes.slice();
+19922: 
+19923:   // Type filter
+19924:   if(notesHubState.filterType !== 'all'){
+19925:     filtered = filtered.filter(n => n.type === notesHubState.filterType);
+19926:   }
+19927: 
+19928:   // Has-attachment filter
+19929:   if(notesHubState.filterHasAtt){
+19930:     filtered = filtered.filter(n => Array.isArray(n.attachments) && n.attachments.length > 0);
+19931:   }
+19932: 
+19933:   // Time filter
+19934:   if(notesHubState.filterTime !== 'all'){
+
+=== Found function initNotesHubEvents at line 20121 ===20121: function initNotesHubEvents(){
+20122:   // Search input
+20123:   const searchInp = document.getElementById('notesSearchInput');
+20124:   const clearBtn = document.getElementById('notesSearchClearBtn');
+20125: 
+20126:   if(searchInp){
+20127:     searchInp.addEventListener('input', (e) => {
+20128:       const val = e.target.value;
+20129:       if(clearBtn) clearBtn.classList.toggle('hidden', val.trim().length === 0);
+20130:       clearTimeout(notesHubSearchTimer);
+20131:       notesHubSearchTimer = setTimeout(() => {
+20132:         notesHubState.searchQuery = val;
+20133:         renderNotesHub();
+20134:       }, 200);
+20135:     });
+20136:   }
+20137: 
+20138:   if(clearBtn){
+20139:     clearBtn.addEventListener('click', () => {
+20140:       if(searchInp){
+20141:         searchInp.value = '';
+20142:         searchInp.focus();
+20143:       }
+20144:       clearBtn.classList.add('hidden');
+20145:       notesHubState.searchQuery = '';
+20146:       renderNotesHub();
+20147:     });
+20148:   }
+20149: 
+20150:   // Type filter chips
+20151:   const typeRow = document.getElementById('notesTypeFilterRow');
+20152:   if(typeRow){
+20153:     typeRow.querySelectorAll('.day-chip').forEach(btn => {
+20154:       btn.addEventListener('click', () => {
+20155:         typeRow.querySelectorAll('.day-chip').forEach(b => b.classList.remove('on'));
+20156:         btn.classList.add('on');
+20157:         notesHubState.filterType = btn.dataset.type || 'all';
+20158:         renderNotesHub();
+20159:       });
+20160:     });
+20161:   }
+20162: 
+20163:   // Time filter chips
+20164:   const timeRow = document.getElementById('notesTimeFilterRow');
+20165:   if(timeRow){
+20166:     timeRow.querySelectorAll('.day-chip').forEach(btn => {
+20167:       btn.addEventListener('click', () => {
+20168:         timeRow.querySelectorAll('.day-chip').forEach(b => b.classList.remove('on'));
+20169:         btn.classList.add('on');
+20170:         notesHubState.filterTime = btn.dataset.time || 'all';
+20171:         renderNotesHub();
+20172:       });
+20173:     });
+20174:   }
+20175: 
+20176:   // Has-attachment filter
+20177:   const hasAttBtn = document.getElementById('notesHasAttBtn');
+20178:   if(hasAttBtn){
+20179:     hasAttBtn.addEventListener('click', () => {
+20180:       notesHubState.filterHasAtt = !notesHubState.filterHasAtt;
+20181:       hasAttBtn.classList.toggle('on', notesHubState.filterHasAtt);
+20182:       hasAttBtn.dataset.hasAtt = String(notesHubState.filterHasAtt);
+20183:       renderNotesHub();
+20184:     });
+20185:   }
+20186: }
+20187: 
+20188: /* ================= CALENDAR HIERARCHY: RENDER + NAV ================= */
+20189: function recomputeWeekDots(){
+20190:   weekDates.forEach((d,idx)=>{
+20191:     const iso = toISO(d);
+20192:     const status = loadDayStatus(iso);
+20193:     const effMeals = getEffectiveDayMeals(iso, idx);
+20194:     weekDotsMeal[iso] = computeDotClassMeal(status, effMeals.meals.length);
+20195:     const ex = loadEx(iso);
+20196:     const eff = getEffectiveGymDay(iso, idx);
+20197:     const list = getRoutineExercises(eff.routineId || eff.gymType);
+20198:     weekDotsGym[iso] = computeDotClassGym(ex, list);
+20199:     weekDotsSleep[iso] = computeDotClassSleep(loadSleepTimes(iso), loadSleepHabits(iso));
+20200:     weekDotsPrayer[iso] = computeDotClassPrayer(loadPrayer(iso));
+20201:     const schedCheck = loadScheduleCheck(iso);
+20202:     weekDotsSchedule[iso] = computeDotClassSchedule(schedCheck, scheduleChecklistItems(idx, scheduleSettings).length);
+20203:     weekDotsRecovery[iso] = computeDotClassRecovery(loadRecovery(iso), loadSleepQuality(iso));
+20204:     weekDotsBudget[iso] = computeDotClassBudget(iso);
+20205:   });
+20206: }
+20207: function renderCalBarLabel(){
+20208:   const first = weekDates[0], last = weekDates[6];
+20209:   const sameMonth = first.getMonth()===last.getMonth();
+20210:   const label = sameMonth
+20211:     ? `${first.getDate()} - ${last.getDate()} ${first.toLocaleDateString('ar-EG',{month:'long'})}`
+20212:     : `${fmtDate(first)} - ${fmtDate(last)}`;
+20213:   document.getElementById('calRangeLabel').textContent = label;
+20214: }
+20215: function weeksOverlappingMonth(monthDate){
+20216:   const firstOfMonth = new Date(monthDate.getFullYear(), monthDate.getMonth(), 1);
+20217:   const lastOfMonth = new Date(monthDate.getFullYear(), monthDate.getMonth()+1, 0);
+20218:   const weeks=[]; let cursor = getWeekStartFor(firstOfMonth);
+20219:   while(cursor <= lastOfMonth){ weeks.push(new Date(cursor)); cursor = addDays(cursor,7); }
+20220:   return weeks;
+20221: }
+20222: function renderCalPanel(){
+20223:   const panel = document.getElementById('calPanel');
+20224:   panel.classList.toggle('hidden', !calOpen);
+20225:   if(!calOpen) return;
+20226:   const weeks = weeksOverlappingMonth(calMonthCursor);
+20227:   panel.innerHTML = `
+20228:     <div class="cal-month-hdr">
+20229:       <button class="cal-nav-btn" id="calMonthPrev">›</button>
+20230:       <div class="cmh-title">${fmtMonthYear(calMonthCursor)}</div>
+20231:       <button class="cal-nav-btn" id="calMonthNext">‹</button>
+20232:     </div>
+20233:     ${weeks.map(ws=>{
+20234:       const we = addDays(ws,6);
+20235:       const isCurrent = isSameDate(ws, weekStart);
+20236:       const hasToday = toISO(ws) <= todayISO && todayISO <= toISO(we);
+20237:       return `<div class="cal-week-row${isCurrent?' is-current':''}" data-iso="${toISO(ws)}">
+20238:         <span>${ws.getDate()} – ${we.getDate()} ${we.toLocaleDateString('ar-EG',{month:'long'})}</span>
+20239:         ${hasToday ? '<span class="cwr-badge">الأسبوع الحالي</span>' : ''}
+20240:       </div>`;

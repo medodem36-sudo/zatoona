@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGradW3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0fdf4"/>
+      <stop offset="100%" stop-color="#e2f7ec"/>
+    </linearGradient>
+    <linearGradient id="maleGradW3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1b5e20"/>
+      <stop offset="100%" stop-color="#0d3b13"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="16" fill="url(#bgGradW3)"/>
+  
+  <!-- Swing Arc Trajectory -->
+  <path d="M 162 120 Q 150 166 100 170 Q 56 166 42 135" fill="none" stroke="#e65100" stroke-width="3" stroke-dasharray="6 4"/>
+  <polygon points="162,116 166,128 156,124" fill="#e65100"/>
+  <polygon points="42,132 40,144 50,140" fill="#e65100"/>
+
+  <!-- Support Wall / Bar Post -->
+  <line x1="38" y1="35" x2="38" y2="175" stroke="#a5d6a7" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- Male Athletic Figure in Profile Swing -->
+  <!-- Hand on support bar -->
+  <line x1="38" y1="84" x2="72" y2="82" stroke="url(#maleGradW3)" stroke-width="7" stroke-linecap="round"/>
+  <!-- Head -->
+  <circle cx="86" cy="46" r="14" fill="url(#maleGradW3)"/>
+  <!-- Torso upright -->
+  <path d="M 86 58 L 86 112" stroke="url(#maleGradW3)" stroke-width="13" stroke-linecap="round"/>
+  <!-- Left Leg (Support standing straight) -->
+  <path d="M 84 112 L 84 168" stroke="url(#maleGradW3)" stroke-width="10" stroke-linecap="round"/>
+  <path d="M 84 168 L 74 172" stroke="url(#maleGradW3)" stroke-width="7" stroke-linecap="round"/>
+  <!-- Right Leg (Dynamic Swing Forward) -->
+  <path d="M 88 112 L 126 130 L 156 122" fill="none" stroke="#2e7d32" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 156 122 L 168 118" stroke="#2e7d32" stroke-width="7" stroke-linecap="round"/>
+  <!-- Free Arm balanced on hip -->
+  <path d="M 88 74 L 104 86 L 96 102" fill="none" stroke="url(#maleGradW3)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

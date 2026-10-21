@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgExB3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0f7ff"/>
+      <stop offset="100%" stop-color="#e3f0fd"/>
+    </linearGradient>
+    <linearGradient id="maleGradB3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0d47a1"/>
+      <stop offset="100%" stop-color="#1565c0"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="200" rx="14" fill="url(#bgExB3)"/>
+  
+  <!-- Floor line -->
+  <line x1="25" y1="172" x2="275" y2="172" stroke="#90caf9" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Badge -->
+  <rect x="18" y="16" width="76" height="22" rx="6" fill="#e3f2fd" stroke="#90caf9" stroke-width="1.2"/>
+  <text x="56" y="31" font-family="'IBM Plex Mono', system-ui, sans-serif" font-size="9" font-weight="bold" fill="#0d47a1" text-anchor="middle">PUSH-UPS</text>
+
+  <!-- Push up motion arrow -->
+  <path d="M 100 105 L 100 135" stroke="#e65100" stroke-width="2.5" stroke-linecap="round"/>
+  <polygon points="100,98 94,108 106,108" fill="#e65100"/>
+  <polygon points="100,142 94,132 106,132" fill="#e65100"/>
+
+  <!-- Male Athletic Figure in Mid-phase Push-up -->
+  <!-- Head -->
+  <circle cx="78" cy="116" r="14" fill="url(#maleGradB3)"/>
+  <!-- Torso & Hips straight line -->
+  <path d="M 90 125 L 170 142" stroke="url(#maleGradB3)" stroke-width="14" stroke-linecap="round"/>
+  <!-- Pectoral / Tricep engagement highlight -->
+  <circle cx="105" cy="130" r="5" fill="#e65100"/>
+
+  <!-- Arm bent at 90° pushing off floor -->
+  <path d="M 104 128 L 104 150 L 118 172" fill="none" stroke="url(#maleGradB3)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Palm on floor -->
+  <path d="M 112 172 L 126 172" stroke="url(#maleGradB3)" stroke-width="7" stroke-linecap="round"/>
+
+  <!-- Legs extended -->
+  <path d="M 170 142 L 240 158" stroke="url(#maleGradB3)" stroke-width="11" stroke-linecap="round"/>
+  <!-- Toes anchored on floor -->
+  <path d="M 240 158 L 244 172" stroke="url(#maleGradB3)" stroke-width="8" stroke-linecap="round"/>
+</svg>

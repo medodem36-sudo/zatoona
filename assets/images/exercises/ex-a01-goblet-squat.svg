@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgExA1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0fdf4"/>
+      <stop offset="100%" stop-color="#e2f7ec"/>
+    </linearGradient>
+    <linearGradient id="maleGradA1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1b5e20"/>
+      <stop offset="100%" stop-color="#0a3310"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="200" rx="14" fill="url(#bgExA1)"/>
+  
+  <!-- Floor line -->
+  <line x1="25" y1="172" x2="275" y2="172" stroke="#a5d6a7" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Badge -->
+  <rect x="18" y="16" width="102" height="22" rx="6" fill="#e8f5e9" stroke="#81c784" stroke-width="1.2"/>
+  <text x="69" y="31" font-family="'IBM Plex Mono', system-ui, sans-serif" font-size="9" font-weight="bold" fill="#1b5e20" text-anchor="middle">GOBLET SQUAT</text>
+
+  <!-- Motion arrows -->
+  <path d="M 68 85 L 68 125" stroke="#e65100" stroke-width="2.5" stroke-linecap="round"/>
+  <polygon points="68,132 62,122 74,122" fill="#e65100"/>
+  <polygon points="68,78 62,88 74,88" fill="#e65100"/>
+
+  <!-- Male Athletic Figure in Deep Goblet Squat -->
+  <!-- Head -->
+  <circle cx="155" cy="52" r="15" fill="url(#maleGradA1)"/>
+  <!-- Torso (athletic flat back angled forward 45°) -->
+  <path d="M 152 66 L 122 115" stroke="url(#maleGradA1)" stroke-width="15" stroke-linecap="round"/>
+  
+  <!-- Arms holding Dumbbell vertically at sternum -->
+  <path d="M 148 76 L 174 88 L 168 96" fill="none" stroke="url(#maleGradA1)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Vertical Dumbbell -->
+  <rect x="164" y="74" width="16" height="32" rx="3" fill="#37474f"/>
+  <rect x="160" y="72" width="24" height="7" rx="2" fill="#78909c"/>
+  <rect x="160" y="101" width="24" height="7" rx="2" fill="#78909c"/>
+
+  <!-- Thigh (parallel to floor) -->
+  <path d="M 122 115 L 178 116" stroke="url(#maleGradA1)" stroke-width="14" stroke-linecap="round"/>
+  <!-- Shin (45° forward angle) -->
+  <path d="M 178 116 L 164 170" stroke="url(#maleGradA1)" stroke-width="11" stroke-linecap="round"/>
+  <!-- Foot flat on ground -->
+  <path d="M 156 170 L 186 170" stroke="url(#maleGradA1)" stroke-width="9" stroke-linecap="round"/>
+
+  <!-- Highlight Quadriceps/Glutes -->
+  <path d="M 132 112 L 168 113" stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+</svg>

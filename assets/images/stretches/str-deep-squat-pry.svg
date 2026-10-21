@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%" role="img" aria-label="النزول العميق في القرفصاء مع فتح وتليين الحوض">
+  <defs>
+    <linearGradient id="bgGrad-str-deep-squat-pry" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="maleMuscles-str-deep-squat-pry" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569"/>
+      <stop offset="100%" stop-color="#334155"/>
+    </linearGradient>
+    <filter id="glow-str-deep-squat-pry" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="400" height="300" rx="16" fill="url(#bgGrad-str-deep-squat-pry)"/>
+
+  <!-- Gym floor grid lines for spatial reference -->
+  <line x1="30" y1="240" x2="370" y2="240" stroke="#334155" stroke-width="2" stroke-dasharray="6,4"/>
+  <circle cx="200" cy="240" r="3" fill="#64748b"/>
+
+  <!-- Target Muscle Highlight Indicator Banner -->
+  <rect x="24" y="20" width="120" height="24" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <circle cx="36" cy="32" r="4" fill="#f59e0b"/>
+  <text x="46" y="36" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="11" font-weight="600">JOINT MOBILITY</text>
+
+  <!-- Male Athletic Figure Group -->
+  <g id="maleFigure-str-deep-squat-pry" transform="translate(0, 0)">
+
+    <!-- Male Athletic Deep Squat Hold & Hip Prying -->
+    <line x1="80" y1="240" x2="320" y2="240" stroke="#334155" stroke-width="3"/>
+    <!-- Feet Flat on Floor Wide Stance -->
+    <!-- Deep Folded Knees and Shins -->
+    <path d="M140 240 L125 180 L180 205" fill="none" stroke="#64748b" stroke-width="12" stroke-linecap="round"/>
+    <path d="M260 240 L275 180 L220 205" fill="none" stroke="#64748b" stroke-width="12" stroke-linecap="round"/>
+    <!-- Deep Pelvis Position -->
+    <ellipse cx="200" cy="210" rx="24" ry="16" fill="url(#maleMuscles-str-deep-squat-pry)"/>
+    <!-- Target Deep Hips & Groin Glow -->
+    <circle cx="200" cy="210" r="18" fill="#f59e0b" opacity="0.9" filter="url(#glow-str-deep-squat-pry)"/>
+    <!-- Upright Proud Chest Torso -->
+    <path d="M200 205 L200 120" fill="none" stroke="url(#maleMuscles-str-deep-squat-pry)" stroke-width="22" stroke-linecap="round"/>
+    <!-- Hands joined in prayer pushing knees out with elbows -->
+    <path d="M150 185 L200 160 L250 185" fill="none" stroke="#64748b" stroke-width="8" stroke-linecap="round"/>
+    <!-- Head Upright -->
+    <ellipse cx="200" cy="85" rx="14" ry="17" fill="#475569" stroke="#64748b" stroke-width="2"/>
+    <!-- Outward prying arrows -->
+    <path d="M155 175 L135 175" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
+    <polygon points="130,175 138,171 138,179" fill="#38bdf8"/>
+    <path d="M245 175 L265 175" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
+    <polygon points="270,175 262,171 262,179" fill="#38bdf8"/>
+
+  </g>
+
+  <!-- Clean Descriptive Watermark Badge -->
+  <text x="375" y="278" text-anchor="end" fill="#64748b" font-family="system-ui, sans-serif" font-size="10" font-weight="500">ZATOONA MOBILITY</text>
+  <text x="24" y="278" fill="#475569" font-family="system-ui, sans-serif" font-size="10" font-weight="500">STRICT MALES-ONLY VECTOR</text>
+</svg>

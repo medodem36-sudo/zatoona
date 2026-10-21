@@ -100,9 +100,30 @@
 
    v18: Phase 3B — Local Exercise Encyclopedia. Added local standalone
    exercise catalog (assets/data/exercise-catalog.js) to SHELL_ASSETS for
-   reliable, fast, 100% offline access. */
+   reliable, fast, 100% offline access.
 
-const CACHE_VERSION = 'v18';
+   v19: Phase 8B — Notification Click Routing & Safe Integration.
+   Added notificationclick event listener to focus existing app windows or open
+   a new window within app scope, passing structured, sanitized routing data
+   (mode, date, targetId) via postMessage and safe query/hash navigation.
+   Content-only update to Service Worker logic; no shell asset paths changed.
+
+   v20: Phase 9B.1 — Unified Notes Hub.
+   Added 'notes' mode to navigation whitelist for safe notification routing,
+   deep-linking, and offline access to the centralized notes hub.
+   Content-only update to Service Worker routing whitelist; no shell asset paths changed.
+
+   v21: Phase 5B.1.1 — Warm-up & Cool-down Image Policy Compliance.
+   Added 12 local offline SVG illustrations for warm-up and cool-down to SHELL_ASSETS,
+   fully replacing external unverified/female images with original male-only SVGs.
+   Cache version bumped to v21 for full offline caching.
+
+   v22: Phase 5B.1.2 — Legacy A/B Exercise Images Compliance.
+   Added 12 local offline SVG illustrations for Routine A/B exercises to SHELL_ASSETS,
+   fully replacing external unverified/female exercise images with original male-only SVGs.
+   Cache version bumped to v22 for full offline caching. */
+
+const CACHE_VERSION = 'v23';
 const SHELL_CACHE = 'zatoona-shell-' + CACHE_VERSION;
 const RUNTIME_CACHE = 'zatoona-runtime-' + CACHE_VERSION;
 const CURRENT_CACHES = [SHELL_CACHE, RUNTIME_CACHE];
@@ -128,6 +149,65 @@ const SHELL_ASSETS = [
   './assets/fonts/tajawal-v12-arabic-700.woff2',
   './assets/fonts/tajawal-v12-latin-700.woff2',
   './assets/data/exercise-catalog.js',
+  './assets/data/stretch-catalog.js',
+  './assets/images/warmup/warmup-01-cardio.svg',
+  './assets/images/warmup/warmup-02-arm-circles.svg',
+  './assets/images/warmup/warmup-03-leg-swings.svg',
+  './assets/images/warmup/warmup-04-hip-circles.svg',
+  './assets/images/warmup/warmup-05-bodyweight-squat.svg',
+  './assets/images/warmup/warmup-06-warmup-set.svg',
+  './assets/images/cooldown/cooldown-01-shoulder-stretch.svg',
+  './assets/images/cooldown/cooldown-02-chest-stretch.svg',
+  './assets/images/cooldown/cooldown-03-lower-back-stretch.svg',
+  './assets/images/cooldown/cooldown-04-hamstring-stretch.svg',
+  './assets/images/cooldown/cooldown-05-quad-stretch.svg',
+  './assets/images/cooldown/cooldown-06-calm-walk.svg',
+  './assets/images/exercises/ex-a01-goblet-squat.svg',
+  './assets/images/exercises/ex-a02-bench-press.svg',
+  './assets/images/exercises/ex-a03-lat-pulldown.svg',
+  './assets/images/exercises/ex-a04-overhead-press.svg',
+  './assets/images/exercises/ex-a05-plank.svg',
+  './assets/images/exercises/ex-a06-face-pull.svg',
+  './assets/images/exercises/ex-b01-romanian-deadlift.svg',
+  './assets/images/exercises/ex-b02-barbell-row.svg',
+  './assets/images/exercises/ex-b03-push-up.svg',
+  './assets/images/exercises/ex-b04-pull-up.svg',
+  './assets/images/exercises/ex-b05-abdominal-crunch.svg',
+  './assets/images/exercises/ex-b06-lunges.svg',
+  './assets/images/stretches/str-doorway-pec-stretch.svg',
+  './assets/images/stretches/str-arm-circles-dynamic.svg',
+  './assets/images/stretches/str-cross-body-shoulder-stretch.svg',
+  './assets/images/stretches/str-band-shoulder-dislocations.svg',
+  './assets/images/stretches/str-lat-wall-stretch.svg',
+  './assets/images/stretches/str-childs-pose.svg',
+  './assets/images/stretches/str-band-pull-apart-activation.svg',
+  './assets/images/stretches/str-upper-trap-stretch.svg',
+  './assets/images/stretches/str-chin-tucks.svg',
+  './assets/images/stretches/str-levator-scapulae-stretch.svg',
+  './assets/images/stretches/str-kneeling-hip-flexor.svg',
+  './assets/images/stretches/str-hip-opener-90-90.svg',
+  './assets/images/stretches/str-butterfly-stretch.svg',
+  './assets/images/stretches/str-standing-quad-stretch.svg',
+  './assets/images/stretches/str-standing-hamstring-stretch.svg',
+  './assets/images/stretches/str-dynamic-leg-swings.svg',
+  './assets/images/stretches/str-couch-stretch.svg',
+  './assets/images/stretches/str-pigeon-pose.svg',
+  './assets/images/stretches/str-figure-four-stretch.svg',
+  './assets/images/stretches/str-glute-bridge-activation.svg',
+  './assets/images/stretches/str-wall-calf-stretch.svg',
+  './assets/images/stretches/str-ankle-wall-mobilization.svg',
+  './assets/images/stretches/str-soleus-bent-knee-stretch.svg',
+  './assets/images/stretches/str-wrist-extensor-stretch.svg',
+  './assets/images/stretches/str-wrist-flexor-prayer.svg',
+  './assets/images/stretches/str-quadruped-wrist-circles.svg',
+  './assets/images/stretches/str-cat-cow-mobility.svg',
+  './assets/images/stretches/str-thoracic-spine-rotations.svg',
+  './assets/images/stretches/str-bird-dog-activation.svg',
+  './assets/images/stretches/str-cobra-lumbar-stretch.svg',
+  './assets/images/stretches/str-worlds-greatest-stretch.svg',
+  './assets/images/stretches/str-deep-squat-pry.svg',
+  './assets/images/stretches/str-downward-dog.svg',
+  './assets/images/stretches/str-inchworm-walkout.svg',
 ];
 const SHELL_FALLBACK = './'; // what to serve for any in-scope navigation that isn't individually cached
 
@@ -176,6 +256,67 @@ self.addEventListener('activate', (event) => {
 // a reload on its own.
 self.addEventListener('message', (event) => {
   if (event.data === 'SKIP_WAITING') self.skipWaiting();
+});
+
+/* ================= NOTIFICATION CLICK ROUTING (Phase 8B) ================= */
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+
+  const data = event.notification.data || {};
+  const VALID_MODES = ['home','meal','gym','sleep','prayer','schedule','recovery','overview','search','budget','notes','stretches'];
+  const safeMode = (data.mode && VALID_MODES.includes(data.mode)) ? data.mode : 'home';
+  const safeDate = (data.date && /^\d{4}-\d{2}-\d{2}$/.test(data.date)) ? data.date : null;
+  const safeTargetId = data.targetId ? String(data.targetId).replace(/[^a-zA-Z0-9_\-:]/g, '').slice(0, 100) : null;
+
+  const routePayload = {
+    mode: safeMode,
+    date: safeDate,
+    targetId: safeTargetId,
+    key: data.key || null
+  };
+
+  event.waitUntil(
+    (async () => {
+      const allClients = await self.clients.matchAll({
+        type: 'window',
+        includeUncontrolled: true
+      });
+
+      // Find an existing client window within our origin/scope
+      let client = allClients.find((c) => {
+        try {
+          const clientUrl = new URL(c.url);
+          return clientUrl.origin === self.location.origin;
+        } catch(e) {
+          return false;
+        }
+      });
+
+      if (client) {
+        // Focus the existing window
+        await client.focus();
+        // Deliver routing instruction to the active client
+        client.postMessage({
+          type: 'ZATOONA_NOTIFICATION_CLICK',
+          data: routePayload
+        });
+      } else if (self.clients.openWindow) {
+        // Open a new window within app scope
+        const targetUrl = new URL('./', self.location.href);
+        if (safeMode && safeMode !== 'home') {
+          targetUrl.searchParams.set('notif_mode', safeMode);
+          targetUrl.hash = '#' + safeMode;
+        }
+        if (safeDate) {
+          targetUrl.searchParams.set('notif_date', safeDate);
+        }
+        if (safeTargetId) {
+          targetUrl.searchParams.set('notif_act', safeTargetId);
+        }
+        await self.clients.openWindow(targetUrl.href);
+      }
+    })()
+  );
 });
 
 function isRuntimeHost(url) {
