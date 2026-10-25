@@ -1,0 +1,24 @@
+# Android local machine configuration & SDK paths
+/android/local.properties
+
+# Android Gradle cache & execution data
+/android/.gradle/
+
+# Android build outputs & intermediate compiler artifacts
+/android/**/build/
+/android/captures/
+/android/.externalNativeBuild/
+/android/.cxx/
+
+# Scratch backups, bytecode & test outputs
+/scratch/backups/
+/scratch/__pycache__/
+/scratch/test-results/
+
+# Python compiled bytecode
+*.py[cod]
+*$py.class
+
+# Operating system metadata
+.DS_Store
+Thumbs.db
