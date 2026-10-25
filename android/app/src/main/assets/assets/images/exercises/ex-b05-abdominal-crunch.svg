@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgExB5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0f7ff"/>
+      <stop offset="100%" stop-color="#e3f0fd"/>
+    </linearGradient>
+    <linearGradient id="maleGradB5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0d47a1"/>
+      <stop offset="100%" stop-color="#1565c0"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="200" rx="14" fill="url(#bgExB5)"/>
+  
+  <!-- Exercise Mat on Floor -->
+  <rect x="35" y="162" width="230" height="10" rx="4" fill="#bbdefb" stroke="#90caf9" stroke-width="1.5"/>
+
+  <!-- Badge -->
+  <rect x="18" y="16" width="76" height="22" rx="6" fill="#e3f2fd" stroke="#90caf9" stroke-width="1.2"/>
+  <text x="56" y="31" font-family="'IBM Plex Mono', system-ui, sans-serif" font-size="9" font-weight="bold" fill="#0d47a1" text-anchor="middle">CRUNCH</text>
+
+  <!-- Abdominal contraction arc arrow -->
+  <path d="M 95 105 Q 118 90 142 108" fill="none" stroke="#e65100" stroke-width="2.5" stroke-linecap="round"/>
+  <polygon points="90,108 100,104 98,114" fill="#e65100"/>
+
+  <!-- Male Athletic Figure Performing Crunch -->
+  <!-- Upper Back & Shoulders curled 30° off floor -->
+  <!-- Head -->
+  <circle cx="82" cy="118" r="14" fill="url(#maleGradB5)"/>
+  <!-- Hands lightly supporting back of head -->
+  <path d="M 98 132 L 80 128 L 74 120" fill="none" stroke="url(#maleGradB5)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Curled upper torso -->
+  <path d="M 92 130 L 126 148 L 158 152" fill="none" stroke="url(#maleGradB5)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Core contraction highlight -->
+  <circle cx="128" cy="142" r="6" fill="#e65100"/>
+
+  <!-- Knees bent at 90°, feet flat on floor -->
+  <path d="M 158 152 L 188 116 L 218 162" fill="none" stroke="url(#maleGradB5)" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 218 162 L 232 162" stroke="url(#maleGradB5)" stroke-width="8" stroke-linecap="round"/>
+</svg>

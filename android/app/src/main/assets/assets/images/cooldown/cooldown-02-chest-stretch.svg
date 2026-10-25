@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGradC2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0f7ff"/>
+      <stop offset="100%" stop-color="#e3f0fd"/>
+    </linearGradient>
+    <linearGradient id="maleGradC2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0d47a1"/>
+      <stop offset="100%" stop-color="#1565c0"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="16" fill="url(#bgGradC2)"/>
+  
+  <!-- Wall / Door Post Reference -->
+  <rect x="30" y="30" width="14" height="145" rx="3" fill="#90caf9" stroke="#64b5f6" stroke-width="1.5"/>
+  
+  <!-- Rotation arrow away from wall -->
+  <path d="M 120 70 Q 145 78 152 98" fill="none" stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+  <polygon points="154,104 148,94 158,96" fill="#e65100"/>
+
+  <!-- Male Athletic Figure Stretching Pectorals -->
+  <!-- Hand placed flat on wall at 90° -->
+  <circle cx="37" cy="80" r="5" fill="url(#maleGradC2)"/>
+  <!-- Left Arm bent at 90 degrees against wall -->
+  <path d="M 37 80 L 65 80 L 86 82" fill="none" stroke="url(#maleGradC2)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Head turned slightly away -->
+  <circle cx="106" cy="46" r="14" fill="url(#maleGradC2)"/>
+  <!-- Torso gently rotated outward opening chest -->
+  <path d="M 86 80 L 118 78 L 112 124 L 92 124 Z" fill="url(#maleGradC2)"/>
+  <!-- Free Right Arm hanging naturally -->
+  <path d="M 118 78 L 132 104" stroke="url(#maleGradC2)" stroke-width="8" stroke-linecap="round"/>
+  <!-- Legs staggered stance for solid leverage -->
+  <path d="M 96 124 L 88 170" stroke="url(#maleGradC2)" stroke-width="10" stroke-linecap="round"/>
+  <path d="M 110 124 L 126 166" stroke="url(#maleGradC2)" stroke-width="10" stroke-linecap="round"/>
+  <path d="M 88 170 L 76 172 M 126 166 L 138 168" stroke="url(#maleGradC2)" stroke-width="7" stroke-linecap="round"/>
+</svg>

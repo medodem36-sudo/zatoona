@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGradW2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0fdf4"/>
+      <stop offset="100%" stop-color="#e2f7ec"/>
+    </linearGradient>
+    <linearGradient id="maleGradW2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1b5e20"/>
+      <stop offset="100%" stop-color="#0d3b13"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="16" fill="url(#bgGradW2)"/>
+  
+  <!-- Circular Motion Trajectories on both sides -->
+  <!-- Left arm rotation circle -->
+  <ellipse cx="44" cy="95" rx="26" ry="32" fill="none" stroke="#e65100" stroke-width="2.5" stroke-dasharray="6 4"/>
+  <polygon points="44,60 52,67 44,74" fill="#e65100"/>
+  <!-- Right arm rotation circle -->
+  <ellipse cx="156" cy="95" rx="26" ry="32" fill="none" stroke="#e65100" stroke-width="2.5" stroke-dasharray="6 4"/>
+  <polygon points="156,60 164,67 156,74" fill="#e65100"/>
+  
+  <!-- Male Athletic Figure Standing Frontal -->
+  <!-- Head -->
+  <circle cx="100" cy="42" r="15" fill="url(#maleGradW2)"/>
+  <!-- Broad Shoulders & Torso -->
+  <path d="M 72 74 Q 100 68 128 74 L 118 124 L 82 124 Z" fill="url(#maleGradW2)"/>
+  <!-- Left Arm Extended -->
+  <path d="M 76 74 L 46 92" stroke="url(#maleGradW2)" stroke-width="9" stroke-linecap="round"/>
+  <!-- Right Arm Extended -->
+  <path d="M 124 74 L 154 92" stroke="url(#maleGradW2)" stroke-width="9" stroke-linecap="round"/>
+  <!-- Legs (solid stance) -->
+  <path d="M 90 124 L 84 172" stroke="url(#maleGradW2)" stroke-width="11" stroke-linecap="round"/>
+  <path d="M 110 124 L 116 172" stroke="url(#maleGradW2)" stroke-width="11" stroke-linecap="round"/>
+  <path d="M 84 172 L 72 176 M 116 172 L 128 176" stroke="url(#maleGradW2)" stroke-width="8" stroke-linecap="round"/>
+  
+  <!-- Rotational arrows badge -->
+  <text x="100" y="190" font-family="system-ui, sans-serif" font-size="11" font-weight="bold" fill="#1b5e20" text-anchor="middle">360° الدوران</text>
+</svg>

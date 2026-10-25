@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%" role="img" aria-label="إطالة الأريكة العميقة للفخذ ومثنيات الورك على الحائط">
+  <defs>
+    <linearGradient id="bgGrad-str-couch-stretch" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="maleMuscles-str-couch-stretch" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569"/>
+      <stop offset="100%" stop-color="#334155"/>
+    </linearGradient>
+    <filter id="glow-str-couch-stretch" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="400" height="300" rx="16" fill="url(#bgGrad-str-couch-stretch)"/>
+
+  <!-- Gym floor grid lines for spatial reference -->
+  <line x1="30" y1="240" x2="370" y2="240" stroke="#334155" stroke-width="2" stroke-dasharray="6,4"/>
+  <circle cx="200" cy="240" r="3" fill="#64748b"/>
+
+  <!-- Target Muscle Highlight Indicator Banner -->
+  <rect x="24" y="20" width="120" height="24" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <circle cx="36" cy="32" r="4" fill="#f59e0b"/>
+  <text x="46" y="36" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="11" font-weight="600">STATIC STRETCH</text>
+
+  <!-- Male Athletic Figure Group -->
+  <g id="maleFigure-str-couch-stretch" transform="translate(0, 0)">
+
+    <!-- Male Athletic Leg / Quad / Hamstring Movement Silhouette -->
+    <!-- Floor and Support -->
+    <rect x="60" y="236" width="280" height="8" rx="2" fill="#1e293b"/>
+    <!-- Dynamic Split Stance Silhouette -->
+    <path d="M180 165 L140 236" fill="none" stroke="#64748b" stroke-width="12" stroke-linecap="round"/>
+    <path d="M190 165 L245 215 L260 236" fill="none" stroke="#64748b" stroke-width="11" stroke-linecap="round"/>
+    <!-- Target Thigh Glow -->
+    <path d="M182 170 L148 225" fill="none" stroke="#f59e0b" stroke-width="9" opacity="0.9" filter="url(#glow-str-couch-stretch)"/>
+    <!-- Torso Athletic Upright Profile -->
+    <path d="M185 165 L185 105" fill="none" stroke="url(#maleMuscles-str-couch-stretch)" stroke-width="21" stroke-linecap="round"/>
+    <!-- Head -->
+    <ellipse cx="185" cy="80" rx="14" ry="16" fill="#475569" stroke="#64748b" stroke-width="2"/>
+    <!-- Motion dynamic arrow -->
+    <path d="M235 180 Q255 190 265 210" fill="none" stroke="#38bdf8" stroke-width="3" stroke-dasharray="4,2"/>
+
+  </g>
+
+  <!-- Clean Descriptive Watermark Badge -->
+  <text x="375" y="278" text-anchor="end" fill="#64748b" font-family="system-ui, sans-serif" font-size="10" font-weight="500">ZATOONA MOBILITY</text>
+  <text x="24" y="278" fill="#475569" font-family="system-ui, sans-serif" font-size="10" font-weight="500">STRICT MALES-ONLY VECTOR</text>
+</svg>

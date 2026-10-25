@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgDeadlift" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#f1f5f9"/>
+    </linearGradient>
+    <linearGradient id="maleGradDeadlift" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#334155"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="200" rx="14" fill="url(#bgDeadlift)"/>
+  
+  <!-- Floor line -->
+  <line x1="25" y1="175" x2="275" y2="175" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Badge -->
+  <rect x="18" y="14" width="144" height="22" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.2"/>
+  <text x="90" y="29" font-family="'IBM Plex Mono', system-ui, sans-serif" font-size="8.5" font-weight="bold" fill="#0f172a" text-anchor="middle">CONVENTIONAL DEADLIFT</text>
+
+  <!-- Motion upward arrow -->
+  <path d="M 60 135 L 60 85" stroke="#e65100" stroke-width="2.2" stroke-linecap="round"/>
+  <polygon points="60,78 55,88 65,88" fill="#e65100"/>
+
+  <!-- Male Athletic Figure in Deadlift Pull (Mid-Shin hinge) -->
+  <!-- Head & Gaze forward-down -->
+  <circle cx="188" cy="68" r="14" fill="url(#maleGradDeadlift)"/>
+  
+  <!-- Torso (rigid flat back, 35 deg angle) -->
+  <path d="M 180 78 L 132 116" stroke="url(#maleGradDeadlift)" stroke-width="14" stroke-linecap="round"/>
+
+  <!-- Thighs (Hips hinged back, knees semi-flexed) -->
+  <path d="M 132 116 L 166 142" stroke="url(#maleGradDeadlift)" stroke-width="13" stroke-linecap="round"/>
+  <!-- Shins (nearly vertical) -->
+  <path d="M 166 142 L 160 174" stroke="url(#maleGradDeadlift)" stroke-width="10" stroke-linecap="round"/>
+  <!-- Feet -->
+  <path d="M 150 174 L 180 174" stroke="url(#maleGradDeadlift)" stroke-width="8" stroke-linecap="round"/>
+
+  <!-- Arms (hanging perfectly straight down from shoulders) -->
+  <path d="M 176 84 L 176 138" stroke="url(#maleGradDeadlift)" stroke-width="8" stroke-linecap="round"/>
+
+  <!-- Barbell at Mid-Shin (close to shins) -->
+  <line x1="100" y1="140" x2="250" y2="140" stroke="#64748b" stroke-width="5" stroke-linecap="round"/>
+  <!-- Olympic Plates touching / near floor -->
+  <rect x="105" y="118" width="10" height="44" rx="2" fill="#020617"/>
+  <rect x="97" y="122" width="7" height="36" rx="2" fill="#1e293b"/>
+  <rect x="235" y="118" width="10" height="44" rx="2" fill="#020617"/>
+  <rect x="246" y="122" width="7" height="36" rx="2" fill="#1e293b"/>
+
+  <!-- Posterior Chain Activation Line (Glutes/Hamstrings/Erectors) -->
+  <path d="M 176 80 L 134 116 L 164 140" fill="none" stroke="#e65100" stroke-width="2.5" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,418 @@
+/* ================= زتونة — Service Worker =================
+   Scope: PWA offline support ONLY. This file never reads or writes
+   localStorage — all user data (meals, workouts, budget, schedule, notes,
+   reminders, etc.) lives exclusively in the page's localStorage under the
+   'meal-gym-tracker:' prefix and is completely untouched by anything here.
+
+   Bump CACHE_VERSION on every real deploy. That's the only line that needs
+   to change for a normal update — activate() cleans up the old versioned
+   caches automatically and safely, and localStorage is never part of that
+   cleanup because it isn't stored via the Cache Storage API at all.
+
+   v2: added the /zatoona/ root ('./' and './index.html') to the shell so the
+   PWA's actual start_url/scope entry point is precached and controlled —
+   the v1 shell only precached gym-meal-tracker-6_8.html directly, which is
+   why the root URL wasn't reliably available offline before. Also fixed a
+   dead fallback: staleWhileRevalidate() never actually rejects (even its
+   worst case resolves to Response.error()), so the old
+   `.catch(() => caches.match(...))` at the call site could never run. The
+   fallback now happens inside the helper itself.
+
+   v3: Session 2 — index.html content changed substantially (Budget missing-
+   price handling + the fully editable Schedule/Time-Engine). No shell asset
+   paths changed, so SHELL_ASSETS below is untouched; bumping the version is
+   the only thing needed to make the existing user-triggered update flow
+   offer this new content next time the app checks.
+
+   v4: Session 2 completion — Meal/Gym to future-Schedule sync (meal
+   enabled/duration and gym-workout-duration now read from schedule-settings
+   instead of fixed constants, reusing the existing edited-flag/materialization
+   mechanism unchanged). Content-only change again; no shell asset paths
+   changed.
+
+   v5: Session 2.5 — Dynamic Daily Timeline / cascading schedule. Editing an
+   activity's time now auto-shifts eligible FLEXIBLE activities after it to
+   avoid stale overlaps, stopping at any FIXED (prayer/sleep/college/commute)
+   or per-occurrence MANUAL (timeLocked) activity. Added Reset-to-Auto and
+   Recalculate-Day controls. Purely additive to the activity data model
+   (new optional timeLocked field); no shell asset paths changed.
+
+   v6: Session 3 — Home/Navigation (new default landing screen + browser
+   history), a schema-v2 migration fixing a Schedule/Budget recurring-defs
+   key collision, several real XSS fixes (escaped user text that was going
+   into innerHTML/attribute contexts unescaped), Backup/Restore shape
+   validation before any data is written, and a data-safety pass making
+   every JSON.parse from storage crash-proof (malformed or wrong-shape
+   values now fall back safely instead of throwing during init). Content-
+   only change; no shell asset paths changed.
+
+   v7: Session 3.1 — CRITICAL HOTFIX: Dynamic Timeline delete-gap. Deleting
+   a Schedule activity left a dead gap instead of pulling the following
+   tightly-packed FLEXIBLE activities back to close it, and "Recalculate
+   Day" could silently resurrect a this-occurrence delete. Added a scoped
+   backward-compaction pass (compactGapAfterRemoval) that closes exactly
+   the freed slot, walking forward only through activities that were
+   originally contiguous, and stopping at the first FIXED/MANUAL wall or
+   any pre-existing (legitimate, intentional) gap — so it never eats real
+   free time elsewhere in the day. deleteActivity() now also records
+   this-occurrence deletions (deletedGenKeys/deletedDefIds) so
+   recalculateDay() excludes them instead of regenerating them from
+   scratch. Verified idempotent (repeated Recalculate Day converges, no
+   drift/duplicates), safe around FIXED/MANUAL walls and pre-existing free
+   time, safe across midnight-adjacent activities, and a no-op byte-for-
+   byte on every untouched/pristine day (checked against all 7 weekday
+   templates). Content-only change; no shell asset paths changed.
+
+   v12: Stage 3 — Gym Management, Exercise Editing, and Schedule
+   Synchronization. Editable weekly gym schedule, pause/resume gym,
+   per-date gym overrides, custom exercises, exercise overrides/exclusions,
+   and schedule/gym bidirectional synchronization.
+
+   v13: Stage 4 Step 1 — Schedule Conflict Analyzer. Added pure read-only
+   helper analyzeScheduleConflicts() for detecting and classifying schedule
+   time overlaps (prayer, sleep, locked, overlap). Content-only change;
+   no shell asset paths changed.
+
+   v14: Stage 5 Step 5B — Micronutrient Support & Targets in Weekly Meal Planner.
+   Expanded schema to 11 micronutrients (sodium, potassium, calcium, iron,
+   magnesium, zinc, vitaminA, vitaminC, vitaminD, vitaminB12, folate). Added
+   optional user daily targets, food editor fields, safe aggregation in
+   computeIngredients without treating missing data as zero, and Priority 5
+   planner optimization without altering portion-solver constraints. Content-only
+   change; no shell asset paths changed.
+
+   v15: Stage 5 Step 5C — Verified Micronutrient Food Dataset. Enriched
+   FOOD_DB_DEFAULTS with 11 USDA FoodData Central micronutrients for 15 standard
+   food items on exact base-unit measurement basis, while safely preserving 5
+   unverified/Egyptian items without fabricated values. Content-only change;
+   no shell asset paths changed.
+
+   v16: Stage 5 Step 5E — Micronutrient Reference Target Presets. Added
+   demographic-based reference daily intake (DRI/RDA/AI) presets for 11
+   micronutrients based on NASEM and NIH ODS standards, requiring explicit user
+   approval, with safe unset-only and replace-all application modes. Content-only
+   change; no shell asset paths changed.
+
+   v17: Phase 1 — Visual Identity Foundation, Tajawal local WOFF2 typography,
+   and framed botanical logo. Added local Tajawal WOFF2 font files and SVG icons
+   to SHELL_ASSETS so the entire visual identity is completely self-contained and
+   offline-first without external font dependencies.
+
+   v18: Phase 3B — Local Exercise Encyclopedia. Added local standalone
+   exercise catalog (assets/data/exercise-catalog.js) to SHELL_ASSETS for
+   reliable, fast, 100% offline access.
+
+   v19: Phase 8B — Notification Click Routing & Safe Integration.
+   Added notificationclick event listener to focus existing app windows or open
+   a new window within app scope, passing structured, sanitized routing data
+   (mode, date, targetId) via postMessage and safe query/hash navigation.
+   Content-only update to Service Worker logic; no shell asset paths changed.
+
+   v20: Phase 9B.1 — Unified Notes Hub.
+   Added 'notes' mode to navigation whitelist for safe notification routing,
+   deep-linking, and offline access to the centralized notes hub.
+   Content-only update to Service Worker routing whitelist; no shell asset paths changed.
+
+   v21: Phase 5B.1.1 — Warm-up & Cool-down Image Policy Compliance.
+   Added 12 local offline SVG illustrations for warm-up and cool-down to SHELL_ASSETS,
+   fully replacing external unverified/female images with original male-only SVGs.
+   Cache version bumped to v21 for full offline caching.
+
+   v22: Phase 5B.1.2 — Legacy A/B Exercise Images Compliance.
+   Added 12 local offline SVG illustrations for Routine A/B exercises to SHELL_ASSETS,
+   fully replacing external unverified/female exercise images with original male-only SVGs.
+   Cache version bumped to v22 for full offline caching.
+
+   v24: Phase 12.1B Curated Exercise Catalog Images.
+   Added 19 curated exercise SVG assets with original adult male-only SVGs to SHELL_ASSETS.
+   Cache version bumped from v23 (const CACHE_VERSION = 'v23') to v24 for full offline caching. */
+
+const CACHE_VERSION = 'v24';
+const SHELL_CACHE = 'zatoona-shell-' + CACHE_VERSION;
+const RUNTIME_CACHE = 'zatoona-runtime-' + CACHE_VERSION;
+const CURRENT_CACHES = [SHELL_CACHE, RUNTIME_CACHE];
+
+/* The exact app shell — same-origin files required for the app to load and
+   run with zero network access. './' and './index.html' are the real PWA
+   entry point (manifest start_url/scope). */
+const SHELL_ASSETS = [
+  './',
+  './index.html',
+  './manifest.json',
+  './icons/icon-any.svg',
+  './icons/icon-maskable.svg',
+  './icons/icon-192.png',
+  './icons/icon-512.png',
+  './icons/icon-maskable-512.png',
+  './icons/icon-apple-touch-180.png',
+  './icons/favicon-32.png',
+  './assets/fonts/tajawal-v12-arabic-400.woff2',
+  './assets/fonts/tajawal-v12-latin-400.woff2',
+  './assets/fonts/tajawal-v12-arabic-500.woff2',
+  './assets/fonts/tajawal-v12-latin-500.woff2',
+  './assets/fonts/tajawal-v12-arabic-700.woff2',
+  './assets/fonts/tajawal-v12-latin-700.woff2',
+  './assets/data/exercise-catalog.js',
+  './assets/data/stretch-catalog.js',
+  './assets/images/warmup/warmup-01-cardio.svg',
+  './assets/images/warmup/warmup-02-arm-circles.svg',
+  './assets/images/warmup/warmup-03-leg-swings.svg',
+  './assets/images/warmup/warmup-04-hip-circles.svg',
+  './assets/images/warmup/warmup-05-bodyweight-squat.svg',
+  './assets/images/warmup/warmup-06-warmup-set.svg',
+  './assets/images/cooldown/cooldown-01-shoulder-stretch.svg',
+  './assets/images/cooldown/cooldown-02-chest-stretch.svg',
+  './assets/images/cooldown/cooldown-03-lower-back-stretch.svg',
+  './assets/images/cooldown/cooldown-04-hamstring-stretch.svg',
+  './assets/images/cooldown/cooldown-05-quad-stretch.svg',
+  './assets/images/cooldown/cooldown-06-calm-walk.svg',
+  './assets/images/exercises/ex-a01-goblet-squat.svg',
+  './assets/images/exercises/ex-a02-bench-press.svg',
+  './assets/images/exercises/ex-a03-lat-pulldown.svg',
+  './assets/images/exercises/ex-a04-overhead-press.svg',
+  './assets/images/exercises/ex-a05-plank.svg',
+  './assets/images/exercises/ex-a06-face-pull.svg',
+  './assets/images/exercises/ex-b01-romanian-deadlift.svg',
+  './assets/images/exercises/ex-b02-barbell-row.svg',
+  './assets/images/exercises/ex-b03-push-up.svg',
+  './assets/images/exercises/ex-b04-pull-up.svg',
+  './assets/images/exercises/ex-b05-abdominal-crunch.svg',
+  './assets/images/exercises/ex-b06-lunges.svg',
+  './assets/images/exercises/ex-barbell-back-squat.svg',
+  './assets/images/exercises/ex-conventional-deadlift.svg',
+  './assets/images/exercises/ex-incline-barbell-bench-press.svg',
+  './assets/images/exercises/ex-incline-dumbbell-press.svg',
+  './assets/images/exercises/ex-dumbbell-bench-press.svg',
+  './assets/images/exercises/ex-seated-cable-row.svg',
+  './assets/images/exercises/ex-leg-press.svg',
+  './assets/images/exercises/ex-seated-dumbbell-shoulder-press.svg',
+  './assets/images/exercises/ex-hanging-leg-raise.svg',
+  './assets/images/exercises/ex-standing-dumbbell-lateral-raise.svg',
+  './assets/images/exercises/ex-barbell-curl.svg',
+  './assets/images/exercises/ex-hammer-curl.svg',
+  './assets/images/exercises/ex-triceps-rope-pushdown.svg',
+  './assets/images/exercises/ex-skull-crushers.svg',
+  './assets/images/exercises/ex-dumbbell-chest-flyes.svg',
+  './assets/images/exercises/ex-lying-leg-curl-machine.svg',
+  './assets/images/exercises/ex-seated-leg-curl-machine.svg',
+  './assets/images/exercises/ex-standing-calf-raise-machine.svg',
+  './assets/images/exercises/ex-seated-palms-up-wrist-curl.svg',
+  './assets/images/stretches/str-doorway-pec-stretch.svg',
+  './assets/images/stretches/str-arm-circles-dynamic.svg',
+  './assets/images/stretches/str-cross-body-shoulder-stretch.svg',
+  './assets/images/stretches/str-band-shoulder-dislocations.svg',
+  './assets/images/stretches/str-lat-wall-stretch.svg',
+  './assets/images/stretches/str-childs-pose.svg',
+  './assets/images/stretches/str-band-pull-apart-activation.svg',
+  './assets/images/stretches/str-upper-trap-stretch.svg',
+  './assets/images/stretches/str-chin-tucks.svg',
+  './assets/images/stretches/str-levator-scapulae-stretch.svg',
+  './assets/images/stretches/str-kneeling-hip-flexor.svg',
+  './assets/images/stretches/str-hip-opener-90-90.svg',
+  './assets/images/stretches/str-butterfly-stretch.svg',
+  './assets/images/stretches/str-standing-quad-stretch.svg',
+  './assets/images/stretches/str-standing-hamstring-stretch.svg',
+  './assets/images/stretches/str-dynamic-leg-swings.svg',
+  './assets/images/stretches/str-couch-stretch.svg',
+  './assets/images/stretches/str-pigeon-pose.svg',
+  './assets/images/stretches/str-figure-four-stretch.svg',
+  './assets/images/stretches/str-glute-bridge-activation.svg',
+  './assets/images/stretches/str-wall-calf-stretch.svg',
+  './assets/images/stretches/str-ankle-wall-mobilization.svg',
+  './assets/images/stretches/str-soleus-bent-knee-stretch.svg',
+  './assets/images/stretches/str-wrist-extensor-stretch.svg',
+  './assets/images/stretches/str-wrist-flexor-prayer.svg',
+  './assets/images/stretches/str-quadruped-wrist-circles.svg',
+  './assets/images/stretches/str-cat-cow-mobility.svg',
+  './assets/images/stretches/str-thoracic-spine-rotations.svg',
+  './assets/images/stretches/str-bird-dog-activation.svg',
+  './assets/images/stretches/str-cobra-lumbar-stretch.svg',
+  './assets/images/stretches/str-worlds-greatest-stretch.svg',
+  './assets/images/stretches/str-deep-squat-pry.svg',
+  './assets/images/stretches/str-downward-dog.svg',
+  './assets/images/stretches/str-inchworm-walkout.svg',
+];
+const SHELL_FALLBACK = './'; // what to serve for any in-scope navigation that isn't individually cached
+
+/* Cross-origin hosts we opportunistically cache AFTER a successful fetch
+   (never pre-fetched in bulk) — exercise photos + the optional web font.
+   Nothing else external is cached; e.g. exrx.net article links and the
+   science-source links in the Schedule tab are never touched here, since
+   they're meant to open in a real browser tab, not be usable offline. */
+const RUNTIME_HOSTS = [
+  'commons.wikimedia.org',
+  'fonts.googleapis.com',
+  'fonts.gstatic.com',
+];
+
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(SHELL_CACHE)
+      .then((cache) => cache.addAll(SHELL_ASSETS))
+      .catch((err) => {
+        // Never let a single missing/renamed shell asset block installation —
+        // the app must still install and work for everything that DID cache.
+        console.warn('[sw] shell precache had an issue:', err);
+      })
+  );
+  // Deliberately NOT calling self.skipWaiting() here — the page decides when
+  // to activate a new version (see the SKIP_WAITING message handler below),
+  // so a mid-session user is never yanked onto new code without warning.
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    (async () => {
+      const names = await caches.keys();
+      await Promise.all(
+        names
+          .filter((n) => n.startsWith('zatoona-') && !CURRENT_CACHES.includes(n))
+          .map((n) => caches.delete(n))
+      );
+      await self.clients.claim();
+    })()
+  );
+});
+
+// Lets the page trigger activation of a waiting service worker on its own
+// schedule (see the update banner in the app), instead of this file forcing
+// a reload on its own.
+self.addEventListener('message', (event) => {
+  if (event.data === 'SKIP_WAITING') self.skipWaiting();
+});
+
+/* ================= NOTIFICATION CLICK ROUTING (Phase 8B) ================= */
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+
+  const data = event.notification.data || {};
+  const VALID_MODES = ['home','meal','gym','sleep','prayer','schedule','recovery','overview','search','budget','notes','stretches'];
+  const safeMode = (data.mode && VALID_MODES.includes(data.mode)) ? data.mode : 'home';
+  const safeDate = (data.date && /^\d{4}-\d{2}-\d{2}$/.test(data.date)) ? data.date : null;
+  const safeTargetId = data.targetId ? String(data.targetId).replace(/[^a-zA-Z0-9_\-:]/g, '').slice(0, 100) : null;
+
+  const routePayload = {
+    mode: safeMode,
+    date: safeDate,
+    targetId: safeTargetId,
+    key: data.key || null
+  };
+
+  event.waitUntil(
+    (async () => {
+      const allClients = await self.clients.matchAll({
+        type: 'window',
+        includeUncontrolled: true
+      });
+
+      // Find an existing client window within our origin/scope
+      let client = allClients.find((c) => {
+        try {
+          const clientUrl = new URL(c.url);
+          return clientUrl.origin === self.location.origin;
+        } catch(e) {
+          return false;
+        }
+      });
+
+      if (client) {
+        // Focus the existing window
+        await client.focus();
+        // Deliver routing instruction to the active client
+        client.postMessage({
+          type: 'ZATOONA_NOTIFICATION_CLICK',
+          data: routePayload
+        });
+      } else if (self.clients.openWindow) {
+        // Open a new window within app scope
+        const targetUrl = new URL('./', self.location.href);
+        if (safeMode && safeMode !== 'home') {
+          targetUrl.searchParams.set('notif_mode', safeMode);
+          targetUrl.hash = '#' + safeMode;
+        }
+        if (safeDate) {
+          targetUrl.searchParams.set('notif_date', safeDate);
+        }
+        if (safeTargetId) {
+          targetUrl.searchParams.set('notif_act', safeTargetId);
+        }
+        await self.clients.openWindow(targetUrl.href);
+      }
+    })()
+  );
+});
+
+function isRuntimeHost(url) {
+  return RUNTIME_HOSTS.some((h) => url.hostname === h);
+}
+
+/* Cache-first-on-miss-fallback for navigations/shell assets: try the exact
+   cached match, then network (updating the cache for next time), then a
+   named shell fallback (index/root) — all resolved INSIDE this function so
+   there's no reliance on a rejected promise that never actually happens. */
+async function staleWhileRevalidate(request, cacheName, fallbackUrl) {
+  const cache = await caches.open(cacheName);
+  const cached = await cache.match(request);
+  const networkPromise = fetch(request)
+    .then((resp) => {
+      if (resp && resp.ok) cache.put(request, resp.clone());
+      return resp;
+    })
+    .catch(() => null);
+  const fresh = await networkPromise;
+  if (cached) return cached;
+  if (fresh) return fresh;
+  if (fallbackUrl) {
+    const fallback = await cache.match(fallbackUrl);
+    if (fallback) return fallback;
+  }
+  return Response.error();
+}
+
+async function cacheFirst(request, cacheName) {
+  const cache = await caches.open(cacheName);
+  const cached = await cache.match(request);
+  if (cached) return cached;
+  try {
+    const resp = await fetch(request);
+    // Opaque (no-cors cross-origin) responses are still cacheable and usable as <img src>.
+    if (resp && (resp.ok || resp.type === 'opaque')) cache.put(request, resp.clone());
+    return resp;
+  } catch (err) {
+    return cached || Response.error();
+  }
+}
+
+self.addEventListener('fetch', (event) => {
+  const { request } = event;
+  if (request.method !== 'GET') return; // never touch writes
+
+  const url = new URL(request.url);
+
+  // Same-origin navigations and shell assets: stale-while-revalidate so the
+  // app opens instantly from cache (works offline) while quietly picking up
+  // updates in the background for next time.
+  if (url.origin === self.location.origin) {
+    const isShellAsset = SHELL_ASSETS.some((a) => {
+      const assetPath = new URL(a, self.location.href).pathname;
+      return url.pathname === assetPath;
+    });
+    if (request.mode === 'navigate' || isShellAsset) {
+      event.respondWith(staleWhileRevalidate(request, SHELL_CACHE, SHELL_FALLBACK));
+      return;
+    }
+    // Any other same-origin asset (e.g. icons requested directly): cache-first.
+    event.respondWith(cacheFirst(request, SHELL_CACHE));
+    return;
+  }
+
+  // Cross-origin: only the specific hosts we've allow-listed get opportunistic
+  // runtime caching (exercise photos, the web font). Everything else (exrx.net,
+  // CDC/WHO/journal source links, etc.) is left to the network/browser as normal —
+  // those are reference links meant to be opened online, not offline assets.
+  if (isRuntimeHost(url)) {
+    event.respondWith(cacheFirst(request, RUNTIME_CACHE));
+  }
+  // No respondWith() call for anything else => default browser network behavior,
+  // which fails gracefully offline exactly like a normal missing resource would.
+});

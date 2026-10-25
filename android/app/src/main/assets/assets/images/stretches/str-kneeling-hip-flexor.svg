@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%" role="img" aria-label="إطالة مثنيات الورك بالركوع النصفي">
+  <defs>
+    <linearGradient id="bgGrad-str-kneeling-hip-flexor" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="maleMuscles-str-kneeling-hip-flexor" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569"/>
+      <stop offset="100%" stop-color="#334155"/>
+    </linearGradient>
+    <filter id="glow-str-kneeling-hip-flexor" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="400" height="300" rx="16" fill="url(#bgGrad-str-kneeling-hip-flexor)"/>
+
+  <!-- Gym floor grid lines for spatial reference -->
+  <line x1="30" y1="240" x2="370" y2="240" stroke="#334155" stroke-width="2" stroke-dasharray="6,4"/>
+  <circle cx="200" cy="240" r="3" fill="#64748b"/>
+
+  <!-- Target Muscle Highlight Indicator Banner -->
+  <rect x="24" y="20" width="120" height="24" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <circle cx="36" cy="32" r="4" fill="#f59e0b"/>
+  <text x="46" y="36" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="11" font-weight="600">STATIC STRETCH</text>
+
+  <!-- Male Athletic Figure Group -->
+  <g id="maleFigure-str-kneeling-hip-flexor" transform="translate(0, 0)">
+
+    <!-- Male Half-Kneeling Athletic Hip Flexor Stretch -->
+    <!-- Rear Knee on Mat -->
+    <rect x="70" y="236" width="260" height="8" rx="2" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+    <!-- Rear Leg (Thigh vertical, knee down) -->
+    <path d="M150 170 L150 236 L115 236" fill="none" stroke="#64748b" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Torso upright and tall -->
+    <path d="M155 170 L160 110" fill="none" stroke="url(#maleMuscles-str-kneeling-hip-flexor)" stroke-width="22" stroke-linecap="round"/>
+    <!-- Head -->
+    <ellipse cx="162" cy="85" rx="14" ry="16" fill="#475569" stroke="#64748b" stroke-width="2"/>
+    <!-- Target Hip Flexor / Psoas Glow Zone -->
+    <ellipse cx="152" cy="168" rx="14" ry="18" fill="#f59e0b" opacity="0.9" filter="url(#glow-str-kneeling-hip-flexor)"/>
+    <!-- Front Leg bent 90 degrees -->
+    <path d="M160 170 L220 175 L225 236" fill="none" stroke="#64748b" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Forward Pelvic Push Indicator -->
+    <path d="M175 165 L198 165" fill="none" stroke="#38bdf8" stroke-width="3"/>
+    <polygon points="204,165 196,160 196,170" fill="#38bdf8"/>
+
+  </g>
+
+  <!-- Clean Descriptive Watermark Badge -->
+  <text x="375" y="278" text-anchor="end" fill="#64748b" font-family="system-ui, sans-serif" font-size="10" font-weight="500">ZATOONA MOBILITY</text>
+  <text x="24" y="278" fill="#475569" font-family="system-ui, sans-serif" font-size="10" font-weight="500">STRICT MALES-ONLY VECTOR</text>
+</svg>

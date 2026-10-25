@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGradC1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0f7ff"/>
+      <stop offset="100%" stop-color="#e3f0fd"/>
+    </linearGradient>
+    <linearGradient id="maleGradC1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0d47a1"/>
+      <stop offset="100%" stop-color="#1565c0"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="16" fill="url(#bgGradC1)"/>
+  
+  <!-- Stretch Tension Highlight Arc -->
+  <path d="M 135 65 Q 155 75 145 100" fill="none" stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+  <polygon points="144,106 142,94 152,98" fill="#e65100"/>
+  
+  <!-- Male Athletic Figure Performing Shoulder Stretch -->
+  <!-- Head -->
+  <circle cx="100" cy="42" r="14" fill="url(#maleGradC1)"/>
+  <!-- Torso -->
+  <path d="M 76 70 Q 100 64 124 70 L 114 122 L 86 122 Z" fill="url(#maleGradC1)"/>
+  <!-- Right Arm crossing horizontally over chest -->
+  <path d="M 124 74 L 62 82" stroke="url(#maleGradC1)" stroke-width="9" stroke-linecap="round"/>
+  <!-- Left Arm pulling right elbow gently toward body -->
+  <path d="M 78 74 L 84 102 L 94 80" fill="none" stroke="#1e88e5" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Legs upright stance -->
+  <path d="M 90 122 L 84 170" stroke="url(#maleGradC1)" stroke-width="11" stroke-linecap="round"/>
+  <path d="M 110 122 L 116 170" stroke="url(#maleGradC1)" stroke-width="11" stroke-linecap="round"/>
+  <path d="M 84 170 L 72 174 M 116 170 L 128 174" stroke="url(#maleGradC1)" stroke-width="8" stroke-linecap="round"/>
+  
+  <!-- Duration Badge -->
+  <rect x="20" y="24" width="58" height="22" rx="6" fill="#e3f2fd" stroke="#90caf9" stroke-width="1.5"/>
+  <text x="49" y="39" font-family="'IBM Plex Mono', monospace, sans-serif" font-size="10" font-weight="bold" fill="#0d47a1" text-anchor="middle">20-30s</text>
+</svg>

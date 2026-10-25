@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%" role="img" aria-label="تمرين الزحف باليدين لكامل الجسم (الإنش وورم)">
+  <defs>
+    <linearGradient id="bgGrad-str-inchworm-walkout" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="maleMuscles-str-inchworm-walkout" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569"/>
+      <stop offset="100%" stop-color="#334155"/>
+    </linearGradient>
+    <filter id="glow-str-inchworm-walkout" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="400" height="300" rx="16" fill="url(#bgGrad-str-inchworm-walkout)"/>
+
+  <!-- Gym floor grid lines for spatial reference -->
+  <line x1="30" y1="240" x2="370" y2="240" stroke="#334155" stroke-width="2" stroke-dasharray="6,4"/>
+  <circle cx="200" cy="240" r="3" fill="#64748b"/>
+
+  <!-- Target Muscle Highlight Indicator Banner -->
+  <rect x="24" y="20" width="120" height="24" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <circle cx="36" cy="32" r="4" fill="#f59e0b"/>
+  <text x="46" y="36" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="11" font-weight="600">WARMUP DRILL</text>
+
+  <!-- Male Athletic Figure Group -->
+  <g id="maleFigure-str-inchworm-walkout" transform="translate(0, 0)">
+
+    <!-- Male Athletic Full Body Mobility & Movement Silhouette -->
+    <rect x="50" y="235" width="300" height="8" rx="2" fill="#1e293b"/>
+    <!-- Front Leg Deep Lunge -->
+    <path d="M120 235 L125 175 L190 180" fill="none" stroke="#64748b" stroke-width="12" stroke-linecap="round"/>
+    <!-- Rear Leg Long Stride -->
+    <path d="M190 180 L290 230" fill="none" stroke="#64748b" stroke-width="11" stroke-linecap="round"/>
+    <!-- Support Hand on Ground -->
+    <path d="M150 175 L150 235" fill="none" stroke="#64748b" stroke-width="8" stroke-linecap="round"/>
+    <!-- Torso Rotated Upward with Raised Arm (World's Greatest) -->
+    <path d="M190 180 L150 135" fill="none" stroke="url(#maleMuscles-str-inchworm-walkout)" stroke-width="19" stroke-linecap="round"/>
+    <path d="M150 135 L120 75" fill="none" stroke="#64748b" stroke-width="9" stroke-linecap="round"/>
+    <circle cx="120" cy="72" r="5" fill="#38bdf8"/>
+    <!-- Target Full Body Integration Glow -->
+    <circle cx="170" cy="170" r="18" fill="#f59e0b" opacity="0.85" filter="url(#glow-str-inchworm-walkout)"/>
+    <!-- Head Looking Up at Raised Hand -->
+    <ellipse cx="155" cy="118" rx="13" ry="15" fill="#475569" stroke="#64748b" stroke-width="2"/>
+    <!-- Rotational vector -->
+    <path d="M130 115 Q145 95 130 80" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="3,2"/>
+    <polygon points="127,77 135,80 131,85" fill="#38bdf8"/>
+
+  </g>
+
+  <!-- Clean Descriptive Watermark Badge -->
+  <text x="375" y="278" text-anchor="end" fill="#64748b" font-family="system-ui, sans-serif" font-size="10" font-weight="500">ZATOONA MOBILITY</text>
+  <text x="24" y="278" fill="#475569" font-family="system-ui, sans-serif" font-size="10" font-weight="500">STRICT MALES-ONLY VECTOR</text>
+</svg>

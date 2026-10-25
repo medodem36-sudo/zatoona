@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgSkullCrush" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#faf5ff"/>
+      <stop offset="100%" stop-color="#f3e8ff"/>
+    </linearGradient>
+    <linearGradient id="maleGradSkull" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6b21a8"/>
+      <stop offset="100%" stop-color="#4c1d95"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="200" rx="14" fill="url(#bgSkullCrush)"/>
+  
+  <!-- Floor line -->
+  <line x1="25" y1="175" x2="275" y2="175" stroke="#d8b4fe" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Badge -->
+  <rect x="18" y="14" width="158" height="22" rx="6" fill="#faf5ff" stroke="#c084fc" stroke-width="1.2"/>
+  <text x="97" y="29" font-family="'IBM Plex Mono', system-ui, sans-serif" font-size="8" font-weight="bold" fill="#6b21a8" text-anchor="middle">EZ-BAR SKULL CRUSHERS</text>
+
+  <!-- Flat Bench -->
+  <line x1="75" y1="174" x2="75" y2="132" stroke="#475569" stroke-width="5" stroke-linecap="round"/>
+  <line x1="195" y1="174" x2="195" y2="132" stroke="#475569" stroke-width="5" stroke-linecap="round"/>
+  <line x1="60" y1="128" x2="205" y2="128" stroke="#1e293b" stroke-width="10" stroke-linecap="round"/>
+
+  <!-- Male Lifter Flat on Bench -->
+  <circle cx="80" cy="116" r="13" fill="url(#maleGradSkull)"/>
+  <path d="M 94 120 L 165 120" stroke="url(#maleGradSkull)" stroke-width="14" stroke-linecap="round"/>
+  <path d="M 165 120 L 195 128 L 202 174" fill="none" stroke="url(#maleGradSkull)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Upper Arms Vertical pointing at ceiling (fixed elbow position) -->
+  <line x1="118" y1="116" x2="118" y2="76" stroke="url(#maleGradSkull)" stroke-width="8" stroke-linecap="round"/>
+  <!-- Forearms hinged back toward forehead with EZ-bar -->
+  <line x1="118" y1="76" x2="88" y2="84" stroke="url(#maleGradSkull)" stroke-width="7" stroke-linecap="round"/>
+
+  <!-- EZ-Curl Bar above Forehead -->
+  <path d="M 82 76 L 86 86 L 90 82" fill="none" stroke="#64748b" stroke-width="4.5" stroke-linecap="round"/>
+  <rect x="74" y="70" width="6" height="24" rx="2" fill="#0f172a"/>
+
+  <!-- Triceps Extension Highlight -->
+  <circle cx="118" cy="88" r="4.5" fill="#e65100"/>
+  <!-- Extension upward arc arrow -->
+  <path d="M 90 74 C 95 62, 108 58, 118 60" fill="none" stroke="#e65100" stroke-width="2" stroke-linecap="round"/>
+  <polygon points="122,62 114,57 116,66" fill="#e65100"/>
+</svg>

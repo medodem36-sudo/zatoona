@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGradW1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0fdf4"/>
+      <stop offset="100%" stop-color="#e2f7ec"/>
+    </linearGradient>
+    <linearGradient id="maleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1b5e20"/>
+      <stop offset="100%" stop-color="#0d3b13"/>
+    </linearGradient>
+  </defs>
+  <!-- Card Background -->
+  <rect width="200" height="200" rx="16" fill="url(#bgGradW1)"/>
+  <circle cx="100" cy="100" r="78" fill="none" stroke="#c8ecd7" stroke-width="2" stroke-dasharray="5 5"/>
+  
+  <!-- Pulse Rhythm Indicator -->
+  <path d="M 24 38 L 44 38 L 50 25 L 58 50 L 66 30 L 72 40 L 88 38" fill="none" stroke="#e65100" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Ground Motion Track -->
+  <line x1="30" y1="168" x2="170" y2="168" stroke="#a5d6a7" stroke-width="3" stroke-linecap="round"/>
+  <line x1="45" y1="174" x2="115" y2="174" stroke="#81c784" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Motion Streaks Behind -->
+  <path d="M 35 85 L 60 85 M 28 100 L 52 100 M 38 115 L 58 115" stroke="#81c784" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Male Athletic Runner -->
+  <!-- Head -->
+  <circle cx="126" cy="46" r="14" fill="url(#maleGrad)"/>
+  <!-- Torso (athletic lean) -->
+  <path d="M 124 58 L 108 106" stroke="url(#maleGrad)" stroke-width="14" stroke-linecap="round"/>
+  <!-- Left Leg (Trailing extension) -->
+  <path d="M 108 106 L 82 128 L 56 148" fill="none" stroke="url(#maleGrad)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 56 148 L 46 154" stroke="url(#maleGrad)" stroke-width="8" stroke-linecap="round"/>
+  <!-- Right Leg (Forward high knee) -->
+  <path d="M 108 106 L 132 122 L 118 158" fill="none" stroke="#2e7d32" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 118 158 L 134 164" stroke="#2e7d32" stroke-width="8" stroke-linecap="round"/>
+  <!-- Left Arm (Backwards pump) -->
+  <path d="M 118 72 L 96 86 L 84 76" fill="none" stroke="url(#maleGrad)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Right Arm (Forward drive) -->
+  <path d="M 120 72 L 142 88 L 158 76" fill="none" stroke="#2e7d32" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
