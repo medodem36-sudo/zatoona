@@ -1,7 +1,7 @@
 # Phase 13.4B1 — Isolated Native Android Shell Foundation: Engineering Report
 
 **Project:** Zatoona (Personal Offline-First Progressive Web App)  
-**Workspace:** `C:\Users\Lenovo\Documents\GitHub\zatoona`  
+**Workspace:** `<REPOSITORY_ROOT>`  
 **Date:** 2026-10-25  
 **Build Status:** `SOURCE_SCAFFOLD_ONLY — NOT BUILT`  
 **Toolchain State:** Android SDK / Studio / JDK 17+ Absent from Local Host  
@@ -38,7 +38,7 @@ A preflight inspection probed environment variables and standard filesystem path
 | **Java JDK (17+)** | `JAVA_HOME`, `javac` on `PATH`, `C:\Program Files\Java` | **NOT FOUND** | Only legacy JRE 1.8 (`C:\Program Files (x86)\Common Files\Oracle\Java\java8path\java.EXE`) is present; no `javac`. |
 | **Gradle** | `GRADLE_HOME`, `gradle` on `PATH` | **NOT FOUND** | Standalone Gradle CLI is not installed on `PATH`. |
 | **Node.js / npm** | `node`, `npm` on `PATH` | **NOT FOUND** | Node.js runtime not installed. |
-| **Git Executable** | Bundled GitHub Desktop Git | **FOUND** | `C:\Users\Lenovo\AppData\Local\GitHubDesktop\app-3.6.7\resources\app\git\cmd\git.exe` (`git version 2.53.0.windows.4`). |
+| **Git Executable** | Bundled GitHub Desktop Git | **FOUND** | `<GIT_PATH>` (`git version 2.53.0.windows.4`). |
 
 ### Build Status Determination:
 Because neither the Android SDK, JDK 17+, nor Android Studio is present to execute a Gradle task or compile Dalvik/ART bytecode, the project status is formally recorded as:

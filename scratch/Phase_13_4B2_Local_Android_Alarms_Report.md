@@ -1,9 +1,9 @@
 # Phase 13.4B2 — Native Android Local Alarm Engine Report
 ## Closed-App Reminders, Persistent Scheduling & Android Validation
 
-**Project Path:** `C:\Users\Lenovo\Documents\GitHub\zatoona`  
+**Project Path:** `<REPOSITORY_ROOT>`  
 **Execution Timestamp:** 2026-10-26 00:55:00 EEST  
-**Environment Host:** Windows 10 x64 (`DESKTOP-GT3TV7O`)  
+**Environment Host:** Windows 10 x64 (`[REDACTED_HOST]`)  
 **Verdict:** **`ALARM_ENGINE_VERIFIED`** 🎯  
 **Generated Debug APK:** `android/app/build/outputs/apk/debug/app-debug.apk` (7,957,348 bytes, ~7.95 MB)  
 **Master Test Gate:** 16 / 16 Suites Passed (848 / 848 checks, 100%)  
@@ -36,7 +36,7 @@ This architecture enables **closed-app reminders** to trigger reliably without r
    - Attempted live runtime boot on the host's configured AVD `Medium_Phone_API_37.0`.
    - Discovered and documented exact host constraints:
      * Hypervisor driver not installed (`accel: 6`).
-     * `FATAL: Not enough space to create userdata partition. Available: 9436.59 MB at C:\Users\Lenovo\.android\avd\Medium_Phone.avd, need 12288.00 MB.`
+     * `FATAL: Not enough space to create userdata partition. Available: 9436.59 MB at <ANDROID_AVD_HOME>\Medium_Phone.avd, need 12288.00 MB.`
    - Fully verified native engine logic, recurrence algorithms, deduplication, payload constraints, and bridge contracts via the dedicated 74-check acceptance test suite and successful full APK compilation.
 
 5. **Unified Regression Gate:**
@@ -137,20 +137,20 @@ This architecture enables **closed-app reminders** to trigger reliably without r
 As requested, live runtime installation and testing was attempted using the host's configured AVD `Medium_Phone_API_37.0`:
 
 ```powershell
-& "C:\Users\Lenovo\AppData\Local\Android\Sdk\emulator\emulator.exe" -avd Medium_Phone_API_37.0 -no-window -no-boot-anim -no-audio
+& "<ANDROID_SDK_PATH>\emulator\emulator.exe" -avd Medium_Phone_API_37.0 -no-window -no-boot-anim -no-audio
 ```
 
 **Diagnostic Output:**
 ```
 INFO         | Android emulator version 37.2.12.0 (build_id 16428233)
-INFO         | Found systemPath: C:\Users\Lenovo\AppData\Local\Android\Sdk\system-images\android-37.0\google_apis_playstore\x86_64\
+INFO         | Found systemPath: <ANDROID_SDK_PATH>\system-images\android-37.0\google_apis_playstore\x86_64\
 INFO         | Checking system compatibility:
 INFO         |   Checking: hasCompatibleHypervisor
 INFO         |      Ok: Hypervisor compatibility to run avd: `Medium_Phone_API_37.0` are met
 INFO         |   Checking: hasSufficientSystem
 INFO         |      Warning: Suggested minimum system RAM to run avd 'Medium_Phone_API_37.0' is 16384 MiB (available: 16255 MiB)
 USER_WARNING | Suggested minimum system RAM to run avd 'Medium_Phone_API_37.0' is 16384 MiB (available: 16255 MiB).
-FATAL        | Not enough space to create userdata partition. Available: 9436.59 MB at C:\Users\Lenovo\.android\avd\..\avd\Medium_Phone.avd, need 12288.00 MB.
+FATAL        | Not enough space to create userdata partition. Available: 9436.59 MB at <ANDROID_AVD_HOME>\..\avd\Medium_Phone.avd, need 12288.00 MB.
 ```
 
 **Findings:**
@@ -187,7 +187,7 @@ Following registration of Suite 16 in `scratch/test_master_regression_gate.py`, 
 ZATOONA UNIFIED MASTER TEST GATE (PHASE 12.6)
 ================================================================================
 Timestamp    : 2026-10-26 00:50:00
-Repository   : C:\Users\Lenovo\Documents\GitHub\zatoona
+Repository   : <REPOSITORY_ROOT>
 Git Commit   : 75c7418 (Branch: main)
 Python       : 3.14.7
 Suites to run: 16

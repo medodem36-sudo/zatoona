@@ -27,7 +27,7 @@
    - `scratch/test-results/test_master_report.json` (تقرير JSON مهيكل للتحليل الآلي).
    - ملفات السجلات المنفصلة لكل جناح: `<suite_id>.stdout.log` و `<suite_id>.stderr.log`.
 4. **نسخة احتياطية خارجية سابقة للتنفيذ (Preflight Backup):**
-   - `C:\Users\Lenovo\Documents\Zatoona_Backups\phase12_6_preflight_20261025\`
+   - `<BACKUP_DIR>\phase12_6_preflight_20261025\`
 
 ---
 

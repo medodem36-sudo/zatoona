@@ -1,7 +1,7 @@
 # Phase 13.2 — Cairo Prayer Times Support: Implementation & Verification Report
 
 **Project:** Zatoona (Personal Offline-First Progressive Web App)  
-**Workspace:** `C:\Users\Lenovo\Documents\GitHub\zatoona`  
+**Workspace:** `<REPOSITORY_ROOT>`  
 **Date:** 2026-10-25  
 **Status:** Completed & Fully Verified (100% PASS)  
 **Master Regression Gate:** 623 / 623 checks passing across 12 suites (137.65s runtime)  
@@ -37,8 +37,8 @@ Phase 13.2 implemented native support for **Cairo (القاهرة)** as a first-
 ## 2. Pre-flight Verification & Backup
 
 Prior to making any code modifications, a pre-flight inspection and external backup were performed:
-- **Git Context:** Branch `main`, commit `75c7418` (via GitHub Desktop Git executable: `C:\Users\Lenovo\AppData\Local\GitHubDesktop\app-3.6.7\resources\app\git\cmd\git.exe`).
-- **External Backup:** Created at `C:\Users\Lenovo\Documents\Zatoona_Backups\phase13_2_preflight_20261025` containing clean pre-flight copies of `index.html`, `zatoona.html`, `sw.js`, `manifest.json`, and `assets/data/exercise-catalog.js`.
+- **Git Context:** Branch `main`, commit `75c7418` (via GitHub Desktop Git executable: `<GIT_PATH>`).
+- **External Backup:** Created at `<BACKUP_DIR>\phase13_2_preflight_20261025` containing clean pre-flight copies of `index.html`, `zatoona.html`, `sw.js`, `manifest.json`, and `assets/data/exercise-catalog.js`.
 - **Pre-flight Binary Parity:** Verified that `index.html` and `zatoona.html` were 100% identical.
 
 ---

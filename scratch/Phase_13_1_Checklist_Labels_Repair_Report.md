@@ -3,7 +3,7 @@
 ### Focused Production Fix — Preserve All Existing User Data
 
 - **المشروع:** Zatoona (تطبيق ويب تقدمي شخصي أوفلاين بالكامل — Personal Offline-First PWA)
-- **المسار المحلي:** `C:\\Users\\Lenovo\\Documents\\GitHub\\zatoona`
+- **المسار المحلي:** `<REPOSITORY_ROOT>`
 - **تاريخ وساعة التنفيذ:** 2026-10-25T20:05:00+03:00
 - **حالة بوابة الانحدار الموحدة (Master Regression Gate):** 11 جناحاً من أصل 11 ناجحة (587 / 587 فحصاً بنسبة 100%)
 - **طبيعة المهمة:** إصلاح إنتاجي مركز لمشكلة اختفاء أسماء المهام والعبادات وعادات النوم، مع الحفاظ التام والصارم على كافة بيانات ومفاتيح المستخدم المخزنة.
@@ -209,7 +209,7 @@ function renderScheduleChecklist(dayIdx, settings){
 ZATOONA UNIFIED MASTER TEST GATE (PHASE 12.6 + 13.1)
 ================================================================================
 Timestamp    : 2026-10-25 20:00:54
-Repository   : C:\Users\Lenovo\Documents\GitHub\zatoona
+Repository   : <REPOSITORY_ROOT>
 Git Commit   : 75c7418 (Branch: main)
 Python       : 3.14.7
 Suites to run: 11
@@ -254,7 +254,7 @@ GATE SUMMARY:
 
 ### 7.3 حالة Git
 - تم استخدام النسخة الفعلية المتاحة عبر GitHub Desktop:
-  `C:\\Users\\Lenovo\\AppData\\Local\\GitHubDesktop\\app-3.6.7\\resources\\app\\git\\cmd\\git.exe`
+  `<GIT_PATH>`
 - نتيجة `git diff --check`: خالية تماماً من أي أخطاء مسافات أو مشاكل تنسيق (0 errors).
 - التعديلات الإنتاجية محصورة بدقة متناهية في ملفي `index.html` وتوأمه `zatoona.html`.
 

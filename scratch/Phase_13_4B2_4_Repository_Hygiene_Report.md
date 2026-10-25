@@ -1,6 +1,6 @@
 # Phase 13.4B2.4 — Repository Hygiene & Remote Reconciliation Report
 **Date:** 2026-10-26  
-**Repository Root:** `C:\Users\Lenovo\Documents\GitHub\zatoona`  
+**Repository Root:** `<REPOSITORY_ROOT>`  
 **Git Branch:** `main`  
 **Status:** `COMPLETED_READY_FOR_STAGING`
 

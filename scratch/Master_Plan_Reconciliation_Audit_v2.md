@@ -3,7 +3,7 @@
 
 **نوع المهمة:** Strict Read-Only Audit  
 **المشروع:** Zatoona — Personal Offline-First PWA  
-**مسار المشروع الأساسي:** `C:\Users\Lenovo\Documents\GitHub\zatoona`  
+**مسار المشروع الأساسي:** `<REPOSITORY_ROOT>`  
 **تاريخ وساعة التدقيق:** 2026-10-21 01:37:45  
 **حالة التدقيق:** مكتمل بنجاح دون أي مساس بملفات الإنتاج (Strict Read-Only Enforcement)
 
@@ -27,7 +27,7 @@
 ## القسم 1 — هوية المصدر الحالي وحالة الملفات
 
 ### 1.1 الموقع ومسار العمل الفعلي
-- **مسار المشروع المستهدف:** `C:\Users\Lenovo\Documents\GitHub\zatoona`
+- **مسار المشروع المستهدف:** `<REPOSITORY_ROOT>`
 - **بيئة العمل ونظام التشغيل:** Windows 10/11 x64, Shell: PowerShell / Python 3.14.
 - **طبيعة المعالجة:** قراءة وتحليل وفحص أداء فقط (Read-Only)، دون تعديل أو كتابة على أي ملف من ملفات الإنتاج.
 
@@ -205,7 +205,7 @@ FC: no differences encountered
 ### 4.1 تدقيق التغطية الفعلية لصور التمارين (Exercise Image Coverage)
 
 #### أ. حالة الكتالوج والمكتبة المدمجة
-- فحص ملف [exercise-catalog.js](file:///c:/Users/Lenovo/Documents/GitHub/zatoona/assets/data/exercise-catalog.js) (الحجم: 103,789 بايت):
+- فحص ملف [exercise-catalog.js](file:///<REPOSITORY_ROOT>/assets/data/exercise-catalog.js) (الحجم: 103,789 بايت):
   - إجمالي التمارين المعرفة في الكتالوج: **119 تمرينًا**.
   - التمارين التي تحوي صورًا في الكتالوج: **0 تمرين (صفر)**.
   - جميع كائنات التمارين تحتوي حرفيًا على: `"images": []`.

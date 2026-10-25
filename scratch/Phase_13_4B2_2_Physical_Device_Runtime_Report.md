@@ -1,11 +1,11 @@
 # Phase 13.4B2.2 — Physical Android Device Runtime Validation Report
 ## Real-Device Validation on Samsung Galaxy A04e (Android 14 / API 34)
 
-**Project Path:** `C:\Users\Lenovo\Documents\GitHub\zatoona`  
+**Project Path:** `<REPOSITORY_ROOT>`  
 **Android Package:** `com.zatoona.app.debug`  
 **Execution Timestamp:** 2026-10-26 01:35:00 EEST  
 **Physical Test Device:** Samsung Galaxy A04e (`SM-A042F`), Android 14 (API 34)  
-**Device Serial / ID:** `R8YWA13G7WM`  
+**Device Serial / ID:** `[REDACTED_DEVICE_SERIAL]`  
 **Final Verdict:** **`RUNTIME_VERIFIED`** 🎯  
 **Master Test Gate:** 16 / 16 Suites Passed (848 / 848 checks, 100%)  
 **Binary Parity:** `index.html` ⟷ `zatoona.html` (100% byte-identical, 0 differences via `fc.exe /b`)
@@ -18,7 +18,7 @@ In **Phase 13.4B2.2**, Zatoona's native local alarm engine was deployed to and v
 
 This test provides real, hardware-level runtime proof:
 1. **Physical Device Connected & Verified:** Samsung SM-A042F running Android 14 (One UI, API 34, Security Patch Oct 2025).
-2. **APK Installation & Launch:** [`android/app/build/outputs/apk/debug/app-debug.apk`](file:///c:/Users/Lenovo/Documents/GitHub/zatoona/android/app/build/outputs/apk/debug/app-debug.apk) installed cleanly (`Performing Streamed Install` -> `Success`). Launched without crash; loaded the bundled PWA via the secure local origin `https://appassets.androidplatform.net/assets/index.html#`.
+2. **APK Installation & Launch:** [`android/app/build/outputs/apk/debug/app-debug.apk`](file:///<REPOSITORY_ROOT>/android/app/build/outputs/apk/debug/app-debug.apk) installed cleanly (`Performing Streamed Install` -> `Success`). Launched without crash; loaded the bundled PWA via the secure local origin `https://appassets.androidplatform.net/assets/index.html#`.
 3. **Notification Channels Created:** Android system confirmed 3 high-priority channels with Arabic localized titles (`zatoona_reminders`, `zatoona_prayers`, `zatoona_sleep`) set to `importance=4` (IMPORTANCE_HIGH).
 4. **Exact-Alarm Safe Fallback:** Android 14 policy restricts `SCHEDULE_EXACT_ALARM` by default for API 34 targets; the native scheduler smoothly used the non-fatal `setAndAllowWhileIdle(RTC_WAKEUP, ...)` fallback without exceptions or crashes.
 5. **Closed-App Delivery Proven:**
@@ -47,7 +47,7 @@ This test provides real, hardware-level runtime proof:
 | **API Level** | `ro.build.version.sdk` | **34** |
 | **Security Patch** | `ro.build.version.security_patch`| **2025-10-01** |
 | **Build Fingerprint**| `ro.build.display.id` | **UP1A.231005.007.A042FXXSDEYJ2** |
-| **Connection State** | `adb devices -l` | `R8YWA13G7WM device` (Authorized USB) |
+| **Connection State** | `adb devices -l` | `[REDACTED_DEVICE_SERIAL] device` (Authorized USB) |
 
 ---
 

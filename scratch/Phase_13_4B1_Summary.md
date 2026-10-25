@@ -1,7 +1,7 @@
 # Phase 13.4B1 — Isolated Native Android Shell Foundation: Summary
 
 **Project:** Zatoona (Personal Offline-First Progressive Web App)  
-**Workspace:** `C:\Users\Lenovo\Documents\GitHub\zatoona`  
+**Workspace:** `<REPOSITORY_ROOT>`  
 **Date:** 2026-10-25  
 **Build Status:** `SOURCE_SCAFFOLD_ONLY — NOT BUILT`  
 

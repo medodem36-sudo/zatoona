@@ -1,7 +1,7 @@
 # Phase 13.4A — Closed-App Reminders: Executive Summary & Recommendation
 
 **Project:** Zatoona (Personal Offline-First Progressive Web App)  
-**Workspace:** `C:\Users\Lenovo\Documents\GitHub\zatoona`  
+**Workspace:** `<REPOSITORY_ROOT>`  
 **Date:** 2026-10-25  
 **Status:** Audit Completed — Strict Read-Only  
 

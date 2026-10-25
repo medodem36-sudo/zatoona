@@ -1,7 +1,7 @@
 # Phase 13.4A — Closed-App Reminders Architecture & Feasibility Audit Report
 
 **Project:** Zatoona (Personal Offline-First Progressive Web App)  
-**Workspace:** `C:\Users\Lenovo\Documents\GitHub\zatoona`  
+**Workspace:** `<REPOSITORY_ROOT>`  
 **Date:** 2026-10-25  
 **Status:** Audit Completed — Strict Read-Only  
 **Baseline Test Gate:** 693 / 693 checks passing across 13 suites  

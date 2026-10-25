@@ -2,7 +2,7 @@
 ## Curated Exercise Catalog Image Gap Audit — Strict Read-Only Report
 
 - **المشروع:** Zatoona (تطبيق ويب تقدمي شخصي Offline-First PWA)
-- **المسار المحلي:** `C:\Users\Lenovo\Documents\GitHub\zatoona`
+- **المسار المحلي:** `<REPOSITORY_ROOT>`
 - **تاريخ وساعة التدقيق:** 2026-10-25T16:40:00+03:00
 - **نوع المهمة:** تدقيق فني صارم للقراءة فقط (Read-Only Audit — No Code / Asset Mutations)
 - **الحالة السابقة:** Phase 12.6.1 معتمدة بنجاح (497 / 497 فحصًا ناجحًا في بوابة الانحدار الموحدة)
@@ -28,8 +28,8 @@
    - `sw.js`: `6EF96D68CD838FC3F99D69993338760A23AB1D6C399DC974A23E5FEFF15378A9` (19,152 bytes)
    - `manifest.json`: `C872752E51F5B339BD3965370B5DF54B47CBAAAD398785F85D6453FD93C743E5` (1,022 bytes)
 4. **النسخ الاحتياطية الخارجية الموثقة:**
-   - `C:\Users\Lenovo\Documents\Zatoona_Backups\phase12_6_preflight_20261025`
-   - `C:\Users\Lenovo\Documents\Zatoona_Backups\phase12_6_1_preflight_20261025`
+   - `<BACKUP_DIR>\phase12_6_preflight_20261025`
+   - `<BACKUP_DIR>\phase12_6_1_preflight_20261025`
 
 ---
 

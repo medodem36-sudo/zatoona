@@ -2,7 +2,7 @@
 ## Post-Implementation Coverage Reconciliation — Strict Read-Only Audit
 
 - **المشروع:** Zatoona (تطبيق ويب تقدمي شخصي Offline-First PWA)
-- **المسار المحلي:** `C:\Users\Lenovo\Documents\GitHub\zatoona`
+- **المسار المحلي:** `<REPOSITORY_ROOT>`
 - **تاريخ وساعة التدقيق:** 2026-10-25T17:22:00+03:00
 - **نوع المهمة:** تدقيق فني صارم للقراءة فقط (Strict Read-Only Audit — No New Images or Production Mutations)
 - **الحالة السابقة:** Phase 12.1B منفذة بنجاح واجتياز 10 أجنحة من أصل 10 (540 / 540 فحصًا بنسبة 100%)

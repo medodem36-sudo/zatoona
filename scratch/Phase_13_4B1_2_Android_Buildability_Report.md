@@ -1,8 +1,8 @@
 # Phase 13.4B1.2 — Android Toolchain Setup & Buildability Verification Report
 
-**Project Path:** `C:\Users\Lenovo\Documents\GitHub\zatoona`  
+**Project Path:** `<REPOSITORY_ROOT>`  
 **Execution Timestamp:** 2026-10-26 00:25:00 EEST  
-**Environment Host:** Windows 10 x64 (`DESKTOP-GT3TV7O`)  
+**Environment Host:** Windows 10 x64 (`[REDACTED_HOST]`)  
 **Verdict:** **`BUILD_VERIFIED`** 🎯  
 **Generated Artifact:** `android/app/build/outputs/apk/debug/app-debug.apk` (7,216,225 bytes, ~7.2 MB)  
 **Master Test Gate:** 15 / 15 Suites Passed (774 / 774 checks, 100%)  
@@ -31,14 +31,14 @@ The host machine environment was inspected thoroughly using PowerShell, Windows 
 | :--- | :--- | :--- | :--- |
 | **Java Development Kit (JDK)** | `C:\Program Files\Eclipse Adoptium\jdk-17.0.20.101-hotspot` (JDK 17.0.20.1) | **VERIFIED & FUNCTIONAL** | Installed via `winget install EclipseAdoptium.Temurin.17.JDK` |
 | **Android Studio** | `D:\Android apk build` (Version 2026.2) | **VERIFIED & PRESENT** | Discovered in Windows Registry (`Uninstall` key) |
-| **Android SDK Root** | `C:\Users\Lenovo\AppData\Local\Android\Sdk` | **VERIFIED & FUNCTIONAL** | Existing Android SDK directory |
+| **Android SDK Root** | `<ANDROID_SDK_PATH>` | **VERIFIED & FUNCTIONAL** | Existing Android SDK directory |
 | **SDK Platform** | `android-34` (`platforms/android-34/android.jar`) | **VERIFIED & PRESENT** | Android 14 API level 34 |
 | **SDK Build-Tools** | `36.0.0` (`build-tools/36.0.0`) | **VERIFIED & PRESENT** | Build tools v36.0.0 |
-| **Platform-Tools / ADB** | `C:\Users\Lenovo\AppData\Local\Microsoft\WinGet\Packages\Google.PlatformTools_Microsoft.Winget.Source_8wekyb3d8bbwe\platform-tools\adb.exe` (v37.0.1) | **VERIFIED & FUNCTIONAL** | Installed via `winget install Google.PlatformTools` |
-| **Gradle Distribution** | `C:\Users\Lenovo\AppData\Local\Gradle\gradle-8.5` (Gradle 8.5 binary) | **VERIFIED & FUNCTIONAL** | Downloaded official bin distribution & extracted |
-| **SDK Licenses** | `C:\Users\Lenovo\AppData\Local\Android\Sdk\licenses\android-sdk-license` | **VERIFIED & PRESENT** | Pre-accepted SDK licenses |
-| **Android Virtual Device (AVD)** | `Medium_Phone_API_37.0` (`C:\Users\Lenovo\.android\avd`) | **VERIFIED & CONFIGURED** | Queried via `emulator.exe -list-avds` |
-| **Git Version Control** | `C:\Users\Lenovo\AppData\Local\GitHubDesktop\app-3.6.7\resources\app\git\cmd\git.exe` | **VERIFIED & FUNCTIONAL** | Bundled GitHub Desktop Git executable |
+| **Platform-Tools / ADB** | `<ADB_PATH>` (v37.0.1) | **VERIFIED & FUNCTIONAL** | Installed via `winget install Google.PlatformTools` |
+| **Gradle Distribution** | `<GRADLE_HOME>` (Gradle 8.5 binary) | **VERIFIED & FUNCTIONAL** | Downloaded official bin distribution & extracted |
+| **SDK Licenses** | `<ANDROID_SDK_PATH>\licenses\android-sdk-license` | **VERIFIED & PRESENT** | Pre-accepted SDK licenses |
+| **Android Virtual Device (AVD)** | `Medium_Phone_API_37.0` (`<ANDROID_AVD_HOME>`) | **VERIFIED & CONFIGURED** | Queried via `emulator.exe -list-avds` |
+| **Git Version Control** | `<GIT_PATH>` | **VERIFIED & FUNCTIONAL** | Bundled GitHub Desktop Git executable |
 
 ---
 
@@ -51,12 +51,12 @@ The host machine environment was inspected thoroughly using PowerShell, Windows 
    - Installed `Google.PlatformTools` via `winget`.
    - Verified `adb version` -> `Android Debug Bridge version 1.0.41 (37.0.1-13753544)`.
 3. **Gradle 8.5 Installation:**
-   - Downloaded `gradle-8.5-bin.zip` directly from official Gradle distribution services into `C:\Users\Lenovo\AppData\Local\Gradle`.
+   - Downloaded `gradle-8.5-bin.zip` directly from official Gradle distribution services into `<GRADLE_DIR>`.
    - Verified clean extraction and executable `bin/gradle.bat --version`.
 4. **Android Project Local Configuration (`local.properties`):**
    - Configured `android/local.properties` with canonical escaped SDK path:
      ```properties
-     sdk.dir=C\:\\Users\\Lenovo\\AppData\\Local\\Android\\Sdk
+     sdk.dir=<ANDROID_SDK_PATH>
      ```
 5. **PWA Assets Synchronization:**
    - Synchronized all 96 static PWA assets from root into `android/app/src/main/assets/`:
@@ -80,7 +80,7 @@ The build task was invoked directly using the Gradle 8.5 binary with JDK 17:
 $env:JAVA_HOME = "C:\Program Files\Eclipse Adoptium\jdk-17.0.20.101-hotspot"
 $env:GRADLE_OPTS = "-Xmx2048m -Dfile.encoding=UTF-8"
 cd android
-& "C:\Users\Lenovo\AppData\Local\Gradle\gradle-8.5\bin\gradle.bat" assembleDebug
+& "<GRADLE_BAT_PATH>" assembleDebug
 ```
 
 ### Build Execution Summary
@@ -92,7 +92,7 @@ cd android
   - Resource processing: AAPT2 compiled all themes, strings, XML configs, and mipmap drawables into `resources-debug.ap_`.
   - Dexing: Generated `classes.dex`, `classes2.dex`, `classes3.dex`.
   - Packaging: Packaged assets, dexes, resources into `app-debug.apk`.
-  - Signing: Successfully signed with auto-generated debug keystore (`C:\Users\Lenovo\.android\debug.keystore`).
+  - Signing: Successfully signed with auto-generated debug keystore (`<USER_HOME>/.android/debug.keystore`).
 
 ### Generated APK Artifact Analysis
 - **File Path:** `android/app/build/outputs/apk/debug/app-debug.apk`

@@ -2,7 +2,7 @@
 ## Curated Exercise Catalog Images — Offline-First SVG Implementation
 
 - **المشروع:** Zatoona (تطبيق ويب تقدمي شخصي Offline-First PWA)
-- **المسار المحلي:** `C:\Users\Lenovo\Documents\GitHub\zatoona`
+- **المسار المحلي:** `<REPOSITORY_ROOT>`
 - **تاريخ وساعة التنفيذ:** 2026-10-25T17:15:00+03:00
 - **نوع المهمة:** تنفيذ رسومات SVG أصلية ومحلية وسد فجوات صور القوالب الجاهزة بنسبة 100%
 - **حالة بوابة الانحدار:** **PASS ✅ — 10 أجنحة من أصل 10 (540 / 540 فحصًا ناجحًا بنسبة 100%)**

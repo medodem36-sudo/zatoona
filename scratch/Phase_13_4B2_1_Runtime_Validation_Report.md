@@ -1,10 +1,10 @@
 # Phase 13.4B2.1 — Runtime Validation & APK Provenance Gate Report
 ## Verification of APK Provenance, Native Scheduling Engine & Closed-App Behavior
 
-**Project Path:** `C:\Users\Lenovo\Documents\GitHub\zatoona`  
+**Project Path:** `<REPOSITORY_ROOT>`  
 **Android Project:** `android/`  
 **Execution Timestamp:** 2026-10-26 01:05:00 EEST  
-**Environment Host:** Windows 10 x64 (`DESKTOP-GT3TV7O`)  
+**Environment Host:** Windows 10 x64 (`[REDACTED_HOST]`)  
 **Verdict:** **`PARTIALLY_VERIFIED`** ⚠️  
 *(APK Provenance: **VERIFIED (100%)** | Native Code & Recurrence Logic: **VERIFIED (100%)** | Master Gate: **16/16 Suites Passed (100%)** | Live Device/Emulator Execution: **BLOCKED BY HOST HARDWARE/FIRMWARE**)*
 
@@ -17,7 +17,7 @@ The objective of **Phase 13.4B2.1** was to independently establish the provenanc
 ### Final Verdict: `PARTIALLY_VERIFIED`
 
 1. **APK Provenance: `VERIFIED` (100%)**
-   - Direct ZIP and binary inspection confirmed that [`android/app/build/outputs/apk/debug/app-debug.apk`](file:///c:/Users/Lenovo/Documents/GitHub/zatoona/android/app/build/outputs/apk/debug/app-debug.apk) (7,957,348 bytes, SHA-256 `c212708afc2d05666e3922bbc931b29d2ba78038a79275994a9e345b97fe2947`) contains the **exact** latest production PWA `index.html` (SHA-256 `aa0cb5ca0c6a6e252100f4d2a248e3bf809b062a9fb66f6647d691d00ec67a27`), all 5 bridge integration hooks, and compiled DEX bytecode for all 8 native alarm engine Kotlin classes.
+   - Direct ZIP and binary inspection confirmed that [`android/app/build/outputs/apk/debug/app-debug.apk`](file:///<REPOSITORY_ROOT>/android/app/build/outputs/apk/debug/app-debug.apk) (7,957,348 bytes, SHA-256 `c212708afc2d05666e3922bbc931b29d2ba78038a79275994a9e345b97fe2947`) contains the **exact** latest production PWA `index.html` (SHA-256 `aa0cb5ca0c6a6e252100f4d2a248e3bf809b062a9fb66f6647d691d00ec67a27`), all 5 bridge integration hooks, and compiled DEX bytecode for all 8 native alarm engine Kotlin classes.
    - Native source timestamps strictly precede the APK timestamp (APK built at 00:45:28).
 
 2. **Native Alarm Engine & Recurrence Logic: `VERIFIED` (100%)**
@@ -168,7 +168,7 @@ If the user wishes to perform live runtime verification on a physical Android ph
 
 ### Prerequisites:
 1. An Android phone or tablet running Android 8.0 (API 26) or higher.
-2. A USB data cable connecting the device to this PC (`DESKTOP-GT3TV7O`).
+2. A USB data cable connecting the device to this PC (`[REDACTED_HOST]`).
 
 ### Step-by-Step Instructions:
 
@@ -187,13 +187,13 @@ If the user wishes to perform live runtime verification on a physical Android ph
 
 4. **Verify ADB Connection (from terminal):**
    ```cmd
-   "C:\Users\Lenovo\AppData\Local\Microsoft\WinGet\Packages\Google.PlatformTools_Microsoft.Winget.Source_8wekyb3d8bbwe\platform-tools\adb.exe" devices -l
+   "<ADB_PATH>" devices -l
    ```
    *Expected output: Your device model listed with state `device` (not `unauthorized` or `offline`).*
 
 5. **Install the Zatoona Debug APK:**
    ```cmd
-   "C:\Users\Lenovo\AppData\Local\Microsoft\WinGet\Packages\Google.PlatformTools_Microsoft.Winget.Source_8wekyb3d8bbwe\platform-tools\adb.exe" install -r "C:\Users\Lenovo\Documents\GitHub\zatoona\android\app\build\outputs\apk\debug\app-debug.apk"
+   "<ADB_PATH>" install -r "<REPOSITORY_ROOT>\android\app\build\outputs\apk\debug\app-debug.apk"
    ```
 
 6. **Execute Runtime Test Flow:**
@@ -208,7 +208,7 @@ If the user wishes to perform live runtime verification on a physical Android ph
 
 ## 6. Prayer Scheduling Horizon & Limitations
 
-A dedicated audit of the prayer reminder engine in [`index.html`](file:///c:/Users/Lenovo/Documents/GitHub/zatoona/index.html) and [`ZatoonaScheduleRepository.kt`](file:///c:/Users/Lenovo/Documents/GitHub/zatoona/android/app/src/main/java/com/zatoona/app/ZatoonaScheduleRepository.kt) was conducted to verify scheduling capabilities:
+A dedicated audit of the prayer reminder engine in [`index.html`](file:///<REPOSITORY_ROOT>/index.html) and [`ZatoonaScheduleRepository.kt`](file:///<REPOSITORY_ROOT>/android/app/src/main/java/com/zatoona/app/ZatoonaScheduleRepository.kt) was conducted to verify scheduling capabilities:
 
 ### Recurrence Classification Matrix
 
