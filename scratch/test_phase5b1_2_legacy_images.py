@@ -144,14 +144,18 @@ try:
     index_url = "file:///" + os.path.join(REPO, "index.html").replace("\\", "/")
     driver.get(index_url)
 
-    # Enable gym mode and navigate to gym view
+    # Enable gym mode and navigate to gym view on deterministic workout day (Saturday / Routine A)
     driver.execute_script("""
         localStorage.setItem('meal-gym-tracker:gym-enabled', 'true');
         localStorage.setItem('meal-gym-tracker:gymPauseDate', '');
+        if(typeof selectDay === 'function') selectDay(0);
         if(typeof navigateTo === 'function') navigateTo('gym');
     """)
     driver.get(index_url)
-    driver.execute_script("if(typeof navigateTo === 'function') navigateTo('gym');")
+    driver.execute_script("""
+        if(typeof selectDay === 'function') selectDay(0);
+        if(typeof navigateTo === 'function') navigateTo('gym');
+    """)
     time.sleep(1)
 
     # 1. Verify EX_A_DEFAULTS and EX_B_DEFAULTS in JS runtime

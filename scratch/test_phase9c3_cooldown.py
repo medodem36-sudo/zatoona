@@ -168,11 +168,11 @@ try:
     driver.execute_script("""
         localStorage.setItem('meal-gym-tracker:gym-enabled', 'true');
         localStorage.setItem('meal-gym-tracker:gymPauseDate', '');
+        if(typeof selectDay === 'function') selectDay(0);
         const iso = toISO(weekDates[selectedIdx]);
         const sessions = window.loadGymSessions();
         delete sessions[iso];
         window.saveGymSessions(sessions);
-        if(typeof selectDay === 'function') selectDay(selectedIdx);
         if(typeof navigateTo === 'function') navigateTo('gym');
     """)
     time.sleep(0.5)
@@ -243,7 +243,7 @@ try:
     check("Cooldown progress restored after reload", stored_cd_reloaded is not None and len(stored_cd_reloaded.get('completedDrills', {})) >= 1)
 
     driver.execute_script("""
-        if(typeof selectDay === 'function') selectDay(selectedIdx);
+        if(typeof selectDay === 'function') selectDay(0);
         if(typeof navigateTo === 'function') navigateTo('gym');
     """)
     time.sleep(0.5)
