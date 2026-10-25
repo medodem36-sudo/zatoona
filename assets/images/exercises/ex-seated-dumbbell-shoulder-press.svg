@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgSeatedDBPress" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f5f3ff"/>
+      <stop offset="100%" stop-color="#ede9fe"/>
+    </linearGradient>
+    <linearGradient id="maleGradSeatedPress" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5b21b6"/>
+      <stop offset="100%" stop-color="#3b0764"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="200" rx="14" fill="url(#bgSeatedDBPress)"/>
+  
+  <!-- Floor line -->
+  <line x1="25" y1="175" x2="275" y2="175" stroke="#c4b5fd" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Badge -->
+  <rect x="18" y="14" width="168" height="22" rx="6" fill="#f5f3ff" stroke="#a78bfa" stroke-width="1.2"/>
+  <text x="102" y="29" font-family="'IBM Plex Mono', system-ui, sans-serif" font-size="8" font-weight="bold" fill="#5b21b6" text-anchor="middle">SEATED DUMBBELL SHOULDER PRESS</text>
+
+  <!-- 90-Degree Upright Bench -->
+  <line x1="120" y1="80" x2="120" y2="148" stroke="#1e293b" stroke-width="9" stroke-linecap="round"/>
+  <line x1="120" y1="148" x2="148" y2="148" stroke="#1e293b" stroke-width="8" stroke-linecap="round"/>
+  <line x1="116" y1="174" x2="116" y2="120" stroke="#475569" stroke-width="4"/>
+  <line x1="142" y1="174" x2="142" y2="148" stroke="#475569" stroke-width="4"/>
+
+  <!-- Male Athletic Figure Seated Upright -->
+  <circle cx="132" cy="74" r="13" fill="url(#maleGradSeatedPress)"/>
+  <path d="M 132 86 L 132 144" stroke="url(#maleGradSeatedPress)" stroke-width="13" stroke-linecap="round"/>
+  <!-- Thighs horizontal, shins vertical, feet flat -->
+  <path d="M 132 144 L 168 144 L 172 174" fill="none" stroke="url(#maleGradSeatedPress)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 166 174 L 186 174" stroke="url(#maleGradSeatedPress)" stroke-width="7" stroke-linecap="round"/>
+
+  <!-- Left Arm (pressed overhead) -->
+  <path d="M 130 92 L 116 68 L 118 48" fill="none" stroke="url(#maleGradSeatedPress)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Left Dumbbell -->
+  <rect x="110" y="44" width="16" height="5" rx="2" fill="#475569"/>
+  <rect x="106" y="38" width="5" height="17" rx="2" fill="#0f172a"/>
+  <rect x="125" y="38" width="5" height="17" rx="2" fill="#0f172a"/>
+
+  <!-- Right Arm (pressed overhead) -->
+  <path d="M 136 92 L 152 68 L 150 48" fill="none" stroke="url(#maleGradSeatedPress)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Right Dumbbell -->
+  <rect x="142" y="44" width="16" height="5" rx="2" fill="#475569"/>
+  <rect x="138" y="38" width="5" height="17" rx="2" fill="#0f172a"/>
+  <rect x="157" y="38" width="5" height="17" rx="2" fill="#0f172a"/>
+
+  <!-- Deltoid Engagement Highlight -->
+  <circle cx="124" cy="94" r="4.5" fill="#e65100"/>
+  <circle cx="140" cy="94" r="4.5" fill="#e65100"/>
+  <!-- Motion arrows upward -->
+  <path d="M 164 68 L 164 48" stroke="#e65100" stroke-width="1.8" stroke-linecap="round"/>
+  <polygon points="164,43 160,51 168,51" fill="#e65100"/>
+</svg>

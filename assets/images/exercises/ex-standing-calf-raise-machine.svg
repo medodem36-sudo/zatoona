@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgCalfRaise" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0fdf4"/>
+      <stop offset="100%" stop-color="#dcfce7"/>
+    </linearGradient>
+    <linearGradient id="maleGradCalf" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#166534"/>
+      <stop offset="100%" stop-color="#14532d"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="200" rx="14" fill="url(#bgCalfRaise)"/>
+  
+  <!-- Floor line -->
+  <line x1="25" y1="175" x2="275" y2="175" stroke="#86efac" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Badge -->
+  <rect x="18" y="14" width="162" height="22" rx="6" fill="#f0fdf4" stroke="#4ade80" stroke-width="1.2"/>
+  <text x="99" y="29" font-family="'IBM Plex Mono', system-ui, sans-serif" font-size="8" font-weight="bold" fill="#166534" text-anchor="middle">STANDING CALF RAISE MACHINE</text>
+
+  <!-- Machine Tower on Left & Elevated Calf Block on Floor -->
+  <rect x="55" y="45" width="20" height="130" rx="2" fill="#334155"/>
+  <!-- Elevated Toe Block -->
+  <rect x="140" y="166" width="30" height="9" rx="2" fill="#0f172a"/>
+
+  <!-- Machine Shoulder Pads resting on lifter -->
+  <line x1="65" y1="62" x2="148" y2="62" stroke="#64748b" stroke-width="4"/>
+  <rect x="135" y="58" width="25" height="10" rx="4" fill="#1e293b"/>
+
+  <!-- Male Athletic Figure Standing Erect under Shoulder Pads -->
+  <!-- Head -->
+  <circle cx="150" cy="50" r="13" fill="url(#maleGradCalf)"/>
+  <!-- Torso & Hips straight -->
+  <path d="M 148 64 L 148 118" stroke="url(#maleGradCalf)" stroke-width="14" stroke-linecap="round"/>
+  <!-- Legs straight -->
+  <path d="M 148 118 L 148 160" stroke="url(#maleGradCalf)" stroke-width="11" stroke-linecap="round"/>
+
+  <!-- Feet on block: Balls of feet on block, Heels elevated high (peak contraction) -->
+  <path d="M 148 160 L 155 166" stroke="url(#maleGradCalf)" stroke-width="7" stroke-linecap="round"/>
+
+  <!-- Calf Muscles (Gastrocnemius / Soleus) Peak Flex Highlight -->
+  <path d="M 144 135 L 144 150" stroke="#e65100" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="144" cy="142" r="4.5" fill="#e65100"/>
+
+  <!-- Motion arrow upward from heels -->
+  <path d="M 166 172 L 166 150" stroke="#e65100" stroke-width="2" stroke-linecap="round"/>
+  <polygon points="166,145 162,153 170,153" fill="#e65100"/>
+</svg>

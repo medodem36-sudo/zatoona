@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgSeatedCurl" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fdf4ff"/>
+      <stop offset="100%" stop-color="#fae8ff"/>
+    </linearGradient>
+    <linearGradient id="maleGradSeatedCurl" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#86198f"/>
+      <stop offset="100%" stop-color="#701a75"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="200" rx="14" fill="url(#bgSeatedCurl)"/>
+  
+  <!-- Floor line -->
+  <line x1="25" y1="175" x2="275" y2="175" stroke="#f0abfc" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Badge -->
+  <rect x="18" y="14" width="154" height="22" rx="6" fill="#fdf4ff" stroke="#e879f9" stroke-width="1.2"/>
+  <text x="95" y="29" font-family="'IBM Plex Mono', system-ui, sans-serif" font-size="8.5" font-weight="bold" fill="#86198f" text-anchor="middle">SEATED LEG CURL MACHINE</text>
+
+  <!-- Seated Machine Chair & Frame -->
+  <line x1="110" y1="80" x2="110" y2="140" stroke="#1e293b" stroke-width="9" stroke-linecap="round"/>
+  <line x1="110" y1="140" x2="162" y2="140" stroke="#1e293b" stroke-width="8" stroke-linecap="round"/>
+  <line x1="105" y1="174" x2="105" y2="120" stroke="#475569" stroke-width="4"/>
+  <line x1="150" y1="174" x2="150" y2="140" stroke="#475569" stroke-width="4"/>
+
+  <!-- Male Lifter Seated in Machine -->
+  <circle cx="124" cy="74" r="13" fill="url(#maleGradSeatedCurl)"/>
+  <path d="M 124 86 L 126 138" stroke="url(#maleGradSeatedCurl)" stroke-width="13" stroke-linecap="round"/>
+  <!-- Thighs pinned under thigh pad -->
+  <path d="M 126 138 L 175 138" stroke="url(#maleGradSeatedCurl)" stroke-width="11" stroke-linecap="round"/>
+  <!-- Thigh Hold-Down Pad -->
+  <rect x="145" y="126" width="28" height="7" rx="3" fill="#0f172a"/>
+
+  <!-- Lower Legs curled downward under seat -->
+  <path d="M 175 138 L 165 174" stroke="url(#maleGradSeatedCurl)" stroke-width="9" stroke-linecap="round"/>
+
+  <!-- Machine Pivot Axis & Lower Roller Pad behind ankles -->
+  <circle cx="178" cy="140" r="5" fill="#64748b"/>
+  <line x1="178" y1="140" x2="168" y2="174" stroke="#94a3b8" stroke-width="3"/>
+  <circle cx="168" cy="174" r="6.5" fill="#0f172a"/>
+
+  <!-- Hamstrings Contraction Highlight -->
+  <path d="M 136 142 L 165 142" stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+  <!-- Downward sweep motion arrow -->
+  <path d="M 205 144 C 205 160, 190 172, 178 174" fill="none" stroke="#e65100" stroke-width="2" stroke-linecap="round"/>
+  <polygon points="173,174 182,171 180,179" fill="#e65100"/>
+</svg>

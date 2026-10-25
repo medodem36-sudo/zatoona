@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgBackSquat" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fdf4ff"/>
+      <stop offset="100%" stop-color="#fae8ff"/>
+    </linearGradient>
+    <linearGradient id="maleGradSquat" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4a044e"/>
+      <stop offset="100%" stop-color="#701a75"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="200" rx="14" fill="url(#bgBackSquat)"/>
+  
+  <!-- Floor line -->
+  <line x1="25" y1="175" x2="275" y2="175" stroke="#e879f9" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Badge -->
+  <rect x="18" y="14" width="130" height="22" rx="6" fill="#fdf2f8" stroke="#f472b6" stroke-width="1.2"/>
+  <text x="83" y="29" font-family="'IBM Plex Mono', system-ui, sans-serif" font-size="8.5" font-weight="bold" fill="#831843" text-anchor="middle">BARBELL BACK SQUAT</text>
+
+  <!-- Motion arrows -->
+  <path d="M 62 82 L 62 128" stroke="#e65100" stroke-width="2.2" stroke-linecap="round"/>
+  <polygon points="62,135 57,125 67,125" fill="#e65100"/>
+  <polygon points="62,75 57,85 67,85" fill="#e65100"/>
+
+  <!-- Squat Rack Uprights (background) -->
+  <line x1="105" y1="45" x2="105" y2="175" stroke="#cbd5e1" stroke-width="3" stroke-linecap="round"/>
+  <line x1="225" y1="45" x2="225" y2="175" stroke="#cbd5e1" stroke-width="3" stroke-linecap="round"/>
+  <line x1="100" y1="85" x2="110" y2="85" stroke="#94a3b8" stroke-width="3"/>
+  <line x1="220" y1="85" x2="230" y2="85" stroke="#94a3b8" stroke-width="3"/>
+
+  <!-- Athletic Male Figure in Parallel Back Squat (Side View angled) -->
+  <!-- Head & Neck -->
+  <circle cx="174" cy="56" r="14" fill="url(#maleGradSquat)"/>
+  
+  <!-- Torso (flat back, ~45 deg forward incline) -->
+  <path d="M 166 68 L 132 118" stroke="url(#maleGradSquat)" stroke-width="15" stroke-linecap="round"/>
+  
+  <!-- Arms & Hands gripping Barbell on upper traps -->
+  <path d="M 160 76 L 152 70 L 160 66" fill="none" stroke="url(#maleGradSquat)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Barbell resting on Upper Traps -->
+  <line x1="85" y1="67" x2="245" y2="67" stroke="#64748b" stroke-width="5" stroke-linecap="round"/>
+  <!-- Plates (Standard 45lb/20kg Olympic Plates) -->
+  <rect x="88" y="45" width="10" height="44" rx="2" fill="#1e293b"/>
+  <rect x="80" y="49" width="7" height="36" rx="2" fill="#334155"/>
+  <rect x="232" y="45" width="10" height="44" rx="2" fill="#1e293b"/>
+  <rect x="243" y="49" width="7" height="36" rx="2" fill="#334155"/>
+
+  <!-- Thigh (parallel to ground at 90 deg hip angle) -->
+  <path d="M 132 118 L 188 120" stroke="url(#maleGradSquat)" stroke-width="14" stroke-linecap="round"/>
+  <!-- Shin (angled forward over toes) -->
+  <path d="M 188 120 L 176 173" stroke="url(#maleGradSquat)" stroke-width="11" stroke-linecap="round"/>
+  <!-- Foot (flat on ground) -->
+  <path d="M 166 174 L 198 174" stroke="url(#maleGradSquat)" stroke-width="8" stroke-linecap="round"/>
+
+  <!-- Highlight Quadriceps & Glute contraction -->
+  <path d="M 142 116 L 178 117" stroke="#e65100" stroke-width="3.5" stroke-linecap="round"/>
+  <circle cx="134" cy="118" r="4.5" fill="#e65100"/>
+</svg>

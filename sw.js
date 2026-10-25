@@ -121,9 +121,13 @@
    v22: Phase 5B.1.2 — Legacy A/B Exercise Images Compliance.
    Added 12 local offline SVG illustrations for Routine A/B exercises to SHELL_ASSETS,
    fully replacing external unverified/female exercise images with original male-only SVGs.
-   Cache version bumped to v22 for full offline caching. */
+   Cache version bumped to v22 for full offline caching.
 
-const CACHE_VERSION = 'v23';
+   v24: Phase 12.1B Curated Exercise Catalog Images.
+   Added 19 curated exercise SVG assets with original adult male-only SVGs to SHELL_ASSETS.
+   Cache version bumped from v23 (const CACHE_VERSION = 'v23') to v24 for full offline caching. */
+
+const CACHE_VERSION = 'v24';
 const SHELL_CACHE = 'zatoona-shell-' + CACHE_VERSION;
 const RUNTIME_CACHE = 'zatoona-runtime-' + CACHE_VERSION;
 const CURRENT_CACHES = [SHELL_CACHE, RUNTIME_CACHE];
@@ -174,6 +178,25 @@ const SHELL_ASSETS = [
   './assets/images/exercises/ex-b04-pull-up.svg',
   './assets/images/exercises/ex-b05-abdominal-crunch.svg',
   './assets/images/exercises/ex-b06-lunges.svg',
+  './assets/images/exercises/ex-barbell-back-squat.svg',
+  './assets/images/exercises/ex-conventional-deadlift.svg',
+  './assets/images/exercises/ex-incline-barbell-bench-press.svg',
+  './assets/images/exercises/ex-incline-dumbbell-press.svg',
+  './assets/images/exercises/ex-dumbbell-bench-press.svg',
+  './assets/images/exercises/ex-seated-cable-row.svg',
+  './assets/images/exercises/ex-leg-press.svg',
+  './assets/images/exercises/ex-seated-dumbbell-shoulder-press.svg',
+  './assets/images/exercises/ex-hanging-leg-raise.svg',
+  './assets/images/exercises/ex-standing-dumbbell-lateral-raise.svg',
+  './assets/images/exercises/ex-barbell-curl.svg',
+  './assets/images/exercises/ex-hammer-curl.svg',
+  './assets/images/exercises/ex-triceps-rope-pushdown.svg',
+  './assets/images/exercises/ex-skull-crushers.svg',
+  './assets/images/exercises/ex-dumbbell-chest-flyes.svg',
+  './assets/images/exercises/ex-lying-leg-curl-machine.svg',
+  './assets/images/exercises/ex-seated-leg-curl-machine.svg',
+  './assets/images/exercises/ex-standing-calf-raise-machine.svg',
+  './assets/images/exercises/ex-seated-palms-up-wrist-curl.svg',
   './assets/images/stretches/str-doorway-pec-stretch.svg',
   './assets/images/stretches/str-arm-circles-dynamic.svg',
   './assets/images/stretches/str-cross-body-shoulder-stretch.svg',

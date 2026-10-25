@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgRopePush" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0f9ff"/>
+      <stop offset="100%" stop-color="#e0f2fe"/>
+    </linearGradient>
+    <linearGradient id="maleGradRope" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0369a1"/>
+      <stop offset="100%" stop-color="#075985"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="200" rx="14" fill="url(#bgRopePush)"/>
+  
+  <!-- Floor line -->
+  <line x1="25" y1="175" x2="275" y2="175" stroke="#7dd3fc" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Badge -->
+  <rect x="18" y="14" width="152" height="22" rx="6" fill="#f0f9ff" stroke="#38bdf8" stroke-width="1.2"/>
+  <text x="94" y="29" font-family="'IBM Plex Mono', system-ui, sans-serif" font-size="8" font-weight="bold" fill="#0369a1" text-anchor="middle">TRICEPS ROPE PUSHDOWN</text>
+
+  <!-- High Cable Machine on Right -->
+  <rect x="238" y="35" width="22" height="140" rx="3" fill="#334155"/>
+  <circle cx="218" cy="46" r="8" fill="#64748b"/>
+  <!-- Cable down to hands -->
+  <line x1="218" y1="46" x2="174" y2="114" stroke="#0284c7" stroke-width="2.5" stroke-dasharray="4,2"/>
+
+  <!-- Male Athletic Figure Standing at Cable (slight forward hinge) -->
+  <circle cx="132" cy="68" r="13" fill="url(#maleGradRope)"/>
+  <path d="M 132 80 L 140 128" stroke="url(#maleGradRope)" stroke-width="13" stroke-linecap="round"/>
+  <!-- Athletic staggered stance -->
+  <path d="M 140 128 L 132 174" stroke="url(#maleGradRope)" stroke-width="10" stroke-linecap="round"/>
+  <path d="M 140 128 L 158 174" stroke="url(#maleGradRope)" stroke-width="10" stroke-linecap="round"/>
+
+  <!-- Upper Arm pinned at ribs -->
+  <path d="M 138 88 L 144 116" stroke="url(#maleGradRope)" stroke-width="8" stroke-linecap="round"/>
+  <!-- Forearms extending rope down & outward -->
+  <path d="M 144 116 L 174 136" stroke="url(#maleGradRope)" stroke-width="8" stroke-linecap="round"/>
+
+  <!-- Flared Rope Attachment with Knobs -->
+  <path d="M 174 114 L 174 136 L 180 144" fill="none" stroke="#d97706" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="180" cy="144" r="3.5" fill="#b45309"/>
+
+  <!-- Triceps Horseshoe Activation Highlight -->
+  <path d="M 138 94 L 146 112" stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+  <!-- Downward push arrow -->
+  <path d="M 166 110 L 174 132" stroke="#e65100" stroke-width="2" stroke-linecap="round"/>
+  <polygon points="176,137 169,130 179,127" fill="#e65100"/>
+</svg>

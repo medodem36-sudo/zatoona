@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgHangingLeg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ecfeff"/>
+      <stop offset="100%" stop-color="#cffafe"/>
+    </linearGradient>
+    <linearGradient id="maleGradHanging" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#155e75"/>
+      <stop offset="100%" stop-color="#083344"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="200" rx="14" fill="url(#bgHangingLeg)"/>
+
+  <!-- Badge -->
+  <rect x="18" y="14" width="138" height="22" rx="6" fill="#ecfeff" stroke="#22d3ee" stroke-width="1.2"/>
+  <text x="87" y="29" font-family="'IBM Plex Mono', system-ui, sans-serif" font-size="8.5" font-weight="bold" fill="#155e75" text-anchor="middle">HANGING LEG RAISE</text>
+
+  <!-- Pull-Up Bar Frame -->
+  <line x1="60" y1="36" x2="240" y2="36" stroke="#475569" stroke-width="5" stroke-linecap="round"/>
+  <line x1="65" y1="36" x2="65" y2="185" stroke="#94a3b8" stroke-width="4"/>
+  <line x1="235" y1="36" x2="235" y2="185" stroke="#94a3b8" stroke-width="4"/>
+
+  <!-- Athletic Male Figure in Full Hanging Leg Raise (90 deg L-Sit) -->
+  <!-- Arms hanging straight down from bar -->
+  <line x1="135" y1="38" x2="135" y2="72" stroke="url(#maleGradHanging)" stroke-width="7" stroke-linecap="round"/>
+  <!-- Head positioned between arms -->
+  <circle cx="135" cy="62" r="12" fill="url(#maleGradHanging)"/>
+
+  <!-- Vertical Torso hanging from shoulders -->
+  <path d="M 135 74 L 135 125" stroke="url(#maleGradHanging)" stroke-width="13" stroke-linecap="round"/>
+
+  <!-- Both Legs Raised Horizontally at 90 degrees to Torso -->
+  <path d="M 135 125 L 195 122" stroke="url(#maleGradHanging)" stroke-width="11" stroke-linecap="round"/>
+  <!-- Feet pointed -->
+  <path d="M 195 122 L 208 124" stroke="url(#maleGradHanging)" stroke-width="8" stroke-linecap="round"/>
+
+  <!-- Abdominal / Core Contraction Highlight -->
+  <circle cx="138" cy="112" r="5" fill="#e65100"/>
+  <!-- Curved motion arrow from bottom up to 90 deg -->
+  <path d="M 152 165 C 175 160, 185 142, 185 132" fill="none" stroke="#e65100" stroke-width="2.2" stroke-linecap="round"/>
+  <polygon points="185,126 180,135 190,135" fill="#e65100"/>
+</svg>

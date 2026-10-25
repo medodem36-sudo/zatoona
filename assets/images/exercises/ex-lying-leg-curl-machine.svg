@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgLyingCurl" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fdf4ff"/>
+      <stop offset="100%" stop-color="#f5d0fe"/>
+    </linearGradient>
+    <linearGradient id="maleGradLying" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#701a75"/>
+      <stop offset="100%" stop-color="#4a044e"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="200" rx="14" fill="url(#bgLyingCurl)"/>
+  
+  <!-- Floor line -->
+  <line x1="25" y1="175" x2="275" y2="175" stroke="#e879f9" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Badge -->
+  <rect x="18" y="14" width="148" height="22" rx="6" fill="#fdf4ff" stroke="#d946ef" stroke-width="1.2"/>
+  <text x="92" y="29" font-family="'IBM Plex Mono', system-ui, sans-serif" font-size="8.5" font-weight="bold" fill="#701a75" text-anchor="middle">LYING LEG CURL MACHINE</text>
+
+  <!-- Angled Prone Bench Frame -->
+  <line x1="70" y1="174" x2="70" y2="132" stroke="#475569" stroke-width="5"/>
+  <line x1="175" y1="174" x2="175" y2="132" stroke="#475569" stroke-width="5"/>
+  <!-- Angled Pad (V-shaped hip relief pad) -->
+  <line x1="60" y1="126" x2="120" y2="122" stroke="#1e293b" stroke-width="9" stroke-linecap="round"/>
+  <line x1="120" y1="122" x2="180" y2="132" stroke="#1e293b" stroke-width="9" stroke-linecap="round"/>
+
+  <!-- Male Lifter Prone (Face Down) -->
+  <circle cx="68" cy="114" r="12" fill="url(#maleGradLying)"/>
+  <!-- Torso & Hips lying prone -->
+  <path d="M 78 118 L 128 120" stroke="url(#maleGradLying)" stroke-width="13" stroke-linecap="round"/>
+  <path d="M 76 126 L 62 136" stroke="url(#maleGradLying)" stroke-width="6" stroke-linecap="round"/> <!-- hand holding handle -->
+
+  <!-- Thighs on pad -->
+  <path d="M 128 120 L 175 130" stroke="url(#maleGradLying)" stroke-width="11" stroke-linecap="round"/>
+  <!-- Lower Legs curled up to 90 degrees against roller pad -->
+  <path d="M 175 130 L 165 82" stroke="url(#maleGradLying)" stroke-width="9" stroke-linecap="round"/>
+
+  <!-- Machine Lever Arm & Roller Pad behind Achilles/Ankles -->
+  <circle cx="178" cy="132" r="5" fill="#64748b"/>
+  <line x1="178" y1="132" x2="168" y2="82" stroke="#94a3b8" stroke-width="3"/>
+  <circle cx="168" cy="82" r="7" fill="#0f172a"/>
+
+  <!-- Hamstrings Contraction Highlight -->
+  <path d="M 140 118 L 168 124" stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+  <!-- Curled motion arrow -->
+  <path d="M 215 135 C 215 105, 195 85, 180 82" fill="none" stroke="#e65100" stroke-width="2" stroke-linecap="round"/>
+  <polygon points="175,82 184,86 182,78" fill="#e65100"/>
+</svg>
