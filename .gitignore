@@ -15,6 +15,36 @@
 /scratch/__pycache__/
 /scratch/test-results/
 
+# Developer scratch one-off scripts & tools (preserves tests and reports)
+/scratch/apply_*.py
+/scratch/audit_*.py
+/scratch/check_*.py
+/scratch/find_*.py
+/scratch/generate_*.py
+/scratch/inspect_*.py
+/scratch/register_*.py
+/scratch/verify_*.py
+/scratch/write_*.py
+/scratch/prompt_*.txt
+/scratch/build_apk.bat
+/scratch/calc_checksums.py
+/scratch/cdp_client.py
+/scratch/create_*.py
+/scratch/debug_*.py
+/scratch/fix_*.py
+/scratch/locate_*.py
+/scratch/make_full_table.py
+/scratch/print_*.py
+/scratch/search_*.py
+/scratch/setup_*.py
+/scratch/sync_*.py
+/scratch/update_*.py
+/scratch/validate_svgs.py
+/scratch/test_gradle_url.py
+/scratch/test_runner_isolation.py
+/scratch/test_targets.py
+/scratch/Phase_13_4B2_6_Controlled_Commits_Report.md
+
 # Python compiled bytecode
 *.py[cod]
 *$py.class
