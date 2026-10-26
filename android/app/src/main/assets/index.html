@@ -3448,20 +3448,23 @@ body.dark .gw-drill-thumb img {
     <div id="prayerApiStatus" class="section-hint" style="margin-top:2px; font-size:.75rem;"></div>
     <div class="checklist" id="prayerTimes"></div>
 
-    <div class="section-title"><span class="n">٣</span> الفروض والسنن الراتبة</div>
+    <div class="section-title"><span class="n">٣</span> 🕌 الفروض والسنن الراتبة</div>
     <div class="section-hint">علّم "فرض" لو صليتها في وقتها، وعلّم "سنة" لو صليت راتبتها</div>
     <div class="checklist" id="prayerFard"></div>
 
-    <div class="section-title"><span class="n">٤</span> قيام الليل والوتر</div>
+    <div class="section-title"><span class="n">٤</span> 🌙 قيام الليل والوتر</div>
+    <div class="section-hint">ركعات صلاة الليل وسنة الوتر المستحبة</div>
     <div class="checklist" id="qiyamWitr"></div>
 
-    <div class="section-title"><span class="n">٥</span> باقي النوافل</div>
+    <div class="section-title"><span class="n">٥</span> ✨ باقي النوافل</div>
+    <div class="section-hint">السنن المؤكدة والمستحبة على مدار اليوم (ضحى، تحية المسجد، سنة الوضوء)</div>
     <div class="checklist" id="nawafilExtra"></div>
 
-    <div class="section-title"><span class="n">٦</span> أذكار الصباح والمساء</div>
+    <div class="section-title"><span class="n">٦</span> 📿 أذكار الصباح والمساء</div>
+    <div class="section-hint">الحصن اليومي المبارك: أذكار الصباح بعد الفجر وأذكار المساء بعد العصر</div>
     <div class="checklist" id="azkar"></div>
 
-    <div class="section-title"><span class="n">٧</span> القرآن</div>
+    <div class="section-title"><span class="n">٧</span> 📖 ورد القرآن الكريم</div>
     <div class="section-hint">الورد اليومي: سماع + قراءة + حفظ آيتين + مراجعة اللي فات</div>
     <div class="checklist" id="quranWird"></div>
   </div>
@@ -6447,26 +6450,26 @@ const PRAYERS = [
 ];
 
 const QIYAM_WITR = [
-  'قيام الليل',
-  'الوتر',
+  { text: 'قيام الليل', icon: '🌙', sub: 'ركعات قيام الليل والتهجد في جوف الليل قبل الفجر' },
+  { text: 'الوتر', icon: '🤲', sub: 'سنة الوتر ختام صلاة الليل (ركعة أو أكثر)' },
 ];
 
 const NAWAFIL_EXTRA = [
-  'صلاة الضحى',
-  'تحية المسجد',
-  'سنة الوضوء (ركعتين بعد كل وضوء)',
+  { text: 'صلاة الضحى', icon: '☀️', sub: 'صلاة الأوابين (من بعد شروق الشمس بثلث ساعة إلى قبل الظهر)' },
+  { text: 'تحية المسجد', icon: '🕌', sub: 'ركعتان عند دخول المسجد قبل الجلوس' },
+  { text: 'سنة الوضوء (ركعتين بعد كل وضوء)', icon: '💧', sub: 'ركعتان مستحبتان عقب كل طهارة' },
 ];
 
 const QURAN_WIRD = [
-  'ورد سماع (استماع للقرآن)',
-  'ورد قراءة (تلاوة يومية)',
-  'حفظ آيتين جديدتين',
-  'مراجعة المحفوظ من قبل',
+  { text: 'ورد سماع (استماع للقرآن)', icon: '🎧', sub: 'الاستماع بخشوع وإنصات وتدبر' },
+  { text: 'ورد قراءة (تلاوة يومية)', icon: '📖', sub: 'تلاوة الورد اليومي الثابت من المصحف' },
+  { text: 'حفظ آيتين جديدتين', icon: '🧠', sub: 'حفظ آيتين بتركيز وتكرار متقن' },
+  { text: 'مراجعة المحفوظ من قبل', icon: '🔄', sub: 'تثبيت ومراجعة المحفوظ السابق' },
 ];
 
 const AZKAR = [
-  'أذكار الصباح',
-  'أذكار المساء',
+  { text: 'أذكار الصباح', icon: '🌅', sub: 'الحصن الصباحي من بعد صلاة الفجر وحتى الشروق' },
+  { text: 'أذكار المساء', icon: '🌇', sub: 'الحصن المسائي من بعد صلاة العصر وحتى الغروب' },
 ];
 
 const SLEEP_QUALITY_OPTS = [
@@ -8729,6 +8732,12 @@ async function onCityChange(newCity){
   weekDotsSchedule[iso] = computeDotClassSchedule(scheduleCheckState, scheduleChecklistItems(selectedIdx, scheduleSettings).length);
   if(mode === 'schedule') renderSchedule();
   if(mode === 'overview') renderOverview();
+  if(typeof syncRemindersToNativeBridge === 'function'){
+    try { syncRemindersToNativeBridge(); } catch(e){ console.warn('[native-bridge] reminder sync error:', e); }
+  }
+  if(typeof checkAndDispatchDueReminders === 'function'){
+    try { checkAndDispatchDueReminders(); } catch(e){}
+  }
 }
 
 async function onPrayerRefresh(){
@@ -8743,6 +8752,12 @@ async function onPrayerRefresh(){
   if(ok){
     recalculateDay(iso, selectedIdx, scheduleSettings);
     if(mode === 'schedule') renderSchedule();
+    if(typeof syncRemindersToNativeBridge === 'function'){
+      try { syncRemindersToNativeBridge(); } catch(e){}
+    }
+    if(typeof checkAndDispatchDueReminders === 'function'){
+      try { checkAndDispatchDueReminders(); } catch(e){}
+    }
   }
 }
 function loadWeight(iso){ const raw = storageGet('weight:'+iso); return raw ? parseFloat(raw) : null; }
@@ -11213,17 +11228,28 @@ function renderSimpleChecklist(containerId, items, state, onToggle){
   const el = document.getElementById(containerId);
   if(!el) return;
   el.innerHTML = '';
-  items.forEach((text, idx)=>{
+  items.forEach((item, idx)=>{
     const key = 'i'+idx;
     const on = !!state[key];
     const row = document.createElement('div');
-    row.className = 'check-row';
+    row.className = 'check-row' + (on ? ' is-checked' : '');
     row.id = containerId + 'Row-' + key;
-    const label = (typeof text === 'object' && text !== null) ? (text.text || text.label || JSON.stringify(text)) : String(text);
+    const label = (typeof item === 'object' && item !== null) ? (item.text || item.label || JSON.stringify(item)) : String(item);
     const safeLabel = typeof escapeHtml === 'function' ? escapeHtml(label) : label;
+    const icon = (typeof item === 'object' && item !== null && item.icon) ? item.icon : '';
+    const safeIcon = icon ? (typeof escapeHtml === 'function' ? escapeHtml(icon) : icon) : '';
+    const sub = (typeof item === 'object' && item !== null && item.sub) ? item.sub : '';
+    const safeSub = sub ? (typeof escapeHtml === 'function' ? escapeHtml(sub) : sub) : '';
+    const iconHtml = safeIcon ? `<span class="cicon" style="margin-left:8px;font-size:1.05rem;vertical-align:middle;">${safeIcon}</span>` : '';
+    const subHtml = safeSub ? `<div class="cnote" style="margin-top:2px;font-size:.74rem;color:var(--muted);line-height:1.4;">${safeSub}</div>` : '';
     row.innerHTML = `
-      <div class="check-left"><div class="cname">${safeLabel}</div></div>
-      <div class="toggle-group"><button type="button" class="tbtn ${on?'on-right':''}" data-key="${key}" aria-label="${safeLabel}">✓</button></div>
+      <div class="check-left">
+        <div class="cname">${iconHtml}<span>${safeLabel}</span></div>
+        ${subHtml}
+      </div>
+      <div class="toggle-group">
+        <button type="button" class="tbtn ${on?'on-right':''}" data-key="${key}" aria-label="${safeLabel}" role="checkbox" aria-checked="${on}" title="${on ? 'مكتمل (اضغط للإلغاء)' : 'غير مكتمل (اضغط للتعليم)'}">${on ? '✓' : ''}</button>
+      </div>
     `;
     const btn = row.querySelector('.tbtn');
     btn.addEventListener('click', (e)=>{
@@ -16226,7 +16252,7 @@ function renderWindDownChecklist(){
         </div>
       </div>
       <div class="toggle-group">
-        <button type="button" class="tbtn ${on ? 'on-right' : ''}" data-key="${step.id}" aria-label="${safeLabel}">✓</button>
+        <button type="button" class="tbtn ${on ? 'on-right' : ''}" data-key="${step.id}" aria-label="${safeLabel}" role="checkbox" aria-checked="${on}" title="${on ? 'مكتمل (اضغط للإلغاء)' : 'غير مكتمل (اضغط للتعليم)'}">${on ? '✓' : ''}</button>
       </div>
     `;
     const btn = row.querySelector('.tbtn');
@@ -16586,13 +16612,13 @@ function renderPrayerFard(){
     if(!prayerState[p.key]) prayerState[p.key] = { fard:false, sunnah:false };
     const st = prayerState[p.key];
     const row = document.createElement('div');
-    row.className = 'check-row';
+    row.className = 'check-row' + ((st.fard && st.sunnah) ? ' is-checked' : '');
     row.id = 'prayerFardRow-' + p.key;
     row.innerHTML = `
       <div class="check-left"><div class="cname">${p.name}</div></div>
       <div class="toggle-group">
-        <button class="tbtn ${st.fard?'on-right':''}" data-type="fard" style="width:auto;padding:0 12px;font-size:.72rem;">فرض</button>
-        <button class="tbtn ${st.sunnah?'on-right':''}" data-type="sunnah" style="width:auto;padding:0 12px;font-size:.72rem;">سنة</button>
+        <button type="button" class="tbtn ${st.fard?'on-right':''}" data-type="fard" role="checkbox" aria-checked="${st.fard}" title="فرض ${p.name}: ${st.fard ? 'تمت الصلاة' : 'لم تُصلَّ بعد'}" style="width:auto;padding:0 12px;font-size:.74rem;">${st.fard ? '✓ فرض' : 'فرض'}</button>
+        <button type="button" class="tbtn ${st.sunnah?'on-right':''}" data-type="sunnah" role="checkbox" aria-checked="${st.sunnah}" title="سنة ${p.name}: ${st.sunnah ? 'تمت الصلاة' : 'لم تُصلَّ بعد'}" style="width:auto;padding:0 12px;font-size:.74rem;">${st.sunnah ? '✓ سنة' : 'سنة'}</button>
       </div>
     `;
     const [btnFard, btnSunnah] = row.querySelectorAll('.tbtn');
@@ -18709,7 +18735,7 @@ function renderScheduleChecklist(dayIdx, settings){
     const iconHtml = item.icon ? `<span class="cicon" style="margin-left:8px;font-size:1.05rem;vertical-align:middle;">${typeof escapeHtml === 'function' ? escapeHtml(item.icon) : item.icon}</span>` : '';
     row.innerHTML = `
       <div class="check-left"><div class="cname">${iconHtml}<span>${safeLabel}</span></div></div>
-      <div class="toggle-group"><button type="button" class="tbtn ${on?'on-right':''}" data-key="${item.key}" aria-label="${safeLabel}">✓</button></div>
+      <div class="toggle-group"><button type="button" class="tbtn ${on?'on-right':''}" data-key="${item.key}" aria-label="${safeLabel}" role="checkbox" aria-checked="${on}" title="${on ? 'مكتمل (اضغط للإلغاء)' : 'غير مكتمل (اضغط للتعليم)'}">${on ? '✓' : ''}</button></div>
     `;
     const btn = row.querySelector('.tbtn');
     const toggle = ()=>{
@@ -23349,6 +23375,8 @@ function applyMode(){
   if(mode==='budget') renderBudgetAll();
   if(mode==='notes') renderNotesHub();
   if(mode==='stretches') renderStretchesView();
+  if(mode==='sleep') renderSleep();
+  if(mode==='prayer') renderPrayer();
   if(isHome) renderHomeDashboard();
 
   updateSectionNotesUI(mode);
