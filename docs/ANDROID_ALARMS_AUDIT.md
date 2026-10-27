@@ -1,11 +1,12 @@
 # Zatoona Android Alarms Reliability Audit (Read-Only)
 
 **Document Path:** `docs/ANDROID_ALARMS_AUDIT.md`
-**Audit Date:** 2026-10-27 01:05:30 +03:00
+**Original Audit Date:** 2026-10-27 01:05:30 +03:00
+**Reconciliation Date:** 2026-10-27 04:55:00 +03:00
 **Repository Path:** `C:\Users\Lenovo\Documents\GitHub\zatoona`
 **Git Branch:** `main`
-**Current HEAD Commit:** `5de355384040e27f1a7d7f45fe3649269f14aeb1`
-**Commit Message:** `fix(ux): clarify worship checklist controls, sleep habits visibility, and cairo prayer resync`
+**Current Reconciled HEAD:** `eddaf6dcf651562565327d14a19c66d0f59816f7`
+**HEAD Commit Message:** `chore: remove temporary scratch scripts` (following `66dd9e0` `fix(android): persist and restore native reminders`)
 **Working Tree Status:** Clean (`nothing to commit, working tree clean`)
 **Scope Mode:** Strictly Read-Only Audit (Zero Application Code Modifications)
 
@@ -128,17 +129,28 @@ The repository contains concrete, deterministic test suites verifying the alarm 
   - Native bridge schema definition (`ZatoonaNativeBridge`, schema `v1`/`v2`).
   - PWA storage non-interference.
 
+### 4. `android/scratch/test_reminder_sync_fix.py`
+- **Result:** **7 / 7 PASSED** (0 failures, verified in prior report).
+- **Verified Items:**
+  - 3-Way HTML byte parity across entry points.
+  - Independent custom reminder sync without early-exit guard on general notifications toggle.
+  - Prayer alert gating under master notification switch.
+  - Unconditional native bridge synchronization with reconciliation loop for obsolete schedule cancellation.
+  - Explicit `cancelSchedule` invocation on reminder deletion.
+  - Status badge rendering for native scheduled alarms vs browser state.
+  - `ZatoonaBridge.kt` schedule reconciliation and omitted alarm cancellation.
+
 ---
 
 ## 5. Android Permissions & OS Constraints Analysis
 
 | Permission / Constraint | API Level | Manifest Declaration | Runtime Handling | Notes & Practical Constraints |
 | :--- | :---: | :---: | :---: | :--- |
-| `RECEIVE_BOOT_COMPLETED` | All | Declared | Normal permission | Enables `BootReceiver`. Restores alarms after reboot. |
+| `RECEIVE_BOOT_COMPLETED` | All | Declared | Normal permission | Enables `BootReceiver`. Restores alarms after reboot (physical hardware reboot test remains deferred). |
 | `POST_NOTIFICATIONS` | 33+ (Android 13) | Declared | Requested in `MainActivity.kt` | User must grant notification permission in system dialog. |
 | `SCHEDULE_EXACT_ALARM` | 31+ (Android 12) | Declared | Checked via `canScheduleExactAlarms()` | Automatically granted for sideloaded/debug APKs. Inexact fallback implemented if revoked. |
 | `WAKE_LOCK` | All | Declared | Normal permission | Prevents CPU sleep while posting notification. |
-| **Aggressive OEM Doze** | All | N/A | `setExactAndAllowWhileIdle` | Xiaomi (MIUI/HyperOS), Huawei, and Samsung may suppress alarms unless app is set to "No restrictions". |
+| **Aggressive OEM Doze / Power Saving** | All | N/A | `setExactAndAllowWhileIdle` | Uses `setExactAndAllowWhileIdle` (not `setAlarmClock`). User reported successful live test under Samsung Maximum Power Saving Mode; however, delivery across multi-day background dormancy or post-reboot locked states remains subject to real-world observation. |
 | **Force Stop State** | All | N/A | OS Level | By Android OS design, Force Stop disables all alarms until app is manually reopened. |
 
 ---
@@ -146,13 +158,13 @@ The repository contains concrete, deterministic test suites verifying the alarm 
 ## 6. Identified Issues & Technical Risks (Ranked by Severity)
 
 1. **Medium Risk — Physical Device Reboot Verification Gap:**
-   - *Issue:* Automated tests verify that `BootReceiver` is registered and compiles, but physical execution depends on the OEM broadcast dispatch timing on real hardware.
-   - *Impact:* Alarms could be delayed or missed after reboot on certain hardware without explicit validation.
-   - *Priority:* **High** (Next physical test target).
+   - *Issue:* Static code audit confirmed `BootReceiver.kt` and `rescheduleAll()` path is sound, but physical execution on real hardware remains unexecuted and deferred.
+   - *Impact:* Alarms could be delayed before first user unlock or subject to OEM broadcast timing on specific devices.
+   - *Priority:* **High** (Deferred physical test target; requires explicit user authorization).
 2. **Medium Risk — OEM Battery Saver / Doze Restrictions:**
-   - *Issue:* While `setExactAndAllowWhileIdle()` is implemented, OEM aggressive power managers may restrict alarms after 24+ hours of inactivity unless exempted in battery settings.
-   - *Impact:* Notifications might fire only when the user turns on the screen.
-   - *Priority:* **Medium** (Requires in-app educational prompt or settings shortcut if needed).
+   - *Observation & Status:* The application utilizes `setExactAndAllowWhileIdle()` rather than `setAlarmClock()`. The user reported a successful live test firing on Samsung Galaxy A04e while Maximum Power Saving Mode was active. This confirms alarms can trigger under tested short-interval conditions; it is not a proven failure, but also does not guarantee universal delivery across extended multi-day deep Doze or post-reboot locked states across all OEM custom skins without physical observation.
+   - *Impact:* Notifications might be deferred in extreme multi-day dormancy scenarios on certain aggressive OEMs unless exempted.
+   - *Priority:* **Medium**.
 3. **Low Risk — Google Play Policy on `SCHEDULE_EXACT_ALARM`:**
    - *Issue:* If published to Google Play, Google enforces strict policies on `SCHEDULE_EXACT_ALARM`.
    - *Impact:* Irrelevant for personal offline sideloading; relevant only for public Play Store distribution (Phase 13.4C).

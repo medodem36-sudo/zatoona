@@ -1,13 +1,13 @@
 # Zatoona Project Status & Development Baseline
 
 **Document Path:** `docs/PROJECT_STATUS.md`  
-**Last Updated:** 2026-10-27 03:00:00 +03:00<br>
+**Last Updated:** 2026-10-27 04:55:00 +03:00<br>
 **Repository:** `C:\Users\Lenovo\Documents\GitHub\zatoona`<br>
 **Remote Origin:** `https://github.com/medodem36-sudo/zatoona.git`<br>
 **Active Branch:** `main`<br>
-**Current HEAD:** `5de355384040e27f1a7d7f45fe3649269f14aeb1`<br>
-**Head Commit Message:** `fix(ux): clarify worship checklist controls, sleep habits visibility, and cairo prayer resync`<br>
-**Working Tree Status:** Native Android Alarm Experience implemented & physically verified on Samsung Galaxy A04e (Android 14).
+**Current HEAD:** `eddaf6dcf651562565327d14a19c66d0f59816f7`<br>
+**Head Commit Message:** `chore: remove temporary scratch scripts`<br>
+**Working Tree Status:** Clean; Native Android Alarm Experience and decoupled reminder sync committed (`66dd9e0`), temporary scratch tools cleaned (`eddaf6d`).
 
 ---
 
@@ -84,6 +84,8 @@ All assertions and test gates are recorded in deterministic test execution logs 
 - **Checklist & Worship Labels (`scratch/test_phase13_1_checklist_labels.py`):** **47 / 47 PASSED**
 - **Cairo Prayer Times (`scratch/test_phase13_2_cairo_prayer.py`):** **36 / 36 PASSED**
 - **Healthy Sleep Habits & Routine (`scratch/test_phase13_3_sleep_habits.py`):** **70 / 70 PASSED**
+- **Native Android Local Alarm Engine (`scratch/test_phase13_4b2_alarms.py`):** **74 / 74 PASSED** (Prior report verified)
+- **Reminder Sync & Bridge Reconciliation (`android/scratch/test_reminder_sync_fix.py`):** **7 / 7 PASSED** (Prior report verified)
 
 ---
 
@@ -133,9 +135,10 @@ While automated headless and static code suites have passed completely, the foll
 1. **Device Reboot Persistence (`BOOT_COMPLETED`):**
    - Static code audit confirmed `BootReceiver.kt` and `ZatoonaAlarmScheduler.rescheduleAll()` path is sound.
    - Live hardware verification (physical device reboot test) is explicitly deferred.
-2. **Aggressive OEM Battery Optimization (Doze Mode):**
-   - `AlarmManager.setExactAndAllowWhileIdle()` is implemented.
-   - Long-term background delivery across multi-day sleep cycles on OEM-specific forks (MIUI/HyperOS, OneUI, ColorOS) requires real-world physical observation.
+2. **Aggressive OEM Battery Optimization (Doze Mode & Samsung Power Saving):**
+   - The scheduling mechanism relies on `AlarmManager.setExactAndAllowWhileIdle()` (with inexact fallback). The application does not use `setAlarmClock()`.
+   - The user reported a successful live test on the physical Samsung Galaxy A04e where the alarm fired while Samsung Maximum Power Saving Mode was enabled.
+   - This reported success indicates alarms can trigger under tested short-interval conditions, but does not conclusively prove delivery across all deep Doze states, multi-day background dormancy, or post-reboot locked states on diverse OEM skins. Real-world long-term observation remains open.
 3. **Android Release Build & Production Signing:**
    - Debug APK currently exists at `android/app/build/outputs/apk/debug/app-debug.apk` (built in Phase 13.4B1).
    - Release signing configuration (`keystore`, `keyAlias`, `storePassword`) is intentionally unconfigured to prevent committing secrets to source control.
