@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
+import androidx.core.content.ContextCompat
 import kotlin.math.abs
 
 /**
@@ -127,6 +128,17 @@ class ZatoonaAlarmScheduler(private val context: Context) {
             pendingIntent.cancel()
         }
         notificationManager.cancelNotification(scheduleId)
+
+        // Stop active alarm sound/service if running
+        try {
+            val dismissIntent = Intent(context, AlarmService::class.java).apply {
+                action = AlarmService.ACTION_DISMISS_ALARM
+                putExtra(AlarmService.EXTRA_SCHEDULE_ID, scheduleId)
+            }
+            context.startService(dismissIntent)
+        } catch (e: Exception) {
+            Log.w(TAG, "Could not send dismiss to AlarmService: ${e.message}")
+        }
     }
 
     fun rescheduleAll(): Int {
@@ -164,8 +176,22 @@ class ZatoonaAlarmScheduler(private val context: Context) {
             return
         }
 
-        // Post the local notification
-        notificationManager.showNotification(schedule)
+        // Start native AlarmService (Foreground Service with looping audio + swipe UI + notification)
+        val serviceIntent = Intent(context, AlarmService::class.java).apply {
+            action = AlarmService.ACTION_START_ALARM
+            putExtra(AlarmService.EXTRA_SCHEDULE_ID, schedule.id)
+            putExtra(AlarmService.EXTRA_TRIGGER_MS, firedEpochMs)
+            putExtra(AlarmService.EXTRA_TITLE, schedule.title)
+            putExtra(AlarmService.EXTRA_BODY, schedule.body)
+            putExtra(AlarmService.EXTRA_MODE, schedule.mode)
+            putExtra(AlarmService.EXTRA_TYPE, schedule.type)
+        }
+        try {
+            ContextCompat.startForegroundService(context, serviceIntent)
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to start AlarmService, falling back to notification: ${e.message}")
+            notificationManager.showNotification(schedule)
+        }
 
         // Local Recurrence Calculation (sustainable without WebView or internet)
         val nextOccurrence = repository.computeNextOccurrence(schedule, nowMs)

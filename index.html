@@ -7531,7 +7531,6 @@ function isNativeBridgeAvailable(){
 
 function syncRemindersToNativeBridge(){
   if(!isNativeBridgeAvailable()) return;
-  if(!notificationSettings || !notificationSettings.enabled) return;
 
   const schedules = [];
   const now = new Date();
@@ -7548,8 +7547,8 @@ function syncRemindersToNativeBridge(){
     return dates;
   }
 
-  // 1. Prayer notifications — push cached dated timings for the next 30 days
-  if(notificationSettings.prayers){
+  // 1. Prayer notifications — push cached dated timings for the next 30 days (only if general notifications & prayers enabled)
+  if(notificationSettings && notificationSettings.enabled && notificationSettings.prayers){
     const city = loadPrayerCity();
     const prayerOffset = Number(notificationSettings.prayerOffset) || 0;
     const enabledPrayers = [];
@@ -7698,13 +7697,11 @@ function syncRemindersToNativeBridge(){
     }
   }
 
-  // Push to native bridge
-  if(schedules.length > 0){
-    try {
-      window.ZatoonaNativeBridge.syncSchedules(JSON.stringify(schedules));
-    } catch(e){
-      console.warn('[native-bridge] syncSchedules error:', e);
-    }
+  // Push to native bridge (always push, even if empty, so that cancelled/deleted schedules are purged from AlarmManager)
+  try {
+    window.ZatoonaNativeBridge.syncSchedules(JSON.stringify(schedules));
+  } catch(e){
+    console.warn('[native-bridge] syncSchedules error:', e);
   }
 }
 
@@ -7752,6 +7749,9 @@ function renderNotificationSettingsUI(){
         <input type="checkbox" id="notifOptMaster" ${notificationSettings.enabled?'checked':''}>
         <b>تفعيل نظام التنبيهات بالكامل</b>
       </label>
+      <div style="font-size:.72rem; color:var(--muted); margin-right:24px; margin-bottom:4px;">
+        (يشمل مواقيت الصلاة وأنشطة الجدول والنافذة المنبثقة؛ التذكيرات المخصصة في تبويب &quot;تذكيرات&quot; تُدار كمنبهات مستقلة بمفتاح تفعيل خاص بكل تذكير)
+      </div>
       <label style="display:flex; align-items:center; gap:8px; margin-right:16px;">
         <input type="checkbox" id="notifOptPrayers" ${notificationSettings.prayers&&notificationSettings.enabled?'checked':''}>
         تنبيهات مواقيت الصلاة (تلقائياً حسب المدينة المختارة)
@@ -19976,8 +19976,12 @@ function toggleReminderEnabled(id){
 }
 function deleteReminder(id){
   if(!confirm('تمسح التذكير ده؟ الخطوة دي مش هترجع.')) return;
+  const remId = 'rem-' + id;
   reminders = reminders.filter(x=>x.id!==id);
   saveReminders(reminders);
+  if(isNativeBridgeAvailable() && typeof window.ZatoonaNativeBridge.cancelSchedule === 'function'){
+    try { window.ZatoonaNativeBridge.cancelSchedule(remId); } catch(e){}
+  }
   if(editingReminderId===id) resetReminderForm();
   renderReminders();
 }
@@ -19986,13 +19990,19 @@ function renderReminders(){
   if(!listEl || !emptyEl) return;
   if(reminders.length===0){ listEl.classList.add('hidden'); emptyEl.classList.remove('hidden'); return; }
   emptyEl.classList.add('hidden'); listEl.classList.remove('hidden');
+  const isNative = isNativeBridgeAvailable();
   listEl.innerHTML = reminders.map(r=>{
     const meta = REMINDER_TYPE_META[r.type] || {label:r.type, icon:'⏰'};
     const timeLabel = r.type==='prayer' ? ((REMINDER_PRAYER_REFS.find(p=>p.key===r.reference)||{}).name || '—') : (r.time || '—');
+    const statusBadge = r.enabled
+      ? (isNative
+          ? '<span style="color:var(--good); font-size:.72rem;">⚡ مجدول كمنبه</span>'
+          : '<span style="color:var(--muted); font-size:.72rem;">🌐 تذكير متصفح (أثناء الفتح)</span>')
+      : '<span style="color:var(--muted); font-size:.72rem;">🔕 موقّف</span>';
     return `<div class="check-row">
       <div class="check-left">
         <div class="cname">${meta.icon} ${escapeHtml(r.title||'(من غير عنوان)')}</div>
-        <div class="rem-meta"><span><b>${meta.label}</b></span><span>🕐 ${timeLabel}</span><span>🔁 ${reminderRecurrenceLabel(r)}</span></div>
+        <div class="rem-meta"><span><b>${meta.label}</b></span><span>🕐 ${timeLabel}</span><span>🔁 ${reminderRecurrenceLabel(r)}</span><span>${statusBadge}</span></div>
       </div>
       <div class="toggle-group" style="gap:6px;">
         <button class="tbtn-lg ${r.enabled?'on-right':''}" data-act="toggle" data-id="${r.id}" title="${r.enabled?'مفعّل':'موقّف'}">${r.enabled?'🔔':'🔕'}</button>

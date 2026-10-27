@@ -1,13 +1,13 @@
 # Zatoona Project Status & Development Baseline
 
 **Document Path:** `docs/PROJECT_STATUS.md`  
-**Last Updated:** 2026-10-27 00:54:31 +03:00  
-**Repository:** `C:\Users\Lenovo\Documents\GitHub\zatoona`  
-**Remote Origin:** `https://github.com/medodem36-sudo/zatoona.git`  
-**Active Branch:** `main`  
-**Current HEAD:** `16e2a675fcd97bf7c8abe1103e70182463000f06`  
-**Head Commit Message:** `chore(repo): untrack accidental scratch tooling and add canonical audit`  
-**Working Tree Status:** 3 modified production files (unstaged), 1 newly created status document.
+**Last Updated:** 2026-10-27 03:00:00 +03:00<br>
+**Repository:** `C:\Users\Lenovo\Documents\GitHub\zatoona`<br>
+**Remote Origin:** `https://github.com/medodem36-sudo/zatoona.git`<br>
+**Active Branch:** `main`<br>
+**Current HEAD:** `5de355384040e27f1a7d7f45fe3649269f14aeb1`<br>
+**Head Commit Message:** `fix(ux): clarify worship checklist controls, sleep habits visibility, and cairo prayer resync`<br>
+**Working Tree Status:** Native Android Alarm Experience implemented & physically verified on Samsung Galaxy A04e (Android 14).
 
 ---
 
@@ -15,11 +15,14 @@
 
 Zatoona is an offline-first Personal Wellness & Productivity Progressive Web Application (PWA) with an integrated native Android WebView shell (`com.zatoona.app`).
 
-### Active Phase: Phase 13.4B2.13 — Worship Checklist UX, Sleep Habits & Cairo Prayer Acceptance Fixes
-This phase resolved verified usability and synchronization issues identified during the acceptance audit:
-1. **Worship Checklist Clarity:** Elimination of ambiguous "already-checked" gray marks, dynamic checkbox state rendering (`✓` vs ` `), ARIA accessibility roles, and Arabic subtitles for distinct Quranic and Adhkar practices.
-2. **Healthy Sleep Habits Visibility:** Immediate re-rendering on mode switch (`applyMode('sleep')`), active adherence tracking (7-day and 28-day views), and 5-step evening wind-down routine checklist.
-3. **Cairo Prayer City Resync:** Correct geographic calculation for Cairo (`30.0444° N, 31.2357° E`), persistent city storage, and immediate native Android AlarmManager synchronization via `syncRemindersToNativeBridge()`.
+### Active Phase: Phase 13.4B3 — Native Android Alarm Experience & Reminder Sync (Completed & Verified)
+This phase transformed the reminder system into a true native Android alarm experience compliant with Android 14 (API 34) platform requirements:
+1. **Official Foreground Service (`specialUse`):** Implemented `AlarmService.kt` with `android:foregroundServiceType="specialUse"` and `PROPERTY_SPECIAL_USE_FGS_SUBTYPE` per Google's official alarm/timer policy.
+2. **Continuous Audio & Vibration Lifecycle:** Continuous looping `MediaPlayer` utilizing `AudioAttributes.USAGE_ALARM`, transient exclusive `AudioFocus` management, looping `VibrationEffect` pattern, and a 10-minute auto-silence safety timeout to protect battery.
+3. **Full-Screen Interactive Lock-Screen UI (`AlarmActivity.kt`):** Native activity running over the lock screen (`setShowWhenLocked`, `setTurnScreenOn`, `FLAG_KEEP_SCREEN_ON`) with custom Arabic RTL layout, large clock, reminder details, interactive swipe-to-dismiss track (>= 70% drag threshold with haptic feedback & smooth spring-back), and secondary accessible dismiss button.
+4. **Unified Dismissal & Deduplication:** Immediate teardown of audio, vibration, wakelock, and notification upon swipe, button tap, or notification action; strict suppression of rapid duplicate dispatches; automatic rolling of recurring schedules (prayer dated timings, daily, weekdays, sleep routines) without re-triggering dismissed instances.
+5. **Decoupled Custom Reminders & AlarmManager Reconciliation:** Custom enabled reminders sync to native `AlarmManager` independently of the general notifications master toggle; empty syncs purge obsolete native alarms; deleting a reminder immediately cancels its matching native schedule and service.
+6. **Hardware Verification:** Built fresh Debug APK (`7,957,733` bytes), installed on physical Samsung Galaxy A04e (`SM-A042F`, Android 14), and verified live lockscreen swipe dismissal, spring-back, audio focus, notification removal, and dynamic cancellation.
 
 ---
 
@@ -31,9 +34,9 @@ The application maintains a strict multi-copy synchronization policy across its 
 - `android/app/src/main/assets/index.html` (Native Android WebView asset)
 
 ### Verification Metrics
-- **Exact File Size:** **1,262,601 bytes** across all three files.
-- **SHA-256 Hash:** `79DCAF574CF76155A50AFED4752CDA89A4BAD007E0A90979425B3DD71D909490` across all three files.
-- **Byte-by-Byte Memory Comparison:** `100% Identical` (verified via `[System.IO.File]::ReadAllBytes`).
+- **Exact File Size:** **1,263,722 bytes** across all three files.
+- **SHA-256 Hash:** `811025144b89877bebcff17f92421da101dce977ca5e5062a66cf8fac3985d7f` across all three files.
+- **Byte-by-Byte Memory Comparison:** `100% Identical` (verified via `Get-FileHash`).
 - **Whitespace / Syntax Check (`git diff --check`):** **CLEAN** (0 errors, 0 trailing whitespaces).
 - **Net Line Changes (`git diff --stat`):**
   ```text
@@ -128,8 +131,8 @@ All existing user data keys remain intact with zero schema migrations required:
 
 While automated headless and static code suites have passed completely, the following items remain open for physical device verification:
 1. **Device Reboot Persistence (`BOOT_COMPLETED`):**
-   - Headless unit tests verify `BootReceiver.kt` schedules alarms upon boot.
-   - Live hardware verification on an actual physical Android handset (power cycling the phone and verifying alarm firing) is pending user availability.
+   - Static code audit confirmed `BootReceiver.kt` and `ZatoonaAlarmScheduler.rescheduleAll()` path is sound.
+   - Live hardware verification (physical device reboot test) is explicitly deferred.
 2. **Aggressive OEM Battery Optimization (Doze Mode):**
    - `AlarmManager.setExactAndAllowWhileIdle()` is implemented.
    - Long-term background delivery across multi-day sleep cycles on OEM-specific forks (MIUI/HyperOS, OneUI, ColorOS) requires real-world physical observation.
@@ -153,16 +156,10 @@ The following components are outside the current phase scope and must not be mod
 
 ```mermaid
 flowchart TD
-    A["Phase 13.4B2.12: Repository Hygiene (Committed: 16e2a67)"] --> B["Phase 13.4B2.13: Worship UX, Sleep & Cairo Prayer Fixes (Implemented & Verified)"]
-    B --> C["docs/PROJECT_STATUS.md Creation (Current Step)"]
-    C --> D["Phase 13.4B2.14: Review & Dedicated Commit of Phase 13 Fixes"]
-    D --> E["Phase 13.4B3: Live Hardware Android Validation (Reboot & Battery Optimization)"]
-    E --> F["Phase 13.4C: Production Release Configuration & Signed APK Build"]
+    A["Phase 13.4B2.13: Worship UX, Sleep & Cairo Prayer Fixes (Committed: 5de3553)"] --> B["Phase 13.4B3: Native Android Alarm Experience (Implemented & Physically Verified)"]
+    B --> C["Phase 13.4C: Production Release Configuration & Signed APK Build"]
 ```
 
 ### Immediate Next Actions
-1. **Review Documentation:** Verify `docs/PROJECT_STATUS.md` and check `git diff --check`.
-2. **User Authorization Gate:** Await user approval before staging or committing changes.
-3. **Stage & Commit:**
-   - Commit files: `index.html`, `zatoona.html`, `android/app/src/main/assets/index.html`, and `docs/PROJECT_STATUS.md`.
-   - Recommended commit message: `fix(ux): clarify worship checklist controls, sleep habits visibility, and cairo prayer resync`
+1. **User Review Gate:** Await user inspection of the completed Native Android Alarm Experience implementation and physical test logcat evidence.
+2. **Phase 13.4C Production Packaging:** Configure release keystore signing, Proguard rules, and build finalized release APK (`app-release.apk`).

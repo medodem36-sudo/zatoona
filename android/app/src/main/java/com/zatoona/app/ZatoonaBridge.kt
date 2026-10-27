@@ -190,6 +190,7 @@ class ZatoonaBridge(private val context: Context) {
 
             val nowMs = System.currentTimeMillis()
             var scheduledCount = 0
+            val incomingIds = mutableSetOf<String>()
 
             for (i in 0 until array.length()) {
                 val item = array.optJSONObject(i)
@@ -199,6 +200,7 @@ class ZatoonaBridge(private val context: Context) {
                 if (id.isEmpty() || id.length > MAX_ID_LENGTH || !ID_REGEX.matches(id)) {
                     return errorResponse("INVALID_ID", "Item at index $i has invalid ID: '$id'")
                 }
+                incomingIds.add(id)
 
                 val type = item.optString("type", "custom").trim().lowercase()
                 if (!ALLOWED_TYPES.contains(type)) {
@@ -272,6 +274,15 @@ class ZatoonaBridge(private val context: Context) {
                     }
                 } else {
                     scheduler.cancelAlarm(id)
+                }
+            }
+
+            // Cancel and remove any previously persisted schedules that were omitted from this sync
+            val allSchedules = repository.getAllSchedules()
+            for (oldSched in allSchedules) {
+                if (!incomingIds.contains(oldSched.id)) {
+                    scheduler.cancelAlarm(oldSched.id)
+                    repository.deleteSchedule(oldSched.id)
                 }
             }
 

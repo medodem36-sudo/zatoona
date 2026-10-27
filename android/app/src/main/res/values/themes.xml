@@ -10,4 +10,11 @@
         <item name="android:statusBarColor">#FAF9F6</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
+    <style name="Theme.Zatoona.AlarmActivity" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">#0B131E</item>
+        <item name="android:statusBarColor">#0B131E</item>
+        <item name="android:navigationBarColor">#0B131E</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
 </resources>

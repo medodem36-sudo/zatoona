@@ -20,6 +20,7 @@ class ZatoonaNotificationManager(private val context: Context) {
         const val CHANNEL_REMINDERS = "zatoona_reminders"
         const val CHANNEL_PRAYERS = "zatoona_prayers"
         const val CHANNEL_SLEEP = "zatoona_sleep"
+        const val CHANNEL_ALARMS = "zatoona_alarms"
 
         const val EXTRA_MODE = "com.zatoona.app.EXTRA_MODE"
         const val EXTRA_SCHEDULE_ID = "com.zatoona.app.EXTRA_SCHEDULE_ID"
@@ -62,8 +63,20 @@ class ZatoonaNotificationManager(private val context: Context) {
                 enableVibration(true)
             }
 
+            val alarmsChannel = NotificationChannel(
+                CHANNEL_ALARMS,
+                "منبهات زتونة",
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                description = "تنبيهات المنبه التفاعلية مع شاشة القفل والصوت المستمر"
+                enableVibration(true)
+                setBypassDnd(true)
+                lockscreenVisibility = android.app.Notification.VISIBILITY_PUBLIC
+                setSound(null, null)
+            }
+
             notificationManager.createNotificationChannels(
-                listOf(generalChannel, prayerChannel, sleepChannel)
+                listOf(generalChannel, prayerChannel, sleepChannel, alarmsChannel)
             )
         }
     }
