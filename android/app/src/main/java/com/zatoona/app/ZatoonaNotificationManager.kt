@@ -22,6 +22,10 @@ class ZatoonaNotificationManager(private val context: Context) {
         const val CHANNEL_SLEEP = "zatoona_sleep"
         const val CHANNEL_ALARMS = "zatoona_alarms"
 
+        // Phase 13.10 / Proposal #14: Android notification grouping & summary
+        const val GROUP_ZATOONA_REMINDERS = "com.zatoona.app.REMINDERS_GROUP"
+        const val NOTIFICATION_ID_GROUP_SUMMARY = 999999
+
         const val EXTRA_MODE = "com.zatoona.app.EXTRA_MODE"
         const val EXTRA_SCHEDULE_ID = "com.zatoona.app.EXTRA_SCHEDULE_ID"
         const val EXTRA_TYPE = "com.zatoona.app.EXTRA_TYPE"
@@ -121,14 +125,45 @@ class ZatoonaNotificationManager(private val context: Context) {
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .setDefaults(NotificationCompat.DEFAULT_ALL)
+            .setGroup(GROUP_ZATOONA_REMINDERS)
 
         val notifId = abs(schedule.id.hashCode())
         notificationManager.notify(notifId, builder.build())
+
+        // Post / update Android notification group summary (Proposal #14)
+        val summaryIntent = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            putExtra(EXTRA_MODE, "home")
+        }
+        val summaryPendingIntent = PendingIntent.getActivity(
+            context,
+            NOTIFICATION_ID_GROUP_SUMMARY,
+            summaryIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        val summaryBuilder = NotificationCompat.Builder(context, channelId)
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setContentTitle("تذكيرات زتونة")
+            .setContentText("تنبيهات مجدولة نشطة")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setGroup(GROUP_ZATOONA_REMINDERS)
+            .setGroupSummary(true)
+            .setContentIntent(summaryPendingIntent)
+            .setAutoCancel(true)
+
+        notificationManager.notify(NOTIFICATION_ID_GROUP_SUMMARY, summaryBuilder.build())
         return true
     }
 
     fun cancelNotification(scheduleId: String) {
         val notifId = abs(scheduleId.hashCode())
         notificationManager.cancel(notifId)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val active = notificationManager.activeNotifications
+            val groupCount = active.count { it.notification.group == GROUP_ZATOONA_REMINDERS && it.id != NOTIFICATION_ID_GROUP_SUMMARY }
+            if (groupCount == 0) {
+                notificationManager.cancel(NOTIFICATION_ID_GROUP_SUMMARY)
+            }
+        }
     }
 }

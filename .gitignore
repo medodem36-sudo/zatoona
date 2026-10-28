@@ -1,6 +1,13 @@
 # Android local machine configuration & SDK paths
 /android/local.properties
 
+# Android release keystores, signing keys & credentials
+*.keystore
+*.jks
+*.p12
+keystore.properties
+signing.properties
+
 # Android Gradle cache & execution data
 /android/.gradle/
 

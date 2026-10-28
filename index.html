@@ -1133,6 +1133,31 @@
     font-size:.72rem; font-weight:700;
   }
   .section-hint{color:var(--muted); font-size:.78rem; margin:-4px 0 12px; padding-right:30px;}
+  .worship-badge{
+    margin-inline-start:auto; font-family:'IBM Plex Mono',monospace; font-size:.72rem; font-weight:700;
+    padding:2px 8px; border-radius:12px; background:var(--card); color:var(--muted);
+    border:1px solid var(--line); transition:all .2s ease;
+  }
+  .worship-badge.is-complete{
+    background:var(--badge-important-bg); color:var(--good); border-color:var(--good);
+  }
+  /* Habit Streaks styling */
+  .streak-pill{
+    transition:transform .15s ease, border-color .15s ease, background .15s ease;
+    cursor:pointer; display:inline-flex; align-items:center; gap:6px;
+    padding:6px 12px; border-radius:20px; font-size:.78rem;
+    border:1px solid var(--line); background:var(--card);
+  }
+  .streak-pill:hover{transform:translateY(-1px); border-color:var(--accent);}
+  .streak-pill.is-today-done{border-color:var(--good); background:var(--badge-important-bg);}
+  .streak-pill.is-alive{border-color:var(--accent); background:rgba(245, 158, 11, 0.05);}
+  .streak-mini-card{
+    cursor:pointer; text-align:center; padding:14px 10px; border-radius:10px;
+    background:var(--card); border:1px solid var(--line);
+    transition:transform .15s ease, border-color .15s ease;
+  }
+  .streak-mini-card:hover{transform:translateY(-2px); border-color:var(--accent);}
+  .streak-mini-card.is-active{border-color:var(--accent); box-shadow:0 2px 8px rgba(245, 158, 11, 0.12);}
 
   .summary{
     background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow);
@@ -1192,6 +1217,12 @@
   .check-left .cqty{color:var(--muted); font-size:.72rem; font-family:'IBM Plex Mono',monospace;}
   .check-left .cnote{color:var(--muted); font-size:.68rem; opacity:.75; margin-top:2px; line-height:1.3;}
   .check-row.on-wrong .cname{text-decoration:line-through; color:var(--muted);}
+  .check-row.is-checked{background:rgba(52, 211, 153, 0.04);}
+  #qiyamWitr .check-row.is-checked{border-inline-start:3px solid #818cf8; background:rgba(129, 140, 248, 0.05);}
+  #nawafilExtra .check-row.is-checked{border-inline-start:3px solid #f59e0b; background:rgba(245, 158, 11, 0.05);}
+  #azkar .check-row.is-checked{border-inline-start:3px solid #10b981; background:rgba(16, 185, 129, 0.05);}
+  #quranWird .check-row.is-checked{border-inline-start:3px solid #06b6d4; background:rgba(6, 182, 212, 0.05);}
+  #prayerFard .check-row.is-checked{border-inline-start:3px solid var(--good); background:rgba(52, 211, 153, 0.05);}
   .list-footer{display:flex; justify-content:space-between; align-items:center; padding:12px 14px;}
   .list-total{font-family:'IBM Plex Mono',monospace; color:var(--accent); font-weight:700;}
   .reset-btn{
@@ -2007,6 +2038,60 @@
   .ex-photo-badge-btn:hover{ background:var(--primary); transform:scale(1.04); }
   .ex-photo.no-photo .ex-photo-badge-btn{ position:static; background:var(--card); color:var(--text); border:1px solid var(--line); }
 
+  /* ===== FASTING TRACKER (Proposal #12 / Phase 13.6B) ===== */
+  .fasting-type-pill{
+    padding:5px 10px; font-size:.76rem; border-radius:16px; border:1px solid var(--line);
+    background:var(--card-alt); color:var(--text); cursor:pointer; transition:all .15s ease;
+  }
+  .fasting-type-pill.active{
+    background:var(--primary); color:#fff; border-color:var(--primary); font-weight:700;
+  }
+  .fasting-sunnah-banner{
+    background:rgba(16, 185, 129, 0.1); border:1px solid rgba(16, 185, 129, 0.35);
+    border-radius:8px; padding:8px 12px; font-size:.78rem; line-height:1.5; color:var(--text); margin-bottom:10px;
+  }
+
+  /* ===== ENCRYPTED BACKUP MODALS (Proposal #4 / Phase 10) ===== */
+  .backup-crypto-overlay{
+    position:fixed; inset:0; background:rgba(0,0,0,0.65); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
+    z-index:1050; display:flex; align-items:center; justify-content:center; padding:14px;
+    opacity:0; pointer-events:none; transition:opacity .2s ease;
+  }
+  .backup-crypto-overlay.open{ opacity:1; pointer-events:auto; }
+  .backup-crypto-card{
+    background:var(--card); border:1px solid var(--line); border-radius:14px; width:100%; max-width:420px;
+    max-height:90vh; overflow-y:auto; padding:18px; box-shadow:0 12px 32px rgba(0,0,0,0.3);
+    display:flex; flex-direction:column; gap:12px; box-sizing:border-box; direction:rtl; text-align:right;
+  }
+
+  /* ===== BATTERY OPTIMIZATION GUIDE (Phase 13.5B / Proposal #15) ===== */
+  .battery-guide-overlay{
+    position:fixed; inset:0; background:rgba(0,0,0,0.65); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
+    z-index:1050; display:flex; align-items:center; justify-content:center; padding:14px;
+    opacity:0; pointer-events:none; transition:opacity .2s ease;
+  }
+  .battery-guide-overlay.open{ opacity:1; pointer-events:auto; }
+  .battery-guide-card{
+    background:var(--card); border:1px solid var(--line); border-radius:14px; width:100%; max-width:480px;
+    max-height:90vh; overflow-y:auto; padding:16px; box-shadow:0 12px 32px rgba(0,0,0,0.3);
+    display:flex; flex-direction:column; gap:12px; box-sizing:border-box; direction:rtl; text-align:right;
+  }
+  .battery-guide-tabs{
+    display:flex; gap:4px; background:var(--card-alt); padding:4px; border-radius:10px; border:1px solid var(--line); overflow-x:auto; scrollbar-width:none;
+  }
+  .battery-guide-tab{
+    flex:1; min-width:max-content; padding:6px 10px; font-size:.76rem; font-weight:600; border:none; border-radius:7px;
+    background:transparent; color:var(--text); cursor:pointer; text-align:center; transition:all .15s ease; white-space:nowrap;
+  }
+  .battery-guide-tab.active{ background:var(--card); color:var(--primary); box-shadow:var(--shadow-sm); font-weight:700; }
+  .bg-panel{ display:none; flex-direction:column; gap:10px; }
+  .bg-panel.active{ display:flex; }
+  .bg-step{ display:flex; gap:10px; align-items:flex-start; font-size:.8rem; line-height:1.6; }
+  .bg-step-num{
+    background:var(--accent-dim); color:var(--accent); font-weight:700; width:22px; height:22px;
+    border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:.76rem; margin-top:2px;
+  }
+
   .ex-img-modal-overlay{
     position:fixed; inset:0; background:rgba(0,0,0,0.65); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
     z-index:1050; display:flex; align-items:center; justify-content:center; padding:14px;
@@ -2643,6 +2728,191 @@ body.dark .gw-drill-thumb img {
   </div>
 </div>
 
+<!-- Battery Optimization Guide Modal (Phase 13.5B / Proposal #15) -->
+<div id="batteryGuideModal" class="battery-guide-overlay" role="dialog" aria-modal="true" aria-labelledby="batteryGuideTitle">
+  <div class="battery-guide-card">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
+      <div>
+        <div id="batteryGuideTitle" style="font-size:.95rem; font-weight:700; color:var(--text); display:flex; align-items:center; gap:6px;">
+          <span>🔋</span>
+          <span>دليل إعدادات البطارية وضمان التنبيهات</span>
+        </div>
+        <div style="font-size:.76rem; color:var(--muted); margin-top:3px; line-height:1.4;">
+          خطوات استثناء زتونة من توفير الطاقة التلقائي لضمان وصول منبهات الأذان والمهام في موعدها
+        </div>
+      </div>
+      <button type="button" id="batteryGuideCloseX" class="reset-btn" style="font-size:1.1rem; padding:2px 8px; border:none; cursor:pointer;" title="إغلاق" aria-label="إغلاق">✕</button>
+    </div>
+
+    <div id="batteryGuideNativeBadge" class="fallback-note" style="margin:0; font-size:.74rem; line-height:1.6; border-color:var(--accent); color:var(--text); background:var(--card-alt);">
+      <!-- Populated dynamically via JS -->
+    </div>
+
+    <!-- OEM Tabs -->
+    <div class="battery-guide-tabs" role="tablist" aria-label="أنواع الهواتف">
+      <button type="button" class="battery-guide-tab active" id="bgTab-samsung" role="tab" aria-selected="true" data-brand="samsung">📱 سامسونج (Samsung)</button>
+      <button type="button" class="battery-guide-tab" id="bgTab-xiaomi" role="tab" aria-selected="false" data-brand="xiaomi">📱 شاومي (Xiaomi)</button>
+      <button type="button" class="battery-guide-tab" id="bgTab-huawei" role="tab" aria-selected="false" data-brand="huawei">📱 هواوي (Huawei)</button>
+      <button type="button" class="battery-guide-tab" id="bgTab-oppo" role="tab" aria-selected="false" data-brand="oppo">📱 أوبو / ريلمي</button>
+      <button type="button" class="battery-guide-tab" id="bgTab-pixel" role="tab" aria-selected="false" data-brand="pixel">📱 أندرويد خام</button>
+    </div>
+
+    <!-- OEM Content Panels -->
+    <!-- Samsung -->
+    <div class="bg-panel active" id="bgPanel-samsung" role="tabpanel" aria-labelledby="bgTab-samsung">
+      <div style="font-weight:700; color:var(--accent); font-size:.82rem;">خطوات هواتف سامسونج (One UI):</div>
+      <div class="bg-step">
+        <span class="bg-step-num">١</span>
+        <div>افتح <b>الضبط (Settings)</b> ➔ <b>التطبيقات (Apps)</b> ➔ ابحث عن تطبيق <b>زتونة (Zatoona)</b> واضغط عليه.</div>
+      </div>
+      <div class="bg-step">
+        <span class="bg-step-num">٢</span>
+        <div>اضغط على <b>البطارية (Battery)</b> ➔ غيّر الخيار إلى <b>غير مقيّد (Unrestricted)</b> بدلاً من &quot;محسّن&quot; أو &quot;مقيّد&quot;.</div>
+      </div>
+      <div class="bg-step">
+        <span class="bg-step-num">٣</span>
+        <div>ارجع للقائمة الرئيسية للضبط ➔ <b>العناية بالجهاز (Device care)</b> ➔ <b>البطارية</b> ➔ <b>حدود استخدام الخلفية</b>.</div>
+      </div>
+      <div class="bg-step">
+        <span class="bg-step-num">٤</span>
+        <div>تأكد أن زتونة ليس في قائمة <b>&quot;تطبيقات في وضع السكون الشديد&quot; (Deep sleeping apps)</b>، واضغط (+) في <b>&quot;تطبيقات لن يتم وضعها في وضع السكون أبدًا&quot; (Never sleeping apps)</b> وأضف زتونة.</div>
+      </div>
+    </div>
+
+    <!-- Xiaomi / Redmi / POCO -->
+    <div class="bg-panel" id="bgPanel-xiaomi" role="tabpanel" aria-labelledby="bgTab-xiaomi">
+      <div style="font-weight:700; color:var(--accent); font-size:.82rem;">خطوات شاومي، ريدمي، وبوكو (MIUI &amp; HyperOS):</div>
+      <div class="bg-step">
+        <span class="bg-step-num">١</span>
+        <div>افتح <b>الإعدادات (Settings)</b> ➔ <b>التطبيقات (Apps)</b> ➔ <b>إدارة التطبيقات (Manage apps)</b> ➔ اختر <b>زتونة (Zatoona)</b>.</div>
+      </div>
+      <div class="bg-step">
+        <span class="bg-step-num">٢</span>
+        <div>فعّل مفتاح <b>التشغيل التلقائي (Autostart)</b> واضغط موافق للتأكيد.</div>
+      </div>
+      <div class="bg-step">
+        <span class="bg-step-num">٣</span>
+        <div>انزل للأسفل واضغط على <b>موفر البطارية (Battery saver)</b> ➔ اختر <b>لا توجد قيود (No restrictions)</b>.</div>
+      </div>
+      <div class="bg-step">
+        <span class="bg-step-num">٤</span>
+        <div>افتح شاشة التطبيقات المفتوحة (Recent Apps) ➔ اضغط مطولاً على نافذة زتونة واضغط أيقونة <b>القفل 🔒 (Lock)</b> لمنع إغلاقه عند تنظيف الذاكرة.</div>
+      </div>
+    </div>
+
+    <!-- Huawei / Honor -->
+    <div class="bg-panel" id="bgPanel-huawei" role="tabpanel" aria-labelledby="bgTab-huawei">
+      <div style="font-weight:700; color:var(--accent); font-size:.82rem;">خطوات هواوي وهونر (EMUI &amp; MagicOS):</div>
+      <div class="bg-step">
+        <span class="bg-step-num">١</span>
+        <div>افتح <b>الإعدادات (Settings)</b> ➔ <b>البطارية (Battery)</b> ➔ <b>تشغيل التطبيقات (App Launch)</b>.</div>
+      </div>
+      <div class="bg-step">
+        <span class="bg-step-num">٢</span>
+        <div>ابحث عن تطبيق <b>زتونة (Zatoona)</b> وقُم بإيقاف زر <b>&quot;الإدارة التلقائية&quot;</b> بجانبه.</div>
+      </div>
+      <div class="bg-step">
+        <span class="bg-step-num">٣</span>
+        <div>في النافذة المنبثقة، تأكد من تفعيل الثلاثة خيارات يدوياً: <b>التشغيل التلقائي</b>، <b>التشغيل الثانوي</b>، و<b>التشغيل في الخلفية</b>.</div>
+      </div>
+    </div>
+
+    <!-- Oppo / Realme / OnePlus -->
+    <div class="bg-panel" id="bgPanel-oppo" role="tabpanel" aria-labelledby="bgTab-oppo">
+      <div style="font-weight:700; color:var(--accent); font-size:.82rem;">خطوات أوبو، ريلمي، ووان بلس (ColorOS / OxygenOS):</div>
+      <div class="bg-step">
+        <span class="bg-step-num">١</span>
+        <div>افتح <b>الإعدادات (Settings)</b> ➔ <b>التطبيقات (Apps)</b> ➔ <b>إدارة التطبيقات</b> ➔ اختر <b>زتونة (Zatoona)</b>.</div>
+      </div>
+      <div class="bg-step">
+        <span class="bg-step-num">٢</span>
+        <div>اضغط على <b>استخدام البطارية (Battery usage)</b> ➔ فعّل <b>السماح بالنشاط في الخلفية (Allow background activity)</b>.</div>
+      </div>
+      <div class="bg-step">
+        <span class="bg-step-num">٣</span>
+        <div>ارجع للشاشة السابقة وفعّل أيضاً <b>السماح بالبدء التلقائي (Allow auto-launch)</b>.</div>
+      </div>
+    </div>
+
+    <!-- Stock Android / Pixel -->
+    <div class="bg-panel" id="bgPanel-pixel" role="tabpanel" aria-labelledby="bgTab-pixel">
+      <div style="font-weight:700; color:var(--accent); font-size:.82rem;">خطوات أندرويد خام وبيكسل وموتورولا (Android 12 - 15):</div>
+      <div class="bg-step">
+        <span class="bg-step-num">١</span>
+        <div>اضغط مطولاً على أيقونة تطبيق زتونة واضغط على علامة <b>(معلومات التطبيق ℹ️ - App info)</b>.</div>
+      </div>
+      <div class="bg-step">
+        <span class="bg-step-num">٢</span>
+        <div>اضغط على <b>استخدام بطارية التطبيق (App battery usage)</b>.</div>
+      </div>
+      <div class="bg-step">
+        <span class="bg-step-num">٣</span>
+        <div>غيّر الضبط من &quot;محسّن (Optimized)&quot; إلى <b>غير مقيّد (Unrestricted)</b>.</div>
+      </div>
+    </div>
+
+    <div style="margin-top:6px;">
+      <button type="button" id="batteryGuideCloseBtn" class="primary-btn" style="width:100%; font-size:.85rem; padding:9px 16px;">فهمت ذلك، إغلاق الدليل</button>
+    </div>
+  </div>
+</div>
+
+<!-- Encrypt Backup Modal (Proposal #4 / Phase 10) -->
+<div id="encryptBackupModal" class="backup-crypto-overlay" role="dialog" aria-modal="true" aria-labelledby="encryptModalTitle">
+  <div class="backup-crypto-card">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
+      <div>
+        <div id="encryptModalTitle" style="font-size:.95rem; font-weight:700; color:var(--text); display:flex; align-items:center; gap:6px;">
+          <span>🔒</span>
+          <span>تشفير النسخة الاحتياطية</span>
+        </div>
+        <div style="font-size:.76rem; color:var(--muted); margin-top:3px; line-height:1.4;">
+          أدخل كلمة مرور لحماية ملف النسخة الاحتياطية بتشفير قوي (AES-GCM). احفظها جيداً لاستيراد البيانات لاحقاً.
+        </div>
+      </div>
+      <button type="button" id="encryptModalCloseX" class="reset-btn" style="font-size:1.1rem; padding:2px 8px; border:none; cursor:pointer;" title="إغلاق" aria-label="إغلاق">✕</button>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      <label style="font-size:.78rem; font-weight:600; color:var(--text);">كلمة المرور:</label>
+      <input type="password" id="encryptPwInput" class="weight-input" style="width:100%; box-sizing:border-box;" placeholder="كلمة المرور (٤ أحرف على الأقل)...">
+      <label style="font-size:.78rem; font-weight:600; color:var(--text); margin-top:4px;">تأكيد كلمة المرور:</label>
+      <input type="password" id="encryptPwConfirm" class="weight-input" style="width:100%; box-sizing:border-box;" placeholder="أعد إدخال كلمة المرور للتأكيد...">
+      <div id="encryptPwError" style="color:var(--danger, #ef4444); font-size:.76rem; font-weight:600; display:none;"></div>
+    </div>
+    <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:8px;">
+      <button type="button" id="btnCancelEncryptExport" class="reset-btn" style="font-size:.8rem; padding:7px 14px;">إلغاء</button>
+      <button type="button" id="btnConfirmEncryptExport" class="primary-btn" style="font-size:.8rem; padding:7px 16px;">تصدير النسخة المشفرة 🔒</button>
+    </div>
+  </div>
+</div>
+
+<!-- Decrypt Backup Modal (Proposal #4 / Phase 10) -->
+<div id="decryptBackupModal" class="backup-crypto-overlay" role="dialog" aria-modal="true" aria-labelledby="decryptModalTitle">
+  <div class="backup-crypto-card">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
+      <div>
+        <div id="decryptModalTitle" style="font-size:.95rem; font-weight:700; color:var(--text); display:flex; align-items:center; gap:6px;">
+          <span>🔓</span>
+          <span>فك تشفير النسخة الاحتياطية</span>
+        </div>
+        <div style="font-size:.76rem; color:var(--muted); margin-top:3px; line-height:1.4;">
+          هذا الملف محمي بكلمة مرور وتشفير AES-GCM. يرجى إدخال كلمة المرور لاستعادة بياناتك بأمان.
+        </div>
+      </div>
+      <button type="button" id="decryptModalCloseX" class="reset-btn" style="font-size:1.1rem; padding:2px 8px; border:none; cursor:pointer;" title="إغلاق" aria-label="إغلاق">✕</button>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      <label style="font-size:.78rem; font-weight:600; color:var(--text);">كلمة المرور:</label>
+      <input type="password" id="decryptPwInput" class="weight-input" style="width:100%; box-sizing:border-box;" placeholder="أدخل كلمة مرور الملف...">
+      <div id="decryptPwError" style="color:var(--danger, #ef4444); font-size:.76rem; font-weight:600; display:none;"></div>
+    </div>
+    <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:8px;">
+      <button type="button" id="btnCancelDecryptImport" class="reset-btn" style="font-size:.8rem; padding:7px 14px;">إلغاء الاستيراد</button>
+      <button type="button" id="btnConfirmDecryptImport" class="primary-btn" style="font-size:.8rem; padding:7px 16px;">فك التشفير والاستيراد ↗</button>
+    </div>
+  </div>
+</div>
+
 <!-- Mobile Drawer Backdrop & Drawer -->
 <div class="drawer-overlay hidden" id="drawerOverlay" aria-hidden="true"></div>
 
@@ -2895,6 +3165,7 @@ body.dark .gw-drill-thumb img {
     <div class="home-summary-card" id="homeSummaryCard"></div>
     <div class="home-quick-actions" id="homeQuickActions"></div>
     <div class="home-stats-grid" id="homeStatsGrid"></div>
+    <div id="homeStreaksCard" class="info-card" style="margin-top:16px;"></div>
     <div id="secNotes-home" style="margin-top:16px;"></div>
   </div>
 
@@ -3448,25 +3719,36 @@ body.dark .gw-drill-thumb img {
     <div id="prayerApiStatus" class="section-hint" style="margin-top:2px; font-size:.75rem;"></div>
     <div class="checklist" id="prayerTimes"></div>
 
-    <div class="section-title"><span class="n">٣</span> 🕌 الفروض والسنن الراتبة</div>
+    <!-- Qibla Compass Card (Phase 13.8B / Proposal #10) -->
+    <div class="card" id="qiblaCard" style="background:var(--card-alt); border:1px solid var(--line); border-radius:12px; padding:14px; margin:14px 0 16px;"></div>
+
+    <div class="section-title"><span class="n">٣</span> <span>🕌 الفروض والسنن الراتبة</span><span class="worship-badge" id="badge-prayerFard"></span></div>
     <div class="section-hint">علّم "فرض" لو صليتها في وقتها، وعلّم "سنة" لو صليت راتبتها</div>
     <div class="checklist" id="prayerFard"></div>
 
-    <div class="section-title"><span class="n">٤</span> 🌙 قيام الليل والوتر</div>
+    <div class="section-title"><span class="n">٤</span> <span>🌙 قيام الليل والوتر</span><span class="worship-badge" id="badge-qiyam"></span></div>
     <div class="section-hint">ركعات صلاة الليل وسنة الوتر المستحبة</div>
     <div class="checklist" id="qiyamWitr"></div>
 
-    <div class="section-title"><span class="n">٥</span> ✨ باقي النوافل</div>
+    <div class="section-title"><span class="n">٥</span> <span>✨ باقي النوافل</span><span class="worship-badge" id="badge-nawafil"></span></div>
     <div class="section-hint">السنن المؤكدة والمستحبة على مدار اليوم (ضحى، تحية المسجد، سنة الوضوء)</div>
     <div class="checklist" id="nawafilExtra"></div>
 
-    <div class="section-title"><span class="n">٦</span> 📿 أذكار الصباح والمساء</div>
+    <div class="section-title"><span class="n">٦</span> <span>📿 أذكار الصباح والمساء</span><span class="worship-badge" id="badge-azkar"></span></div>
     <div class="section-hint">الحصن اليومي المبارك: أذكار الصباح بعد الفجر وأذكار المساء بعد العصر</div>
     <div class="checklist" id="azkar"></div>
 
-    <div class="section-title"><span class="n">٧</span> 📖 ورد القرآن الكريم</div>
+    <div class="section-title"><span class="n">٧</span> <span>📖 ورد القرآن الكريم</span><span class="worship-badge" id="badge-quran"></span></div>
     <div class="section-hint">الورد اليومي: سماع + قراءة + حفظ آيتين + مراجعة اللي فات</div>
     <div class="checklist" id="quranWird"></div>
+
+    <div class="section-title"><span class="n">٨</span> <span>🌱 صيام التطوع والقضاء</span><span class="worship-badge" id="badge-fasting"></span></div>
+    <div class="section-hint">تسجيل صيام اليوم (سنة، قضاء، تطوع، كفارة) ومتابعة أيام الصيام في الشهر</div>
+    <div id="fastingCard" class="settings-card" style="margin-bottom:12px;"></div>
+
+    <div class="section-title" style="margin-top:16px;"><span class="n">٩</span> <span>📊 تقرير التزام العبادات (أسبوعي / شهري)</span></div>
+    <div class="section-hint">مؤشرات انتظام الفروض، السنن، قيام الليل، الأذكار، والقرآن على مدار ٧ أو ٢٨ يومًا</div>
+    <div id="worshipAdherenceContainer" style="margin-top:8px;"></div>
   </div>
 
   <!-- ===== SCHEDULE MODE ===== -->
@@ -3597,7 +3879,11 @@ body.dark .gw-drill-thumb img {
     <div class="section-hint">نفس عناصر جدول اليوم بالتفصيل — علّم كل حاجة خلصتها</div>
     <div class="checklist" id="scheduleChecklist"></div>
 
-    <div class="section-title"><span class="n">٤</span> الأساس العلمي للجدول</div>
+    <div class="section-title"><span class="n">٤</span> <span>🎯 اكتساب العادات وتعلّم المهارات</span><span class="worship-badge" id="badge-customHabits"></span></div>
+    <div class="section-hint">ابنِ عادات جديدة وثابتة، وتابع تعلّم واكتساب مهاراتك اليومية مع عدّاد الاستمرارية (Streaks)</div>
+    <div id="customHabitsContainer" class="settings-card" style="margin-bottom:16px;"></div>
+
+    <div class="section-title"><span class="n">٥</span> الأساس العلمي للجدول</div>
     <div class="info-card">
       <details class="ex-details">
         <summary>ليه الجدول متبني بالشكل ده؟ (مصادر حقيقية، من غير اختراع)</summary>
@@ -3656,6 +3942,9 @@ body.dark .gw-drill-thumb img {
       <div id="dailyNotesAttachments" class="note-attachments-container"></div>
     </div>
 
+    <!-- Daily Progress Summary & Social Accountability Card (Proposal #13) -->
+    <div class="card" id="dailyShareCard" style="background:var(--card-alt); border:1px solid var(--line); border-radius:12px; padding:16px; margin-bottom:16px;"></div>
+
     <div class="section-title"><span class="n">١</span> التغذية</div>
     <div class="domain-card" id="domainNutrition"></div>
 
@@ -3671,7 +3960,11 @@ body.dark .gw-drill-thumb img {
     <div class="section-title"><span class="n">٥</span> الصلاة والقرآن</div>
     <div class="domain-card" id="domainWorship"></div>
 
-    <div class="section-title"><span class="n">٦</span> وزنك بمرور الوقت</div>
+    <div class="section-title"><span class="n">٦</span> 🔥 سلاسل الالتزام واستمرارية العادات</div>
+    <div class="section-hint">تابع استمراريتك اليومية المتواصلة (Streaks) في كل محور لبناء عادات ثابتة</div>
+    <div class="domain-card" id="domainStreaks"></div>
+
+    <div class="section-title"><span class="n">٧</span> وزنك بمرور الوقت</div>
     <div class="water-card">
       <div class="water-info" style="flex:1;">
         <div class="wtitle">وزن اليوم المختار</div>
@@ -3700,10 +3993,16 @@ body.dark .gw-drill-thumb img {
     <div class="section-title"><span class="n">١٠</span> نسخ احتياطي للبيانات</div>
     <div class="info-card">
       <p>البيانات محفوظة في متصفحك بس، فلو غيّرت جهاز أو مسحت بيانات المتصفح هتتفقد. اعمل نسخة احتياطية بين فترة وفترة.</p>
-      <div style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;">
+      <div style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap; align-items:center;">
         <button class="reset-btn" id="exportData" style="border-color:var(--teal); color:var(--teal);">⬇ تصدير نسخة احتياطية</button>
         <button class="reset-btn" id="importDataBtn" style="border-color:var(--accent-dim); color:var(--accent);">⬆ استيراد نسخة</button>
         <input type="file" id="importDataFile" accept="application/json" class="hidden">
+      </div>
+      <div style="margin-top:10px; padding-top:8px; border-top:1px dashed var(--line); display:flex; align-items:center; gap:8px;">
+        <label style="display:inline-flex; align-items:center; gap:6px; cursor:pointer; font-size:.8rem; color:var(--text);">
+          <input type="checkbox" id="chkEncryptBackup">
+          <span>🔒 تشفير النسخة الاحتياطية بكلمة مرور (AES-GCM)</span>
+        </label>
       </div>
     </div>
 
@@ -7133,6 +7432,7 @@ const NOTIF_SETTINGS_DEFAULT = {
   activities: true, // remind for activities marked with reminder: true
   autoImportantActivities: true, // auto-remind for essential and important activities
   inAppModal: true, // show in-app popup modal
+  smartGrouping: true, // Phase 13.10 / Proposal #14: batch concurrent reminders into unified digest
 };
 
 function loadNotificationSettings(){
@@ -7362,13 +7662,12 @@ function checkAndDispatchDueReminders(overrideIso, overrideMin){
 
   const dispatched = getDispatchedReminders(iso);
   const triggered = [];
+  const dueItems = [];
 
   function tryTrigger(tag, info, triggerMin){
     if(dispatched[tag]) return false;
     if(currentMin >= triggerMin && currentMin <= triggerMin + 15){
-      markReminderDispatched(iso, tag);
-      dispatchNotification(Object.assign({ key: tag }, info));
-      triggered.push(tag);
+      dueItems.push(Object.assign({ key: tag, triggerMin: triggerMin }, info));
       return true;
     }
     return false;
@@ -7508,6 +7807,70 @@ function checkAndDispatchDueReminders(overrideIso, overrideMin){
         tryTrigger(tag, info, triggerMin);
       }
     }
+  }
+
+  if(dueItems.length === 0){
+    return triggered;
+  }
+
+  // Phase 13.10 / Proposal #14: Smart Notification Grouping
+  const isGroupingEnabled = notificationSettings && notificationSettings.smartGrouping !== false;
+
+  if(dueItems.length > 1 && isGroupingEnabled){
+    // Batch concurrent reminders into a single unified notification digest
+    dueItems.forEach(item => {
+      markReminderDispatched(iso, item.key);
+      triggered.push(item.key);
+    });
+
+    let targetMode = 'home';
+    const modes = dueItems.map(d => d.mode).filter(Boolean);
+    if(modes.includes('prayer')) targetMode = 'prayer';
+    else if(modes.includes('schedule')) targetMode = 'schedule';
+    else if(modes.includes('sleep')) targetMode = 'sleep';
+    else if(modes.length > 0) targetMode = modes[0];
+
+    const count = dueItems.length;
+    const title = `🔔 تذكيرات زتونة (${count} تنبيهات)`;
+    const sub = `لديك ${count} تنبيهات مجدولة حان موعدها الآن`;
+    const plainList = dueItems.map(d => `• ${(d.icon ? d.icon + ' ' : '')}${d.title.replace(/^[^:]+:\s*/, '')}${d.sub ? ' (' + d.sub + ')' : ''}`).join('\n');
+    const plainBody = `لديك ${count} تنبيهات في نفس التوقيت:\n${plainList}`;
+
+    const htmlItems = dueItems.map(d => {
+      const cleanTitle = (d.title || '').replace(/^[^:]+:\s*/, '');
+      const itemSub = d.sub || '';
+      return `<div style="display:flex;align-items:center;gap:8px;padding:6px 8px;background:rgba(255,255,255,0.04);border-radius:6px;border-right:3px solid var(--accent);">` +
+        `<span style="font-size:1.2rem;line-height:1;">${d.icon || '⏰'}</span>` +
+        `<div style="flex:1;min-width:0;">` +
+          `<div style="font-weight:700;font-size:.82rem;color:var(--text);">${escapeHtml(cleanTitle)}</div>` +
+          `${itemSub ? `<div style="font-size:.72rem;color:var(--muted);">${escapeHtml(itemSub)}</div>` : ''}` +
+        `</div>` +
+      `</div>`;
+    }).join('');
+
+    const htmlBody = `<div style="display:flex;flex-direction:column;gap:6px;margin-top:4px;">${htmlItems}</div>`;
+
+    const groupedInfo = {
+      key: `grouped:${iso}:${currentMin}`,
+      icon: '🔔',
+      title: title,
+      sub: sub,
+      plainBody: plainBody,
+      body: htmlBody,
+      mode: targetMode,
+      date: iso,
+      isGrouped: true,
+      items: dueItems
+    };
+
+    dispatchNotification(groupedInfo);
+  } else {
+    // Single reminder or grouping disabled: dispatch individually
+    dueItems.forEach(item => {
+      markReminderDispatched(iso, item.key);
+      dispatchNotification(item);
+      triggered.push(item.key);
+    });
   }
 
   return triggered;
@@ -7743,6 +8106,12 @@ function renderNotificationSettingsUI(){
     ${permBanner}
     <div class="fallback-note" style="margin-top:10px; font-size:.74rem; line-height:1.7;">
       <b>📱 ملاحظة تقنية هامة حول الخلفية وAndroid:</b> تعمل الإشعارات بدقة عندما يكون التطبيق مفتوحاً أو شغالاً في الخلفية (تبويب مفتوح). عند إغلاق المتصفح تماماً أو إيقاف النظام له لتوفير البطارية، تتوقف محركات التوقيت المحلية لحين إعادة فتح التطبيق لعدم وجود خادم Web Push خارجي. تظهر لك أيضاً نافذة تذكير تفاعلية فور فتح التطبيق لأي مهمة مستحقة.
+      <div style="margin-top:8px;">
+        <button type="button" class="reset-btn" id="btnBatteryGuide" style="border-color:var(--accent); color:var(--accent); font-size:.76rem; font-weight:600; display:inline-flex; align-items:center; gap:6px; cursor:pointer; padding:5px 12px; border-radius:16px;">
+          <span>🔋</span>
+          <span>دليل ضبط البطارية حسب نوع هاتفك لمنع إيقاف التنبيهات</span>
+        </button>
+      </div>
     </div>
     <div style="margin-top:12px; display:flex; flex-direction:column; gap:8px; font-size:.8rem;">
       <label style="display:flex; align-items:center; gap:8px;">
@@ -7768,6 +8137,10 @@ function renderNotificationSettingsUI(){
         <input type="checkbox" id="notifOptModal" ${notificationSettings.inAppModal?'checked':''}>
         عرض نافذة تفاعلية منبثقة داخل التطبيق عند حلول الموعد
       </label>
+      <label style="display:flex; align-items:center; gap:8px; margin-right:16px;">
+        <input type="checkbox" id="notifOptSmartGrouping" ${notificationSettings.smartGrouping!==false?'checked':''}>
+        تجميع التنبيهات المتزامنة (Smart Grouping لتفادي كثرة الإشعارات)
+      </label>
     </div>
   `;
 
@@ -7785,6 +8158,9 @@ function renderNotificationSettingsUI(){
       key: 'test:' + Date.now()
     });
   });
+
+  const btnGuide = document.getElementById('btnBatteryGuide');
+  if(btnGuide) btnGuide.addEventListener('click', () => openBatteryGuide());
 
   const mOpt = document.getElementById('notifOptMaster');
   if(mOpt) mOpt.addEventListener('change', (e)=>{
@@ -7819,9 +8195,87 @@ function renderNotificationSettingsUI(){
     notificationSettings.inAppModal = e.target.checked;
     saveNotificationSettings(notificationSettings);
   });
+
+  const grpOpt = document.getElementById('notifOptSmartGrouping');
+  if(grpOpt) grpOpt.addEventListener('change', (e)=>{
+    notificationSettings.smartGrouping = e.target.checked;
+    saveNotificationSettings(notificationSettings);
+  });
 }
 
+function openBatteryGuide(brand){
+  const modal = document.getElementById('batteryGuideModal');
+  if(!modal) return;
+  const badge = document.getElementById('batteryGuideNativeBadge');
+  if(badge){
+    if(typeof window.ZatoonaNativeBridge !== 'undefined'){
+      badge.innerHTML = '🟢 <b>أنت تستخدم تطبيق زتونة الأصلي للأندرويد:</b> المحرك مزوّد بخدمة Foreground Service وتنبيهات AlarmManager، واتباع هذه الخطوات يضمن تشغيل منبهات الأذان والمهام فوراً حتى في وضع توفير الطاقة وقفل الشاشة.';
+      badge.style.borderColor = 'var(--good)';
+      badge.style.color = 'var(--good)';
+    } else {
+      badge.innerHTML = '🌐 <b>أنت تستخدم زتونة عبر المتصفح (PWA):</b> يجب إبقاء المتصفح مسموحاً له بالنشاط في الخلفية واستثناؤه من توفير الطاقة لضمان وصول التنبيهات في موعدها.';
+      badge.style.borderColor = 'var(--accent)';
+      badge.style.color = 'var(--text)';
+    }
+  }
+  switchBatteryGuideTab(brand || 'samsung');
+  modal.classList.add('open');
+}
+
+function closeBatteryGuide(){
+  const modal = document.getElementById('batteryGuideModal');
+  if(modal) modal.classList.remove('open');
+}
+
+function switchBatteryGuideTab(brand){
+  const tabs = document.querySelectorAll('.battery-guide-tab');
+  const panels = document.querySelectorAll('.bg-panel');
+  tabs.forEach(t => {
+    const isTarget = t.getAttribute('data-brand') === brand;
+    t.classList.toggle('active', isTarget);
+    t.setAttribute('aria-selected', isTarget ? 'true' : 'false');
+  });
+  panels.forEach(p => {
+    const isTarget = p.id === 'bgPanel-' + brand;
+    p.classList.toggle('active', isTarget);
+  });
+}
+
+function initBatteryGuide(){
+  if(window._batteryGuideInited) return;
+  window._batteryGuideInited = true;
+  const closeX = document.getElementById('batteryGuideCloseX');
+  if(closeX) closeX.addEventListener('click', closeBatteryGuide);
+  const closeBtn = document.getElementById('batteryGuideCloseBtn');
+  if(closeBtn) closeBtn.addEventListener('click', closeBatteryGuide);
+  const modal = document.getElementById('batteryGuideModal');
+  if(modal){
+    modal.addEventListener('click', (e) => {
+      if(e.target === modal) closeBatteryGuide();
+    });
+  }
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape'){
+      const m = document.getElementById('batteryGuideModal');
+      if(m && m.classList.contains('open')) closeBatteryGuide();
+    }
+  });
+
+  const tabs = document.querySelectorAll('.battery-guide-tab');
+  tabs.forEach(t => {
+    t.addEventListener('click', () => {
+      const b = t.getAttribute('data-brand');
+      if(b) switchBatteryGuideTab(b);
+    });
+  });
+}
+
+window.openBatteryGuide = openBatteryGuide;
+window.closeBatteryGuide = closeBatteryGuide;
+window.switchBatteryGuideTab = switchBatteryGuideTab;
+
 function initNotifications(){
+  initBatteryGuide();
   renderNotificationSettingsUI();
   initNotificationScheduler();
   const btnCloseModal = document.getElementById('inAppRemClose');
@@ -16531,9 +16985,14 @@ function renderPrayerSummary(){
   const vals = Object.values(prayerState);
   const fardCount = vals.filter(v=>v && v.fard).length;
   const sunnahCount = vals.filter(v=>v && v.sunnah).length;
+  const qiyamCount = Object.values(qiyamState).filter(Boolean).length;
+  const nawafilCount = Object.values(nawafilState).filter(Boolean).length;
+  const azkarCount = Object.values(azkarState).filter(Boolean).length;
   const quranCount = Object.values(quranState).filter(Boolean).length;
   const pct = Math.round((fardCount/5)*100);
-  document.getElementById('prayerSummary').innerHTML = `
+  const el = document.getElementById('prayerSummary');
+  if(!el) return;
+  el.innerHTML = `
     <div class="item">
       <div class="val mono">${fardCount}/5</div>
       <div class="lbl">فروض</div>
@@ -16544,10 +17003,23 @@ function renderPrayerSummary(){
       <div class="lbl">سنن راتبة</div>
     </div>
     <div class="item">
+      <div class="val mono">${qiyamCount}/${QIYAM_WITR.length}</div>
+      <div class="lbl">قيام ووتر</div>
+    </div>
+    <div class="item">
+      <div class="val mono">${nawafilCount}/${NAWAFIL_EXTRA.length}</div>
+      <div class="lbl">باقي النوافل</div>
+    </div>
+    <div class="item">
+      <div class="val mono">${azkarCount}/${AZKAR.length}</div>
+      <div class="lbl">أذكار</div>
+    </div>
+    <div class="item">
       <div class="val mono">${quranCount}/${QURAN_WIRD.length}</div>
       <div class="lbl">ورد القرآن</div>
     </div>
   `;
+  if(typeof renderWorshipAdherenceSummary === 'function') renderWorshipAdherenceSummary();
 }
 
 function renderPrayerTimes(){
@@ -16637,6 +17109,15 @@ function renderPrayerFard(){
     });
     el.appendChild(row);
   });
+  const badge = document.getElementById('badge-prayerFard');
+  if(badge){
+    const vals = Object.values(prayerState);
+    const fardDone = vals.filter(v=>v && v.fard).length;
+    const sunnahDone = vals.filter(v=>v && v.sunnah).length;
+    const allDone = fardDone === 5 && sunnahDone === 5;
+    badge.textContent = (allDone ? "✓ " : "") + `${fardDone}/5 فرض · ${sunnahDone}/5 سنة`;
+    badge.classList.toggle("is-complete", allDone);
+  }
 }
 
 function renderQiyam(){
@@ -16645,7 +17126,16 @@ function renderQiyam(){
     if(qiyamState[key]) delete qiyamState[key]; else qiyamState[key] = true;
     saveQiyam(iso, qiyamState);
     renderQiyam();
+    renderPrayerSummary();
   });
+  const badge = document.getElementById('badge-qiyam');
+  if(badge){
+    const done = Object.values(qiyamState).filter(Boolean).length;
+    const total = QIYAM_WITR.length;
+    const allDone = done === total;
+    badge.textContent = (allDone ? "✓ " : "") + `${done}/${total}`;
+    badge.classList.toggle("is-complete", allDone);
+  }
 }
 
 function renderNawafilExtra(){
@@ -16654,7 +17144,16 @@ function renderNawafilExtra(){
     if(nawafilState[key]) delete nawafilState[key]; else nawafilState[key] = true;
     saveNawafil(iso, nawafilState);
     renderNawafilExtra();
+    renderPrayerSummary();
   });
+  const badge = document.getElementById('badge-nawafil');
+  if(badge){
+    const done = Object.values(nawafilState).filter(Boolean).length;
+    const total = NAWAFIL_EXTRA.length;
+    const allDone = done === total;
+    badge.textContent = (allDone ? "✓ " : "") + `${done}/${total}`;
+    badge.classList.toggle("is-complete", allDone);
+  }
 }
 
 function renderAzkar(){
@@ -16663,7 +17162,16 @@ function renderAzkar(){
     if(azkarState[key]) delete azkarState[key]; else azkarState[key] = true;
     saveAzkar(iso, azkarState);
     renderAzkar();
+    renderPrayerSummary();
   });
+  const badge = document.getElementById('badge-azkar');
+  if(badge){
+    const done = Object.values(azkarState).filter(Boolean).length;
+    const total = AZKAR.length;
+    const allDone = done === total;
+    badge.textContent = (allDone ? "✓ " : "") + `${done}/${total}`;
+    badge.classList.toggle("is-complete", allDone);
+  }
 }
 
 function renderQuranWird(){
@@ -16675,16 +17183,664 @@ function renderQuranWird(){
     renderQuranWird();
     renderPrayerSummary();
   });
+  const badge = document.getElementById('badge-quran');
+  if(badge){
+    const done = Object.values(quranState).filter(Boolean).length;
+    const total = QURAN_WIRD.length;
+    const allDone = done === total;
+    badge.textContent = (allDone ? "✓ " : "") + `${done}/${total}`;
+    badge.classList.toggle("is-complete", allDone);
+  }
 }
+
+/* ================= FASTING TRACKER ENGINE (Proposal #12 / Phase 13.6B) ================= */
+const FASTING_TYPES = [
+  { id: 'sunnah', label: 'سنة (إثنين / خميس / بيض)' },
+  { id: 'qadaa', label: 'قضاء' },
+  { id: 'tatawaa', label: 'تطوع عام' },
+  { id: 'kaffara', label: 'كفارة / نذر' }
+];
+
+function isSunnahFastingDay(iso) {
+  if (!iso) return false;
+  const parts = iso.split('-').map(Number);
+  const d = new Date(parts[0], parts[1] - 1, parts[2]);
+  const day = d.getDay();
+  return day === 1 || day === 4;
+}
+
+function loadFasting(iso) {
+  return storageGetJSON('fasting:' + iso, { fasted: false, type: 'sunnah', note: '' });
+}
+
+function saveFasting(iso, data) {
+  storageSet('fasting:' + iso, JSON.stringify(data));
+}
+
+function countMonthlyFasts(yearMonth) {
+  let count = 0;
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && k.indexOf(STORAGE_PREFIX + 'fasting:' + yearMonth) === 0) {
+      try {
+        const val = JSON.parse(localStorage.getItem(k));
+        if (val && val.fasted) count++;
+      } catch(e) {}
+    }
+  }
+  return count;
+}
+
+function renderFasting() {
+  const card = document.getElementById('fastingCard');
+  const badge = document.getElementById('badge-fasting');
+  if (!card) return;
+
+  const iso = toISO(weekDates[selectedIdx]);
+  const state = loadFasting(iso);
+  const yearMonth = iso.slice(0, 7);
+  const monthCount = countMonthlyFasts(yearMonth);
+  const isSunnah = isSunnahFastingDay(iso);
+
+  if (badge) {
+    if (state.fasted) {
+      const typeObj = FASTING_TYPES.find(t => t.id === state.type);
+      const typeLabel = typeObj ? typeObj.label.split(' ')[0] : 'صائم';
+      badge.textContent = '✓ صائم (' + typeLabel + ')';
+      badge.classList.add('is-complete');
+    } else {
+      badge.textContent = monthCount + ' أيام صيام هذا الشهر';
+      badge.classList.remove('is-complete');
+    }
+  }
+
+  let sunnahBanner = '';
+  if (isSunnah) {
+    sunnahBanner = `
+      <div class="fasting-sunnah-banner">
+        🌟 <b>سنة نبوية مباركة:</b> اليوم تُعرض فيه الأعمال على الله تعالى، ويُستحب صيامه.
+      </div>`;
+  }
+
+  const typePills = FASTING_TYPES.map(t => `
+    <button type="button" class="fasting-type-pill ${state.type === t.id ? 'active' : ''}" data-type="${t.id}">
+      ${t.label}
+    </button>
+  `).join('');
+
+  card.innerHTML = `
+    ${sunnahBanner}
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+      <div>
+        <div style="font-weight:700; font-size:.88rem; color:var(--text);">
+          ${state.fasted ? '🌱 صائم اليوم بحمد الله' : 'هل أنت صائم اليوم؟'}
+        </div>
+        <div style="font-size:.76rem; color:var(--muted); margin-top:2px;">
+          إجمالي صيام شهر (${yearMonth}): <b>${monthCount}</b> ${monthCount === 1 ? 'يوم' : 'أيام'}
+        </div>
+      </div>
+      <button type="button" class="reset-btn" id="btnToggleFasting" style="border-color:${state.fasted ? 'var(--good)' : 'var(--accent)'}; color:${state.fasted ? 'var(--good)' : 'var(--accent)'}; font-weight:700; font-size:.8rem; padding:6px 14px; border-radius:18px;">
+        ${state.fasted ? '✓ تم تسجيل الصيام' : '🌱 تسجيل صيام اليوم'}
+      </button>
+    </div>
+    ${state.fasted ? `
+      <div style="margin-top:12px; padding-top:10px; border-top:1px dashed var(--line);">
+        <div style="font-size:.76rem; color:var(--muted); margin-bottom:6px;">نوع الصيام:</div>
+        <div style="display:flex; gap:6px; flex-wrap:wrap;" id="fastingTypePillsWrap">
+          ${typePills}
+        </div>
+      </div>
+    ` : ''}
+  `;
+
+  const btnToggle = document.getElementById('btnToggleFasting');
+  if (btnToggle) {
+    btnToggle.addEventListener('click', () => {
+      const cur = loadFasting(iso);
+      cur.fasted = !cur.fasted;
+      if (cur.fasted && !cur.type) cur.type = isSunnah ? 'sunnah' : 'tatawaa';
+      saveFasting(iso, cur);
+      renderFasting();
+    });
+  }
+
+  const pillsWrap = document.getElementById('fastingTypePillsWrap');
+  if (pillsWrap) {
+    pillsWrap.querySelectorAll('.fasting-type-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const t = btn.getAttribute('data-type');
+        const cur = loadFasting(iso);
+        cur.type = t;
+        saveFasting(iso, cur);
+        renderFasting();
+      });
+    });
+  }
+}
+
+window.loadFasting = loadFasting;
+window.saveFasting = saveFasting;
+window.countMonthlyFasts = countMonthlyFasts;
+window.isSunnahFastingDay = isSunnahFastingDay;
+window.renderFasting = renderFasting;
+
+/* ================= WORSHIP ADHERENCE & CONSISTENCY ENGINE (PHASE 13.7B / PROPOSAL #11) ================= */
+let worshipAdherenceDays = 7;
+
+function computeWorshipAdherenceStats(windowDays, refIso){
+  const refDate = refIso ? new Date(refIso + 'T00:00:00') : new Date();
+  const today = new Date();
+  const todayIso = toISO(today);
+  const maxIso = refIso && refIso > todayIso ? refIso : todayIso;
+
+  const days = [];
+  for(let i = windowDays - 1; i >= 0; i--){
+    const d = new Date(refDate);
+    d.setDate(d.getDate() - i);
+    const iso = toISO(d);
+    if(iso <= maxIso){
+      days.push({ iso, dateObj: d });
+    }
+  }
+
+  if(days.length === 0){
+    return { hasData: false, totalDays: 0, prayerStats: [] };
+  }
+
+  const PRAYER_NAMES = [
+    { key: 'fajr', label: 'الفجر' },
+    { key: 'dhuhr', label: 'الظهر' },
+    { key: 'asr', label: 'العصر' },
+    { key: 'maghrib', label: 'المغرب' },
+    { key: 'isha', label: 'العشاء' }
+  ];
+
+  const prayerStats = PRAYER_NAMES.map(p => {
+    let fardDone = 0;
+    let sunnahDone = 0;
+    days.forEach(day => {
+      const ps = loadPrayer(day.iso);
+      if(ps && ps[p.key]){
+        if(ps[p.key].fard) fardDone++;
+        if(ps[p.key].sunnah) sunnahDone++;
+      }
+    });
+    const fardPct = Math.round((fardDone / days.length) * 100);
+    return {
+      key: p.key,
+      label: p.label,
+      fardDone,
+      sunnahDone,
+      totalDays: days.length,
+      fardPct
+    };
+  });
+
+  const totalFardPossible = days.length * 5;
+  let totalFardDone = 0;
+  let totalSunnahDone = 0;
+  prayerStats.forEach(p => {
+    totalFardDone += p.fardDone;
+    totalSunnahDone += p.sunnahDone;
+  });
+  const overallFardPct = totalFardPossible > 0 ? Math.round((totalFardDone / totalFardPossible) * 100) : 0;
+  const avgFardPerDay = days.length > 0 ? (totalFardDone / days.length).toFixed(1) : '0';
+  const avgSunnahPerDay = days.length > 0 ? (totalSunnahDone / days.length).toFixed(1) : '0';
+
+  let qiyamNights = 0;
+  let witrNights = 0;
+  days.forEach(day => {
+    const qs = loadQiyam(day.iso);
+    if(qs){
+      if(qs.i0) qiyamNights++;
+      if(qs.i1) witrNights++;
+    }
+  });
+  const qiyamPct = Math.round((qiyamNights / days.length) * 100);
+
+  let totalQuranItemsDone = 0;
+  const totalQuranPossible = days.length * (typeof QURAN_WIRD !== 'undefined' ? QURAN_WIRD.length : 4);
+  days.forEach(day => {
+    const qs = loadQuran(day.iso);
+    if(qs){
+      totalQuranItemsDone += Object.values(qs).filter(Boolean).length;
+    }
+  });
+  const quranPct = totalQuranPossible > 0 ? Math.round((totalQuranItemsDone / totalQuranPossible) * 100) : 0;
+
+  let morningDone = 0;
+  let eveningDone = 0;
+  days.forEach(day => {
+    const az = loadAzkar(day.iso);
+    if(az){
+      if(az.i0) morningDone++;
+      if(az.i1) eveningDone++;
+    }
+  });
+  const totalAzkarPossible = days.length * 2;
+  const totalAzkarDone = morningDone + eveningDone;
+  const azkarPct = totalAzkarPossible > 0 ? Math.round((totalAzkarDone / totalAzkarPossible) * 100) : 0;
+
+  let totalNawafilDone = 0;
+  days.forEach(day => {
+    const nw = loadNawafil(day.iso);
+    if(nw){
+      totalNawafilDone += Object.values(nw).filter(Boolean).length;
+    }
+  });
+
+  let totalFastingDays = 0;
+  days.forEach(day => {
+    const fst = typeof loadFasting === 'function' ? loadFasting(day.iso) : null;
+    if(fst && fst.fasted) totalFastingDays++;
+  });
+
+  const hasAnyData = totalFardDone > 0 || totalSunnahDone > 0 || qiyamNights > 0 || totalQuranItemsDone > 0 || totalAzkarDone > 0 || totalFastingDays > 0;
+
+  return {
+    hasData: hasAnyData,
+    daysCount: days.length,
+    overallFardPct,
+    avgFardPerDay,
+    totalFardDone,
+    totalFardPossible,
+    totalSunnahDone,
+    avgSunnahPerDay,
+    qiyamNights,
+    witrNights,
+    qiyamPct,
+    totalQuranItemsDone,
+    totalQuranPossible,
+    quranPct,
+    morningDone,
+    eveningDone,
+    azkarPct,
+    totalNawafilDone,
+    totalFastingDays,
+    prayerStats
+  };
+}
+
+function renderWorshipAdherenceSummary(requestedDays){
+  const el = document.getElementById('worshipAdherenceContainer');
+  if(!el) return;
+  if(requestedDays !== undefined) worshipAdherenceDays = requestedDays;
+  const iso = toISO(weekDates[selectedIdx]);
+  const stats = computeWorshipAdherenceStats(worshipAdherenceDays, iso);
+
+  let html = `
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+      <div style="font-weight:700; font-size:.88rem; color:var(--text);">نظرة عامة على الالتزام بالعبادات</div>
+      <div class="day-toggle-row" style="margin-bottom:0;">
+        <button type="button" class="dbtn ${worshipAdherenceDays===7?'active':''}" id="btnWorshipAdherence7" style="padding:4px 10px; font-size:.76rem;">٧ أيام</button>
+        <button type="button" class="dbtn ${worshipAdherenceDays===28?'active':''}" id="btnWorshipAdherence28" style="padding:4px 10px; font-size:.76rem;">٢٨ يومًا</button>
+      </div>
+    </div>
+  `;
+
+  if(!stats.hasData){
+    html += `
+      <div class="card" style="background:var(--card-alt); border:1px solid var(--line); border-radius:10px; padding:16px; text-align:center; color:var(--muted); font-size:.82rem; line-height:1.5;">
+        🕌 لا توجد بيانات عبادات مسجلة في آخر ${worshipAdherenceDays} يومًا حتى الآن.<br>
+        سجّل صلواتك وأورادك لتظهر هنا إحصائيات ومؤشرات الالتزام التراكمية.
+      </div>
+    `;
+  } else {
+    html += `
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(110px, 1fr)); gap:8px; margin-bottom:12px;">
+        <div style="background:var(--card-alt); padding:10px; border-radius:10px; border:1px solid var(--line); text-align:center;">
+          <div style="font-size:1.15rem; font-weight:700; color:var(--primary);">${stats.overallFardPct}%</div>
+          <div style="font-size:.72rem; color:var(--muted); margin-top:2px;">التزام الفروض (${stats.totalFardDone}/${stats.totalFardPossible})</div>
+        </div>
+        <div style="background:var(--card-alt); padding:10px; border-radius:10px; border:1px solid var(--line); text-align:center;">
+          <div style="font-size:1.15rem; font-weight:700; color:var(--teal);">${stats.avgSunnahPerDay}</div>
+          <div style="font-size:.72rem; color:var(--muted); margin-top:2px;">متوسط السنن/يوم (إجمالي: ${stats.totalSunnahDone})</div>
+        </div>
+        <div style="background:var(--card-alt); padding:10px; border-radius:10px; border:1px solid var(--line); text-align:center;">
+          <div style="font-size:1.15rem; font-weight:700; color:#818cf8;">${stats.qiyamNights} / ${stats.daysCount}</div>
+          <div style="font-size:.72rem; color:var(--muted); margin-top:2px;">قيام الليل (${stats.qiyamPct}%)</div>
+        </div>
+        <div style="background:var(--card-alt); padding:10px; border-radius:10px; border:1px solid var(--line); text-align:center;">
+          <div style="font-size:1.15rem; font-weight:700; color:#06b6d4;">${stats.quranPct}%</div>
+          <div style="font-size:.72rem; color:var(--muted); margin-top:2px;">ورد القرآن الكريم</div>
+        </div>
+        <div style="background:var(--card-alt); padding:10px; border-radius:10px; border:1px solid var(--line); text-align:center;">
+          <div style="font-size:1.15rem; font-weight:700; color:#10b981;">${stats.azkarPct}%</div>
+          <div style="font-size:.72rem; color:var(--muted); margin-top:2px;">أذكار الصباح والمساء</div>
+        </div>
+        <div style="background:var(--card-alt); padding:10px; border-radius:10px; border:1px solid var(--line); text-align:center;">
+          <div style="font-size:1.15rem; font-weight:700; color:#f59e0b;">${stats.totalFastingDays}</div>
+          <div style="font-size:.72rem; color:var(--muted); margin-top:2px;">أيام الصيام المسجلة</div>
+        </div>
+      </div>
+
+      <div class="card" style="background:var(--card-alt); border:1px solid var(--line); border-radius:10px; padding:12px; margin-bottom:10px;">
+        <div style="font-weight:700; font-size:.8rem; margin-bottom:8px; color:var(--text);">انتظام الفروض الخمسة (${stats.daysCount} أيام):</div>
+        ${stats.prayerStats.map(p => `
+          <div style="margin-bottom:8px;">
+            <div style="display:flex; justify-content:space-between; font-size:.76rem; margin-bottom:3px;">
+              <span>صلاة ${typeof escapeHtml === 'function' ? escapeHtml(p.label) : p.label}</span>
+              <span class="mono" style="color:var(--muted);">${p.fardDone}/${p.totalDays} (${p.fardPct}%) — ${p.sunnahDone} سنة</span>
+            </div>
+            <div class="bar-track" style="height:6px;"><div class="bar-fill" style="width:${p.fardPct}%;"></div></div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  el.innerHTML = html;
+
+  const btn7 = document.getElementById('btnWorshipAdherence7');
+  if(btn7) btn7.addEventListener('click', () => renderWorshipAdherenceSummary(7));
+  const btn28 = document.getElementById('btnWorshipAdherence28');
+  if(btn28) btn28.addEventListener('click', () => renderWorshipAdherenceSummary(28));
+}
+
+/* ================= QIBLA COMPASS ENGINE (PHASE 13.8B / PROPOSAL #10) ================= */
+const KAABA_COORDS = { lat: 21.422487, lon: 39.826206 };
+
+const QIBLA_CITY_COORDS = {
+  Minya: { lat: 28.1099, lon: 30.7503, nameAr: 'المنيا' },
+  Alexandria: { lat: 31.2001, lon: 29.9187, nameAr: 'الإسكندرية' },
+  Cairo: { lat: 30.0444, lon: 31.2357, nameAr: 'القاهرة' }
+};
+
+let qiblaGpsCoords = null;
+let liveCompassActive = false;
+let currentDeviceHeading = null;
+let orientationHandlerBound = null;
+
+function calculateQibla(lat, lon){
+  const phi1 = (lat * Math.PI) / 180;
+  const phi2 = (KAABA_COORDS.lat * Math.PI) / 180;
+  const dLambda = ((KAABA_COORDS.lon - lon) * Math.PI) / 180;
+
+  const y = Math.sin(dLambda);
+  const x = Math.cos(phi1) * Math.tan(phi2) - Math.sin(phi1) * Math.cos(dLambda);
+  let bearing = (Math.atan2(y, x) * 180) / Math.PI;
+  bearing = (bearing + 360) % 360;
+
+  const dPhi = ((KAABA_COORDS.lat - lat) * Math.PI) / 180;
+  const a = Math.sin(dPhi / 2) ** 2 + Math.cos(phi1) * Math.cos(phi2) * (Math.sin(dLambda / 2) ** 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distanceKm = Math.round(6371 * c);
+
+  let compassDirection = 'جنوب شرق';
+  if(bearing >= 337.5 || bearing < 22.5) compassDirection = 'شمال';
+  else if(bearing >= 22.5 && bearing < 67.5) compassDirection = 'شمال شرق';
+  else if(bearing >= 67.5 && bearing < 112.5) compassDirection = 'شرق';
+  else if(bearing >= 112.5 && bearing < 157.5) compassDirection = 'جنوب شرق';
+  else if(bearing >= 157.5 && bearing < 202.5) compassDirection = 'جنوب';
+  else if(bearing >= 202.5 && bearing < 247.5) compassDirection = 'جنوب غرب';
+  else if(bearing >= 247.5 && bearing < 292.5) compassDirection = 'غرب';
+  else if(bearing >= 292.5 && bearing < 337.5) compassDirection = 'شمال غرب';
+
+  return {
+    bearing: Math.round(bearing * 10) / 10,
+    distanceKm,
+    compassDirection
+  };
+}
+
+function getCityQibla(cityKey){
+  const c = QIBLA_CITY_COORDS[cityKey] || QIBLA_CITY_COORDS['Cairo'];
+  const res = calculateQibla(c.lat, c.lon);
+  return { ...res, cityName: c.nameAr, key: cityKey };
+}
+
+function getCurrentQiblaData(){
+  if(qiblaGpsCoords){
+    const res = calculateQibla(qiblaGpsCoords.lat, qiblaGpsCoords.lon);
+    return { ...res, cityName: 'موقعي الدقيق (GPS)', isGps: true, lat: qiblaGpsCoords.lat, lon: qiblaGpsCoords.lon };
+  }
+  const city = typeof loadPrayerCity === 'function' ? loadPrayerCity() : 'Cairo';
+  return getCityQibla(city);
+}
+
+function renderQiblaCard(){
+  const card = document.getElementById('qiblaCard');
+  if(!card) return;
+
+  const data = getCurrentQiblaData();
+  const bearing = data.bearing;
+
+  let dialRotation = 0;
+  let isAligned = false;
+  if(liveCompassActive && currentDeviceHeading !== null){
+    dialRotation = -currentDeviceHeading;
+    const diff = Math.abs((currentDeviceHeading - bearing + 540) % 360 - 180);
+    if(diff <= 4) isAligned = true;
+  }
+
+  card.innerHTML = `
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span style="font-size:1.1rem;">🧭</span>
+        <div>
+          <div style="font-weight:700; font-size:.88rem; color:var(--text);">اتجاه القبلة نحو الكعبة المشرفة</div>
+          <div style="font-size:.74rem; color:var(--muted);">${data.cityName} • زاوية ${bearing}° ${data.compassDirection}</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:6px; align-items:center;">
+        <button type="button" class="reset-btn" id="btnGpsQibla" style="padding:3px 9px; font-size:.74rem; border-color:var(--line);" title="تحديد القبلة بالموقع الدقيق">
+          ${qiblaGpsCoords ? '✓ GPS نشط' : '📍 دقة GPS'}
+        </button>
+        <button type="button" class="reset-btn" id="btnToggleCompass" style="padding:3px 10px; font-size:.74rem; border-color:${liveCompassActive ? 'var(--good)' : 'var(--primary)'}; color:${liveCompassActive ? 'var(--good)' : 'var(--primary)'};">
+          ${liveCompassActive ? '🟢 إيقاف البوصلة' : '🧭 بوصلة حية'}
+        </button>
+      </div>
+    </div>
+
+    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; padding:10px 0;">
+      <div id="qiblaDialWrap" style="position:relative; width:190px; height:190px; border-radius:50%; background:var(--card); border:2px solid ${isAligned ? 'var(--good)' : 'var(--line)'}; box-shadow:${isAligned ? '0 0 16px rgba(16, 185, 129, 0.4)' : 'none'}; transition:border-color .3s, box-shadow .3s; display:flex; align-items:center; justify-content:center;">
+
+        <!-- Rotating Compass Dial SVG -->
+        <svg id="qiblaSvgDial" viewBox="0 0 200 200" style="width:100%; height:100%; transform: rotate(${dialRotation}deg); transition:${liveCompassActive ? 'none' : 'transform 0.5s ease-out'};">
+          <!-- Outer circle -->
+          <circle cx="100" cy="100" r="92" fill="none" stroke="var(--line)" stroke-width="1.5" stroke-dasharray="2 3"/>
+          <circle cx="100" cy="100" r="76" fill="none" stroke="var(--line)" stroke-width="0.8" opacity="0.5"/>
+
+          <!-- Cardinal Direction Labels -->
+          <text x="100" y="24" text-anchor="middle" fill="var(--bad)" font-size="12" font-weight="700">شمال N</text>
+          <text x="182" y="104" text-anchor="middle" fill="var(--muted)" font-size="11" font-weight="600">شرق E</text>
+          <text x="100" y="184" text-anchor="middle" fill="var(--muted)" font-size="11" font-weight="600">جنوب S</text>
+          <text x="18" y="104" text-anchor="middle" fill="var(--muted)" font-size="11" font-weight="600">غرب W</text>
+
+          <!-- Degree ticks -->
+          <line x1="100" y1="10" x2="100" y2="16" stroke="var(--bad)" stroke-width="2"/>
+          <line x1="190" y1="100" x2="184" y2="100" stroke="var(--muted)" stroke-width="1.5"/>
+          <line x1="100" y1="190" x2="100" y2="184" stroke="var(--muted)" stroke-width="1.5"/>
+          <line x1="10" y1="100" x2="16" y2="100" stroke="var(--muted)" stroke-width="1.5"/>
+
+          <!-- Qibla Pointer Indicator (Rotates to Bearing) -->
+          <g transform="rotate(${bearing} 100 100)">
+            <!-- Golden/Emerald needle pointing to Kaaba -->
+            <path d="M 97 100 L 100 32 L 103 100 Z" fill="${isAligned ? 'var(--good)' : '#f59e0b'}"/>
+            <path d="M 97 100 L 100 135 L 103 100 Z" fill="var(--muted)" opacity="0.4"/>
+            <!-- Kaaba emblem circle -->
+            <circle cx="100" cy="28" r="11" fill="var(--card-alt)" stroke="${isAligned ? 'var(--good)' : '#f59e0b'}" stroke-width="1.5"/>
+            <text x="100" y="32" text-anchor="middle" font-size="11">🕋</text>
+          </g>
+
+          <!-- Center Pivot -->
+          <circle cx="100" cy="100" r="5" fill="var(--text)"/>
+        </svg>
+
+        <!-- Static device top indicator -->
+        <div style="position:absolute; top:-8px; left:50%; transform:translateX(-50%); width:0; height:0; border-left:6px solid transparent; border-right:6px solid transparent; border-top:8px solid var(--primary);"></div>
+      </div>
+
+      <div id="qiblaStatusMsg" style="margin-top:12px; text-align:center;">
+        ${isAligned ? `
+          <div style="color:var(--good); font-weight:700; font-size:.84rem; display:flex; align-items:center; justify-content:center; gap:5px;">
+            <span>✓ أنت في اتجاه القبلة تمامًا</span>
+          </div>
+        ` : `
+          <div style="color:var(--muted); font-size:.76rem;">
+            ${liveCompassActive ? 'قم بتدوير الهاتف حتى تتطابق الكعبة 🕋 مع السهم العلوي' : `زاوية القبلة: <b class="mono" style="color:var(--text);">${bearing}°</b> • المسافة: <b class="mono" style="color:var(--text);">${data.distanceKm.toLocaleString('ar-EG')} كم</b>`}
+          </div>
+        `}
+      </div>
+    </div>
+  `;
+
+  const btnCompass = document.getElementById('btnToggleCompass');
+  if(btnCompass){
+    btnCompass.addEventListener('click', toggleLiveCompass);
+  }
+
+  const btnGps = document.getElementById('btnGpsQibla');
+  if(btnGps){
+    btnGps.addEventListener('click', requestGpsQibla);
+  }
+}
+
+function updateCompassRotation(){
+  const dial = document.getElementById('qiblaSvgDial');
+  const wrap = document.getElementById('qiblaDialWrap');
+  const msg = document.getElementById('qiblaStatusMsg');
+  if(!dial || currentDeviceHeading === null) return;
+
+  const data = getCurrentQiblaData();
+  const bearing = data.bearing;
+  const dialRot = -currentDeviceHeading;
+  dial.style.transform = `rotate(${dialRot}deg)`;
+
+  const diff = Math.abs((currentDeviceHeading - bearing + 540) % 360 - 180);
+  const isAligned = diff <= 4;
+
+  if(wrap){
+    wrap.style.borderColor = isAligned ? 'var(--good)' : 'var(--line)';
+    wrap.style.boxShadow = isAligned ? '0 0 16px rgba(16, 185, 129, 0.4)' : 'none';
+  }
+
+  if(msg){
+    if(isAligned){
+      msg.innerHTML = `
+        <div style="color:var(--good); font-weight:700; font-size:.84rem; display:flex; align-items:center; justify-content:center; gap:5px;">
+          <span>✓ أنت في اتجاه القبلة تمامًا</span>
+        </div>
+      `;
+      if(navigator.vibrate && !window._lastQiblaVibrated){
+        try { navigator.vibrate(50); } catch(e){}
+        window._lastQiblaVibrated = true;
+        setTimeout(() => { window._lastQiblaVibrated = false; }, 3000);
+      }
+    } else {
+      msg.innerHTML = `
+        <div style="color:var(--muted); font-size:.76rem;">
+          قم بتدوير الهاتف حتى تتطابق الكعبة 🕋 مع السهم العلوي
+        </div>
+      `;
+    }
+  }
+}
+
+function toggleLiveCompass(){
+  if(liveCompassActive){
+    stopLiveCompass();
+    return;
+  }
+  startLiveCompass();
+}
+
+async function startLiveCompass(){
+  if(typeof window.DeviceOrientationEvent !== 'undefined' && typeof window.DeviceOrientationEvent.requestPermission === 'function'){
+    try {
+      const resp = await window.DeviceOrientationEvent.requestPermission();
+      if(resp === 'granted'){
+        attachOrientationListener();
+        return true;
+      } else {
+        alert('يرجى منح إذن الوصول إلى مستشعر الاتجاه لاستخدام البوصلة الحية.');
+        return false;
+      }
+    } catch(e){
+      attachOrientationListener();
+      return true;
+    }
+  } else {
+    attachOrientationListener();
+    return true;
+  }
+}
+
+function attachOrientationListener(){
+  if(!orientationHandlerBound){
+    orientationHandlerBound = (e) => {
+      let heading = null;
+      if(typeof e.webkitCompassHeading !== 'undefined'){
+        heading = e.webkitCompassHeading;
+      } else if(typeof e.alpha === 'number' && e.alpha !== null){
+        heading = (360 - e.alpha) % 360;
+      }
+      if(heading !== null && !isNaN(heading)){
+        currentDeviceHeading = heading;
+        updateCompassRotation();
+      }
+    };
+  }
+  window.addEventListener('deviceorientation', orientationHandlerBound, true);
+  liveCompassActive = true;
+  renderQiblaCard();
+}
+
+function stopLiveCompass(){
+  if(orientationHandlerBound){
+    window.removeEventListener('deviceorientation', orientationHandlerBound, true);
+  }
+  liveCompassActive = false;
+  currentDeviceHeading = null;
+  renderQiblaCard();
+}
+
+function requestGpsQibla(){
+  if(!navigator.geolocation){
+    alert('خدمة تحديد الموقع (GPS) غير مدعومة في هذا المتصفح.');
+    return;
+  }
+  const btn = document.getElementById('btnGpsQibla');
+  if(btn) btn.textContent = '⏳ جاري التحديد...';
+
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      qiblaGpsCoords = {
+        lat: pos.coords.latitude,
+        lon: pos.coords.longitude
+      };
+      renderQiblaCard();
+    },
+    (err) => {
+      console.warn('Geolocation error:', err);
+      alert('تعذر تحديد الموقع تلقائيًا. تم استخدام إحداثيات المدينة المختارة.');
+      if(btn) btn.textContent = '📍 دقة GPS';
+    },
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+  );
+}
+
+window.calculateQibla = calculateQibla;
+window.getCityQibla = getCityQibla;
+window.getCurrentQiblaData = getCurrentQiblaData;
+window.renderQiblaCard = renderQiblaCard;
+window.startLiveCompass = startLiveCompass;
+window.stopLiveCompass = stopLiveCompass;
+
+window.computeWorshipAdherenceStats = computeWorshipAdherenceStats;
+window.renderWorshipAdherenceSummary = renderWorshipAdherenceSummary;
 
 function renderPrayer(){
   renderPrayerTimes();
+  renderQiblaCard();
   renderPrayerFard();
   renderQiyam();
   renderNawafilExtra();
   renderAzkar();
   renderQuranWird();
+  renderFasting();
   renderPrayerSummary();
+  renderWorshipAdherenceSummary();
 }
 
 /* ================= SCHEDULE FEATURE ================= */
@@ -18759,6 +19915,401 @@ function renderScheduleChecklist(dayIdx, settings){
   });
 }
 
+/* ================= CUSTOM HABITS & SKILLS LEARNING ENGINE (PHASE 13.9) ================= */
+const DEFAULT_CUSTOM_HABITS = [
+  { id: 'h_learn', title: 'تعلّم مهارة جديدة / برمجة', type: 'learning', target: '٣٠ دقيقة يوميًا', createdAt: '2026-10-28', active: true },
+  { id: 'h_read', title: 'قراءة كتاب وتغذية معرفية', type: 'habit', target: '١٥ صفحة يوميًا', createdAt: '2026-10-28', active: true }
+];
+
+let customHabitAddFormOpen = false;
+
+function loadCustomHabitsList(){
+  const raw = storageGetJSON('custom-habits-list', null);
+  if(Array.isArray(raw) && raw.length > 0) return raw;
+  return DEFAULT_CUSTOM_HABITS;
+}
+
+function saveCustomHabitsList(list){
+  storageSet('custom-habits-list', JSON.stringify(list));
+}
+
+function addCustomHabit(title, type, target){
+  if(!title || !title.trim()) return null;
+  const list = loadCustomHabitsList();
+  const id = 'ch_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 5);
+  const newHabit = {
+    id,
+    title: title.trim(),
+    type: type === 'learning' ? 'learning' : 'habit',
+    target: (target && target.trim()) ? target.trim() : 'يوميًا',
+    createdAt: toISO(new Date()),
+    active: true
+  };
+  list.push(newHabit);
+  saveCustomHabitsList(list);
+  renderCustomHabitsTracker();
+  return newHabit;
+}
+
+function deleteCustomHabit(id){
+  let list = loadCustomHabitsList();
+  list = list.filter(h => h.id !== id);
+  saveCustomHabitsList(list);
+  renderCustomHabitsTracker();
+}
+
+function loadDailyCustomHabits(iso){
+  return storageGetJSON('customhabits:' + iso, {});
+}
+
+function saveDailyCustomHabits(iso, data){
+  storageSet('customhabits:' + iso, JSON.stringify(data));
+}
+
+function toggleCustomHabit(id, iso){
+  const state = loadDailyCustomHabits(iso);
+  const cur = state[id] || { done: false };
+  cur.done = !cur.done;
+  state[id] = cur;
+  saveDailyCustomHabits(iso, state);
+  renderCustomHabitsTracker();
+  if(typeof renderDailySummaryShareCard === 'function') renderDailySummaryShareCard();
+}
+
+function computeCustomHabitStreak(id, refIso){
+  const refDate = refIso ? new Date(refIso + 'T00:00:00') : new Date();
+  const today = new Date();
+  const todayIso = toISO(today);
+  const maxIso = refIso && refIso > todayIso ? refIso : todayIso;
+
+  let currentStreak = 0;
+  let totalDone = 0;
+  let broken = false;
+
+  // Check past 180 days
+  for(let i = 0; i < 180; i++){
+    const d = new Date(refDate);
+    d.setDate(d.getDate() - i);
+    const iso = toISO(d);
+    if(iso > maxIso) continue;
+
+    const dayState = loadDailyCustomHabits(iso);
+    const isDone = !!(dayState[id] && dayState[id].done);
+
+    if(isDone) totalDone++;
+
+    if(!broken){
+      if(isDone){
+        currentStreak++;
+      } else if(i > 0){
+        broken = true;
+      }
+    }
+  }
+
+  return { currentStreak, totalDone };
+}
+
+function renderCustomHabitsTracker(){
+  const container = document.getElementById('customHabitsContainer');
+  if(!container) return;
+
+  const iso = toISO(weekDates[selectedIdx]);
+  const habits = loadCustomHabitsList();
+  const dailyState = loadDailyCustomHabits(iso);
+
+  let doneCount = 0;
+  habits.forEach(h => {
+    if(dailyState[h.id] && dailyState[h.id].done) doneCount++;
+  });
+
+  const badgeEl = document.getElementById('badge-customHabits');
+  if(badgeEl){
+    badgeEl.textContent = `${doneCount}/${habits.length}`;
+    if(doneCount === habits.length && habits.length > 0){
+      badgeEl.classList.add('all-done');
+    } else {
+      badgeEl.classList.remove('all-done');
+    }
+  }
+
+  let html = `
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+      <div>
+        <div style="font-weight:700; font-size:.88rem; color:var(--text);">عادات اليوم والمهارات قيد التعلّم</div>
+        <div style="font-size:.74rem; color:var(--muted); margin-top:2px;">تم إنجاز ${doneCount} من ${habits.length} لهذا اليوم</div>
+      </div>
+      <button type="button" class="reset-btn" id="btnToggleAddHabit" style="padding:4px 10px; font-size:.76rem; border-color:var(--primary); color:var(--primary); font-weight:700;">
+        ${customHabitAddFormOpen ? '✖ إغلاق' : '➕ عادة / مهارة جديدة'}
+      </button>
+    </div>
+
+    <!-- Add Habit Form -->
+    <div id="addCustomHabitForm" style="display:${customHabitAddFormOpen ? 'block' : 'none'}; background:var(--card); border:1px solid var(--line); border-radius:10px; padding:12px; margin-bottom:14px;">
+      <div style="font-weight:700; font-size:.82rem; margin-bottom:8px; color:var(--text);">إضافة عادة يومية أو هدف تعلّم جديد</div>
+      <div class="sc-grid" style="margin-bottom:8px;">
+        <div class="sc-field">
+          <label style="font-size:.74rem;">اسم العادة أو المهارة</label>
+          <input type="text" id="newHabitTitle" class="weight-input" placeholder="مثال: قراءة كتاب، تعلّم لغة، رياضة خفيفة..." style="width:100%; font-size:.8rem;">
+        </div>
+        <div class="sc-field">
+          <label style="font-size:.74rem;">التصنيف</label>
+          <select id="newHabitType" class="weight-input" style="width:100%; font-size:.8rem;">
+            <option value="habit">🎯 عادة يومية جديدة (Habit)</option>
+            <option value="learning">📚 تعلّم واكتساب مهارة (Learning)</option>
+          </select>
+        </div>
+      </div>
+      <div class="sc-field" style="margin-bottom:10px;">
+        <label style="font-size:.74rem;">الهدف اليومي (اختياري)</label>
+        <input type="text" id="newHabitTarget" class="weight-input" placeholder="مثال: ٣٠ دقيقة، ١٠ صفحات، درس واحد..." style="width:100%; font-size:.8rem;">
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:8px;">
+        <button type="button" class="reset-btn" id="btnCancelAddHabit" style="padding:4px 10px; font-size:.74rem;">إلغاء</button>
+        <button type="button" class="reset-btn" id="btnSaveNewHabit" style="padding:4px 12px; font-size:.74rem; border-color:var(--good); color:var(--good); font-weight:700;">✓ حفظ العادة</button>
+      </div>
+    </div>
+
+    <!-- Habits List -->
+    <div class="checklist">
+      ${habits.map(h => {
+        const isDone = !!(dailyState[h.id] && dailyState[h.id].done);
+        const streakInfo = computeCustomHabitStreak(h.id, iso);
+        const icon = h.type === 'learning' ? '📚' : '🎯';
+        return `
+          <div class="check-row" style="display:flex; justify-content:space-between; align-items:center; padding:10px 12px; border-radius:8px; margin-bottom:6px; background:var(--card); border:1px solid ${isDone ? 'rgba(46,204,113,0.3)' : 'var(--line)'}; border-right:4px solid ${isDone ? 'var(--good)' : (h.type === 'learning' ? '#06b6d4' : 'var(--primary)')};">
+            <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:0;">
+              <span style="font-size:1.1rem;">${icon}</span>
+              <div style="overflow:hidden;">
+                <div style="font-weight:700; font-size:.84rem; color:var(--text); text-decoration:${isDone ? 'line-through' : 'none'}; opacity:${isDone ? '0.85' : '1'}; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                  ${typeof escapeHtml === 'function' ? escapeHtml(h.title) : h.title}
+                </div>
+                <div style="font-size:.72rem; color:var(--muted); display:flex; align-items:center; gap:8px; margin-top:2px;">
+                  <span>${typeof escapeHtml === 'function' ? escapeHtml(h.target) : h.target}</span>
+                  <span>•</span>
+                  <span style="color:#f59e0b; font-weight:600;">🔥 ${streakInfo.currentStreak} يوم استمرار</span>
+                  <span>•</span>
+                  <span>إجمالي: ${streakInfo.totalDone} يوم</span>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <button type="button" class="check-toggle ${isDone ? 'on' : ''}" data-habit-id="${h.id}" style="width:36px; height:36px; border-radius:8px; font-size:.9rem; cursor:pointer;" title="${isDone ? 'مكتملة' : 'تعليم كمكتملة'}">
+                ${isDone ? '✓' : ''}
+              </button>
+              <button type="button" class="reset-btn btn-del-habit" data-habit-id="${h.id}" style="padding:3px 6px; font-size:.7rem; border-color:transparent; color:var(--muted);" title="حذف العادة">
+                🗑
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+
+  container.innerHTML = html;
+
+  // Wire buttons
+  const btnToggleForm = document.getElementById('btnToggleAddHabit');
+  if(btnToggleForm){
+    btnToggleForm.addEventListener('click', () => {
+      customHabitAddFormOpen = !customHabitAddFormOpen;
+      renderCustomHabitsTracker();
+    });
+  }
+
+  const btnCancel = document.getElementById('btnCancelAddHabit');
+  if(btnCancel){
+    btnCancel.addEventListener('click', () => {
+      customHabitAddFormOpen = false;
+      renderCustomHabitsTracker();
+    });
+  }
+
+  const btnSave = document.getElementById('btnSaveNewHabit');
+  if(btnSave){
+    btnSave.addEventListener('click', () => {
+      const title = document.getElementById('newHabitTitle').value;
+      const type = document.getElementById('newHabitType').value;
+      const target = document.getElementById('newHabitTarget').value;
+      if(title && title.trim()){
+        addCustomHabit(title, type, target);
+        customHabitAddFormOpen = false;
+        renderCustomHabitsTracker();
+      }
+    });
+  }
+
+  container.querySelectorAll('.check-toggle[data-habit-id]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-habit-id');
+      toggleCustomHabit(id, iso);
+    });
+  });
+
+  container.querySelectorAll('.btn-del-habit[data-habit-id]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-habit-id');
+      if(confirm('هل أنت متأكد من حذف هذه العادة؟ لن تُحذف سجلاتك السابقة.')){
+        deleteCustomHabit(id);
+      }
+    });
+  });
+}
+
+window.loadCustomHabitsList = loadCustomHabitsList;
+window.saveCustomHabitsList = saveCustomHabitsList;
+window.addCustomHabit = addCustomHabit;
+window.deleteCustomHabit = deleteCustomHabit;
+window.loadDailyCustomHabits = loadDailyCustomHabits;
+window.saveDailyCustomHabits = saveDailyCustomHabits;
+window.toggleCustomHabit = toggleCustomHabit;
+window.computeCustomHabitStreak = computeCustomHabitStreak;
+window.renderCustomHabitsTracker = renderCustomHabitsTracker;
+
+/* ================= DAILY SUMMARY & SOCIAL ACCOUNTABILITY ENGINE (PROPOSAL #13) ================= */
+function generateDailySummaryText(iso){
+  const prayer = typeof loadPrayer === 'function' ? loadPrayer(iso) : {};
+  const fardDone = Object.values(prayer).filter(v => v && v.fard).length;
+  const sunnahDone = Object.values(prayer).filter(v => v && v.sunnah).length;
+
+  const qiyam = typeof loadQiyam === 'function' ? loadQiyam(iso) : {};
+  const qiyamDone = !!(qiyam && (qiyam.i0 || qiyam.i1));
+
+  const quran = typeof loadQuran === 'function' ? loadQuran(iso) : {};
+  const quranCount = Object.values(quran).filter(Boolean).length;
+
+  const fasting = typeof loadFasting === 'function' ? loadFasting(iso) : null;
+  const isFasted = !!(fasting && fasting.fasted);
+
+  const habits = loadCustomHabitsList();
+  const dailyHabits = loadDailyCustomHabits(iso);
+  const doneHabitsCount = habits.filter(h => dailyHabits[h.id] && dailyHabits[h.id].done).length;
+
+  const sleep = typeof loadSleepTimes === 'function' ? loadSleepTimes(iso) : null;
+  const sleepH = typeof sleepHours === 'function' ? sleepHours(sleep) : null;
+  const water = typeof loadWater === 'function' ? loadWater(iso) : 0;
+
+  const lines = [];
+  lines.push(`🌿 تقرير إنجاز يوم: ${iso} — تطبيق زيتونة`);
+  lines.push(`----------------------------------------`);
+  lines.push(`🕌 العبادات:`);
+  lines.push(`  • الفروض: ${fardDone}/5 صلوات | السنن: ${sunnahDone}`);
+  lines.push(`  • قيام الليل: ${qiyamDone ? '✓ تم بحمد الله' : '—'} | ورد القرآن: ${quranCount > 0 ? quranCount + ' أوراد ✓' : '—'}`);
+  if(isFasted){
+    lines.push(`  • الصيام: صائم اليوم بحمد الله (${fasting.type === 'sunnah' ? 'سنة' : (fasting.type === 'qadaa' ? 'قضاء' : 'تطوع')}) 🌱`);
+  }
+
+  lines.push(`🎯 العادات واكتساب المهارات:`);
+  lines.push(`  • تم إنجاز: ${doneHabitsCount} من ${habits.length} عادات ومهارات`);
+  habits.forEach(h => {
+    const isDone = !!(dailyHabits[h.id] && dailyHabits[h.id].done);
+    lines.push(`  • ${h.type === 'learning' ? '📚' : '🎯'} ${h.title}: ${isDone ? '✓ منجز' : 'لم يكتمل بعد'}`);
+  });
+
+  lines.push(`🌙 النوم والمياه:`);
+  lines.push(`  • ساعات النوم: ${sleepH !== null ? sleepH.toFixed(1) + ' ساعة' : '—'}`);
+  lines.push(`  • شرب المياه: ${water}/8 أكواب`);
+
+  lines.push(`----------------------------------------`);
+  lines.push(`🤍 الاستمرارية تصنع الفارق — خطوة بخطوة كل يوم.`);
+
+  return lines.join('\n');
+}
+
+function renderDailySummaryShareCard(){
+  const card = document.getElementById('dailyShareCard');
+  if(!card) return;
+
+  const iso = toISO(weekDates[selectedIdx]);
+  const summaryText = generateDailySummaryText(iso);
+
+  card.innerHTML = `
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span style="font-size:1.1rem;">📋</span>
+        <div>
+          <div style="font-weight:700; font-size:.88rem; color:var(--text);">بطاقة إنجاز اليوم والمتابعة الاجتماعية</div>
+          <div style="font-size:.74rem; color:var(--muted);">${iso} • جاهزة للمشاركة مع رفيق المتابعة</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:6px;">
+        <button type="button" class="reset-btn" id="btnCopyDailySummary" style="padding:4px 10px; font-size:.76rem; border-color:var(--primary); color:var(--primary); font-weight:700;">
+          📋 نسخ التقرير
+        </button>
+        <button type="button" class="reset-btn" id="btnShareDailySummary" style="padding:4px 10px; font-size:.76rem; border-color:var(--good); color:var(--good); font-weight:700;">
+          📲 مشاركة للمتابعة
+        </button>
+      </div>
+    </div>
+
+    <div style="position:relative;">
+      <pre id="dailySummaryPreviewText" style="background:var(--card); border:1px solid var(--line); border-radius:8px; padding:12px; font-size:.76rem; line-height:1.6; white-space:pre-wrap; word-break:break-word; max-height:180px; overflow-y:auto; color:var(--text); font-family:inherit;">${summaryText}</pre>
+    </div>
+    <div id="copySummaryToast" style="display:none; color:var(--good); font-size:.74rem; font-weight:700; margin-top:6px; text-align:center;">
+      ✓ تم نسخ تقرير الإنجاز بنجاح إلى الحافظة!
+    </div>
+  `;
+
+  const btnCopy = document.getElementById('btnCopyDailySummary');
+  if(btnCopy){
+    btnCopy.addEventListener('click', () => {
+      const textToCopy = generateDailySummaryText(iso);
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          showCopyToast();
+        }).catch(() => {
+          fallbackCopyText(textToCopy);
+        });
+      } else {
+        fallbackCopyText(textToCopy);
+      }
+    });
+  }
+
+  const btnShare = document.getElementById('btnShareDailySummary');
+  if(btnShare){
+    btnShare.addEventListener('click', () => {
+      const textToShare = generateDailySummaryText(iso);
+      if(navigator.share){
+        navigator.share({
+          title: `إنجاز يوم ${iso} — تطبيق زيتونة`,
+          text: textToShare
+        }).catch(e => console.log('Share canceled', e));
+      } else {
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(textToShare).then(() => {
+            alert('تم نسخ ملخص اليوم بنجاح لمشاركته مع رفيق المتابعة.');
+          });
+        }
+      }
+    });
+  }
+
+  function showCopyToast(){
+    const toast = document.getElementById('copySummaryToast');
+    if(toast){
+      toast.style.display = 'block';
+      setTimeout(() => { toast.style.display = 'none'; }, 3000);
+    }
+  }
+
+  function fallbackCopyText(text){
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand('copy');
+      showCopyToast();
+    } catch(e){}
+    document.body.removeChild(ta);
+  }
+}
+
+window.generateDailySummaryText = generateDailySummaryText;
+window.renderDailySummaryShareCard = renderDailySummaryShareCard;
+
 function renderSchedule(){
   const iso = toISO(weekDates[selectedIdx]);
   // Raw generated version — used ONLY for the systemic banners below (fallback prayer times,
@@ -18774,6 +20325,7 @@ function renderSchedule(){
   renderScheduleActivities(rec, selectedIdx, iso);
   renderScheduleSleepBlock(rec);
   renderScheduleChecklist(selectedIdx, scheduleSettings);
+  renderCustomHabitsTracker();
 }
 
 /* ================= RENDER: WEEKLY TIME BUDGET (Overview) ================= */
@@ -18865,6 +20417,12 @@ function computeAnalyticsForDates(dateList){
 
     const qs = loadQuran(iso);
     if(Object.keys(qs).length){ quran.days++; quran.sum += Object.values(qs).filter(Boolean).length; quran.possible += QURAN_WIRD.length; }
+
+    const qy = loadQiyam(iso);
+    if(qy && (qy.i0 || qy.i1)){ prayer.qiyamNights = (prayer.qiyamNights || 0) + 1; }
+
+    const fst = typeof loadFasting === 'function' ? loadFasting(iso) : null;
+    if(fst && fst.fasted){ prayer.fastingDays = (prayer.fastingDays || 0) + 1; }
 
     const wt = loadWeight(iso);
     if(wt!==null && !isNaN(wt)) weight.points.push({iso,val:wt});
@@ -18963,15 +20521,31 @@ function renderDomainStudyWater(a){
 }
 function renderDomainWorship(a){
   const p = a.prayer, q = a.quran;
+  const fardDays = p.days || 1;
+  const fardAvg = p.days ? round1(p.fardSum / p.days) : 0;
+  const fardPct = clamp(Math.round((p.fardSum / (fardDays * 5)) * 100), 0, 100);
+  const quranAvg = q.days ? round1(q.sum / q.days) : 0;
   document.getElementById('domainWorship').innerHTML = `
-    <h4>🕌 الصلاة والقرآن</h4>
+    <h4>🕌 الصلاة والقرآن <span class="score-pill">${fardPct}%</span></h4>
     <div class="stat-grid">
-      <div class="stat-mini"><div class="smv">${p.days?round1(p.fardSum/p.days):0}/5</div><div class="sml">متوسط الفروض/يوم</div></div>
+      <div class="stat-mini"><div class="smv">${fardAvg}/5</div><div class="sml">متوسط الفروض/يوم (${fardPct}%)</div></div>
       <div class="stat-mini"><div class="smv">${p.days?round1(p.sunnahSum/p.days):0}</div><div class="sml">متوسط السنن/يوم</div></div>
-      <div class="stat-mini"><div class="smv">${q.days?round1(q.sum/q.days):0}/${QURAN_WIRD.length}</div><div class="sml">متوسط ورد القرآن/يوم</div></div>
+      <div class="stat-mini"><div class="smv">${quranAvg}/${QURAN_WIRD.length}</div><div class="sml">متوسط ورد القرآن/يوم</div></div>
+      <div class="stat-mini"><div class="smv">${p.qiyamNights || 0}</div><div class="sml">ليالي قيام الليل</div></div>
+      <div class="stat-mini"><div class="smv">${p.fastingDays || 0}</div><div class="sml">أيام الصيام</div></div>
     </div>
-    <p style="color:var(--muted); font-size:.72rem; margin:10px 0 0;">إحصائيات التزام بس — مش "درجة نجاح"، الأجر مش بيتقاس بالأرقام 🤍</p>
+    ${scoreBar(fardPct)}
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; flex-wrap:wrap; gap:6px;">
+      <p style="color:var(--muted); font-size:.72rem; margin:0;">إحصائيات التزام بس — مش "درجة نجاح"، الأجر مش بيتقاس بالأرقام 🤍</p>
+      <button type="button" class="reset-btn" id="btnGoWorshipAdherence" style="padding:2px 8px; font-size:.7rem; border-color:var(--primary); color:var(--primary);">عرض التقرير المفصل ↗</button>
+    </div>
   `;
+  const goBtn = document.getElementById('btnGoWorshipAdherence');
+  if(goBtn) goBtn.addEventListener('click', () => {
+    if(typeof routeNotificationClick === 'function'){
+      routeNotificationClick({ mode: 'prayer' });
+    }
+  });
 }
 function renderDomainBudget(a){
   const n = a.nut;
@@ -19002,7 +20576,7 @@ function renderRangeTabs(){
 }
 function renderAnalyticsDomains(){
   const a = computeAnalytics(analyticsRange);
-  renderDomainNutrition(a); renderDomainTraining(a); renderDomainSleep(a); renderDomainStudyWater(a); renderDomainWorship(a); renderDomainBudget(a);
+  renderDomainNutrition(a); renderDomainTraining(a); renderDomainSleep(a); renderDomainStudyWater(a); renderDomainWorship(a); renderDomainBudget(a); renderDomainStreaks();
   const sc = computeOverallScores(a);
   const overallEl = document.getElementById('overallConsistency');
   if(overallEl) overallEl.textContent = sc.overall!==null ? `⭐ الاتزام العام في الفترة دي: ${sc.overall}%` : '';
@@ -19144,6 +20718,7 @@ function renderOverview(){
   renderWeightChart();
   renderWeeklyBudget();
   renderDailyNotes();
+  renderDailySummaryShareCard();
   renderReminders();
 }
 
@@ -21090,7 +22665,7 @@ function validateBackupData(data){
   if(data===null || typeof data!=='object' || Array.isArray(data)) return {ok:false, reason:'الملف ده مش نسخة احتياطية صحيحة (شكل البيانات مش متوقع).'};
   const keys = Object.keys(data);
   if(keys.length===0) return {ok:false, reason:'الملف فاضي — مفيش بيانات فيه أصلاً.'};
-  const KNOWN_KEY_PATTERNS = [/^schema-version$/, /^theme$/, /^targets$/, /^schedule-settings$/, /^shopping$/, /^prep$/, /^subs$/, /^meals:/, /^sched-acts:/, /^water:/, /^weight:/, /^budget-/, /^custom-foods$/, /^food-overrides$/, /^secnote:/, /^ex:/, /^gym-settings$/, /^gym-date-ov:/, /^custom-exercises$/, /^exercise-overrides$/, /^excluded-exercises$/, /^meal-date-ov:/, /^notification-settings$/, /^reminders$/, /^gym-routine-order$/, /^gym-plan-config-v1$/, /^gym-custom-plans-v1$/, /^exercise-image-map-v1$/, /^note-attachments-v1$/, /^gym-sessions-v1$/, /^gym-rest-timer-v1$/, /^shopping-purchases-v1$/, /^gym-warmup-state-v1$/, /^gym-cooldown-state-v1$/, /^zatoona-media-v1$/, /^media$/, /^sleep-routine-settings$/, /^winddown:/];
+  const KNOWN_KEY_PATTERNS = [/^schema-version$/, /^theme$/, /^targets$/, /^schedule-settings$/, /^shopping$/, /^prep$/, /^subs$/, /^meals:/, /^sched-acts:/, /^water:/, /^weight:/, /^budget-/, /^custom-foods$/, /^food-overrides$/, /^secnote:/, /^ex:/, /^gym-settings$/, /^gym-date-ov:/, /^custom-exercises$/, /^exercise-overrides$/, /^excluded-exercises$/, /^meal-date-ov:/, /^notification-settings$/, /^reminders$/, /^gym-routine-order$/, /^gym-plan-config-v1$/, /^gym-custom-plans-v1$/, /^exercise-image-map-v1$/, /^note-attachments-v1$/, /^gym-sessions-v1$/, /^gym-rest-timer-v1$/, /^shopping-purchases-v1$/, /^gym-warmup-state-v1$/, /^gym-cooldown-state-v1$/, /^zatoona-media-v1$/, /^media$/, /^sleep-routine-settings$/, /^winddown:/, /^fasting:/, /^custom-habits-list$/, /^customhabits:/, /^notif-dispatched:/];
   const looksLikeOurs = keys.some(k=> KNOWN_KEY_PATTERNS.some(re=>re.test(k)));
   if(!looksLikeOurs) return {ok:false, reason:'الملف ده متبقاش شكل نسخة زتونة الاحتياطية — متأكد إنك اخترت الملف الصح؟'};
   for(const k of keys){
@@ -21420,6 +22995,159 @@ function dataUrlToBlob(dataUrl, fallbackMime){
   return new Blob([byteNumbers], { type: mime });
 }
 
+/* ================= ENCRYPTED BACKUP ENGINE (Proposal #4 / Phase 10) ================= */
+function _backupBufToBase64(buffer) {
+  let binary = '';
+  const bytes = new Uint8Array(buffer);
+  const len = bytes.byteLength;
+  for (let i = 0; i < len; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return btoa(binary);
+}
+
+function _backupBase64ToBuf(base64) {
+  const binary_string = atob(base64);
+  const len = binary_string.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+    bytes[i] = binary_string.charCodeAt(i);
+  }
+  return bytes.buffer;
+}
+
+function isEncryptedBackup(obj) {
+  return !!(obj && typeof obj === 'object' && obj.zatoonaBackupFormat === 'v1-encrypted' && obj.ciphertext);
+}
+
+async function encryptBackupPayload(dataObj, password) {
+  if (!password || typeof password !== 'string' || password.length < 1) {
+    throw new Error('يرجى إدخال كلمة مرور صالحة لتشفير النسخة الاحتياطية.');
+  }
+  if (!window.crypto || !window.crypto.subtle) {
+    throw new Error('متصفحك لا يدعم Web Crypto API لتشفير البيانات.');
+  }
+  const enc = new TextEncoder();
+  const plaintext = JSON.stringify(dataObj);
+  const salt = window.crypto.getRandomValues(new Uint8Array(16));
+  const iv = window.crypto.getRandomValues(new Uint8Array(12));
+
+  const pwKey = await window.crypto.subtle.importKey(
+    'raw', enc.encode(password), { name: 'PBKDF2' }, false, ['deriveKey']
+  );
+  const aesKey = await window.crypto.subtle.deriveKey(
+    { name: 'PBKDF2', salt: salt, iterations: 100000, hash: 'SHA-256' },
+    pwKey,
+    { name: 'AES-GCM', length: 256 },
+    false,
+    ['encrypt']
+  );
+
+  const encryptedBuf = await window.crypto.subtle.encrypt(
+    { name: 'AES-GCM', iv: iv },
+    aesKey,
+    enc.encode(plaintext)
+  );
+
+  return {
+    zatoonaBackupFormat: 'v1-encrypted',
+    algorithm: 'AES-GCM',
+    kdf: 'PBKDF2',
+    iterations: 100000,
+    hash: 'SHA-256',
+    salt: _backupBufToBase64(salt.buffer),
+    iv: _backupBufToBase64(iv.buffer),
+    ciphertext: _backupBufToBase64(encryptedBuf),
+    exportedAt: Date.now()
+  };
+}
+
+async function decryptBackupPayload(encryptedObj, password) {
+  if (!isEncryptedBackup(encryptedObj)) {
+    throw new Error('الملف ليس بتنسيق النسخ الاحتياطية المشفرة لزتونة.');
+  }
+  if (!password || typeof password !== 'string') {
+    throw new Error('يرجى إدخال كلمة المرور.');
+  }
+  if (!window.crypto || !window.crypto.subtle) {
+    throw new Error('متصفحك لا يدعم Web Crypto API لفك التشفير.');
+  }
+  const enc = new TextEncoder();
+  const dec = new TextDecoder();
+  const saltBuf = _backupBase64ToBuf(encryptedObj.salt);
+  const ivBuf = _backupBase64ToBuf(encryptedObj.iv);
+  const ciphertextBuf = _backupBase64ToBuf(encryptedObj.ciphertext);
+
+  const pwKey = await window.crypto.subtle.importKey(
+    'raw', enc.encode(password), { name: 'PBKDF2' }, false, ['deriveKey']
+  );
+  const aesKey = await window.crypto.subtle.deriveKey(
+    { name: 'PBKDF2', salt: new Uint8Array(saltBuf), iterations: encryptedObj.iterations || 100000, hash: 'SHA-256' },
+    pwKey,
+    { name: 'AES-GCM', length: 256 },
+    false,
+    ['decrypt']
+  );
+
+  try {
+    const decryptedBuf = await window.crypto.subtle.decrypt(
+      { name: 'AES-GCM', iv: new Uint8Array(ivBuf) },
+      aesKey,
+      ciphertextBuf
+    );
+    const plaintext = dec.decode(decryptedBuf);
+    return JSON.parse(plaintext);
+  } catch(decErr) {
+    throw new Error('كلمة المرور غير صحيحة أو تم تعديل محتوى الملف.');
+  }
+}
+
+function showEncryptBackupModal() {
+  const m = document.getElementById('encryptBackupModal');
+  if (m) {
+    const err = document.getElementById('encryptPwError');
+    if (err) { err.style.display = 'none'; err.textContent = ''; }
+    const p1 = document.getElementById('encryptPwInput');
+    const p2 = document.getElementById('encryptPwConfirm');
+    if (p1) p1.value = '';
+    if (p2) p2.value = '';
+    m.classList.add('open');
+    if (p1) p1.focus();
+  }
+}
+
+function closeEncryptBackupModal() {
+  const m = document.getElementById('encryptBackupModal');
+  if (m) m.classList.remove('open');
+}
+
+function showDecryptBackupModal(onConfirmCallback) {
+  const m = document.getElementById('decryptBackupModal');
+  if (m) {
+    const err = document.getElementById('decryptPwError');
+    if (err) { err.style.display = 'none'; err.textContent = ''; }
+    const p = document.getElementById('decryptPwInput');
+    if (p) p.value = '';
+    m.classList.add('open');
+    if (p) p.focus();
+    window._onDecryptBackupConfirm = onConfirmCallback;
+  }
+}
+
+function closeDecryptBackupModal() {
+  const m = document.getElementById('decryptBackupModal');
+  if (m) m.classList.remove('open');
+  window._onDecryptBackupConfirm = null;
+}
+
+window.isEncryptedBackup = isEncryptedBackup;
+window.encryptBackupPayload = encryptBackupPayload;
+window.decryptBackupPayload = decryptBackupPayload;
+window.showEncryptBackupModal = showEncryptBackupModal;
+window.closeEncryptBackupModal = closeEncryptBackupModal;
+window.showDecryptBackupModal = showDecryptBackupModal;
+window.closeDecryptBackupModal = closeDecryptBackupModal;
+
 async function exportAllData(options = {}){
   const data = {};
   for(let i=0; i<localStorage.length; i++){
@@ -21467,20 +23195,28 @@ async function exportAllData(options = {}){
     }
   }
 
+  let finalPayload = data;
+  let filename = 'tracker-backup-' + toISO(new Date()) + '.json';
+
+  if (options.password) {
+    finalPayload = await encryptBackupPayload(data, options.password);
+    filename = 'tracker-backup-' + toISO(new Date()) + '-encrypted.json';
+  }
+
   if(options.download !== false && typeof document !== 'undefined'){
-    const jsonStr = JSON.stringify(data, null, 2);
+    const jsonStr = JSON.stringify(finalPayload, null, 2);
     const blob = new Blob([jsonStr], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'tracker-backup-' + toISO(new Date()) + '.json';
+    a.download = filename;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   }
 
-  return data;
+  return finalPayload;
 }
 
 async function importAllData(fileOrData, options = {}){
@@ -21513,6 +23249,35 @@ async function importAllData(fileOrData, options = {}){
     const msg = 'بيانات الاستيراد غير صالحة.';
     if(options.silent !== true && typeof alert === 'function') alert(msg);
     throw new Error(msg);
+  }
+
+  // 0. If encrypted format, decrypt before validation
+  if (isEncryptedBackup(data)) {
+    if (options.password) {
+      data = await decryptBackupPayload(data, options.password);
+    } else {
+      const decrypted = await new Promise((resolve, reject) => {
+        showDecryptBackupModal(async (enteredPassword) => {
+          try {
+            const res = await decryptBackupPayload(data, enteredPassword);
+            closeDecryptBackupModal();
+            resolve(res);
+          } catch(err) {
+            const errEl = document.getElementById('decryptPwError');
+            if (errEl) {
+              errEl.textContent = '❌ ' + (err.message || err);
+              errEl.style.display = 'block';
+            } else {
+              alert('❌ ' + (err.message || err));
+            }
+          }
+        });
+        window._onDecryptBackupCancel = () => {
+          reject(new Error('تم إلغاء فك التشفير.'));
+        };
+      });
+      data = decrypted;
+    }
   }
 
   // 1. Strict validation of backup structure before touching ANY storage
@@ -23306,8 +25071,201 @@ function renderHomeDashboard(){
       quickAddWater();
     });
   }
+  renderHomeStreaks(todayIso);
 }
 
+
+/* ================= HABIT STREAKS ENGINE (Proposal #6) ================= */
+function shiftIsoDay(iso, offsetDays){
+  const parts = iso.split('-').map(Number);
+  const dt = new Date(parts[0], parts[1] - 1, parts[2]);
+  dt.setDate(dt.getDate() + offsetDays);
+  return toISO(dt);
+}
+
+function computeHabitStreaks(todayIso){
+  if(!todayIso) todayIso = toISO(new Date());
+  const yesterdayIso = shiftIsoDay(todayIso, -1);
+
+  const habits = [
+    {
+      id: 'prayer',
+      title: 'الصلوات الخمس',
+      icon: '🕌',
+      nav: 'prayer',
+      check: (iso) => {
+        const p = loadPrayer(iso);
+        if(!p) return false;
+        return ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'].filter(k => p[k] && p[k].fard).length === 5;
+      }
+    },
+    {
+      id: 'quran',
+      title: 'ورد القرآن الكريم',
+      icon: '📖',
+      nav: 'prayer',
+      check: (iso) => {
+        const q = loadQuran(iso);
+        return q && Object.values(q).filter(Boolean).length > 0;
+      }
+    },
+    {
+      id: 'azkar',
+      title: 'أذكار الصباح والمساء',
+      icon: '📿',
+      nav: 'prayer',
+      check: (iso) => {
+        const a = loadAzkar(iso);
+        return a && Object.values(a).filter(Boolean).length > 0;
+      }
+    },
+    {
+      id: 'sleep',
+      title: 'عادات النوم الصحية',
+      icon: '🌙',
+      nav: 'sleep',
+      check: (iso) => {
+        const h = loadSleepHabits(iso);
+        return h && Object.values(h).filter(Boolean).length >= 3;
+      }
+    },
+    {
+      id: 'water',
+      title: 'المياه (٨+ أكواب)',
+      icon: '💧',
+      nav: 'meal',
+      check: (iso) => {
+        const w = loadWater(iso);
+        return (w || 0) >= 8;
+      }
+    },
+    {
+      id: 'schedule',
+      title: 'مهام الجدول',
+      icon: '📋',
+      nav: 'schedule',
+      check: (iso) => {
+        const s = loadScheduleCheck(iso);
+        return s && Object.values(s).filter(Boolean).length > 0;
+      }
+    }
+  ];
+
+  const MAX_HISTORY_DAYS = 90;
+  const historyDates = [];
+  for(let i = 0; i <= MAX_HISTORY_DAYS; i++){
+    historyDates.push(shiftIsoDay(todayIso, -i));
+  }
+
+  return habits.map(h => {
+    const doneToday = !!h.check(todayIso);
+    const doneYesterday = !!h.check(yesterdayIso);
+
+    let currentStreak = 0;
+    let startIso = doneToday ? todayIso : (doneYesterday ? yesterdayIso : null);
+
+    if(startIso){
+      let cur = startIso;
+      while(h.check(cur)){
+        currentStreak++;
+        cur = shiftIsoDay(cur, -1);
+      }
+    }
+
+    let bestStreak = 0;
+    let tempStreak = 0;
+    let totalDays = 0;
+
+    for(let i = historyDates.length - 1; i >= 0; i--){
+      const dt = historyDates[i];
+      if(h.check(dt)){
+        totalDays++;
+        tempStreak++;
+        if(tempStreak > bestStreak) bestStreak = tempStreak;
+      } else {
+        tempStreak = 0;
+      }
+    }
+
+    if(currentStreak > bestStreak) bestStreak = currentStreak;
+
+    return {
+      id: h.id,
+      title: h.title,
+      icon: h.icon,
+      nav: h.nav,
+      doneToday,
+      currentStreak,
+      bestStreak,
+      totalDays
+    };
+  });
+}
+
+function renderDomainStreaks(){
+  const el = document.getElementById('domainStreaks');
+  if(!el) return;
+  const streaks = computeHabitStreaks(toISO(new Date()));
+  el.innerHTML = `
+    <h4>🔥 سلاسل الالتزام واستمرارية العادات</h4>
+    <div class="stat-grid" style="grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:10px;">
+      ${streaks.map(s => `
+        <div class="streak-mini-card ${s.currentStreak > 0 ? 'is-active' : ''}" onclick="navigateTo('${s.nav}')">
+          <div style="font-size:1.3rem; margin-bottom:4px;">${s.icon}</div>
+          <div class="smv" style="font-size:1.1rem; color:${s.currentStreak > 0 ? 'var(--accent)' : 'var(--muted)'};">
+            ${s.currentStreak > 0 ? '🔥 ' + s.currentStreak + ' يوم' : '٠ يوم'}
+          </div>
+          <div class="sml" style="font-weight:700; margin-top:2px;">${s.title}</div>
+          <div style="font-size:.68rem; color:var(--muted); margin-top:4px;">
+            🏆 أفضل: ${s.bestStreak} يوم · 📅 إجمالي: ${s.totalDays}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    <p style="color:var(--muted); font-size:.72rem; margin:10px 0 0;">
+      💡 الاستمرارية أهم من الكمال — يوم ورا يوم السلسلة بتكبر وبتتحول لعادة ثابتة بدون مجهود.
+    </p>
+  `;
+}
+
+function renderHomeStreaks(todayIso){
+  const streaksCard = document.getElementById('homeStreaksCard');
+  if(!streaksCard) return;
+  const streaks = computeHabitStreaks(todayIso);
+  const activeStreaks = streaks.filter(s => s.currentStreak > 0);
+  const totalActiveStreakDays = streaks.reduce((acc, s) => acc + s.currentStreak, 0);
+
+  streaksCard.innerHTML = `
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+      <div style="font-weight:700; font-size:.95rem; display:flex; align-items:center; gap:6px;">
+        <span>🔥</span> <span>سلاسل الالتزام بالعادات</span>
+      </div>
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:.76rem; color:var(--accent); font-weight:700; background:var(--badge-optional-bg); border:1px solid var(--badge-optional-border); padding:2px 8px; border-radius:12px;">
+        ${activeStreaks.length} عادات مستمرة · ${totalActiveStreakDays} يوم تراكمي
+      </div>
+    </div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;">
+      ${streaks.map(s => `
+        <div class="streak-pill ${s.doneToday ? 'is-today-done' : (s.currentStreak > 0 ? 'is-alive' : 'is-idle')}" data-nav="${s.nav}" role="button" tabindex="0" title="${s.title}">
+          <span>${s.icon}</span>
+          <span style="font-weight:600;">${s.title}</span>
+          <span style="font-family:'IBM Plex Mono',monospace; font-weight:700; color:${s.currentStreak > 0 ? 'var(--accent)' : 'var(--muted)'};">
+            ${s.currentStreak > 0 ? '🔥 ' + s.currentStreak : '٠'}
+          </span>
+          ${s.doneToday ? '<span style="color:var(--good); font-size:.7rem;">✓</span>' : ''}
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  streaksCard.querySelectorAll('.streak-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      if(pill.dataset.nav && typeof navigateTo === 'function'){
+        navigateTo(pill.dataset.nav);
+      }
+    });
+  });
+}
 /* ================= MODE + DAY SELECTION ================= */
 function applyMode(){
   syncNavigation(mode);
@@ -23726,8 +25684,59 @@ document.querySelectorAll('#macroModeToggle .tbtn').forEach(b=>{
   b.addEventListener('click', ()=> onMacroModeChange(b.dataset.mode));
 });
 document.getElementById('exportData').addEventListener('click', ()=>{
-  exportAllData().catch(err => console.error(err));
+  const chk = document.getElementById('chkEncryptBackup');
+  if (chk && chk.checked) {
+    showEncryptBackupModal();
+  } else {
+    exportAllData().catch(err => console.error(err));
+  }
 });
+
+// Encrypt modal buttons
+const btnCloseEncX = document.getElementById('encryptModalCloseX');
+if (btnCloseEncX) btnCloseEncX.addEventListener('click', closeEncryptBackupModal);
+const btnCancelEnc = document.getElementById('btnCancelEncryptExport');
+if (btnCancelEnc) btnCancelEnc.addEventListener('click', closeEncryptBackupModal);
+const btnConfirmEnc = document.getElementById('btnConfirmEncryptExport');
+if (btnConfirmEnc) btnConfirmEnc.addEventListener('click', async () => {
+  const p1 = (document.getElementById('encryptPwInput')?.value || '').trim();
+  const p2 = (document.getElementById('encryptPwConfirm')?.value || '').trim();
+  const errEl = document.getElementById('encryptPwError');
+  if (!p1 || p1.length < 4) {
+    if (errEl) { errEl.textContent = 'كلمة المرور يجب ألا تقل عن ٤ أحرف.'; errEl.style.display = 'block'; }
+    return;
+  }
+  if (p1 !== p2) {
+    if (errEl) { errEl.textContent = 'كلمتا المرور غير متطابقتين.'; errEl.style.display = 'block'; }
+    return;
+  }
+  closeEncryptBackupModal();
+  try {
+    await exportAllData({ password: p1 });
+  } catch(err) {
+    alert('فشل التصدير المشفر: ' + (err.message || err));
+  }
+});
+
+// Decrypt modal buttons
+const btnCloseDecX = document.getElementById('decryptModalCloseX');
+if (btnCloseDecX) btnCloseDecX.addEventListener('click', () => {
+  closeDecryptBackupModal();
+  if (typeof window._onDecryptBackupCancel === 'function') window._onDecryptBackupCancel();
+});
+const btnCancelDec = document.getElementById('btnCancelDecryptImport');
+if (btnCancelDec) btnCancelDec.addEventListener('click', () => {
+  closeDecryptBackupModal();
+  if (typeof window._onDecryptBackupCancel === 'function') window._onDecryptBackupCancel();
+});
+const btnConfirmDec = document.getElementById('btnConfirmDecryptImport');
+if (btnConfirmDec) btnConfirmDec.addEventListener('click', () => {
+  const p = (document.getElementById('decryptPwInput')?.value || '').trim();
+  if (typeof window._onDecryptBackupConfirm === 'function') {
+    window._onDecryptBackupConfirm(p);
+  }
+});
+
 document.getElementById('importDataBtn').addEventListener('click', ()=> document.getElementById('importDataFile').click());
 document.getElementById('importDataFile').addEventListener('change', (e)=>{
   if(e.target.files && e.target.files[0]){

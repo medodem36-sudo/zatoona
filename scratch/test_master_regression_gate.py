@@ -144,6 +144,15 @@ REGISTERED_SUITES = [
         "description": "Verifies renderSimpleChecklist and renderScheduleChecklist label rendering, Arabic worship labels, sleep habits labels, icons, click toggling, and layout responsiveness."
     },
     {
+        "id": "phase13_worship_ux",
+        "name": "Phase 13.1B Worship Checklist Visual Badges & Summary",
+        "category": "UX & Worship",
+        "rel_path": "scratch/test_phase13_worship_ux_badges.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies section header counter badges, thematic border accents, full 6-category prayerSummary metrics, and real-time interactive updates."
+    },
+    {
         "id": "phase13_2",
         "name": "Phase 13.2 Cairo Prayer Times Support",
         "category": "Prayer & Schedule",
@@ -160,6 +169,78 @@ REGISTERED_SUITES = [
         "timeout_sec": 120,
         "active": True,
         "description": "Verifies target bedtime & wake settings, midnight crossing duration, circular diff, evening wind-down checklist, 5 core sleep habits preservation, actual vs target comparison, 7/28-day adherence summaries, reminder dispatching, and backup compatibility."
+    },
+    {
+        "id": "phase13_habit_streaks",
+        "name": "Phase 13.3B Habit Streaks Engine & Motivation Tracker",
+        "category": "Habits & Streaks",
+        "rel_path": "scratch/test_phase13_habit_streaks.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies shiftIsoDay calendar math, computeHabitStreaks 6-habit evaluation, home view streak pills, overview domain cards, and interactive navigation."
+    },
+    {
+        "id": "phase13_battery_guide",
+        "name": "Phase 13.5B Per-Manufacturer Battery Optimization Guide",
+        "category": "Settings & Notifications",
+        "rel_path": "scratch/test_phase13_battery_guide.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies OEM battery optimization guide modal, Samsung/Xiaomi/Huawei/Oppo/Pixel tabs, step-by-step Arabic instructions, and native bridge detection."
+    },
+    {
+        "id": "phase10_encrypted_backup",
+        "name": "Phase 10 Encrypted Backup Export & Import (AES-GCM)",
+        "category": "Backup & Security",
+        "rel_path": "scratch/test_phase10_encrypted_backup.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies PBKDF2 + AES-GCM 256-bit backup encryption, password protection, unencrypted backward compatibility, and error handling."
+    },
+    {
+        "id": "phase13_fasting",
+        "name": "Phase 13.6B Fasting Tracker & Sunnah Days",
+        "category": "Worship & Fasting",
+        "rel_path": "scratch/test_phase13_fasting_tracker.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies voluntary, sunnah, and qadaa fasting logging, monthly fasting counts, and Monday/Thursday sunnah alerts."
+    },
+    {
+        "id": "phase13_worship_adherence",
+        "name": "Phase 13.7B Weekly & Monthly Worship Adherence Report",
+        "category": "Worship & Analytics",
+        "rel_path": "scratch/test_phase13_worship_adherence.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies 7/28-day window adherence stats, per-prayer breakdown, multi-pillar tracking (Qiyam, Fasting, Quran, Azkar), and Overview integration."
+    },
+    {
+        "id": "phase13_qibla_compass",
+        "name": "Phase 13.8B Prayer Qibla Compass Engine & Dial",
+        "category": "Worship & Compass",
+        "rel_path": "scratch/test_phase13_qibla_compass.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies spherical trigonometry math, distance calculation, offline cities, SVG compass dial, live orientation, and Kaaba alignment."
+    },
+    {
+        "id": "phase13_habits_and_share",
+        "name": "Phase 13.9 Custom Habits & Learning Tracker + Share Card",
+        "category": "Habits & Productivity",
+        "rel_path": "scratch/test_phase13_habits_and_share.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies custom habits and skills learning tracker, habit streaks, daily checkoffs, and daily summary social accountability share card."
+    },
+    {
+        "id": "phase13_smart_notification_grouping",
+        "name": "Phase 13.10 Smart Notification Grouping (Proposal #14)",
+        "category": "Notifications & UX",
+        "rel_path": "scratch/test_phase13_smart_notification_grouping.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies smart notification grouping: concurrent reminders batched into unified digest, settings toggle, deduplication, in-app modal, Android group constants, and backup key patterns."
     },
     {
         "id": "phase13_4b1",
