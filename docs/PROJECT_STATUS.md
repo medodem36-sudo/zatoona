@@ -1,13 +1,13 @@
 # Zatoona Project Status & Development Baseline
 
 **Document Path:** `docs/PROJECT_STATUS.md`  
-**Last Updated:** 2026-10-28 15:14:00 +03:00<br>
+**Last Updated:** 2026-10-28 15:25:00 +03:00<br>
 **Repository:** `C:\Users\Lenovo\Documents\GitHub\zatoona`<br>
 **Remote Origin:** `https://github.com/medodem36-sudo/zatoona.git`<br>
 **Active Branch:** `main`<br>
-**Current HEAD:** `0c084914b948bec050330b516dfdd8bebd46a461`<br>
-**Head Commit Message:** `ف`<br>
-**Working Tree Status:** Clean baseline (`c382a50`); Phase A3 Worship Badges, Phase 13.3B Habit Streaks, Phase 13.5B Battery Guide, Phase 10 Encrypted Backup, Phase 13.6B Fasting Tracker, Phase 13.7B Worship Adherence, Phase 13.8B Qibla Compass, Phase 13.9 Habits/Share Card, Phase 13.10 Smart Notification Grouping, Phase 14 Release Signing Template & Phase 13.5 Quick Access Widget implemented; signing protection added to `.gitignore`; `docs/MASTER_ROADMAP.md` established.
+**Current HEAD:** `6646bb7`<br>
+**Head Commit Message:** `Widget`<br>
+**Working Tree Status:** Clean baseline (`c382a50`); Phase A3 Worship Badges, Phase 13.3B Habit Streaks, Phase 13.5B Battery Guide, Phase 10 Encrypted Backup, Phase 13.6B Fasting Tracker, Phase 13.7B Worship Adherence, Phase 13.8B Qibla Compass, Phase 13.9 Habits/Share Card, Phase 13.10 Smart Notification Grouping, Phase 14 Release Signing Template & Phase 13.5 Quick Access & Next Prayer Widgets implemented; signing protection added to `.gitignore`; `docs/MASTER_ROADMAP.md` established.
 
 ---
 
@@ -15,19 +15,14 @@
 
 Zatoona is an offline-first Personal Wellness & Productivity Progressive Web Application (PWA) with an integrated native Android WebView shell (`com.zatoona.app`).
 
-### Active Phase: Phase 13.5 — Native Android Home-Screen Widgets (Proposal #7 Quick Access Widget) (Completed & Verified)
-This phase introduces native Android home-screen widget capabilities providing 1-tap direct access to core application modules without opening the browser:
-1. **Native AppWidgetProvider (`QuickAccessWidgetProvider.kt`):** Implements an Android `AppWidgetProvider` wired to update home-screen widget instances with localized `RemoteViews` layouts and intent routing.
-2. **Four-Module Deep Linking Architecture:** Binds four independent, one-tap navigation targets via `PendingIntent`s targeting `MainActivity` with `EXTRA_MODE`:
-   - 🕌 **الصلوات (`mode="prayer"`):** Instant jump to prayer times, city selection, and worship checklists.
-   - 🏋️ **التمارين (`mode="gym"`):** Quick entry into workout sessions, exercise encyclopedia, and warmup/cooldown flows.
-   - 🥗 **التغذية (`mode="meal"`):** Direct logging of meals, water tracker, and macronutrient targets.
-   - 📅 **الجدول (`mode="schedule"`):** Immediate view of today's schedule activities, habits, and timeline.
-   - 🌿 **شريط العنوان (`widget_header` -> `mode="home"`):** Header tap opens the overview dashboard.
-3. **RTL & Dark Theme XML Layout (`res/layout/widget_quick_access.xml`):** Fully compliant `RemoteViews` layout utilizing `LinearLayout` structures, card background (`#1A202C`), button tiles (`#242C38`), and Arabic typography.
-4. **AppWidget Metadata & Manifest Registration (`res/xml/widget_quick_access_info.xml` & `AndroidManifest.xml`):** Registered with `APPWIDGET_UPDATE` action, home-screen category, minimum dimensions (`250dp x 100dp`), and localized Arabic description.
-5. **ProGuard & Packaging Invariance:** `proguard-rules.pro` preserves `QuickAccessWidgetProvider` from obfuscation. Verified inside compiled APK (`app-debug.apk`, 8,964,453 bytes) with all 4 XML resources and DEX bytecode symbols.
-6. **Automated Verification:** Verified via `scratch/test_phase13_5_widgets.py` (57 / 57 passed) and full master regression gate (27 / 27 suites, 1178 / 1178 checks, 186.22s).
+### Active Phase: Phase 13.5 — Native Android Home-Screen Widgets (Proposals #7 & #8) (Completed & Verified)
+This phase introduces a complete suite of native Android home-screen widgets providing instant awareness and one-tap deep navigation directly from the phone's launcher:
+1. **Quick Access Widget (`QuickAccessWidgetProvider.kt` & `widget_quick_access.xml`):** Provides 4 direct one-tap shortcut buttons to core app modules (🕌 الصلوات `prayer`, 🏋️ التمارين `gym`, 🥗 التغذية `meal`, 📅 الجدول `schedule`) and header dashboard navigation (`home`).
+2. **Next Prayer Widget (`NextPrayerWidgetProvider.kt` & `widget_next_prayer.xml`):** Displays upcoming prayer name, scheduled time in Arabic 12-hour format (`ص` / `م`), active city badge (`القاهرة` / `الإسكندرية` / `المنيا`), and live natural Arabic countdown grammar (`⏳ باقي ساعة و 25 دقيقة` / `⏳ باقي 45 دقيقة` / `حان وقت الصلاة الآن`).
+3. **Dynamic Bridge Resynchronization (`ZatoonaBridge.kt`):** Automatically updates all active Next Prayer widgets via `NextPrayerWidgetProvider.updateAllWidgets(context)` whenever prayer times are synchronized (`syncSchedules`) or the prayer city is changed (`updateActivePrayerCity`) from the PWA.
+4. **Pure RemoteViews & Dark Theme RTL Layouts:** Strict adherence to Android `RemoteViews` constraints (`LinearLayout`, `TextView`, `ImageView`), rounded cards (`#1A202C`), and high-contrast typography.
+5. **Security, ProGuard & APK Packaging:** Protected by ProGuard rules, registered in `AndroidManifest.xml`, and verified inside compiled APK (`app-debug.apk`, 8,964,453 bytes) with both providers in `classes.dex` and all XML resources packaged.
+6. **Automated Verification:** Verified via `scratch/test_phase13_5_widgets.py` (57 / 57 passed), `scratch/test_phase13_5_next_prayer_widget.py` (53 / 53 passed), and full master regression gate (28 / 28 suites, 1231 / 1231 checks, 198.75s).
 
 ### Prior Phase: Phase 14 — Release Signing Configuration Template (Completed & Verified)
 This phase establishes a secure, modular Android release signing architecture adhering strictly to credential isolation and zero-secret repository principles:
@@ -154,11 +149,11 @@ All assertions and test gates are recorded in deterministic test execution logs 
 
 ### Master Regression Gate (`scratch/test_master_regression_gate.py`)
 - **Evidence Log:** `scratch/test-results/test_master_report.json` & `scratch/test-results/test_master_report.md`
-- **Execution Timestamp:** 2026-10-28 15:10:09
+- **Execution Timestamp:** 2026-10-28 15:21:50
 - **Gate Status:** **PASS ✅**
-- **Suites Passed:** **27 / 27** (100%)
-- **Total Checks Passed:** **1178 / 1178** (0 failures)
-- **Total Duration:** 186.22s
+- **Suites Passed:** **28 / 28** (100%)
+- **Total Checks Passed:** **1231 / 1231** (0 failures)
+- **Total Duration:** 198.75s
 
 #### Detailed Suite Breakdown
 | Suite ID | Suite Name | Category | Passed Checks | Duration | Status |
@@ -189,9 +184,11 @@ All assertions and test gates are recorded in deterministic test execution logs 
 | `phase13_4b1_2` | Phase 13.4B1.2 Android Toolchain & Buildability Verification | Native Android & Build | 31 / 31 | 0.28s | PASS ✅ |
 | `phase13_4b2` | Phase 13.4B2 Native Android Local Alarm Engine | Native Android & Alarms | 74 / 74 | 0.22s | PASS ✅ |
 | `phase14_release_signing` | Phase 14 Release Signing Configuration Template | Build & Release Security | 40 / 40 | 0.09s | PASS ✅ |
-| `phase13_5_widgets` | Phase 13.5 Native Android Quick Access Widget (Proposal #7) | Native Android & Widgets | 57 / 57 | 0.21s | PASS ✅ |
+| `phase13_5_widgets` | Phase 13.5 Native Android Quick Access Widget (Proposal #7) | Native Android & Widgets | 57 / 57 | 0.27s | PASS ✅ |
+| `phase13_5_next_prayer_widget` | Phase 13.5 Next Prayer Home-Screen Widget (Proposal #8) | Native Android & Widgets | 53 / 53 | 0.29s | PASS ✅ |
 
 ### Targeted Test Suites
+- **Next Prayer Home-Screen Widget (`scratch/test_phase13_5_next_prayer_widget.py`):** **53 / 53 PASSED**
 - **Native Android Quick Access Widget (`scratch/test_phase13_5_widgets.py`):** **57 / 57 PASSED**
 - **Release Signing Configuration Template (`scratch/test_phase14_release_signing.py`):** **40 / 40 PASSED**
 - **Smart Notification Grouping (`scratch/test_phase13_smart_notification_grouping.py`):** **37 / 37 PASSED**

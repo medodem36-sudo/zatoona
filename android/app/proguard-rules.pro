@@ -8,3 +8,6 @@
 
 # Keep QuickAccessWidgetProvider
 -keep class com.zatoona.app.QuickAccessWidgetProvider { *; }
+
+# Keep NextPrayerWidgetProvider
+-keep class com.zatoona.app.NextPrayerWidgetProvider { *; }

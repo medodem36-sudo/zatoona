@@ -6,4 +6,10 @@
     <string name="widget_gym">التمارين</string>
     <string name="widget_meal">التغذية</string>
     <string name="widget_schedule">الجدول</string>
+
+    <!-- Next Prayer Widget (Proposal #8 / Phase 13.5 Extension) -->
+    <string name="widget_next_prayer_title">زتونة — الصلاة القادمة</string>
+    <string name="widget_next_prayer_description">عرض اسم الصلاة القادمة وموعدها والوقت المتبقي لها على الشاشة الرئيسية.</string>
+    <string name="widget_prayer_header">الصلاة القادمة</string>
+    <string name="widget_prayer_fallback">افتح زتونة لمزامنة المواقيت</string>
 </resources>

@@ -93,6 +93,19 @@
                 android:resource="@xml/widget_quick_access_info" />
         </receiver>
 
+        <!-- Next Prayer Home-Screen Widget (Proposal #8 / Phase 13.5 Extension) -->
+        <receiver
+            android:name=".NextPrayerWidgetProvider"
+            android:exported="true"
+            android:label="@string/widget_next_prayer_title">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_next_prayer_info" />
+        </receiver>
+
     </application>
 
 </manifest>

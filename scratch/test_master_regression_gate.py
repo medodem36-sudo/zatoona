@@ -287,6 +287,15 @@ REGISTERED_SUITES = [
         "active": True,
         "description": "Verifies native AppWidgetProvider registration, RemoteViews XML layouts, localized Arabic strings, click PendingIntents for 4 core modules, ProGuard rules, and APK packaging."
     },
+    {
+        "id": "phase13_5_next_prayer_widget",
+        "name": "Phase 13.5 Next Prayer Home-Screen Widget (Proposal #8)",
+        "category": "Native Android & Widgets",
+        "rel_path": "scratch/test_phase13_5_next_prayer_widget.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies NextPrayerWidgetProvider, XML RemoteViews, Arabic prayer countdown math, ZatoonaBridge cache sync, ProGuard keep rules, and APK packaging."
+    },
     # Superseded / Obsolete historical gates (excluded by default, enabled via --include-superseded)
     {
         "id": "phase9b1_1_gate",

@@ -1,11 +1,11 @@
 # Zatoona — Master Project Roadmap & Verification Baseline
 
 **Document Path:** `docs/MASTER_ROADMAP.md`
-**Last Updated:** 2026-10-28 15:14:00 +03:00
+**Last Updated:** 2026-10-28 15:25:00 +03:00
 **Repository:** `C:\Users\Lenovo\Documents\GitHub\zatoona`
 **GitHub Remote:** `medodem36-sudo/zatoona` (`main`)
-**Base HEAD:** `0c084914b948bec050330b516dfdd8bebd46a461`
-**Regression Gate Status:** **27 / 27 Suites Passing (1178 / 1178 Checks, 186.22s)**
+**Base HEAD:** `6646bb7`
+**Regression Gate Status:** **28 / 28 Suites Passing (1231 / 1231 Checks, 198.75s)**
 **HTML 3-Way Parity:** **1,357,317 bytes | SHA-256: `04fd5dcfd0417b9170d57d508a3e14329c5aff644db1a3389f029cb6d7ac2dfc`**
 
 ---
@@ -48,7 +48,7 @@ All features and roadmap items are classified under the strict verification stan
 | **Phase 13.8B**| Prayer Qibla Compass Engine & Dial | **Verified Complete** | `test_phase13_qibla_compass.py` (23/23 checks passing). Spherical trigonometry bearing/distance, offline cities, SVG dial, device orientation alignment. | None. |
 | **Phase 13.9** | Custom Habits & Skills Learning Tracker + Share Card | **Verified Complete** | `test_phase13_habits_and_share.py` (29/29 checks passing). Daily custom habits, skills acquisition goals, individual streaks, daily summary social accountability card. | None. |
 | **Phase 13.10** | Smart Notification Grouping (Proposal #14) | **Verified Complete** | `test_phase13_smart_notification_grouping.py` (37/37 checks passing). Concurrent reminder batching, user toggle, Android group summary, deduplication, backup patterns. | None. |
-| **Phase 13.5**| Native Android Home-Screen Widgets (Quick Access) | **Verified Complete** | `test_phase13_5_widgets.py` (57/57 checks passing). Native `AppWidgetProvider`, `RemoteViews` layouts, Arabic strings, 4-module deep-link PendingIntents, ProGuard rules, APK verified. | Next Prayer widget mapped for future extension. |
+| **Phase 13.5**| Native Android Home-Screen Widgets (Quick Access & Next Prayer) | **Verified Complete** | `test_phase13_5_widgets.py` (57/57) & `test_phase13_5_next_prayer_widget.py` (53/53). Native `QuickAccessWidgetProvider` & `NextPrayerWidgetProvider`, RemoteViews layouts, Arabic countdown math, ZatoonaBridge cache sync, APK verified. | None. |
 | **Phase 13.6**| Pantry / Inventory Capability | **Missing** | Scoped as future optional module. Needs UX design to prevent conflicting with existing shopping list. | Low priority. |
 | **Phase 13.7**| Optional Privacy-Conscious AI Assistant | **Planned / Disabled** | Strictly opt-in; no keys or endpoints configured in frontend. | Deferred until core application is finalized. |
 | **Phase 14** | Release Signing Configuration Template | **Verified Complete** | `test_phase14_release_signing.py` (40/40 checks passing). Conditional `signingConfigs.release` in `build.gradle.kts`, `keystore.properties.example` template, `.gitignore` guards, R8 ProGuard rules. | Keystore generation remains manual for security. |
@@ -61,15 +61,14 @@ All features and roadmap items are classified under the strict verification stan
 
 Reconciling `docs/Final_Master_Plan_Acceptance_Audit.md` and the current state, the top unblocked candidate tasks are:
 
-1. **Next Prayer Home-Screen Widget (Proposal #8 / Phase 13.5 Extension):**
-   - **Need:** Dynamic home-screen widget displaying the upcoming prayer name, remaining countdown, and city.
-   - **Scope:** Second `AppWidgetProvider` reading cached prayer times from SharedPreferences.
-   - **Benefit:** At-a-glance prayer awareness from the Android launcher.
-
-2. **Physical Device Reboot Verification Test (Phase 15):**
+1. **Physical Device Reboot Verification Test (Phase 15):**
    - **Need:** Validate `BootReceiver` alarm rescheduling after physical hardware reboot.
    - **Scope:** Physical Samsung Galaxy A04e device test.
    - **Status:** Explicitly held/deferred pending user approval.
+
+2. **Production Release Keystore Generation (Phase 14 / Phase 16):**
+   - **Need:** Generate production `zatoona-release.keystore` and create local `android/keystore.properties` following `keystore.properties.example`.
+   - **Scope:** Developer local action (must not be committed to Git).
    - **Need:** Wire `signingConfigs.release` in `android/app/build.gradle.kts` to safely read credentials from an untracked local file or environment variables without committing keystores or secrets.
    - **Scope:** Gradle build configuration only (no secrets committed).
    - **Benefit:** Prepares the build system for release readiness without risking secret leaks.
@@ -78,5 +77,5 @@ Reconciling `docs/Final_Master_Plan_Acceptance_Audit.md` and the current state, 
 
 ## 4. Next Recommended Task
 
-**Task:** **Next Prayer Home-Screen Widget (Phase 13.5 Extension / Proposal #8)**
-**Rationale:** Following the successful completion of the Quick Access Widget (57/57 checks passing, 27/27 master suites), the Next Prayer widget extends native launcher capabilities by showing upcoming prayer name and countdown from SharedPreferences without opening the app.
+**Task:** **Master Acceptance Audit Reconciliation & Release Verification**
+**Rationale:** With all 28 automated test suites passing (1,231 / 1,231 checks, 100% pass rate) covering Worship, Sleep, Gym, Nutrition, Schedules, Habits, Alarms, Security, Release Signing Template, and both Native Android Widgets (Quick Access & Next Prayer), the application is functionally complete across all planned acceptance criteria. Next step is a clean status reconciliation and handoff.

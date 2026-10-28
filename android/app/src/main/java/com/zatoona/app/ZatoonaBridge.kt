@@ -291,6 +291,10 @@ class ZatoonaBridge(private val context: Context) {
             result.put("syncedCount", array.length())
             result.put("scheduledCount", scheduledCount)
             result.put("timestamp", nowMs)
+
+            // Refresh home-screen Next Prayer widgets if prayer schedules were updated
+            NextPrayerWidgetProvider.updateAllWidgets(context)
+
             return result.toString()
 
         } catch (t: Throwable) {
@@ -322,6 +326,9 @@ class ZatoonaBridge(private val context: Context) {
         val cleanCity = city.trim()
         val staleSchedules = repository.purgeStaleCityPrayers(cleanCity)
         staleSchedules.forEach { scheduler.cancelAlarm(it.id) }
+
+        // Refresh home-screen Next Prayer widgets with newly selected city
+        NextPrayerWidgetProvider.updateAllWidgets(context)
 
         return JSONObject().apply {
             put("status", "ok")
