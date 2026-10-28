@@ -269,6 +269,24 @@ REGISTERED_SUITES = [
         "active": True,
         "description": "Verifies native AlarmManager scheduling, boot/time receivers, notification channels, ZatoonaBridge v2 sync, recurrence math, city isolation, PWA bridge integration, and debug APK packaging."
     },
+    {
+        "id": "phase14_release_signing",
+        "name": "Phase 14 Release Signing Configuration Template",
+        "category": "Build & Release Security",
+        "rel_path": "scratch/test_phase14_release_signing.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies release signing configuration in build.gradle.kts, keystore.properties.example template, .gitignore guards against secrets, ProGuard R8 rules, and debug APK buildability."
+    },
+    {
+        "id": "phase13_5_widgets",
+        "name": "Phase 13.5 Native Android Quick Access Widget (Proposal #7)",
+        "category": "Native Android & Widgets",
+        "rel_path": "scratch/test_phase13_5_widgets.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies native AppWidgetProvider registration, RemoteViews XML layouts, localized Arabic strings, click PendingIntents for 4 core modules, ProGuard rules, and APK packaging."
+    },
     # Superseded / Obsolete historical gates (excluded by default, enabled via --include-superseded)
     {
         "id": "phase9b1_1_gate",

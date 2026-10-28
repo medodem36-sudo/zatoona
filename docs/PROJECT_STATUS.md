@@ -1,13 +1,13 @@
 # Zatoona Project Status & Development Baseline
 
 **Document Path:** `docs/PROJECT_STATUS.md`  
-**Last Updated:** 2026-10-28 12:46:00 +03:00<br>
+**Last Updated:** 2026-10-28 15:14:00 +03:00<br>
 **Repository:** `C:\Users\Lenovo\Documents\GitHub\zatoona`<br>
 **Remote Origin:** `https://github.com/medodem36-sudo/zatoona.git`<br>
 **Active Branch:** `main`<br>
-**Current HEAD:** `c382a50b81d8f740a90a3ec5a9a456982cd8f827`<br>
-**Head Commit Message:** `docs: reconcile project status and alarm audit with HEAD eddaf6d`<br>
-**Working Tree Status:** Clean baseline (`c382a50`); Phase A3 Worship Badges, Phase 13.3B Habit Streaks, Phase 13.5B Battery Guide, Phase 10 Encrypted Backup, Phase 13.6B Fasting Tracker, Phase 13.7B Worship Adherence, Phase 13.8B Qibla Compass, Phase 13.9 Habits/Share Card & Phase 13.10 Smart Notification Grouping implemented; signing protection added to `.gitignore`; `docs/MASTER_ROADMAP.md` established.
+**Current HEAD:** `0c084914b948bec050330b516dfdd8bebd46a461`<br>
+**Head Commit Message:** `ف`<br>
+**Working Tree Status:** Clean baseline (`c382a50`); Phase A3 Worship Badges, Phase 13.3B Habit Streaks, Phase 13.5B Battery Guide, Phase 10 Encrypted Backup, Phase 13.6B Fasting Tracker, Phase 13.7B Worship Adherence, Phase 13.8B Qibla Compass, Phase 13.9 Habits/Share Card, Phase 13.10 Smart Notification Grouping, Phase 14 Release Signing Template & Phase 13.5 Quick Access Widget implemented; signing protection added to `.gitignore`; `docs/MASTER_ROADMAP.md` established.
 
 ---
 
@@ -15,7 +15,30 @@
 
 Zatoona is an offline-first Personal Wellness & Productivity Progressive Web Application (PWA) with an integrated native Android WebView shell (`com.zatoona.app`).
 
-### Active Phase: Phase 13.10 — Smart Notification Grouping (Proposal #14) (Completed & Verified)
+### Active Phase: Phase 13.5 — Native Android Home-Screen Widgets (Proposal #7 Quick Access Widget) (Completed & Verified)
+This phase introduces native Android home-screen widget capabilities providing 1-tap direct access to core application modules without opening the browser:
+1. **Native AppWidgetProvider (`QuickAccessWidgetProvider.kt`):** Implements an Android `AppWidgetProvider` wired to update home-screen widget instances with localized `RemoteViews` layouts and intent routing.
+2. **Four-Module Deep Linking Architecture:** Binds four independent, one-tap navigation targets via `PendingIntent`s targeting `MainActivity` with `EXTRA_MODE`:
+   - 🕌 **الصلوات (`mode="prayer"`):** Instant jump to prayer times, city selection, and worship checklists.
+   - 🏋️ **التمارين (`mode="gym"`):** Quick entry into workout sessions, exercise encyclopedia, and warmup/cooldown flows.
+   - 🥗 **التغذية (`mode="meal"`):** Direct logging of meals, water tracker, and macronutrient targets.
+   - 📅 **الجدول (`mode="schedule"`):** Immediate view of today's schedule activities, habits, and timeline.
+   - 🌿 **شريط العنوان (`widget_header` -> `mode="home"`):** Header tap opens the overview dashboard.
+3. **RTL & Dark Theme XML Layout (`res/layout/widget_quick_access.xml`):** Fully compliant `RemoteViews` layout utilizing `LinearLayout` structures, card background (`#1A202C`), button tiles (`#242C38`), and Arabic typography.
+4. **AppWidget Metadata & Manifest Registration (`res/xml/widget_quick_access_info.xml` & `AndroidManifest.xml`):** Registered with `APPWIDGET_UPDATE` action, home-screen category, minimum dimensions (`250dp x 100dp`), and localized Arabic description.
+5. **ProGuard & Packaging Invariance:** `proguard-rules.pro` preserves `QuickAccessWidgetProvider` from obfuscation. Verified inside compiled APK (`app-debug.apk`, 8,964,453 bytes) with all 4 XML resources and DEX bytecode symbols.
+6. **Automated Verification:** Verified via `scratch/test_phase13_5_widgets.py` (57 / 57 passed) and full master regression gate (27 / 27 suites, 1178 / 1178 checks, 186.22s).
+
+### Prior Phase: Phase 14 — Release Signing Configuration Template (Completed & Verified)
+This phase establishes a secure, modular Android release signing architecture adhering strictly to credential isolation and zero-secret repository principles:
+1. **Conditional Gradle Release Signing Architecture (`android/app/build.gradle.kts`):** Wires `signingConfigs.create("release")` to dynamically read signing keys from `android/keystore.properties` only when the file is present on the local machine (`hasReleaseSigningConfig = keystorePropertiesFile.exists()`), preventing build failures in environments without release credentials.
+2. **Standardized Keystore Properties Template (`android/keystore.properties.example`):** Provides a comprehensive developer template with explicit instructions for `keytool` keystore generation, parameters (`storeFile`, `storePassword`, `keyAlias`, `keyPassword`), and prominent security warnings.
+3. **Repository Secret Guardrail Integrity:** Enforces absolute exclusion of `keystore.properties`, `signing.properties`, `*.keystore`, `*.jks`, and `*.p12` via `.gitignore`. Automated scanner confirms zero keystore files in the repository.
+4. **ProGuard & R8 Optimization Rules (`android/app/proguard-rules.pro`):** Validates that R8 code shrinking and optimization keep all `@android.webkit.JavascriptInterface` methods and the native `ZatoonaBridge` contract without obfuscation or symbol stripping.
+5. **Debug APK Buildability Invariance:** Confirms debug APK compilation and packaging (`app-debug.apk`, 8,964,453 bytes) remains 100% operational and healthy.
+6. **Automated Verification:** Verified via `scratch/test_phase14_release_signing.py` (40 / 40 passed) and full master regression gate (26 / 26 suites, 1121 / 1121 checks, 196.99s).
+
+### Prior Phase: Phase 13.10 — Smart Notification Grouping (Proposal #14) (Completed & Verified)
 This phase introduces intelligent batching of concurrent notifications into unified digest cards to reduce alert fatigue:
 1. **Smart Grouping Engine in `checkAndDispatchDueReminders`:** When multiple reminders fire within the same 15-minute window, they are consolidated into a single grouped notification with itemized list, total count, and mode-priority routing (prayer > schedule > sleep > others).
 2. **User-Configurable Toggle (`smartGrouping` in `NOTIF_SETTINGS_DEFAULT`):** Users can enable/disable grouping via a dedicated checkbox in the notification settings UI, with the setting persisted in `notification-settings` storage.
@@ -131,11 +154,11 @@ All assertions and test gates are recorded in deterministic test execution logs 
 
 ### Master Regression Gate (`scratch/test_master_regression_gate.py`)
 - **Evidence Log:** `scratch/test-results/test_master_report.json` & `scratch/test-results/test_master_report.md`
-- **Execution Timestamp:** 2026-10-28 12:45:53
+- **Execution Timestamp:** 2026-10-28 15:10:09
 - **Gate Status:** **PASS ✅**
-- **Suites Passed:** **25 / 25** (100%)
-- **Total Checks Passed:** **1081 / 1081** (0 failures)
-- **Total Duration:** 189.97s
+- **Suites Passed:** **27 / 27** (100%)
+- **Total Checks Passed:** **1178 / 1178** (0 failures)
+- **Total Duration:** 186.22s
 
 #### Detailed Suite Breakdown
 | Suite ID | Suite Name | Category | Passed Checks | Duration | Status |
@@ -161,12 +184,16 @@ All assertions and test gates are recorded in deterministic test execution logs 
 | `phase13_worship_adherence` | Phase 13.7B Weekly & Monthly Worship Adherence Report | Worship & Analytics | 22 / 22 | 6.44s | PASS ✅ |
 | `phase13_qibla_compass` | Phase 13.8B Prayer Qibla Compass Engine & Dial | Worship & Compass | 23 / 23 | 8.10s | PASS ✅ |
 | `phase13_habits_and_share` | Phase 13.9 Custom Habits/Learning & Share Card | Habits & Productivity | 29 / 29 | 6.38s | PASS ✅ |
-| `phase13_fasting_tracker` | Phase 13.6B Fasting Tracker & Sunnah Days | Worship & Fasting | 18 / 18 | 6.10s | PASS ✅ |
+| `phase13_smart_notification_grouping` | Phase 13.10 Smart Notification Grouping (Proposal #14) | Notifications & UX | 37 / 37 | 5.95s | PASS ✅ |
 | `phase13_4b1` | Phase 13.4B1 Isolated Native Android Shell Foundation | Native Android & Bridge | 50 / 50 | 6.61s | PASS ✅ |
 | `phase13_4b1_2` | Phase 13.4B1.2 Android Toolchain & Buildability Verification | Native Android & Build | 31 / 31 | 0.28s | PASS ✅ |
 | `phase13_4b2` | Phase 13.4B2 Native Android Local Alarm Engine | Native Android & Alarms | 74 / 74 | 0.22s | PASS ✅ |
+| `phase14_release_signing` | Phase 14 Release Signing Configuration Template | Build & Release Security | 40 / 40 | 0.09s | PASS ✅ |
+| `phase13_5_widgets` | Phase 13.5 Native Android Quick Access Widget (Proposal #7) | Native Android & Widgets | 57 / 57 | 0.21s | PASS ✅ |
 
 ### Targeted Test Suites
+- **Native Android Quick Access Widget (`scratch/test_phase13_5_widgets.py`):** **57 / 57 PASSED**
+- **Release Signing Configuration Template (`scratch/test_phase14_release_signing.py`):** **40 / 40 PASSED**
 - **Smart Notification Grouping (`scratch/test_phase13_smart_notification_grouping.py`):** **37 / 37 PASSED**
 - **Custom Habits/Learning & Share Card (`scratch/test_phase13_habits_and_share.py`):** **29 / 29 PASSED**
 - **Prayer Qibla Compass Engine & Dial (`scratch/test_phase13_qibla_compass.py`):** **23 / 23 PASSED**

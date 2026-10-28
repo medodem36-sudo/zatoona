@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">زتونة</string>
+    <string name="widget_quick_access_title">زتونة — وصول سريع</string>
+    <string name="widget_quick_access_description">اختصارات سريعة للوصول المباشر إلى أقسام الصلوات، التمارين، التغذية، والجدول اليومي.</string>
+    <string name="widget_prayer">الصلوات</string>
+    <string name="widget_gym">التمارين</string>
+    <string name="widget_meal">التغذية</string>
+    <string name="widget_schedule">الجدول</string>
 </resources>
