@@ -25,6 +25,7 @@ class ZatoonaNotificationManager(private val context: Context) {
         // Phase 13.10 / Proposal #14: Android notification grouping & summary
         const val GROUP_ZATOONA_REMINDERS = "com.zatoona.app.REMINDERS_GROUP"
         const val NOTIFICATION_ID_GROUP_SUMMARY = 999999
+        const val NOTIFICATION_ID_WORKOUT = 888888
 
         const val EXTRA_MODE = "com.zatoona.app.EXTRA_MODE"
         const val EXTRA_SCHEDULE_ID = "com.zatoona.app.EXTRA_SCHEDULE_ID"
@@ -164,6 +165,44 @@ class ZatoonaNotificationManager(private val context: Context) {
             if (groupCount == 0) {
                 notificationManager.cancel(NOTIFICATION_ID_GROUP_SUMMARY)
             }
+        }
+    }
+
+    fun showWorkoutNotification(title: String, text: String): Boolean {
+        return try {
+            val intent = Intent(context, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                putExtra(EXTRA_MODE, "gym")
+            }
+            val pendingIntent = PendingIntent.getActivity(
+                context,
+                NOTIFICATION_ID_WORKOUT,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0)
+            )
+
+            val builder = NotificationCompat.Builder(context, CHANNEL_REMINDERS)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(title.ifBlank { "تمرين الجيم نشط 🏋️" })
+                .setContentText(text.ifBlank { "مؤقت الراحة والمجموعات قيد التشغيل" })
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setOngoing(true)
+                .setAutoCancel(false)
+                .setContentIntent(pendingIntent)
+
+            notificationManager.notify(NOTIFICATION_ID_WORKOUT, builder.build())
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    fun hideWorkoutNotification(): Boolean {
+        return try {
+            notificationManager.cancel(NOTIFICATION_ID_WORKOUT)
+            true
+        } catch (e: Exception) {
+            false
         }
     }
 }

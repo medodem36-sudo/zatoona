@@ -296,6 +296,51 @@ REGISTERED_SUITES = [
         "active": True,
         "description": "Verifies NextPrayerWidgetProvider, XML RemoteViews, Arabic prayer countdown math, ZatoonaBridge cache sync, ProGuard keep rules, and APK packaging."
     },
+    {
+        "id": "phase13_items_1_and_3",
+        "name": "Phase 13.5 Daily Habits Widget (Proposal #9) & Phase 13.7 Privacy-Conscious Local AI",
+        "category": "Widgets & Local AI",
+        "rel_path": "scratch/test_phase13_items_1_and_3.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies DailyHabitsWidgetProvider, RemoteViews layout and slots, PWA habits bridge sync, and Phase 13.7 opt-in local AI coach offline analysis."
+    },
+    {
+        "id": "phase13_6_pantry",
+        "name": "Phase 13.6 Pantry & Food Inventory Management",
+        "category": "Nutrition & Pantry",
+        "rel_path": "scratch/test_phase13_6_pantry_inventory.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies Pantry & Food Inventory storage, deficit tracking, expiry warnings, smart transfer from shopping, and backup validation."
+    },
+    {
+        "id": "phase1_ui_ergonomics",
+        "name": "Phase 1 UI Ergonomics, AMOLED Theme & Dashboard Engine",
+        "category": "UI & Ergonomics",
+        "rel_path": "scratch/test_phase1_ui_ergonomics.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies AMOLED theme, custom accent colors, large font scaling, compact dashboard mode, dashboard cards reordering, morning briefing card, haptic feedback, and interactive water logging."
+    },
+    {
+        "id": "phase2_study_hub",
+        "name": "Phase 2 Study Hub, Spaced Repetition & Deep Focus Engine",
+        "category": "Study & Learning",
+        "rel_path": "scratch/test_phase2_study_hub.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies independent #studyView, SM-2 flashcard spaced repetition, Pomodoro & Flowmodoro timers, Web Audio offline ambient focus sounds, distraction parking lot, hardcore deep focus fullscreen mode, exam countdown with syllabus progress, Ebbinghaus active recall review planner, Feynman notebook, Cornell notes, vocab bank with random quiz, reading speed estimator, and 100-Hour focus challenge."
+    },
+    {
+        "id": "phase3_gym_engine",
+        "name": "Phase 3 Next-Gen Gym & Strength Engine",
+        "category": "Gym & Strength",
+        "rel_path": "scratch/test_phase3_gym_engine.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies 1RM/RPE calculator, smart warmup sets and plate loader, live exercise swap for busy machines, blacklist exercises manager, muscle recovery heatmap with SVG body map, gym big-numbers focus mode, tempo cadence metronome, injury/pain flagging, and ongoing workout floating HUD with notification bridge."
+    },
     # Superseded / Obsolete historical gates (excluded by default, enabled via --include-superseded)
     {
         "id": "phase9b1_1_gate",

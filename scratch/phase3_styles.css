@@ -1,0 +1,630 @@
+﻿/* ================= PHASE 3: NEXT-GEN GYM & STRENGTH ENGINE STYLES ================= */
+.gym-tools-bar {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 6px 4px 10px 4px;
+  margin-bottom: 14px;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+.gym-tool-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: var(--bg-card, var(--card));
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+.gym-tool-btn:hover {
+  background: var(--bg-2);
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+.gym-tool-btn:active {
+  transform: scale(0.97);
+}
+.gym-tool-icon {
+  font-size: 1.05rem;
+}
+
+/* Modals */
+.gym-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+.gym-modal-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.gym-modal-card {
+  background: var(--bg-card, var(--card));
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 580px;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+  animation: gymModalPop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes gymModalPop {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.gym-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg-2);
+}
+.gym-modal-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.gym-modal-close {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  line-height: 1;
+}
+.gym-modal-close:hover {
+  color: var(--danger, #ef4444);
+  background: rgba(239, 68, 68, 0.1);
+}
+.gym-modal-body {
+  padding: 16px 18px;
+  overflow-y: auto;
+  flex: 1;
+}
+.gym-modal-footer {
+  padding: 12px 18px;
+  border-top: 1px solid var(--line);
+  background: var(--bg-2);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* 1RM Calculator */
+.calc-1rm-result-box {
+  background: linear-gradient(135deg, rgba(52, 211, 153, 0.12), rgba(59, 130, 246, 0.12));
+  border: 1px solid var(--accent);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+.calc-1rm-huge {
+  font-size: 2.5rem;
+  font-weight: 800;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--accent);
+  line-height: 1.1;
+  margin: 6px 0;
+}
+.calc-1rm-formula-note {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.calc-1rm-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin-top: 12px;
+}
+.calc-1rm-table th, .calc-1rm-table td {
+  padding: 8px 10px;
+  text-align: center;
+  border-bottom: 1px solid var(--line);
+}
+.calc-1rm-table th {
+  background: var(--bg-2);
+  font-weight: 600;
+  color: var(--text);
+}
+.calc-1rm-table tr:hover {
+  background: var(--bg-2);
+}
+
+/* Plate Loader */
+.plate-visual-rack {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: var(--bg-2);
+  padding: 20px 10px;
+  border-radius: 12px;
+  border: 1px dashed var(--line);
+  margin-bottom: 16px;
+  min-height: 120px;
+  overflow-x: auto;
+}
+.barbell-sleeve {
+  width: 24px;
+  height: 16px;
+  background: #94a3b8;
+  border-radius: 3px 0 0 3px;
+  border: 1px solid #64748b;
+}
+.plate-disc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.72rem;
+  font-family: 'IBM Plex Mono', monospace;
+  border-radius: 4px;
+  border: 2px solid rgba(0,0,0,0.25);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  transition: transform 0.15s ease;
+}
+.plate-disc:hover { transform: scale(1.05); }
+.plate-disc.p25 { width: 28px; height: 96px; background: #dc2626; }
+.plate-disc.p20 { width: 26px; height: 90px; background: #2563eb; }
+.plate-disc.p15 { width: 24px; height: 78px; background: #ca8a04; }
+.plate-disc.p10 { width: 22px; height: 66px; background: #16a34a; }
+.plate-disc.p5  { width: 18px; height: 52px; background: #64748b; }
+.plate-disc.p2_5{ width: 14px; height: 42px; background: #ef4444; }
+.plate-disc.p1_25{ width: 12px; height: 34px; background: #94a3b8; color:#1e293b; }
+
+.plate-summary-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+  justify-content: center;
+}
+.plate-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+}
+.plate-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* Warmup Sets Table */
+.warmup-sets-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin-top: 10px;
+}
+.warmup-sets-table th, .warmup-sets-table td {
+  padding: 8px 10px;
+  text-align: right;
+  border-bottom: 1px solid var(--line);
+}
+.warmup-sets-table th { background: var(--bg-2); }
+
+/* Live Swap */
+.swap-alt-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
+}
+.swap-alt-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  transition: all 0.15s ease;
+}
+.swap-alt-card:hover {
+  border-color: var(--accent);
+  background: var(--card);
+}
+.swap-alt-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.swap-alt-name {
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--text);
+}
+.swap-alt-sub {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.swap-action-btn {
+  padding: 6px 14px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.swap-action-btn:hover { opacity: 0.9; }
+
+/* Exercise Card Actions Row */
+.ex-p3-actions-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--line);
+}
+.ex-p3-action-btn {
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 6px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.12s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.ex-p3-action-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--card);
+}
+
+/* Pain & Injury Alert */
+.ex-pain-alert {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  margin-top: 8px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid var(--danger, #ef4444);
+  border-radius: 8px;
+  font-size: 0.8rem;
+  color: var(--danger, #ef4444);
+  font-weight: 600;
+}
+.ex-pain-alert button {
+  margin-right: auto;
+  padding: 2px 8px;
+  font-size: 0.72rem;
+  background: var(--danger, #ef4444);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Muscle Recovery Heatmap */
+.recovery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+.recovery-muscle-card {
+  padding: 10px;
+  border-radius: 10px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.recovery-muscle-name {
+  font-weight: 700;
+  font-size: 0.84rem;
+}
+.recovery-muscle-status {
+  font-size: 0.74rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+.recovery-muscle-status.ready { background: rgba(34, 197, 94, 0.15); color: #16a34a; }
+.recovery-muscle-status.recovering { background: rgba(234, 179, 8, 0.15); color: #ca8a04; }
+.recovery-muscle-status.fatigued { background: rgba(239, 68, 68, 0.15); color: #dc2626; }
+.recovery-progress-bar {
+  height: 6px;
+  background: var(--line);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+.recovery-progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+.recovery-progress-fill.ready { background: #22c55e; }
+.recovery-progress-fill.recovering { background: #eab308; }
+.recovery-progress-fill.fatigued { background: #ef4444; }
+
+/* Big Numbers Focus Mode */
+.gym-big-numbers-overlay {
+  position: fixed;
+  inset: 0;
+  background: #000000;
+  color: #ffffff;
+  z-index: 999999;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 24px 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+.gym-big-numbers-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.gbn-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.gbn-ex-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #f8fafc;
+}
+.gbn-set-indicator {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+.gbn-close-btn {
+  background: rgba(255,255,255,0.1);
+  color: #f8fafc;
+  border: 1px solid rgba(255,255,255,0.2);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.gbn-center-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex: 1;
+  gap: 16px;
+}
+.gbn-huge-metrics {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin: 12px 0;
+}
+.gbn-metric-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.gbn-huge-number {
+  font-size: 4.2rem;
+  font-weight: 900;
+  font-family: 'IBM Plex Mono', monospace;
+  color: #38bdf8;
+  line-height: 1;
+}
+.gbn-metric-label {
+  font-size: 0.95rem;
+  color: #94a3b8;
+  font-weight: 600;
+  margin-top: 6px;
+}
+.gbn-stepper {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.gbn-step-btn {
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+  width: 44px;
+  height: 36px;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+.gbn-huge-action-btn {
+  width: 100%;
+  max-width: 420px;
+  padding: 18px 24px;
+  background: #22c55e;
+  color: #052e16;
+  font-size: 1.3rem;
+  font-weight: 800;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(34, 197, 94, 0.4);
+  transition: transform 0.12s, background 0.12s;
+}
+.gbn-huge-action-btn:active {
+  transform: scale(0.98);
+}
+.gbn-rest-mode {
+  text-align: center;
+}
+.gbn-rest-huge-timer {
+  font-size: 5.5rem;
+  font-weight: 900;
+  font-family: 'IBM Plex Mono', monospace;
+  color: #fbbf24;
+  line-height: 1;
+  margin: 10px 0;
+}
+
+/* Tempo Metronome */
+.tempo-circle-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 0;
+}
+.tempo-pulsing-circle {
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  border: 8px solid var(--accent);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+  box-shadow: 0 0 24px rgba(59, 130, 246, 0.25);
+}
+.tempo-step-name {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text);
+}
+.tempo-step-count {
+  font-size: 2.5rem;
+  font-weight: 900;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--accent);
+  line-height: 1;
+}
+
+/* Floating Ongoing Workout HUD */
+.gym-active-hud {
+  position: fixed;
+  bottom: 66px;
+  left: 12px;
+  right: 12px;
+  max-width: 580px;
+  margin: 0 auto;
+  background: var(--bg-card, var(--card));
+  border: 1.5px solid var(--accent);
+  border-radius: 16px;
+  padding: 10px 14px;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.3);
+  z-index: 9990;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: hudSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes hudSlideUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.gym-active-hud.hidden { display: none !important; }
+.hud-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  cursor: pointer;
+  flex: 1;
+  min-width: 0;
+}
+.hud-title {
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.hud-sub {
+  font-size: 0.75rem;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.hud-rest-badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  color: #fbbf24;
+}
+.hud-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.hud-btn-done {
+  padding: 7px 14px;
+  background: var(--good, #22c55e);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.hud-btn-focus {
+  padding: 7px 10px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  color: var(--text);
+  border-radius: 10px;
+  font-size: 0.82rem;
+  cursor: pointer;
+}

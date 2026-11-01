@@ -12,4 +12,10 @@
     <string name="widget_next_prayer_description">عرض اسم الصلاة القادمة وموعدها والوقت المتبقي لها على الشاشة الرئيسية.</string>
     <string name="widget_prayer_header">الصلاة القادمة</string>
     <string name="widget_prayer_fallback">افتح زتونة لمزامنة المواقيت</string>
+
+    <!-- Daily Habits Widget (Proposal #9 / Phase 13.5 Extension) -->
+    <string name="widget_daily_habits_title">زتونة — عادات اليوم</string>
+    <string name="widget_daily_habits_description">عرض قائمة العادات والمهارات اليومية ومستوى الإنجاز اليومي على الشاشة الرئيسية.</string>
+    <string name="widget_habits_header">عادات اليوم</string>
+    <string name="widget_habits_empty">لا توجد عادات مسجلة — اضغط للإضافة</string>
 </resources>

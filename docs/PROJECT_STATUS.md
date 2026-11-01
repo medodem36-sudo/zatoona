@@ -1,13 +1,13 @@
 # Zatoona Project Status & Development Baseline
 
 **Document Path:** `docs/PROJECT_STATUS.md`  
-**Last Updated:** 2026-10-28 15:25:00 +03:00<br>
+**Last Updated:** 2026-11-02 00:20:00 +02:00<br>
 **Repository:** `C:\Users\Lenovo\Documents\GitHub\zatoona`<br>
 **Remote Origin:** `https://github.com/medodem36-sudo/zatoona.git`<br>
 **Active Branch:** `main`<br>
-**Current HEAD:** `6646bb7`<br>
+**Current HEAD:** `abc343fe31fa2efae1090cc142059db836b3ca67`<br>
 **Head Commit Message:** `Widget`<br>
-**Working Tree Status:** Clean baseline (`c382a50`); Phase A3 Worship Badges, Phase 13.3B Habit Streaks, Phase 13.5B Battery Guide, Phase 10 Encrypted Backup, Phase 13.6B Fasting Tracker, Phase 13.7B Worship Adherence, Phase 13.8B Qibla Compass, Phase 13.9 Habits/Share Card, Phase 13.10 Smart Notification Grouping, Phase 14 Release Signing Template & Phase 13.5 Quick Access & Next Prayer Widgets implemented; signing protection added to `.gitignore`; `docs/MASTER_ROADMAP.md` established.
+**Working Tree Status:** Phase 1 (UI Ergonomics & AMOLED Theme), Phase 2 (Study Hub & Spaced Repetition Engine), and Phase 3 (Next-Gen Gym & Strength Engine) implemented and verified across 3-way HTML parity (`61d980a5fcf0...`). Master Regression Gate: 33 / 33 suites passed, 1,389 / 1,389 checks passed (100% green).
 
 ---
 
@@ -15,14 +15,54 @@
 
 Zatoona is an offline-first Personal Wellness & Productivity Progressive Web Application (PWA) with an integrated native Android WebView shell (`com.zatoona.app`).
 
-### Active Phase: Phase 13.5 — Native Android Home-Screen Widgets (Proposals #7 & #8) (Completed & Verified)
+### Active Phase: Phase 4 — Smart Nutrition, Pantry & Budget Engine (In Progress)
+Following the completion and full automated verification of Phase 1, Phase 2, and Phase 3 of the Zatoona Grand Blueprint, Phase 4 focuses on intelligent nutrition optimization, budget efficiency, and food waste reduction:
+1. **Smart Pantry Meal Suggestions ("أطبخ إيه من المؤن المتاحة؟"):** Compares pantry items with recipes and meals to suggest zero-waste high-protein meals.
+2. **Protein-to-Cost Calculator for Egyptian Athletes:** Real-time cost-per-gram calculation and ranking for local protein sources.
+3. **Quick-Add Favorite Combos:** 1-tap addition of frequent meal combinations directly into daily logs.
+4. **Smart Carb Cycling Planner:** Automated carbohydrate and caloric tailoring synchronized with gym workout/rest days.
+5. **Weekly Caloric Deficit Progress Bar:** Visual tracking of weekly cumulative energy deficit and expected fat loss.
+6. **Sodium/Potassium Balance + Remaining Daily Spending Allowance:** Electrolyte water retention gauge and dynamic daily budget allowance.
+
+### Completed Phase: Phase 3 — Next-Gen Gym & Strength Engine (Completed & Verified)
+This phase upgrades the strength and workout encyclopedia into a world-class bodybuilding and fitness companion:
+1. **1RM & RPE/RIR Calculator (`calculate1RM`, `#gym1RMModal`):** Multi-formula 1RM calculation (Brzycki, Epley, Lander, Lombardi) with full percentage breakdown (50% to 100%) and RPE 6-10 / RIR 0-4 adjustment table.
+2. **Smart Warm-up Progression & Plate Loader (`renderWarmupProgression`, `#gymWarmupModal`):** 5-stage progressive ramp-up sets and visual plate breakdown (20kg, 15kg, 10kg, 5kg, 2.5kg, 1.25kg) for Olympic 20kg bar.
+3. **Live Exercise Swap ("الجهاز مشغول؟") (`#gymSwapModal`):** Instant alternate exercise discovery matching target muscle groups with 1-tap substitution.
+4. **Blacklist / Excluded Exercises Manager (`#gymBlacklistModal`):** Ability to exclude and hide exercises with reason tagging, fully synced with `excludedExercises`.
+5. **Muscle Recovery Heatmap (`#gymHeatmapModal`):** Interactive SVG anatomical body map (chest, back, shoulders, arms, legs, core) color-coded by rest duration (Ready, Recovering, Fatigued).
+6. **Gym Big-Numbers Focus Mode (`#gymFocusOverlay`):** Fullscreen ultra-high contrast dark mode overlay for gym floor usage.
+7. **Tempo Cadence Metronome (`#gymTempoModal`):** Auditory/visual metronome for eccentric, pause, and concentric repetition cadences.
+8. **Injury & Pain Flagging (`#gymPainModal`):** Per-exercise joint/muscle pain tracking with severity tags and cautionary warnings on exercise cards.
+9. **Android Ongoing Workout Notification & HUD:** Real-time workout duration and set tracking via floating HUD and native Android status bar notification (`ZatoonaBridge.showWorkoutNotification`).
+10. **Automated Verification:** Verified via `scratch/test_phase3_gym_engine.py` (14 / 14 passed) and full master regression gate (33 / 33 suites, 1,389 / 1,389 checks, 299.98s).
+
+### Completed Phase: Phase 2 — Study Hub, Spaced Repetition & Deep Focus Engine (Completed & Verified)
+Dedicated self-directed learning and study management workspace (`#studyView`) featuring:
+1. Flashcards & SuperMemo SM-2 Spaced Repetition engine.
+2. Subject-by-Subject Stop-Timer and 100-Hour Focus Challenge.
+3. Offline Pomodoro with ambient sound generators (Brown Noise, Rain, Library).
+4. Distraction Parking Lot for session clarity.
+5. Exam countdowns and syllabus chapter progression tracking.
+6. Feynman Explainer notebook, Cornell notes grid, and subject vocab bank.
+7. Verified via `scratch/test_phase2_study_hub.py` (15 / 15 passed).
+
+### Completed Phase: Phase 1 — UI Ergonomics, AMOLED Theme & Dashboard Engine (Completed & Verified)
+1. Pitch Black AMOLED theme with ultra-deep contrasts.
+2. Customizable drag-and-drop dashboard cards ordering.
+3. Compact dashboard layout view.
+4. 1-tap clear completed tasks and top pinning.
+5. Accent color and font scaling customizations.
+6. Verified via `scratch/test_phase1_ui_ergonomics.py` (12 / 12 passed).
+
+### Prior Phase: Phase 13.5 — Native Android Home-Screen Widgets (Proposals #7 & #8) (Completed & Verified)
 This phase introduces a complete suite of native Android home-screen widgets providing instant awareness and one-tap deep navigation directly from the phone's launcher:
 1. **Quick Access Widget (`QuickAccessWidgetProvider.kt` & `widget_quick_access.xml`):** Provides 4 direct one-tap shortcut buttons to core app modules (🕌 الصلوات `prayer`, 🏋️ التمارين `gym`, 🥗 التغذية `meal`, 📅 الجدول `schedule`) and header dashboard navigation (`home`).
 2. **Next Prayer Widget (`NextPrayerWidgetProvider.kt` & `widget_next_prayer.xml`):** Displays upcoming prayer name, scheduled time in Arabic 12-hour format (`ص` / `م`), active city badge (`القاهرة` / `الإسكندرية` / `المنيا`), and live natural Arabic countdown grammar (`⏳ باقي ساعة و 25 دقيقة` / `⏳ باقي 45 دقيقة` / `حان وقت الصلاة الآن`).
 3. **Dynamic Bridge Resynchronization (`ZatoonaBridge.kt`):** Automatically updates all active Next Prayer widgets via `NextPrayerWidgetProvider.updateAllWidgets(context)` whenever prayer times are synchronized (`syncSchedules`) or the prayer city is changed (`updateActivePrayerCity`) from the PWA.
 4. **Pure RemoteViews & Dark Theme RTL Layouts:** Strict adherence to Android `RemoteViews` constraints (`LinearLayout`, `TextView`, `ImageView`), rounded cards (`#1A202C`), and high-contrast typography.
 5. **Security, ProGuard & APK Packaging:** Protected by ProGuard rules, registered in `AndroidManifest.xml`, and verified inside compiled APK (`app-debug.apk`, 8,964,453 bytes) with both providers in `classes.dex` and all XML resources packaged.
-6. **Automated Verification:** Verified via `scratch/test_phase13_5_widgets.py` (57 / 57 passed), `scratch/test_phase13_5_next_prayer_widget.py` (53 / 53 passed), and full master regression gate (28 / 28 suites, 1231 / 1231 checks, 198.75s).
+6. **Automated Verification:** Verified via `scratch/test_phase13_5_widgets.py` (57 / 57 passed), `scratch/test_phase13_5_next_prayer_widget.py` (53 / 53 passed), and full master regression gate (31 / 31 suites, 1360 / 1360 checks, 198.75s).
 
 ### Prior Phase: Phase 14 — Release Signing Configuration Template (Completed & Verified)
 This phase establishes a secure, modular Android release signing architecture adhering strictly to credential isolation and zero-secret repository principles:
@@ -129,8 +169,8 @@ The application maintains a strict multi-copy synchronization policy across its 
 - `android/app/src/main/assets/index.html` (Native Android WebView asset)
 
 ### Verification Metrics
-- **Exact File Size:** **1,357,317 bytes** across all three files.
-- **SHA-256 Hash:** `04fd5dcfd0417b9170d57d508a3e14329c5aff644db1a3389f029cb6d7ac2dfc` across all three files.
+- **Exact File Size:** **1,422,802 bytes** across all three files.
+- **SHA-256 Hash:** `d375b9c8cf43a22f42b9ab1a63e83baf567ec75a5437054b3c637db1aee2f624` across all three files.
 - **Byte-by-Byte Memory Comparison:** `100% Identical` (verified via SHA-256 equality).
 - **Whitespace / Syntax Check (`git diff --check`):** **CLEAN** (0 errors, 0 trailing whitespaces).
 - **Net Line Changes (`git diff --stat`):**
@@ -151,8 +191,8 @@ All assertions and test gates are recorded in deterministic test execution logs 
 - **Evidence Log:** `scratch/test-results/test_master_report.json` & `scratch/test-results/test_master_report.md`
 - **Execution Timestamp:** 2026-10-28 15:21:50
 - **Gate Status:** **PASS ✅**
-- **Suites Passed:** **28 / 28** (100%)
-- **Total Checks Passed:** **1231 / 1231** (0 failures)
+- **Suites Passed:** **31 / 31** (100%)
+- **Total Checks Passed:** **1360 / 1360** (0 failures)
 - **Total Duration:** 198.75s
 
 #### Detailed Suite Breakdown
@@ -186,8 +226,14 @@ All assertions and test gates are recorded in deterministic test execution logs 
 | `phase14_release_signing` | Phase 14 Release Signing Configuration Template | Build & Release Security | 40 / 40 | 0.09s | PASS ✅ |
 | `phase13_5_widgets` | Phase 13.5 Native Android Quick Access Widget (Proposal #7) | Native Android & Widgets | 57 / 57 | 0.27s | PASS ✅ |
 | `phase13_5_next_prayer_widget` | Phase 13.5 Next Prayer Home-Screen Widget (Proposal #8) | Native Android & Widgets | 53 / 53 | 0.29s | PASS ✅ |
+| phase13_items_1_and_3 | Phase 13.5 Daily Habits Widget (Proposal #9) & Phase 13.7 Privacy-Conscious Local AI | Widgets & AI Coach | 66 / 66 | 0.26s | PASS ✅ |
+| phase13_6_pantry | Phase 13.6 Pantry & Food Inventory Management | Meals & Pantry | 51 / 51 | 5.06s | PASS ✅ |
+| `phase1_ui_ergonomics` | Phase 1 UI Ergonomics, AMOLED Theme & Dashboard Engine | UI & Ergonomics | 12 / 12 | 5.87s | PASS ✅ |
 
 ### Targeted Test Suites
+- **Phase 1 UI Ergonomics & Dashboard Engine (`scratch/test_phase1_ui_ergonomics.py`):** **12 / 12 PASSED**
+- **Pantry & Food Inventory Management (scratch/test_phase13_6_pantry_inventory.py):** **51 / 51 PASSED**
+- **Daily Habits Widget & Local AI Assistant (scratch/test_phase13_items_1_and_3.py):** **66 / 66 PASSED**
 - **Next Prayer Home-Screen Widget (`scratch/test_phase13_5_next_prayer_widget.py`):** **53 / 53 PASSED**
 - **Native Android Quick Access Widget (`scratch/test_phase13_5_widgets.py`):** **57 / 57 PASSED**
 - **Release Signing Configuration Template (`scratch/test_phase14_release_signing.py`):** **40 / 40 PASSED**

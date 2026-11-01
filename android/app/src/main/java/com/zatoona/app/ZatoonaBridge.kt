@@ -26,6 +26,7 @@ class ZatoonaBridge(private val context: Context) {
         const val SCHEMA_VERSION_V2 = "v2"
         const val PREFS_NAME = "zatoona_alarms_prefs"
         const val KEY_ALARMS_CACHE = "cached_upcoming_alarms_v1"
+        const val KEY_DAILY_HABITS_CACHE = "daily_habits_cache_v1"
         const val MAX_PAYLOAD_LENGTH = 131072 // 128 KB
         const val MAX_ALARM_ITEMS = 60
         const val MAX_TITLE_LENGTH = 120
@@ -336,6 +337,114 @@ class ZatoonaBridge(private val context: Context) {
             put("purgedStaleCount", staleSchedules.size)
             put("timestamp", System.currentTimeMillis())
         }.toString()
+    }
+
+    @JavascriptInterface
+    fun syncDailyHabits(payloadJson: String?): String {
+        try {
+            if (payloadJson == null || payloadJson.isBlank()) {
+                return errorResponse("EMPTY_PAYLOAD", "Payload cannot be null or empty.")
+            }
+            if (payloadJson.length > MAX_PAYLOAD_LENGTH) {
+                return errorResponse("PAYLOAD_OVERSIZED", "Payload exceeds maximum allowed size.")
+            }
+
+            val obj = try {
+                JSONObject(payloadJson)
+            } catch (e: JSONException) {
+                return errorResponse("INVALID_JSON", "Payload is not valid JSON: ${e.message}")
+            }
+
+            val version = obj.optString("schemaVersion", SCHEMA_VERSION)
+            if (version != SCHEMA_VERSION) {
+                return errorResponse("UNSUPPORTED_SCHEMA", "Unsupported schemaVersion: $version")
+            }
+
+            val totalCount = obj.optInt("totalCount", 0)
+            val doneCount = obj.optInt("doneCount", 0)
+
+            // Cache payload in shared preferences
+            prefs.edit().putString(KEY_DAILY_HABITS_CACHE, payloadJson).apply()
+
+            // Refresh home-screen Daily Habits widgets
+            DailyHabitsWidgetProvider.updateAllWidgets(context)
+
+            return JSONObject().apply {
+                put("status", "ok")
+                put("totalCount", totalCount)
+                put("doneCount", doneCount)
+                put("timestamp", System.currentTimeMillis())
+            }.toString()
+        } catch (t: Throwable) {
+            return errorResponse("INTERNAL_ERROR", "syncDailyHabits error: ${t.message}")
+        }
+    }
+
+    @JavascriptInterface
+    fun getDailyHabitsCache(): String {
+        return prefs.getString(KEY_DAILY_HABITS_CACHE, "{}") ?: "{}"
+    }
+
+    @JavascriptInterface
+    fun triggerHaptic(durationMs: Long = 15): String {
+        return try {
+            val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                val vm = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as? android.os.VibratorManager
+                vm?.defaultVibrator
+            } else {
+                @Suppress("DEPRECATION")
+                context.getSystemService(Context.VIBRATOR_SERVICE) as? android.os.Vibrator
+            }
+
+            if (vibrator != null && vibrator.hasVibrator()) {
+                val safeMs = durationMs.coerceIn(5, 500)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    vibrator.vibrate(android.os.VibrationEffect.createOneShot(safeMs, android.os.VibrationEffect.DEFAULT_AMPLITUDE))
+                } else {
+                    @Suppress("DEPRECATION")
+                    vibrator.vibrate(safeMs)
+                }
+                JSONObject().apply {
+                    put("status", "ok")
+                    put("durationMs", safeMs)
+                }.toString()
+            } else {
+                JSONObject().apply {
+                    put("status", "skipped")
+                    put("reason", "NO_VIBRATOR")
+                }.toString()
+            }
+        } catch (e: Exception) {
+            errorResponse("HAPTIC_FAILED", e.message ?: "Unknown vibration error")
+        }
+    }
+
+    @JavascriptInterface
+    fun showWorkoutNotification(title: String, text: String): String {
+        return try {
+            val notifManager = ZatoonaNotificationManager(context)
+            val success = notifManager.showWorkoutNotification(title, text)
+            JSONObject().apply {
+                put("status", if (success) "ok" else "error")
+                put("shown", success)
+            }.toString()
+        } catch (e: Exception) {
+            errorResponse("WORKOUT_NOTIF_FAILED", e.message ?: "Failed to show workout notification")
+        }
+    }
+
+    @JavascriptInterface
+    fun hideWorkoutNotification(): String {
+        return try {
+            val notifManager = ZatoonaNotificationManager(context)
+            val success = notifManager.hideWorkoutNotification()
+            JSONObject().apply {
+                put("status", if (success) "ok" else "error")
+                put("hidden", success)
+            }.toString()
+        } catch (e: Exception) {
+            errorResponse("WORKOUT_NOTIF_CANCEL_FAILED", e.message ?: "Failed to hide workout notification")
+        }
     }
 
     @JavascriptInterface

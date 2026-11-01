@@ -11,3 +11,6 @@
 
 # Keep NextPrayerWidgetProvider
 -keep class com.zatoona.app.NextPrayerWidgetProvider { *; }
+
+# Keep DailyHabitsWidgetProvider
+-keep class com.zatoona.app.DailyHabitsWidgetProvider { *; }
