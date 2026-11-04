@@ -25,3 +25,5 @@
 # Keep WaterWidgetProvider & ScheduleWidgetProvider
 -keep class com.zatoona.app.WaterWidgetProvider { *; }
 -keep class com.zatoona.app.ScheduleWidgetProvider { *; }
+-keep class com.zatoona.app.ScheduleWidgetService { *; }
+-keep class com.zatoona.app.ScheduleRemoteViewsFactory { *; }

@@ -14003,6 +14003,8 @@ function initNotificationScheduler(){
   try { syncRemindersToNativeBridge(); } catch(e){ console.warn('[native-bridge] init sync error:', e); }
   // Phase 13.5: sync daily habits to native Android widget
   try { syncDailyHabitsToNativeBridge(); } catch(e){ console.warn('[native-bridge] habits sync error:', e); }
+  try { if(typeof syncScheduleToNativeWidget === 'function') syncScheduleToNativeWidget(); } catch(e){}
+  try { if(typeof syncWaterToNativeWidget === 'function' && typeof waterCount !== 'undefined') syncWaterToNativeWidget(waterCount); } catch(e){}
 }
 /* ================= NATIVE BRIDGE SYNC (Phase 13.4B2) ================= */
 function isNativeBridgeAvailable(){
@@ -14413,7 +14415,7 @@ function fmtDate(d){ return d.toLocaleDateString('ar-EG', {day:'2-digit', month:
 function loadDayStatus(iso){ return storageGetJSON('meals:'+iso, {}); }
 function saveDayStatus(iso, obj){ storageSet('meals:'+iso, JSON.stringify(obj)); }
 function loadWater(iso){ const raw = storageGet('water:'+iso); return raw ? parseInt(raw,10) : 0; }
-function saveWater(iso, n){ storageSet('water:'+iso, String(n)); }
+function saveWater(iso, n){ storageSet('water:'+iso, String(n)); try { if(typeof syncWaterToNativeWidget === 'function') syncWaterToNativeWidget(n); } catch(e){} }
 function loadShopping(){ return storageGetJSON('shopping', {}); }
 function saveShopping(obj){ storageSet('shopping', JSON.stringify(obj)); }
 
@@ -24658,7 +24660,7 @@ function loadScheduleSettings(){
 }
 function saveScheduleSettings(obj){ storageSet('schedule-settings', JSON.stringify(obj)); }
 function loadScheduleCheck(iso){ return storageGetJSON('schedcheck:'+iso, {}); }
-function saveScheduleCheck(iso,obj){ storageSet('schedcheck:'+iso, JSON.stringify(obj)); }
+function saveScheduleCheck(iso,obj){ storageSet('schedcheck:'+iso, JSON.stringify(obj)); try { if(typeof syncScheduleToNativeWidget === 'function') syncScheduleToNativeWidget(); } catch(e){} }
 
 /* ================= SCHEDULE: TIME HELPERS ================= */
 function schedTimeToMin(hhmm){ if(!hhmm) return null; const p=hhmm.split(':').map(Number); if(p.length<2||isNaN(p[0])||isNaN(p[1])) return null; return p[0]*60+p[1]; }
@@ -24941,7 +24943,7 @@ function buildDaySchedule(dayIdx, settings, explicitIso){
 function schedUid(){ return 's'+Date.now().toString(36)+Math.random().toString(36).slice(2,8); }
 
 function loadDayActs(iso){ return storageGetJSON('sched-acts:'+iso, null); }
-function saveDayActs(iso, rec){ storageSet('sched-acts:'+iso, JSON.stringify(rec)); }
+function saveDayActs(iso, rec){ storageSet('sched-acts:'+iso, JSON.stringify(rec)); try { if(typeof syncScheduleToNativeWidget === 'function') syncScheduleToNativeWidget(); } catch(e){} }
 function loadSeriesOverrides(){ return storageGetJSON('sched-series-overrides', {}); }
 function saveSeriesOverrides(obj){ storageSet('sched-series-overrides', JSON.stringify(obj)); }
 function loadSchedRecurringDefs(){ return storageGetJSONArray('sched-recurring-defs'); }
@@ -27682,6 +27684,7 @@ function renderSchedule(){
   renderScheduleSleepBlock(rec);
   renderScheduleChecklist(selectedIdx, scheduleSettings);
   renderCustomHabitsTracker();
+  try { if(typeof syncScheduleToNativeWidget === 'function') syncScheduleToNativeWidget(); } catch(e){}
 }
 
 /* ================= RENDER: WEEKLY TIME BUDGET (Overview) ================= */
@@ -43996,32 +43999,81 @@ function syncWaterToNativeWidget(waterCount){
 function syncScheduleToNativeWidget(){
   if(window.ZatoonaNativeBridge && typeof window.ZatoonaNativeBridge.syncScheduleWidget === 'function'){
     try {
-      const items = (typeof scheduleChecklistItems === 'function') ? scheduleChecklistItems(selectedIdx, scheduleSettings) : [];
+      const dayIdx = (typeof selectedIdx !== 'undefined') ? selectedIdx : (new Date().getDay() + 1) % 7;
+      const settings = (typeof scheduleSettings !== 'undefined') ? scheduleSettings : (typeof loadScheduleSettings === 'function' ? loadScheduleSettings() : { collegeDays: [false,false,false,false,false,false,false] });
+      const items = (typeof scheduleChecklistItems === 'function') ? scheduleChecklistItems(dayIdx, settings) : [];
       const total = items.length;
       let completed = 0;
-      let nextTitle = 'جدول اليوم منظم';
+      let nextTitle = 'جدول اليوم منظم ومحدد';
       let nextTime = 'اضغط لعرض الأنشطة';
+      const widgetItems = [];
+
+      // 1. Add Timeline Activities for today
+      try {
+        const iso = (typeof toISO === 'function' && typeof weekDates !== 'undefined' && weekDates[dayIdx]) ? toISO(weekDates[dayIdx]) : (typeof toISO === 'function' ? toISO(new Date()) : null);
+        if(iso && typeof getDaySchedRecord === 'function'){
+          const rec = getDaySchedRecord(iso, dayIdx, settings);
+          if(rec && Array.isArray(rec.acts)){
+            const sortedActs = rec.acts.slice().sort((a,b)=> (a.start||0) - (b.start||0));
+            sortedActs.forEach(act => {
+              const startStr = typeof schedMinToTime12 === 'function' ? schedMinToTime12(act.start) : `${Math.floor(act.start/60)}:${act.start%60}`;
+              const endStr = typeof schedMinToTime12 === 'function' ? schedMinToTime12(act.end) : `${Math.floor(act.end/60)}:${act.end%60}`;
+              const actName = act.name || 'نشاط مجدول';
+              const iconPrefix = act.icon ? (act.icon + ' ') : '⏰ ';
+              widgetItems.push({
+                title: iconPrefix + actName,
+                time: `${startStr} - ${endStr}`,
+                completed: false,
+                isActivity: true
+              });
+            });
+          }
+        }
+      } catch(actErr){
+        console.warn('[bridge] schedule acts sync:', actErr);
+      }
+
+      // 2. Add Checklist tasks for today
       if(items && items.length > 0){
         items.forEach(it => {
-          if(scheduleCheckState && scheduleCheckState[it.id]) completed++;
-          else if(nextTitle === 'جدول اليوم منظم'){
-            nextTitle = it.title || it.text || nextTitle;
-            nextTime = it.time || nextTime;
-          }
+          const isDone = Boolean(scheduleCheckState && scheduleCheckState[it.key]);
+          if(isDone) completed++;
+          const taskLabel = it.label || it.title || it.text || 'مهمة';
+          const iconPrefix = it.icon ? (it.icon + ' ') : '✓ ';
+          widgetItems.push({
+            title: iconPrefix + taskLabel,
+            time: isDone ? 'مكتملة ✓' : 'مهمة يومية',
+            completed: isDone,
+            isActivity: false
+          });
         });
       }
+
+      if(widgetItems.length > 0){
+        const firstPending = widgetItems.find(x => !x.completed);
+        if(firstPending){
+          nextTitle = firstPending.title;
+          nextTime = firstPending.time;
+        } else {
+          nextTitle = widgetItems[0].title;
+          nextTime = widgetItems[0].time;
+        }
+      }
+
       window.ZatoonaNativeBridge.syncScheduleWidget(JSON.stringify({
         currentTaskTitle: nextTitle,
         currentTaskTime: nextTime,
         summaryText: `${completed} من ${total} مهام مكتملة`,
         completedCount: completed,
-        totalCount: total
+        totalCount: total,
+        items: widgetItems
       }));
     } catch(e){
       console.warn('[bridge] schedule sync error:', e);
     }
   }
 }
+window.syncScheduleToNativeWidget = syncScheduleToNativeWidget;
 
 </script>
 <div id="screenFlashOverlay" class="screen-flash-overlay"></div>

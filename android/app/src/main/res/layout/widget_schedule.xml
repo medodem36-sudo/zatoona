@@ -2,17 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_schedule_root"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/bg_widget_card"
-    android:padding="12dp">
+    android:padding="10dp">
 
     <!-- Header bar with icon and title -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:paddingBottom="6dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -38,38 +39,36 @@
             android:background="@drawable/bg_widget_button"
             android:paddingHorizontal="8dp"
             android:paddingVertical="2dp"
-            android:text="جدول اليوم"
+            android:text="اليوم"
             android:textColor="#A0AEC0"
             android:textSize="11sp" />
     </LinearLayout>
 
-    <!-- Main Schedule Activity Row -->
-    <LinearLayout
+    <!-- Scrollable Schedule & Tasks List -->
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@drawable/bg_widget_button"
-        android:padding="8dp"
-        android:layout_marginTop="8dp">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginVertical="4dp">
+
+        <ListView
+            android:id="@+id/widget_schedule_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="4dp"
+            android:scrollbars="vertical" />
 
         <TextView
-            android:id="@+id/widget_schedule_current_title"
+            android:id="@+id/widget_schedule_empty_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="لا توجد أنشطة قادمة حالياً"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/widget_schedule_current_time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:text="اضغط لعرض أو ضبط جدول اليوم"
-            android:textColor="#34D399"
-            android:textSize="12sp" />
-    </LinearLayout>
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/widget_schedule_empty"
+            android:textColor="#A0AEC0"
+            android:textSize="12sp"
+            android:visibility="gone" />
+    </FrameLayout>
 
     <!-- Bottom summary & action row -->
     <LinearLayout
@@ -77,21 +76,21 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:layout_marginTop="8dp">
+        android:paddingTop="6dp">
 
         <TextView
             android:id="@+id/widget_schedule_summary_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="الجدول اليومي المنظم"
+            android:text="@string/widget_schedule_summary_default"
             android:textColor="#A0AEC0"
             android:textSize="11sp" />
 
         <Button
             android:id="@+id/widget_schedule_btn_open"
             android:layout_width="wrap_content"
-            android:layout_height="32dp"
+            android:layout_height="30dp"
             android:background="@drawable/bg_widget_button"
             android:text="@string/widget_schedule_open"
             android:textColor="#F59E0B"

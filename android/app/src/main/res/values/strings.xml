@@ -50,4 +50,6 @@
     <string name="widget_schedule_description">عرض أنشطة ومواعيد جدولك اليومي ومتابعة التقدم والمهام مباشرة على الشاشة الرئيسية.</string>
     <string name="widget_schedule_header">📅 جدول اليوم والأنشطة</string>
     <string name="widget_schedule_open">فتح الجدول ↗</string>
+    <string name="widget_schedule_empty">لا توجد مهام أو أنشطة مسجلة لليوم</string>
+    <string name="widget_schedule_summary_default">الجدول اليومي وقائمة المهام</string>
 </resources>

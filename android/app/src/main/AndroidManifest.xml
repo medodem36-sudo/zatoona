@@ -161,6 +161,12 @@
                 android:resource="@xml/widget_schedule_info" />
         </receiver>
 
+        <!-- Service providing collection data for ScheduleWidget scrollable ListView -->
+        <service
+            android:name=".ScheduleWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"
+            android:exported="false" />
+
         <!-- All-in-One Daily Home-Screen Widget (Package F / Feature 88) -->
         <receiver
             android:name=".AllInOneDailyWidgetProvider"
