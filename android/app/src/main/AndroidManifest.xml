@@ -126,10 +126,39 @@
             android:label="@string/widget_study_title">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.zatoona.app.ACTION_TOGGLE_STUDY_TIMER" />
+                <action android:name="com.zatoona.app.ACTION_RESET_STUDY_TIMER" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_study_info" />
+        </receiver>
+
+        <!-- Water Tracker Home-Screen Widget (Interactive Hydration) -->
+        <receiver
+            android:name=".WaterWidgetProvider"
+            android:exported="true"
+            android:label="@string/widget_water_title">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.zatoona.app.ACTION_ADD_WATER" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_water_info" />
+        </receiver>
+
+        <!-- Daily Schedule Home-Screen Widget -->
+        <receiver
+            android:name=".ScheduleWidgetProvider"
+            android:exported="true"
+            android:label="@string/widget_schedule_title">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_schedule_info" />
         </receiver>
 
         <!-- All-in-One Daily Home-Screen Widget (Package F / Feature 88) -->

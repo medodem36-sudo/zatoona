@@ -29,6 +29,8 @@ class ZatoonaBridge(private val context: Context) {
         const val KEY_DAILY_HABITS_CACHE = "daily_habits_cache_v1"
         const val KEY_STUDY_CACHE = "study_widget_cache_v1"
         const val KEY_ALL_IN_ONE_CACHE = "all_in_one_widget_cache_v1"
+        const val KEY_WATER_CACHE = "water_widget_cache_v1"
+        const val KEY_SCHEDULE_CACHE = "schedule_widget_cache_v1"
         const val MAX_PAYLOAD_LENGTH = 131072 // 128 KB
         const val MAX_ALARM_ITEMS = 60
         const val MAX_TITLE_LENGTH = 120
@@ -554,6 +556,62 @@ class ZatoonaBridge(private val context: Context) {
     @JavascriptInterface
     fun getAllInOneWidgetCache(): String {
         return prefs.getString(KEY_ALL_IN_ONE_CACHE, "{}") ?: "{}"
+    }
+
+    /**
+     * Sync Water Tracker Widget
+     */
+    @JavascriptInterface
+    fun syncWaterWidget(payloadJson: String): String {
+        val res = JSONObject()
+        try {
+            if (payloadJson.length > MAX_PAYLOAD_LENGTH) {
+                res.put("status", "error")
+                res.put("message", "Payload exceeds maximum length")
+                return res.toString()
+            }
+            val json = JSONObject(payloadJson)
+            prefs.edit().putString(KEY_WATER_CACHE, json.toString()).apply()
+            WaterWidgetProvider.updateAllWidgets(context)
+            res.put("status", "ok")
+        } catch (e: Exception) {
+            res.put("status", "error")
+            res.put("message", e.message ?: "Invalid JSON")
+        }
+        return res.toString()
+    }
+
+    @JavascriptInterface
+    fun getWaterWidgetCache(): String {
+        return prefs.getString(KEY_WATER_CACHE, "{}") ?: "{}"
+    }
+
+    /**
+     * Sync Daily Schedule Widget
+     */
+    @JavascriptInterface
+    fun syncScheduleWidget(payloadJson: String): String {
+        val res = JSONObject()
+        try {
+            if (payloadJson.length > MAX_PAYLOAD_LENGTH) {
+                res.put("status", "error")
+                res.put("message", "Payload exceeds maximum length")
+                return res.toString()
+            }
+            val json = JSONObject(payloadJson)
+            prefs.edit().putString(KEY_SCHEDULE_CACHE, json.toString()).apply()
+            ScheduleWidgetProvider.updateAllWidgets(context)
+            res.put("status", "ok")
+        } catch (e: Exception) {
+            res.put("status", "error")
+            res.put("message", e.message ?: "Invalid JSON")
+        }
+        return res.toString()
+    }
+
+    @JavascriptInterface
+    fun getScheduleWidgetCache(): String {
+        return prefs.getString(KEY_SCHEDULE_CACHE, "{}") ?: "{}"
     }
 
     private fun errorResponse(code: String, message: String): String {

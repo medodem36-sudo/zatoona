@@ -22,3 +22,6 @@
 
 # Keep AllInOneDailyWidgetProvider (Package F / Feature 88)
 -keep class com.zatoona.app.AllInOneDailyWidgetProvider { *; }
+# Keep WaterWidgetProvider & ScheduleWidgetProvider
+-keep class com.zatoona.app.WaterWidgetProvider { *; }
+-keep class com.zatoona.app.ScheduleWidgetProvider { *; }

@@ -17,7 +17,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="📚"
+            android:text="🧠"
             android:textSize="14sp" />
 
         <TextView
@@ -27,7 +27,7 @@
             android:layout_weight="1"
             android:layout_marginStart="6dp"
             android:text="@string/widget_study_header"
-            android:textColor="#06AAC4"
+            android:textColor="#38BDF8"
             android:textSize="12sp"
             android:textStyle="bold" />
 
@@ -56,84 +56,86 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="٠ دقيقة تركيز"
-            android:textColor="#60A5FA"
-            android:textSize="16sp"
+            android:text="0 دقيقة تركيز اليوم"
+            android:textColor="#38BDF8"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/widget_study_cards_display"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="٠ كارت للمراجعة"
+            android:text="مراجعة الكروت"
             android:textColor="#A0AEC0"
-            android:textSize="12sp" />
+            android:textSize="11sp" />
     </LinearLayout>
 
-    <!-- Action Buttons Row -->
+    <!-- Interactive Live Chronometer Row -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="10dp">
+        android:gravity="center_vertical"
+        android:background="@drawable/bg_widget_button"
+        android:paddingVertical="6dp"
+        android:paddingHorizontal="10dp"
+        android:layout_marginTop="6dp">
 
-        <!-- Start Focus Session -->
-        <LinearLayout
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="⏱️"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/widget_study_timer_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="6dp"
+            android:text="المؤقت المباشر:"
+            android:textColor="#CBD5E1"
+            android:textSize="12sp" />
+
+        <Chronometer
+            android:id="@+id/widget_study_chronometer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#34D399"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Interactive Action Buttons Row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
+
+        <!-- Start / Pause Toggle Button -->
+        <Button
             android:id="@+id/widget_study_btn_start"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="36dp"
             android:layout_weight="1"
             android:layout_marginEnd="4dp"
-            android:background="@drawable/bg_widget_button"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:paddingVertical="6dp"
-            android:paddingHorizontal="6dp">
+            android:background="@drawable/bg_widget_button_accent"
+            android:text="@string/widget_study_start"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="⏱️"
-                android:textSize="12sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:text="@string/widget_study_start"
-                android:textColor="#E2E8F0"
-                android:textSize="11sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <!-- Flashcards Review -->
-        <LinearLayout
+        <!-- Review / Reset Button -->
+        <Button
             android:id="@+id/widget_study_btn_review"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="4dp"
+            android:layout_height="36dp"
+            android:layout_weight="0.8"
             android:background="@drawable/bg_widget_button"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:paddingVertical="6dp"
-            android:paddingHorizontal="6dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="🗂️"
-                android:textSize="12sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:text="@string/widget_study_review"
-                android:textColor="#E2E8F0"
-                android:textSize="11sp"
-                android:textStyle="bold" />
-        </LinearLayout>
+            android:text="@string/widget_study_review"
+            android:textColor="#CBD5E1"
+            android:textSize="11sp" />
     </LinearLayout>
 
 </LinearLayout>

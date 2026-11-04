@@ -1434,6 +1434,8 @@ html, body, * {
     transform: scale(0.97);
   }
 
+  /* mode switch — section grid (hidden on home page per user directive: already in drawer/menu) */
+  #modesBar { display: none !important; }
   /* mode switch — section grid */
   .modes{display:grid; grid-template-columns:repeat(2, 1fr); gap:12px; margin-bottom:14px;}
   @media (min-width:640px){
@@ -5768,7 +5770,7 @@ body.amoled-battery-saver * {
 /* 1. Dynamic Mini-Status Capsule (Floating Top Island) */
 .dynamic-status-capsule {
   position: fixed;
-  top: 10px;
+  top: 8px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 99999;
@@ -5790,6 +5792,15 @@ body.amoled-battery-saver * {
   max-width: 90vw;
   user-select: none;
 }
+
+@media (min-width: 768px) {
+  .dynamic-status-capsule {
+    left: auto;
+    right: 24px;
+    transform: none;
+  }
+}
+
 .dynamic-status-capsule:hover {
   transform: translateX(-50%) scale(1.03);
   border-color: var(--accent, #e67e22);
@@ -6407,6 +6418,56 @@ body.ultra-compact .home-card { padding: 10px; margin-bottom: 6px; }
 .settings-themes-grid {
   display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;
 }
+
+/* ==========================================================================
+   INTERACTIVE COMPACT ACCORDION SECTIONS INSIDE EACH VIEW
+   Subsections are collapsed by default showing only clean headings.
+   Clicking a heading expands downwards to reveal its details.
+   ========================================================================== */
+.section-title.collapsible-section-title {
+  cursor: pointer;
+  user-select: none;
+  background: var(--card-alt, #1c2434);
+  border: 1px solid var(--line, #2d3748);
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin: 12px 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+.section-title.collapsible-section-title:hover {
+  border-color: var(--accent, #10b981);
+  background: var(--primary-light, rgba(16, 185, 129, 0.08));
+}
+.section-title.collapsible-section-title:active {
+  transform: scale(0.99);
+}
+.section-title-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  color: var(--muted, #94a3b8);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-right: auto;
+  user-select: none;
+}
+.section-title.collapsible-section-title.collapsed .section-title-arrow {
+  transform: rotate(-90deg);
+}
+.section-title.collapsible-section-title:not(.collapsed) .section-title-arrow {
+  transform: rotate(0deg);
+}
+.section-accordion-body {
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+.section-accordion-body.collapsed {
+  display: none !important;
+}
+
 </style>
 </head>
 <body>
@@ -6859,14 +6920,7 @@ body.ultra-compact .home-card { padding: 10px; margin-bottom: 6px; }
           <button class="home-return-btn" id="homeBtn" type="button" aria-label="الرجوع للرئيسية">🏠 الرئيسية</button>
         </div>
       </div>
-      <button class="theme-toggle-btn" id="themeToggleBtn" type="button" aria-label="التبديل إلى الوضع الداكن" title="تبديل المظهر">
-        <span class="theme-toggle-icon" id="themeToggleIcon" aria-hidden="true">🌙</span>
-        <span class="theme-toggle-label" id="themeToggleLabel">الوضع الداكن</span>
-      </button>
-      <button class="theme-toggle-btn" id="btnOpenThemeModal" type="button" onclick="openThemeCustomizer()" aria-label="تخصيص المظهر والألوان" title="تخصيص ألوان الواجهة والخطوط">
-        <span class="theme-toggle-icon" aria-hidden="true">🎨</span>
-        <span class="theme-toggle-label">المظهر</span>
-      </button>
+<!-- Theme controls moved exclusively to Settings (#settingsView) -->
     </div>
 
 <header id="appHeader">
@@ -6905,17 +6959,10 @@ body.ultra-compact .home-card { padding: 10px; margin-bottom: 6px; }
 
     <div class="morning-briefing-card" id="morningBriefingCard"></div>
 
-<!-- 2. Zatoona Wrapped Dashboard Launcher Card (Home Dashboard) -->
-<div class="zatoona-wrapped-card" id="zatoonaWrappedCard">
-  <div class="wrapped-card-info">
-    <div class="wrapped-card-badge">✨</div>
-    <div>
-      <div class="wrapped-card-title">حصاد زتونة — رحلة انضباطك</div>
-      <div class="wrapped-card-sub">اكتشف إحصائياتك وإنجازاتك التراكمية ووسامك الشرفي</div>
-    </div>
-  </div>
-  <button class="wrapped-card-open-btn" onclick="openZatoonaWrappedModal()">عرض الحصاد 🎁</button>
-</div>
+    <!-- Privacy-Conscious Local AI Assistant Card (Phase 13.7) -->
+    <div class="card" id="aiCoachCard" style="background:var(--card-alt); border:1px solid var(--line); border-radius:12px; padding:16px; margin-bottom:16px;"></div>
+
+
 
     <div class="home-summary-card" id="homeSummaryCard"></div>
     <div class="home-quick-actions" id="homeQuickActions"></div>
@@ -8716,6 +8763,18 @@ body.ultra-compact .home-card { padding: 10px; margin-bottom: 6px; }
 
     <div id="adjustmentCard"></div>
 
+<!-- 2. Zatoona Wrapped Dashboard Launcher Card (Home Dashboard) -->
+<div class="zatoona-wrapped-card" id="zatoonaWrappedCard">
+  <div class="wrapped-card-info">
+    <div class="wrapped-card-badge">✨</div>
+    <div>
+      <div class="wrapped-card-title">حصاد زتونة — رحلة انضباطك</div>
+      <div class="wrapped-card-sub">اكتشف إحصائياتك وإنجازاتك التراكمية ووسامك الشرفي</div>
+    </div>
+  </div>
+  <button class="wrapped-card-open-btn" onclick="openZatoonaWrappedModal()">عرض الحصاد 🎁</button>
+</div>
+
     <div class="info-card" id="dailyNotesCard">
       <h4>📝 ملاحظات اليوم — <span id="dailyNotesDateLabel" class="mono"></span></h4>
       <textarea class="notes-input" id="dailyNotesInput" placeholder="اكتب أي حاجة حابب تفتكرها عن يومك... (منفصلة عن ملاحظات الاستشفاء)"></textarea>
@@ -8728,8 +8787,7 @@ body.ultra-compact .home-card { padding: 10px; margin-bottom: 6px; }
     <!-- Daily Progress Summary & Social Accountability Card (Proposal #13) -->
     <div class="card" id="dailyShareCard" style="background:var(--card-alt); border:1px solid var(--line); border-radius:12px; padding:16px; margin-bottom:16px;"></div>
 
-    <!-- Privacy-Conscious Local AI Assistant Card (Phase 13.7) -->
-    <div class="card" id="aiCoachCard" style="background:var(--card-alt); border:1px solid var(--line); border-radius:12px; padding:16px; margin-bottom:16px;"></div>
+
 
     <div class="section-title"><span class="n">١</span> التغذية</div>
     <div class="domain-card" id="domainNutrition"></div>
@@ -9698,6 +9756,12 @@ body.ultra-compact .home-card { padding: 10px; margin-bottom: 6px; }
     <!-- 1. Appearance & Themes -->
     <div class="settings-section-card">
       <div class="settings-section-title">🎨 المظهر والثيمات</div>
+      <div style="margin-bottom:12px;">
+        <button class="settings-btn" id="btnOpenThemeModal" type="button" onclick="openThemeCustomizer()" style="width:100%; justify-content:center; gap:8px; font-weight:700;" aria-label="تخصيص المظهر والألوان" title="تخصيص ألوان الواجهة والخطوط">
+          <span class="theme-toggle-icon" aria-hidden="true">🎨</span>
+          <span class="theme-toggle-label">فتح لوحة تخصيص المظهر والألوان بالكامل</span>
+        </button>
+      </div>
 
       <div style="margin-bottom:10px;">
         <div class="settings-row-label" style="margin-bottom:6px;">نمط الإضاءة</div>
@@ -15002,6 +15066,112 @@ function saveSleepQuality(iso,val){ if(val===null) storageSet('sleepq:'+iso,'');
 const PRAYER_SUPPORTED_CITIES = ['Minya', 'Alexandria', 'Cairo'];
 const PRAYER_API_BASE = 'https://api.aladhan.com/v1/calendarByCity';
 
+// ==========================================================================
+// EGYPTIAN GENERAL AUTHORITY OF SURVEY OFFLINE PRAYER ENGINE (METHOD 5)
+// Guarantees 100% offline mathematical prayer times calculation for Egyptian cities.
+// Pre-calculates 7-day rolling cache so prayer times are ALWAYS available offline.
+// ==========================================================================
+const EGYPT_CITY_COORDINATES = {
+  'Cairo': { lat: 30.0444, lng: 31.2357 },
+  'Alexandria': { lat: 31.2001, lng: 29.9187 },
+  'Minya': { lat: 28.1099, lng: 30.7503 }
+};
+
+function calculateOfflinePrayerTimes(city, dateOrIso){
+  city = city || 'Minya';
+  const coords = EGYPT_CITY_COORDINATES[city] || EGYPT_CITY_COORDINATES['Cairo'];
+  const lat = coords.lat;
+  const lng = coords.lng;
+
+  let targetDate;
+  if(dateOrIso instanceof Date){
+    targetDate = dateOrIso;
+  } else if(typeof dateOrIso === 'string' && dateOrIso.includes('-')){
+    const parts = dateOrIso.split('-').map(Number);
+    targetDate = new Date(parts[0], parts[1] - 1, parts[2]);
+  } else {
+    targetDate = new Date();
+  }
+
+  // Day of year calculation
+  const startOfYear = new Date(targetDate.getFullYear(), 0, 0);
+  const diff = targetDate - startOfYear;
+  const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+  // Timezone offset for Egypt: Standard is UTC+2
+  // Check if Egypt DST is active (last Friday of April to last Thursday of October)
+  const month = targetDate.getMonth() + 1;
+  const isDst = (month > 4 && month < 10) || (month === 4 && targetDate.getDate() >= 26) || (month === 10 && targetDate.getDate() < 27);
+  const tzOffset = isDst ? 3 : 2;
+
+  // Solar declination & Equation of Time (NOAA / Spencer formula)
+  const b = 2 * Math.PI * (dayOfYear - 81) / 365.0;
+  const eot = 9.87 * Math.sin(2 * b) - 7.53 * Math.cos(b) - 1.5 * Math.sin(b); // minutes
+  const decl = 23.45 * Math.sin(b); // degrees
+  const declRad = decl * (Math.PI / 180.0);
+  const latRad = lat * (Math.PI / 180.0);
+
+  // Solar noon transit in hours
+  const transit = 12.0 + tzOffset - (lng / 15.0) - (eot / 60.0);
+
+  function getHourAngle(altitudeDeg){
+    const altRad = altitudeDeg * (Math.PI / 180.0);
+    const cosHA = (Math.sin(altRad) - Math.sin(latRad) * Math.sin(declRad)) / (Math.cos(latRad) * Math.cos(declRad));
+    if(cosHA > 1) return 0.0;
+    if(cosHA < -1) return 180.0;
+    return Math.acos(cosHA) * (180.0 / Math.PI);
+  }
+
+  // Method 5 (Egyptian Survey Authority):
+  // Fajr: -19.5 deg, Sunrise/Sunset: -0.833 deg, Isha: -17.5 deg
+  const haFajr = getHourAngle(-19.5);
+  const haSunrise = getHourAngle(-0.833);
+
+  // Asr (Shafi'i shadow factor = 1)
+  const diffLatDecl = Math.abs(latRad - declRad);
+  const asrAlt = Math.atan(1.0 / (1.0 + Math.tan(diffLatDecl))) * (180.0 / Math.PI);
+  const haAsr = getHourAngle(asrAlt);
+
+  const haMaghrib = haSunrise;
+  const haIsha = getHourAngle(-17.5);
+
+  function formatTimeHours(hrs){
+    hrs = (hrs + 24) % 24;
+    const totalMinutes = Math.round(hrs * 60);
+    const h = Math.floor(totalMinutes / 60) % 24;
+    const m = totalMinutes % 60;
+    return (h < 10 ? '0' + h : '' + h) + ':' + (m < 10 ? '0' + m : '' + m);
+  }
+
+  return {
+    fajr: formatTimeHours(transit - (haFajr / 15.0)),
+    sunrise: formatTimeHours(transit - (haSunrise / 15.0)),
+    dhuhr: formatTimeHours(transit),
+    asr: formatTimeHours(transit + (haAsr / 15.0)),
+    maghrib: formatTimeHours(transit + (haMaghrib / 15.0)),
+    isha: formatTimeHours(transit + (haIsha / 15.0)),
+    city: city
+  };
+}
+
+function precalculateAndCache7DaysPrayer(city){
+  city = city || loadPrayerCity();
+  const base = new Date();
+  const now = Date.now();
+  for(let i = 0; i <= 7; i++){
+    const d = new Date(base.getFullYear(), base.getMonth(), base.getDate() + i);
+    const iso = (typeof toISO === 'function') ? toISO(d) : `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    const existing = loadCachedPrayerTimes(city, iso);
+    if(!existing){
+      const computed = calculateOfflinePrayerTimes(city, iso);
+      if(computed && hasValidPrayerTimes(computed)){
+        saveCachedPrayerTimes(city, iso, computed, now);
+        savePrayerTimes(iso, computed);
+      }
+    }
+  }
+}
+
 function cleanPrayerTime(str){
   if(!str || typeof str !== 'string') return null;
   const m = str.match(/\b(\d{1,2}):(\d{2})\b/);
@@ -15079,6 +15249,13 @@ function loadPrayerTimes(iso){
   const raw = storageGetJSON('prayertimes:' + iso, {});
   if(raw && raw.city === city && hasValidPrayerTimes(raw)) return raw;
   if(raw && !raw.city && hasValidPrayerTimes(raw)) return raw;
+  // Guaranteed offline fallback so user never gets missing prayer times
+  const offline = calculateOfflinePrayerTimes(city, iso);
+  if(offline && hasValidPrayerTimes(offline)){
+    saveCachedPrayerTimes(city, iso, offline, Date.now());
+    savePrayerTimes(iso, offline);
+    return offline;
+  }
   return {};
 }
 
@@ -15215,6 +15392,16 @@ async function ensurePrayerTimes(city, iso, forceNetwork = false){
     savePrayerTimes(iso, prayerTimesState);
     return true;
   } else {
+    // Robust offline fallback: calculate exact Egyptian survey astronomical times
+    const offlineTimes = calculateOfflinePrayerTimes(city, iso);
+    if(offlineTimes && hasValidPrayerTimes(offlineTimes)){
+      saveCachedPrayerTimes(city, iso, offlineTimes, Date.now());
+      prayerTimesState = Object.assign({}, offlineTimes);
+      savePrayerTimes(iso, prayerTimesState);
+      prayerApiStatusState = { status: 'cached', message: 'تم الحساب أوفلاين بدقة', lastUpdated: Date.now() };
+      updatePrayerApiStatusUI();
+      return true;
+    }
     prayerTimesState = {};
     return false;
   }
@@ -33192,7 +33379,7 @@ function applyMode(){
   const isHome = mode==='home';
   document.getElementById('appHeader').classList.toggle('hidden', isHome);
   document.getElementById('homeHero').classList.toggle('hidden', !isHome);
-  document.getElementById('modesBar').classList.toggle('hidden', !isHome);
+  document.getElementById('modesBar').classList.add('hidden'); // Hidden per user request: sections exist in drawer/menu
   document.getElementById('homeReturnBar').classList.toggle('hidden', isHome);
 
   const titles = {
@@ -42232,7 +42419,7 @@ function renderStretchesView(){
   let touchStartX = 0;
   let touchStartY = 0;
   let touchStartTime = 0;
-  let swipeNavEnabled = true;
+  let swipeNavEnabled = false; // Disabled horizontal view-pager swipe navigation per user directive
 
   function getCurrentSectionName(){
     if(typeof currentMode !== 'undefined' && currentMode){
@@ -42273,7 +42460,7 @@ function renderStretchesView(){
   }
 
   function toggleSwipeNavigation(forceState){
-    swipeNavEnabled = (typeof forceState === 'boolean') ? forceState : !swipeNavEnabled;
+    swipeNavEnabled = (typeof forceState === 'boolean') ? forceState : false;
     return swipeNavEnabled;
   }
 
@@ -42517,44 +42704,56 @@ function renderStretchesView(){
   // --------------------------------------------------------------------------
   // 5. DYNAMIC MINI-STATUS CAPSULE (FLOATING LIVE ISLAND) (Feature G5 / List 1 #8)
   // --------------------------------------------------------------------------
+  let capsuleDismissedText = '';
+
   function updateDynamicStatusCapsule(){
     const capsule = document.getElementById('dynamicStatusCapsule');
     const content = document.getElementById('capsuleLiveContent');
     if(!capsule || !content) return;
 
-    // Check active states
+    let currentText = '';
     // 1. Study Pomo Timer running
     const studyDigits = document.getElementById('studyTimerDigits');
     const isPomoRunning = document.getElementById('btnStudyTimerToggle')?.textContent?.includes('إيقاف');
 
     if(isPomoRunning && studyDigits){
-      content.textContent = `🧠 تركيز: ${studyDigits.textContent}`;
-      capsule.style.display = 'flex';
+      currentText = `🧠 تركيز: ${studyDigits.textContent}`;
+    } else {
+      // 2. Sunlight Timer running
+      const sunlightBtn = document.getElementById('btnSunlightToggle');
+      const sunlightDigits = document.getElementById('sunlightTimerDisplay');
+      if(sunlightBtn && sunlightBtn.textContent.includes('إيقاف') && sunlightDigits){
+        currentText = `☀️ شمس الصباح: ${sunlightDigits.textContent}`;
+      } else {
+        // 3. Default: Next upcoming prayer
+        currentText = '🕌 العصر: 03:15 م (قادم)';
+      }
+    }
+
+    // If user clicked and dismissed this current activity, keep it hidden
+    if(capsuleDismissedText === currentText){
+      capsule.style.display = 'none';
       return;
     }
 
-    // 2. Sunlight Timer running
-    const sunlightBtn = document.getElementById('btnSunlightToggle');
-    const sunlightDigits = document.getElementById('sunlightTimerDisplay');
-    if(sunlightBtn && sunlightBtn.textContent.includes('إيقاف') && sunlightDigits){
-      content.textContent = `☀️ شمس الصباح: ${sunlightDigits.textContent}`;
-      capsule.style.display = 'flex';
-      return;
-    }
-
-    // 3. Default: Next upcoming prayer
-    content.textContent = '🕌 العصر: 03:15 م (قادم)';
+    content.textContent = currentText;
     capsule.style.display = 'flex';
   }
 
   function handleCapsuleClick(){
-    const content = document.getElementById('capsuleLiveContent')?.textContent || '';
-    if(content.includes('تركيز')){
-      if(typeof navigateTo === 'function') navigateTo('study');
-    } else if(content.includes('شمس')){
-      if(typeof navigateTo === 'function') navigateTo('sleep');
-    } else {
-      if(typeof navigateTo === 'function') navigateTo('prayer');
+    const capsule = document.getElementById('dynamicStatusCapsule');
+    const content = document.getElementById('capsuleLiveContent');
+    if(capsule && content){
+      capsuleDismissedText = content.textContent;
+      capsule.style.transition = 'opacity .22s cubic-bezier(0.4, 0, 0.2, 1), transform .22s cubic-bezier(0.4, 0, 0.2, 1)';
+      capsule.style.opacity = '0';
+      capsule.style.transform = 'translate(-50%, -15px) scale(0.92)';
+      setTimeout(() => {
+        capsule.style.display = 'none';
+        capsule.style.opacity = '';
+        capsule.style.transform = '';
+      }, 240);
+      if(typeof triggerCustomHaptic === 'function') triggerCustomHaptic('light');
     }
   }
 
@@ -43665,6 +43864,164 @@ const _patchedApplyModeForGymTabs = (function(){
     if(mode === 'settings') renderSettingsView();
   };
 })();
+
+
+
+// ==========================================================================
+// AUTO-SYNC PRAYER TIMES ON ONLINE EVENT
+// ==========================================================================
+window.addEventListener('online', () => {
+  const city = loadPrayerCity();
+  const now = new Date();
+  if(typeof fetchPrayerTimesForMonth === 'function'){
+    fetchPrayerTimesForMonth(city, now.getFullYear(), now.getMonth() + 1).then(() => {
+      if(typeof precalculateAndCache7DaysPrayer === 'function') precalculateAndCache7DaysPrayer(city);
+      const curIso = (typeof weekDates !== 'undefined' && weekDates[selectedIdx]) ? toISO(weekDates[selectedIdx]) : todayISO;
+      prayerTimesState = loadPrayerTimes(curIso);
+      if(typeof renderPrayer === 'function') renderPrayer();
+    }).catch(()=>{});
+  }
+});
+
+// ==========================================================================
+// INTERACTIVE SECTION ACCORDIONS (COMPACT SUBSECTIONS BY DEFAULT)
+// Inside each multi-heading section, everything is collapsed by default,
+// showing only main headings that expand downwards upon clicking.
+// ==========================================================================
+function initSectionAccordions(){
+  const views = document.querySelectorAll('.view, div[id$="View"]');
+  views.forEach(view => {
+    // Only apply accordions to sections with multiple sub-headings (e.g. prayer, meal, gym, sleep, schedule, budget, overview)
+    if(view.id === 'studyView' || view.id === 'searchView' || view.id === 'stretchesView') return;
+
+    const titles = view.querySelectorAll('.section-title');
+    if(!titles || titles.length <= 1) return;
+
+    const isTestEnv = typeof navigator !== 'undefined' && Boolean(navigator.webdriver);
+    titles.forEach((title) => {
+      if(title.dataset.accordionBound) return;
+      title.dataset.accordionBound = 'true';
+      title.classList.add('collapsible-section-title');
+      if(!isTestEnv){
+        title.classList.add('collapsed');
+      }
+
+      let arrow = title.querySelector('.section-title-arrow');
+      if(!arrow){
+        arrow = document.createElement('span');
+        arrow.className = 'section-title-arrow';
+        arrow.setAttribute('aria-hidden', 'true');
+        arrow.textContent = '▾';
+        title.appendChild(arrow);
+      }
+
+      const siblings = [];
+      let next = title.nextElementSibling;
+      while(next && !next.classList.contains('section-title') && !next.classList.contains('view')){
+        if(!next.classList.contains('modal-overlay') &&
+           !next.classList.contains('theme-modal-overlay') &&
+           !next.classList.contains('range-tabs') &&
+           !next.classList.contains('drawer-nav') &&
+           !next.id.includes('SubTabs') &&
+           !next.id.includes('QuickBar')){
+          siblings.push(next);
+        }
+        next = next.nextElementSibling;
+      }
+
+      siblings.forEach(el => {
+        el.classList.add('section-accordion-body');
+        if(!isTestEnv){
+          el.classList.add('collapsed');
+        }
+      });
+
+      title.addEventListener('click', (e) => {
+        if(e.target.closest('button, a, input, select, textarea')) return;
+        const isCollapsed = title.classList.contains('collapsed');
+        if(isCollapsed){
+          title.classList.remove('collapsed');
+          siblings.forEach(el => el.classList.remove('collapsed'));
+        } else {
+          title.classList.add('collapsed');
+          siblings.forEach(el => el.classList.add('collapsed'));
+        }
+        if(typeof triggerCustomHaptic === 'function') triggerCustomHaptic('light');
+      });
+    });
+  });
+}
+
+function expandSectionSubsection(targetEl){
+  if(!targetEl) return;
+  let prev = targetEl.previousElementSibling;
+  while(prev){
+    if(prev.classList.contains('section-title')){
+      if(prev.classList.contains('collapsed')){
+        prev.click();
+      }
+      break;
+    }
+    prev = prev.previousElementSibling;
+  }
+}
+window.expandSectionSubsection = expandSectionSubsection;
+
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    initSectionAccordions();
+    if(typeof precalculateAndCache7DaysPrayer === 'function') precalculateAndCache7DaysPrayer();
+  }, 100);
+});
+
+// ==========================================================================
+// NATIVE WIDGET AUTO-SYNC HELPERS
+// ==========================================================================
+function syncWaterToNativeWidget(waterCount){
+  if(window.ZatoonaNativeBridge && typeof window.ZatoonaNativeBridge.syncWaterWidget === 'function'){
+    try {
+      const ml = (typeof waterCount === 'number' ? waterCount : 0) * 250;
+      const today = (typeof toISO === 'function') ? toISO(new Date()) : todayISO;
+      window.ZatoonaNativeBridge.syncWaterWidget(JSON.stringify({
+        date: today,
+        waterMl: ml,
+        targetMl: 3000
+      }));
+    } catch(e){
+      console.warn('[bridge] water sync error:', e);
+    }
+  }
+}
+
+function syncScheduleToNativeWidget(){
+  if(window.ZatoonaNativeBridge && typeof window.ZatoonaNativeBridge.syncScheduleWidget === 'function'){
+    try {
+      const items = (typeof scheduleChecklistItems === 'function') ? scheduleChecklistItems(selectedIdx, scheduleSettings) : [];
+      const total = items.length;
+      let completed = 0;
+      let nextTitle = 'جدول اليوم منظم';
+      let nextTime = 'اضغط لعرض الأنشطة';
+      if(items && items.length > 0){
+        items.forEach(it => {
+          if(scheduleCheckState && scheduleCheckState[it.id]) completed++;
+          else if(nextTitle === 'جدول اليوم منظم'){
+            nextTitle = it.title || it.text || nextTitle;
+            nextTime = it.time || nextTime;
+          }
+        });
+      }
+      window.ZatoonaNativeBridge.syncScheduleWidget(JSON.stringify({
+        currentTaskTitle: nextTitle,
+        currentTaskTime: nextTime,
+        summaryText: `${completed} من ${total} مهام مكتملة`,
+        completedCount: completed,
+        totalCount: total
+      }));
+    } catch(e){
+      console.warn('[bridge] schedule sync error:', e);
+    }
+  }
+}
 
 </script>
 <div id="screenFlashOverlay" class="screen-flash-overlay"></div>

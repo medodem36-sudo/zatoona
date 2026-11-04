@@ -97,31 +97,31 @@ class AllInOneDailyWidgetProvider : AppWidgetProvider() {
             views.setTextViewText(R.id.txt_aio_streak, "🔥 ${summary.streakDays} أيام")
 
             // 2. Wire PendingIntents
-            val flags = PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            val pendingFlags = PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
 
             // Root / open app
             val rootIntent = Intent(context, MainActivity::class.java).apply {
-                putExtra(MainActivity.EXTRA_TARGET_MODE, "home")
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                putExtra(ZatoonaNotificationManager.EXTRA_MODE, "home")
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
-            val rootPending = PendingIntent.getActivity(context, REQUEST_CODE_AIO_ROOT, rootIntent, flags)
+            val rootPending = PendingIntent.getActivity(context, REQUEST_CODE_AIO_ROOT, rootIntent, pendingFlags)
             views.setOnClickPendingIntent(R.id.widget_aio_root, rootPending)
             views.setOnClickPendingIntent(R.id.btn_aio_open_app, rootPending)
 
             // Prayer shortcut
             val prayerIntent = Intent(context, MainActivity::class.java).apply {
-                putExtra(MainActivity.EXTRA_TARGET_MODE, "prayer")
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                putExtra(ZatoonaNotificationManager.EXTRA_MODE, "prayer")
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
-            val prayerPending = PendingIntent.getActivity(context, REQUEST_CODE_AIO_PRAYER, prayerIntent, flags)
+            val prayerPending = PendingIntent.getActivity(context, REQUEST_CODE_AIO_PRAYER, prayerIntent, pendingFlags)
             views.setOnClickPendingIntent(R.id.btn_aio_prayer, prayerPending)
 
             // Gym shortcut
             val gymIntent = Intent(context, MainActivity::class.java).apply {
-                putExtra(MainActivity.EXTRA_TARGET_MODE, "gym")
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                putExtra(ZatoonaNotificationManager.EXTRA_MODE, "gym")
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
-            val gymPending = PendingIntent.getActivity(context, REQUEST_CODE_AIO_GYM, gymIntent, flags)
+            val gymPending = PendingIntent.getActivity(context, REQUEST_CODE_AIO_GYM, gymIntent, pendingFlags)
             views.setOnClickPendingIntent(R.id.btn_aio_gym, gymPending)
 
             appWidgetManager.updateAppWidget(widgetId, views)
