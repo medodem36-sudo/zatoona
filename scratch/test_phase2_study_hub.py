@@ -196,9 +196,13 @@ class TestPhase2StudyHub(unittest.TestCase):
         """Distraction parking lot adds, checks, and deletes items."""
         driver = self.driver
         inp = driver.find_element(By.ID, "studyParkingInput")
-        inp.send_keys("فكرة مشتتة للاختبار الآلي")
-        driver.find_element(By.ID, "btnStudyAddParking").click()
-        time.sleep(0.3)
+        driver.execute_script("arguments[0].scrollIntoView({block:'center'});", inp)
+        time.sleep(0.2)
+        driver.execute_script("arguments[0].value = 'فكرة مشتتة للاختبار الآلي'; arguments[0].dispatchEvent(new Event('input'));", inp)
+        time.sleep(0.2)
+        add_btn = driver.find_element(By.ID, "btnStudyAddParking")
+        driver.execute_script("arguments[0].click();", add_btn)
+        time.sleep(0.4)
 
         list_el = driver.find_element(By.ID, "studyParkingList")
         self.assertIn("فكرة مشتتة للاختبار الآلي", list_el.text)

@@ -1,0 +1,188 @@
+/* ==========================================================================
+   PACKAGE E: SCHEDULE, TASKS, SLEEP & STUDY STYLES (Features 42, 44, 56, 61, 62, 64, 65, 66, 68, 97)
+   ========================================================================== */
+
+/* 1. Feature 42: Morning Sunlight Card */
+.sunlight-card {
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 14px;
+  transition: border-color .2s ease;
+}
+.sunlight-card:hover {
+  border-color: #f59e0b;
+}
+
+/* 2. Feature 44: Stop Fluids Reminder Card */
+.stop-fluids-card {
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 14px;
+  transition: border-color .2s ease;
+}
+.stop-fluids-card:hover {
+  border-color: #3b82f6;
+}
+
+/* 3. Feature 61: Visual Time-Blocking Card & Grid */
+.time-blocking-card {
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 14px;
+}
+.time-blocking-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 14px;
+  font-size: .75rem;
+}
+.tb-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--muted);
+}
+.tb-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+.time-blocking-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  gap: 6px;
+  margin-top: 8px;
+}
+.tb-slot {
+  background: var(--card-alt);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 6px 4px;
+  text-align: center;
+  font-size: .72rem;
+  transition: transform .15s ease, border-color .15s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.tb-slot:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+}
+.tb-slot-hour {
+  font-family: monospace;
+  font-weight: 700;
+  font-size: .68rem;
+  color: var(--muted);
+}
+.tb-slot-icon {
+  font-size: .95rem;
+  margin: 2px 0;
+}
+.tb-slot-name {
+  font-size: .65rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text);
+}
+.tb-slot.type-worship { border-color: #10b981; background: rgba(16, 185, 129, 0.08); }
+.tb-slot.type-gym { border-color: #f59e0b; background: rgba(245, 158, 11, 0.08); }
+.tb-slot.type-study { border-color: #3b82f6; background: rgba(59, 130, 246, 0.08); }
+.tb-slot.type-sleep { border-color: #8b5cf6; background: rgba(139, 92, 246, 0.08); }
+.tb-slot.type-meal { border-color: #ef4444; background: rgba(239, 68, 68, 0.08); }
+
+/* 4. Feature 64: Estimated vs Actual Time Tracking Card */
+.time-accuracy-card {
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 14px;
+}
+.time-accuracy-bar-track {
+  background: var(--card-alt);
+  border-radius: 999px;
+  height: 8px;
+  width: 100%;
+  overflow: hidden;
+  margin: 10px 0 6px;
+}
+.time-accuracy-bar-fill {
+  background: linear-gradient(90deg, #3b82f6, #10b981);
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  transition: width .3s ease;
+}
+
+/* 5. Feature 66: Complex Recurring Tasks Card */
+.recurring-tasks-card {
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 14px;
+}
+.recurring-task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--card-alt);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-bottom: 6px;
+  font-size: .8rem;
+}
+
+/* 6. Feature 68: Time-to-Leave Alert Card */
+.time-to-leave-card {
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 14px;
+  transition: border-color .2s ease;
+}
+.time-to-leave-card:hover {
+  border-color: #3b82f6;
+}
+.ttl-result-badge {
+  display: inline-block;
+  background: rgba(59, 130, 246, 0.12);
+  border: 1.5px solid #3b82f6;
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-weight: 800;
+  font-size: .95rem;
+  color: #3b82f6;
+  margin-top: 10px;
+}
+
+/* 7. Feature 97: Schedule Conflict Card */
+.schedule-conflict-card {
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 14px;
+}
+.conflict-item-row {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-top: 6px;
+  font-size: .82rem;
+  color: var(--text);
+  line-height: 1.5;
+}

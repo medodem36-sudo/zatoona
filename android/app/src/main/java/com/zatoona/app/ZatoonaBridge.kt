@@ -27,6 +27,8 @@ class ZatoonaBridge(private val context: Context) {
         const val PREFS_NAME = "zatoona_alarms_prefs"
         const val KEY_ALARMS_CACHE = "cached_upcoming_alarms_v1"
         const val KEY_DAILY_HABITS_CACHE = "daily_habits_cache_v1"
+        const val KEY_STUDY_CACHE = "study_widget_cache_v1"
+        const val KEY_ALL_IN_ONE_CACHE = "all_in_one_widget_cache_v1"
         const val MAX_PAYLOAD_LENGTH = 131072 // 128 KB
         const val MAX_ALARM_ITEMS = 60
         const val MAX_TITLE_LENGTH = 120
@@ -36,7 +38,7 @@ class ZatoonaBridge(private val context: Context) {
         val ALLOWED_TYPES = setOf("prayer", "sleep", "activity", "custom")
         val ALLOWED_MODES = setOf(
             "home", "meal", "gym", "sleep", "prayer", "schedule",
-            "recovery", "overview", "search", "budget", "notes", "stretches"
+            "recovery", "overview", "search", "budget", "notes", "stretches", "study", "settings"
         )
         val ID_REGEX = Regex("^[a-zA-Z0-9_\\-:]+$")
     }
@@ -386,6 +388,33 @@ class ZatoonaBridge(private val context: Context) {
     }
 
     @JavascriptInterface
+    fun syncStudyWidget(payloadJson: String): String {
+        return try {
+            if (payloadJson.length > MAX_PAYLOAD_LENGTH) {
+                return errorResponse("PAYLOAD_TOO_LARGE", "Payload exceeds max length")
+            }
+            try {
+                JSONObject(payloadJson)
+            } catch (e: JSONException) {
+                return errorResponse("INVALID_JSON", "Payload is not valid JSON: ${e.message}")
+            }
+            prefs.edit().putString(KEY_STUDY_CACHE, payloadJson).apply()
+            StudyWidgetProvider.updateAllWidgets(context)
+            JSONObject().apply {
+                put("status", "ok")
+                put("timestamp", System.currentTimeMillis())
+            }.toString()
+        } catch (t: Throwable) {
+            errorResponse("INTERNAL_ERROR", "syncStudyWidget error: ${t.message}")
+        }
+    }
+
+    @JavascriptInterface
+    fun getStudyWidgetCache(): String {
+        return prefs.getString(KEY_STUDY_CACHE, "{}") ?: "{}"
+    }
+
+    @JavascriptInterface
     fun triggerHaptic(durationMs: Long = 15): String {
         return try {
             val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -458,6 +487,73 @@ class ZatoonaBridge(private val context: Context) {
             put("sdkVersion", Build.VERSION.SDK_INT)
             put("timestamp", System.currentTimeMillis())
         }.toString()
+    }
+
+    /**
+     * Feature 81: Trigger LED Flash alert with alarm
+     */
+    @JavascriptInterface
+    fun triggerLedFlash(durationMs: Long = 3000, pulseCount: Int = 6): String {
+        val res = JSONObject()
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as? android.hardware.camera2.CameraManager
+                val cameraId = cameraManager?.cameraIdList?.firstOrNull()
+                if (cameraManager != null && cameraId != null) {
+                    Thread {
+                        try {
+                            val count = if (pulseCount in 1..20) pulseCount else 6
+                            val sleepMs = (durationMs / (count * 2)).coerceIn(50, 500)
+                            for (i in 0 until count) {
+                                cameraManager.setTorchMode(cameraId, true)
+                                Thread.sleep(sleepMs)
+                                cameraManager.setTorchMode(cameraId, false)
+                                Thread.sleep(sleepMs)
+                            }
+                        } catch (e: Exception) {
+                            // Camera in use or torch unavailable
+                        }
+                    }.start()
+                    res.put("status", "ok")
+                    res.put("supported", true)
+                    return res.toString()
+                }
+            }
+            res.put("status", "unsupported")
+            res.put("supported", false)
+        } catch (e: Exception) {
+            res.put("status", "error")
+            res.put("message", e.message ?: "unknown")
+        }
+        return res.toString()
+    }
+
+    /**
+     * Feature 88: Sync All-in-One Daily Widget
+     */
+    @JavascriptInterface
+    fun syncAllInOneWidget(payloadJson: String): String {
+        val res = JSONObject()
+        try {
+            if (payloadJson.length > MAX_PAYLOAD_LENGTH) {
+                res.put("status", "error")
+                res.put("message", "Payload exceeds maximum length")
+                return res.toString()
+            }
+            val json = JSONObject(payloadJson)
+            prefs.edit().putString(KEY_ALL_IN_ONE_CACHE, json.toString()).apply()
+            AllInOneDailyWidgetProvider.updateAllWidgets(context)
+            res.put("status", "ok")
+        } catch (e: Exception) {
+            res.put("status", "error")
+            res.put("message", e.message ?: "Invalid JSON")
+        }
+        return res.toString()
+    }
+
+    @JavascriptInterface
+    fun getAllInOneWidgetCache(): String {
+        return prefs.getString(KEY_ALL_IN_ONE_CACHE, "{}") ?: "{}"
     }
 
     private fun errorResponse(code: String, message: String): String {

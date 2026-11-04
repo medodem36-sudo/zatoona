@@ -1,0 +1,143 @@
+<!-- PACKAGE E: FEATURE 61 - VISUAL TIME-BLOCKING -->
+<div class="time-blocking-card" id="visualTimeBlockingCard">
+  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+    <div>
+      <div style="font-weight:800; font-size:.95rem; color:var(--text);">🎨 التايم بوكسينج المرئي لليوم (Visual Time-Blocking)</div>
+      <div class="section-hint" style="padding:0; margin:2px 0 0;">توزيع بصري لساعات يومك الـ 24 كمربعات زمنية ملونة حسب نوع النشاط.</div>
+    </div>
+    <button type="button" class="reset-btn" onclick="renderVisualTimeBlocks()" style="font-size:.78rem; padding:3px 10px;">🔄 تحديث المربعات</button>
+  </div>
+
+  <div class="time-blocking-legend">
+    <span class="tb-legend-item"><span class="tb-legend-dot" style="background:#10b981;"></span> 🕌 صلاة وعبادة</span>
+    <span class="tb-legend-item"><span class="tb-legend-dot" style="background:#f59e0b;"></span> 🏋️ جيم ورياضة</span>
+    <span class="tb-legend-item"><span class="tb-legend-dot" style="background:#3b82f6;"></span> 📚 مذاكرة وعمل</span>
+    <span class="tb-legend-item"><span class="tb-legend-dot" style="background:#8b5cf6;"></span> 🌙 نوم</span>
+    <span class="tb-legend-item"><span class="tb-legend-dot" style="background:#ef4444;"></span> 🍽️ تغذية</span>
+  </div>
+
+  <div class="time-blocking-grid" id="timeBlockingGrid"></div>
+</div>
+
+<!-- PACKAGE E: FEATURE 97 - SCHEDULE CONFLICT DETECTOR -->
+<div class="schedule-conflict-card" id="scheduleConflictCard">
+  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+    <div>
+      <div style="font-weight:800; font-size:.95rem; color:var(--text);">⚠️ كاشف تعارض المواعيد (Conflict Detector)</div>
+      <div class="section-hint" style="padding:0; margin:2px 0 0;">فحص تلقائي لتداخل أنشطة الجدول واقتراح تعديلات ذكية لتفادي الضغط.</div>
+    </div>
+    <span id="conflictStatusBadge" class="eq-badge" style="background:var(--good); color:#fff;">الجدول متناسق ✓</span>
+  </div>
+  <div id="scheduleConflictItemsList" style="margin-top:8px;"></div>
+</div>
+
+<!-- PACKAGE E: FEATURE 64 - ESTIMATED VS ACTUAL TIME ACCURACY -->
+<div class="time-accuracy-card" id="scheduleTimeAccuracyCard">
+  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+    <div>
+      <div style="font-weight:800; font-size:.95rem; color:var(--text);">⏱️ دقة التخطيط: الوقت التقديري مقابل الفعلي</div>
+      <div class="section-hint" style="padding:0; margin:2px 0 0;">مقارنة مجموع دقائق المهام المقدرة بالوقت المستغرق فعلياً لمعرفة دقة تقديرك.</div>
+    </div>
+    <span id="timeAccuracyPercentBadge" class="eq-badge" style="background:#3b82f6; color:#fff;">100% دقة</span>
+  </div>
+  <div class="time-accuracy-bar-track">
+    <div class="time-accuracy-bar-fill" id="timeAccuracyBarFill" style="width:100%;"></div>
+  </div>
+  <div id="timeAccuracySummaryText" style="font-size:.78rem; color:var(--muted); margin-top:4px;">
+    إجمالي المقدر: 0 د | إجمالي الفعلي: 0 د
+  </div>
+</div>
+
+<!-- PACKAGE E: FEATURE 68 - TIME-TO-LEAVE ALERT -->
+<div class="time-to-leave-card" id="timeToLeaveCard">
+  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+    <div>
+      <div style="font-weight:800; font-size:.95rem; color:var(--text);">🚗 منبه ميعاد الخروج للمشوار (Time-to-Leave)</div>
+      <div class="section-hint" style="padding:0; margin:2px 0 0;">احسب بالضبط متى يجب أن تتحرك للمشوار بناءً على وقت الطريق ووقت التجهيز.</div>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end; margin-top:10px;">
+    <div style="flex:1; min-width:140px;">
+      <label style="font-size:.75rem; color:var(--muted); display:block; margin-bottom:2px;">المشوار / الموعد:</label>
+      <input type="text" id="ttlEventTitle" class="weight-input" placeholder="مثال: محاضرة / مقابلة" style="width:100%; padding:4px 8px; font-size:.8rem;">
+    </div>
+    <div style="width:110px;">
+      <label style="font-size:.75rem; color:var(--muted); display:block; margin-bottom:2px;">ساعة الموعد:</label>
+      <input type="time" id="ttlEventTime" class="weight-input" value="10:00" style="width:100%; padding:4px 8px; font-size:.8rem;">
+    </div>
+    <div style="width:85px;">
+      <label style="font-size:.75rem; color:var(--muted); display:block; margin-bottom:2px;">الطريق (د):</label>
+      <input type="number" id="ttlTravelMins" class="weight-input" value="30" min="5" max="300" style="width:100%; padding:4px 6px; font-size:.8rem;">
+    </div>
+    <div style="width:85px;">
+      <label style="font-size:.75rem; color:var(--muted); display:block; margin-bottom:2px;">تجهيز (د):</label>
+      <input type="number" id="ttlBufferMins" class="weight-input" value="15" min="0" max="60" style="width:100%; padding:4px 6px; font-size:.8rem;">
+    </div>
+    <button type="button" class="save-btn" onclick="saveTimeToLeaveFromUi()" style="padding:6px 14px; font-size:.8rem;">⏰ ضبط</button>
+  </div>
+
+  <div id="ttlResultDisplay" style="display:none; margin-top:10px;"></div>
+</div>
+
+<!-- PACKAGE E: FEATURE 66 - COMPLEX RECURRING TASKS -->
+<div class="recurring-tasks-card" id="complexRecurringTasksCard">
+  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:10px;">
+    <div>
+      <div style="font-weight:800; font-size:.95rem; color:var(--text);">🔁 المهام الدورية المعقدة (أيام مخصصة)</div>
+      <div class="section-hint" style="padding:0; margin:2px 0 0;">مهام تتكرر في أيام أسبوعية محددة أو أيام معينة من الشهر.</div>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:flex-end; background:var(--card-alt); border-radius:10px; padding:10px; margin-bottom:10px;">
+    <div style="flex:1; min-width:130px;">
+      <label style="font-size:.75rem; color:var(--muted); display:block; margin-bottom:2px;">اسم المهمة:</label>
+      <input type="text" id="recTaskTitle" class="weight-input" placeholder="مثال: غسيل الملابس / تسليم التقرير" style="width:100%; padding:4px 8px; font-size:.8rem;">
+    </div>
+    <div style="width:120px;">
+      <label style="font-size:.75rem; color:var(--muted); display:block; margin-bottom:2px;">نوع التكرار:</label>
+      <select id="recTaskType" class="weight-input" style="width:100%; padding:4px 6px; font-size:.8rem;">
+        <option value="weekdays">أيام أسبوعية</option>
+        <option value="monthdays">أيام الشهر (1، 15)</option>
+      </select>
+    </div>
+    <div style="width:130px;">
+      <label style="font-size:.75rem; color:var(--muted); display:block; margin-bottom:2px;">الأيام (بفواصل):</label>
+      <input type="text" id="recTaskDays" class="weight-input" placeholder="مثال: 1, 4" style="width:100%; padding:4px 8px; font-size:.8rem;">
+    </div>
+    <button type="button" class="save-btn" onclick="saveComplexRecurringTaskFromUi()" style="padding:6px 12px; font-size:.8rem;">➕ إضافة</button>
+  </div>
+
+  <div id="complexRecurringTasksList"></div>
+</div>
+
+<!-- PACKAGE E: FEATURE 65 - SUBTASKS TREE MODAL -->
+<div id="modalSubtasks" class="p4-modal-overlay" style="display:none;" onclick="if(event.target===this)closeSubtasksModal()">
+  <div class="p4-modal-sheet" style="max-width:440px;" onclick="event.stopPropagation()">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+      <div>
+        <div style="font-weight:800; font-size:1rem; color:var(--text);">🌿 شجرة الخطوات الفرعية (Subtasks Tree)</div>
+        <div class="section-hint" id="subtasksParentTitle" style="padding:0; margin:2px 0 0;"></div>
+      </div>
+      <button type="button" class="reset-btn" onclick="closeSubtasksModal()" style="font-size:1rem; padding:2px 8px;">✕</button>
+    </div>
+
+    <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+      <div style="flex:1; background:var(--card-alt); border-radius:999px; height:8px; overflow:hidden;">
+        <div id="subtasksProgressFill" style="background:#10b981; height:100%; width:0%; transition:width .2s ease;"></div>
+      </div>
+      <span id="subtasksProgressPercent" style="font-size:.78rem; font-weight:700; color:#10b981;">0%</span>
+    </div>
+
+    <div style="display:flex; gap:8px; margin-bottom:12px;">
+      <input type="text" id="newSubtaskInput" class="weight-input" placeholder="أضف خطوة فرعية للمهمة..." style="flex:1; padding:6px 10px; font-size:.82rem;">
+      <button type="button" class="save-btn" onclick="addNewSubtaskFromUi()" style="padding:6px 14px; font-size:.82rem;">➕ إضافة</button>
+    </div>
+
+    <div id="subtasksList" style="display:flex; flex-direction:column; gap:6px; max-height:260px; overflow-y:auto;"></div>
+
+    <div style="text-align:left; margin-top:14px;">
+      <button type="button" class="save-btn" onclick="closeSubtasksModal()" style="padding:6px 18px; font-size:.82rem;">حفظ وإغلاق ✓</button>
+    </div>
+  </div>
+</div>

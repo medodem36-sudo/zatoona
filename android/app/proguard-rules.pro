@@ -14,3 +14,11 @@
 
 # Keep DailyHabitsWidgetProvider
 -keep class com.zatoona.app.DailyHabitsWidgetProvider { *; }
+
+# Keep StudyWidgetProvider and Quick Settings Tile Services (Phase 7)
+-keep class com.zatoona.app.StudyWidgetProvider { *; }
+-keep class com.zatoona.app.ZatoonaStudyTileService { *; }
+-keep class com.zatoona.app.ZatoonaGymTileService { *; }
+
+# Keep AllInOneDailyWidgetProvider (Package F / Feature 88)
+-keep class com.zatoona.app.AllInOneDailyWidgetProvider { *; }

@@ -119,6 +119,56 @@
                 android:resource="@xml/widget_daily_habits_info" />
         </receiver>
 
+        <!-- Study & Focus Home-Screen Widget (Phase 7 - System Polish) -->
+        <receiver
+            android:name=".StudyWidgetProvider"
+            android:exported="true"
+            android:label="@string/widget_study_title">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_study_info" />
+        </receiver>
+
+        <!-- All-in-One Daily Home-Screen Widget (Package F / Feature 88) -->
+        <receiver
+            android:name=".AllInOneDailyWidgetProvider"
+            android:exported="true"
+            android:label="@string/widget_all_in_one_title">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_all_in_one_info" />
+        </receiver>
+
+        <!-- Quick Settings Tile: Study & Focus (Phase 7) -->
+        <service
+            android:name=".ZatoonaStudyTileService"
+            android:label="@string/tile_study_label"
+            android:icon="@mipmap/ic_launcher"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <!-- Quick Settings Tile: Gym & Workout (Phase 7) -->
+        <service
+            android:name=".ZatoonaGymTileService"
+            android:label="@string/tile_gym_label"
+            android:icon="@mipmap/ic_launcher"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>

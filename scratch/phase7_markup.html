@@ -1,0 +1,64 @@
+<!-- ===== PHASE 7: SYSTEM POLISH & ZATOONA WRAPPED MARKUP ===== -->
+
+<!-- 1. Automated Local Backup Reminder Banner (Home Dashboard) -->
+<div id="backupReminderBanner" class="backup-reminder-banner" style="display:none;">
+  <div class="backup-reminder-icon">🛡️</div>
+  <div class="backup-reminder-body">
+    <div class="backup-reminder-title" id="backupReminderTitle">تذكير أمان: احفظ نسختك الاحتياطية</div>
+    <div class="backup-reminder-desc" id="backupReminderDesc">مر أكثر من ٧ أيام دون حفظ نسخة احتياطية من بياناتك محلياً.</div>
+  </div>
+  <div class="backup-reminder-actions">
+    <button class="backup-btn-download" onclick="triggerImmediateBackupExport()">تنزيل الآن ⬇</button>
+    <button class="backup-btn-dismiss" onclick="dismissBackupReminder()" title="تذكيري لاحقاً">✕</button>
+  </div>
+</div>
+
+<!-- 2. Zatoona Wrapped Dashboard Launcher Card (Home Dashboard) -->
+<div class="zatoona-wrapped-card" id="zatoonaWrappedCard">
+  <div class="wrapped-card-info">
+    <div class="wrapped-card-badge">✨</div>
+    <div>
+      <div class="wrapped-card-title">حصاد زتونة — رحلة انضباطك</div>
+      <div class="wrapped-card-sub">اكتشف إحصائياتك وإنجازاتك التراكمية ووسامك الشرفي</div>
+    </div>
+  </div>
+  <button class="wrapped-card-open-btn" onclick="openZatoonaWrappedModal()">عرض الحصاد 🎁</button>
+</div>
+
+<!-- 3. Zatoona Wrapped Fullscreen Festive Modal -->
+<div id="zatoonaWrappedModal" class="zatoona-wrapped-overlay" role="dialog" aria-modal="true" onclick="if(event.target===this)closeZatoonaWrappedModal()">
+  <div class="zatoona-wrapped-sheet" onclick="event.stopPropagation()">
+    <div class="wrapped-header">
+      <div class="wrapped-header-title">
+        <span>✨</span>
+        <span>حصاد زتونة (Zatoona Wrapped)</span>
+      </div>
+      <button class="wrapped-close-btn" onclick="closeZatoonaWrappedModal()" aria-label="إغلاق">✕</button>
+    </div>
+    <div class="wrapped-body">
+      <!-- Period Selector Tabs -->
+      <div class="wrapped-tabs">
+        <button class="wrapped-tab-btn active" id="btnWrappedMonth" onclick="switchWrappedPeriod('month')">📅 حصاد الشهر الحالي</button>
+        <button class="wrapped-tab-btn" id="btnWrappedYear" onclick="switchWrappedPeriod('year')">🏆 حصاد العام التراكمي</button>
+      </div>
+
+      <!-- Motivational Rank Banner -->
+      <div class="wrapped-rank-banner" id="wrappedRankBanner">
+        <div class="wrapped-rank-emoji" id="wrappedRankEmoji">🌟</div>
+        <div class="wrapped-rank-title" id="wrappedRankTitle">محارب الانضباط الأسطوري</div>
+        <div class="wrapped-rank-subtitle" id="wrappedRankSubtitle">حققت إنجازات استثنائية في الالتزام والنمو الذاتي</div>
+      </div>
+
+      <!-- Aggregated 6 Pillars Metrics Grid -->
+      <div class="wrapped-grid" id="wrappedMetricsGrid">
+        <!-- Rendered dynamically by phase7_engine.js -->
+      </div>
+    </div>
+    <div class="wrapped-footer">
+      <button class="wrapped-share-action-btn" onclick="shareZatoonaWrapped()">
+        <span>📋</span>
+        <span>مشاركة بطاقة إنجازاتي</span>
+      </button>
+    </div>
+  </div>
+</div>

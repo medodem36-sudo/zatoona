@@ -1,0 +1,33 @@
+<!-- PACKAGE E: FEATURE 42 - MORNING SUNLIGHT LOGGER -->
+<div class="sunlight-card" id="morningSunlightCard">
+  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+    <div>
+      <div style="font-weight:800; font-size:.95rem; color:var(--text);">☀️ مؤشر شمس الصباح (Morning Sunlight Logger)</div>
+      <div class="section-hint" style="padding:0; margin:2px 0 0;">15 دقيقة شمس مباشرة صباحاً توقف الميلاتونين وتضبط إيقاع نومك الطبيعي ليلاً.</div>
+    </div>
+    <span class="screen-free-streak-badge" id="sunlightStreakBadge">☀️ لم يُسجل اليوم</span>
+  </div>
+
+  <div class="nap-timer-display" id="sunlightTimerDisplay" style="color:#f59e0b; margin:10px 0 6px;">15:00</div>
+
+  <div style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
+    <button type="button" class="nap-ctrl-btn start" id="btnSunlightToggle" onclick="toggleSunlightTimer()">بدء الجلسة ☀️</button>
+    <button type="button" class="nap-ctrl-btn" id="btnSunlightReset" onclick="resetSunlightTimer()" style="background:var(--card-alt); border:1px solid var(--line); color:var(--text);">إعادة ضبط 🔄</button>
+    <button type="button" class="nap-ctrl-btn" id="btnSunlightManual" onclick="logSunlightSession(15)" style="background:rgba(245,158,11,0.15); border:1px solid #f59e0b; color:#f59e0b;">تسجيل تم (15 د) ✅</button>
+  </div>
+</div>
+
+<!-- PACKAGE E: FEATURE 44 - STOP FLUIDS 2HRS BEFORE BED -->
+<div class="stop-fluids-card" id="stopFluidsCard">
+  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+    <div>
+      <div style="font-weight:800; font-size:.95rem; color:var(--text);">🚫 إيقاف السوائل قبل النوم بساعتين</div>
+      <div class="section-hint" style="padding:0; margin:2px 0 0;">يمنع الاستيقاظ المتكرر لدخول الحمام ليلاً لحماية مراحل النوم العميق.</div>
+    </div>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <span id="stopFluidsCalculatedTime" style="font-weight:800; font-size:1rem; color:#3b82f6;">09:00 م</span>
+      <button type="button" class="tbtn" id="btnToggleStopFluids" onclick="toggleStopFluidsReminder()">✓</button>
+    </div>
+  </div>
+  <div class="section-hint" id="stopFluidsHintText" style="margin-top:6px; font-size:.78rem;">بناءً على موعد نومك المستهدف (11:00 م)، توقف عن السوائل الكبيرة والكافيين بدءاً من 09:00 م.</div>
+</div>

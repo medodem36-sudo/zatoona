@@ -1,0 +1,190 @@
+{
+  "calc_edge_cases": [
+    {
+      "name": "1RM calculation handles zero/negative/extreme safely",
+      "status": "FAIL",
+      "details": "{'r1': None, 'r2': None, 'r3': None, 'r4': None, 'r5': None}"
+    },
+    {
+      "name": "Plate breakdown exception",
+      "status": "FAIL",
+      "details": "'NoneType' object has no attribute 'get'"
+    },
+    {
+      "name": "Sleep cycle calculator generates 4 cycles and handles invalid input",
+      "status": "FAIL",
+      "details": "{'s1_len': 0, 's2_len': 0, 's3': None}"
+    }
+  ],
+  "dom_references": [],
+  "nl_parser_edge_cases": [
+    {
+      "name": "NL Parser: Normal Arabic",
+      "status": "PASS",
+      "details": "{'dateIso': '2026-11-04', 'durationMinutes': 60, 'time': '17:00', 'title': 'مذاكرة رياضيات ال'}"
+    },
+    {
+      "name": "NL Parser: ASCII Numerals",
+      "status": "PASS",
+      "details": "{'dateIso': '2026-11-04', 'durationMinutes': 60, 'time': '17:00', 'title': 'تمرين ضهر ال'}"
+    },
+    {
+      "name": "NL Parser: Relative Time",
+      "status": "PASS",
+      "details": "{'dateIso': '2026-11-04', 'durationMinutes': 30, 'time': '16:00', 'title': 'قراءة قرآن بعد  ب'}"
+    },
+    {
+      "name": "NL Parser: Empty String",
+      "status": "FAIL",
+      "details": "None"
+    },
+    {
+      "name": "NL Parser: Only Whitespace",
+      "status": "FAIL",
+      "details": "None"
+    },
+    {
+      "name": "NL Parser: Special Characters",
+      "status": "PASS",
+      "details": "{'dateIso': '2026-11-04', 'durationMinutes': 45, 'time': '12:00', 'title': '!@#$%^&*()_+'}"
+    },
+    {
+      "name": "NL Parser: Eastern Arabic Digits",
+      "status": "PASS",
+      "details": "{'dateIso': '2026-11-04', 'durationMinutes': 60, 'time': '12:00', 'title': 'ميعاد دكتور ال 07:30 م'}"
+    },
+    {
+      "name": "NL Parser: Extreme Long Text",
+      "status": "PASS",
+      "details": "{'dateIso': '2026-11-04', 'durationMinutes': 45, 'time': '12:00', 'title': 'مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة مهمة'}"
+    }
+  ],
+  "navigation_integrity": [
+    {
+      "name": "Navigate to 'home' view",
+      "status": "PASS",
+      "details": "view hidden=None"
+    },
+    {
+      "name": "Navigate to 'meal' view",
+      "status": "PASS",
+      "details": "view hidden=False"
+    },
+    {
+      "name": "Navigate to 'gym' view",
+      "status": "PASS",
+      "details": "view hidden=False"
+    },
+    {
+      "name": "Navigate to 'sleep' view",
+      "status": "PASS",
+      "details": "view hidden=False"
+    },
+    {
+      "name": "Navigate to 'prayer' view",
+      "status": "PASS",
+      "details": "view hidden=False"
+    },
+    {
+      "name": "Navigate to 'schedule' view",
+      "status": "PASS",
+      "details": "view hidden=False"
+    },
+    {
+      "name": "Navigate to 'recovery' view",
+      "status": "PASS",
+      "details": "view hidden=True"
+    },
+    {
+      "name": "Navigate to 'overview' view",
+      "status": "PASS",
+      "details": "view hidden=False"
+    },
+    {
+      "name": "Navigate to 'search' view",
+      "status": "PASS",
+      "details": "view hidden=False"
+    },
+    {
+      "name": "Navigate to 'budget' view",
+      "status": "PASS",
+      "details": "view hidden=False"
+    },
+    {
+      "name": "Navigate to 'notes' view",
+      "status": "PASS",
+      "details": "view hidden=False"
+    },
+    {
+      "name": "Navigate to 'stretches' view",
+      "status": "PASS",
+      "details": "view hidden=True"
+    },
+    {
+      "name": "Navigate to 'study' view",
+      "status": "PASS",
+      "details": "view hidden=False"
+    },
+    {
+      "name": "Navigate to 'settings' view",
+      "status": "PASS",
+      "details": "view hidden=False"
+    }
+  ],
+  "modal_open_close": [
+    {
+      "name": "Modal: Theme Customizer",
+      "status": "PASS",
+      "details": "open=True, close=True"
+    },
+    {
+      "name": "Modal: 1RM Calc Modal",
+      "status": "PASS",
+      "details": "open=True, close=None"
+    },
+    {
+      "name": "Modal: Warmup Calc Modal",
+      "status": "PASS",
+      "details": "open=True, close=None"
+    },
+    {
+      "name": "Modal: Exercise Swap Modal",
+      "status": "PASS",
+      "details": "open=True, close=None"
+    },
+    {
+      "name": "Modal: Recovery Heatmap Modal",
+      "status": "PASS",
+      "details": "open=True, close=None"
+    },
+    {
+      "name": "Modal: Protein Cost Modal",
+      "status": "PASS",
+      "details": "open=None, close=None"
+    },
+    {
+      "name": "Modal: Pantry Suggestions Modal",
+      "status": "PASS",
+      "details": "open=None, close=None"
+    },
+    {
+      "name": "Modal: Zatoona Wrapped Modal",
+      "status": "PASS",
+      "details": "open=None, close=None"
+    }
+  ],
+  "storage_integrity": [
+    {
+      "name": "LocalStorage corruption resistance test",
+      "status": "PASS",
+      "details": "Safe JSON handling verified"
+    }
+  ],
+  "console_errors": [
+    {
+      "name": "Headless Chrome zero SEVERE console errors",
+      "status": "FAIL",
+      "details": "3 errors: [{\"level\": \"SEVERE\", \"message\": \"file:///C:/Users/Lenovo/Documents/GitHub/zatoona/index.html 7896 Access to manifest at 'file:///C:/Users/Lenovo/Documents/GitHub/zatoona/manifest.json' from origin 'null' has been blocked by CORS policy: Cross origin requests are only supported for protocol schemes: chrome, chrome-experimental-site-token-provider, chrome-extension, chrome-untrusted, data, http, https, isolated-app.\", \"source\": \"javascript\", \"timestamp\": 1793793608621}, {\"level\": \"SEVERE\", \"message\": \"file:///C:/Users/Lenovo/Documents/GitHub/zatoona/manifest.json - Failed to load resource: net::ERR_FAILED\", \"source\": \"network\", \"timestamp\": 1793793608621}, {\"level\": \"SEVERE\", \"message\": \"file:///C:/Users/Lenovo/Documents/GitHub/zatoona/index.html 12858 Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216.\", \"source\": \"intervention\", \"timestamp\": 1793793618376}]"
+    }
+  ]
+}

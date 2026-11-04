@@ -1,0 +1,301 @@
+<!-- ==========================================================================
+     PHASE 5: WORSHIP & SMART KHATMA ENGINE MARKUP CARDS
+     ========================================================================== -->
+
+<!-- 1. Forbidden Prayer Times Card -->
+<div id="forbiddenTimesCard" class="worship-card">
+  <div class="worship-card-header">
+    <div class="worship-card-title">
+      <span class="worship-gold-accent">🚫</span>
+      <span>دليل وبوصلة أوقات الكراهة والنهي عن صلاة التطوع</span>
+    </div>
+    <div id="forbiddenStatusBadge" class="forbidden-status-badge allowed">
+      <span>●</span>
+      <span>جاري الفحص...</span>
+    </div>
+  </div>
+  <div class="worship-subtext">
+    أوقات منهي عن صلاة النفل المطلق فيها شرعاً، محسوبة آلياً من مواقيت اليوم:
+  </div>
+  <div class="forbidden-windows-list" id="forbiddenWindowsList">
+    <!-- Populated dynamically by Phase 5 Engine -->
+  </div>
+  <div style="margin-top:10px; font-size:0.75rem; color:var(--muted); line-height:1.5;">
+    💡 <strong>تنبيه فقهي:</strong> النهي خاص بصلاة النفل المطلق. أما قضاء الصلوات المفروضة الفائتة وصلاة ذوات الأسباب (كتحية المسجد وسنة الوضوء وركعتي الطواف) فتجوز عند جمهور الفقهاء.
+  </div>
+</div>
+
+<!-- 2. Pre-Adhan Preparation Chime Card -->
+<div id="preAdhanChimeCard" class="worship-card">
+  <div class="worship-card-header">
+    <div class="worship-card-title">
+      <span class="worship-emerald-accent">🔔</span>
+      <span>منبه الاستعداد الهادئ قبل الأذان</span>
+    </div>
+    <label class="switch-ui" style="position:relative; display:inline-block; width:44px; height:24px;">
+      <input type="checkbox" id="preAdhanChimeToggle" onchange="window.ZATOONA_PHASE5.togglePreAdhanChime(this.checked)" style="opacity:0; width:0; height:0;">
+      <span class="slider round" style="position:absolute; cursor:pointer; inset:0; background:#30363d; border-radius:24px; transition:.3s;"></span>
+    </label>
+  </div>
+  <div class="worship-subtext">
+    تنبيه لطيف قبل وقت الفريضة لإنهاء أعمالك والاستعداد والوضوء قبل دخول الوقت:
+  </div>
+  <div class="worship-toggle-row" style="margin-top:10px;">
+    <span>التنبيه قبل الأذان بـ:</span>
+    <select id="preAdhanMinutesSelect" class="weight-input" style="padding:4px 8px; font-size:0.82rem;" onchange="window.ZATOONA_PHASE5.setPreAdhanMinutes(this.value)">
+      <option value="10">10 دقائق (موصى به)</option>
+      <option value="15">15 دقيقة</option>
+      <option value="20">20 دقيقة</option>
+      <option value="5">5 دقائق</option>
+    </select>
+  </div>
+  <div id="preAdhanNextAlert" style="font-size:0.78rem; color:var(--accent); margin-top:6px;">
+    <!-- Populated dynamically -->
+  </div>
+</div>
+
+<!-- 3. Smart Pre-Fajr & Suhoor Alarm Card -->
+<div id="suhoorQiyamCard" class="worship-card">
+  <div class="worship-card-header">
+    <div class="worship-card-title">
+      <span class="worship-gold-accent">🌙</span>
+      <span>منبه السَحَر وقيام الليل الذكي (الثلث الأخير)</span>
+    </div>
+    <label class="switch-ui" style="position:relative; display:inline-block; width:44px; height:24px;">
+      <input type="checkbox" id="suhoorAlarmToggle" onchange="window.ZATOONA_PHASE5.toggleSuhoorAlarm(this.checked)" style="opacity:0; width:0; height:0;">
+      <span class="slider round" style="position:absolute; cursor:pointer; inset:0; background:#30363d; border-radius:24px; transition:.3s;"></span>
+    </label>
+  </div>
+  <div class="worship-subtext">
+    منبه ذكي يتكيف تلقائياً مع توقيت أذان الفجر لمدينتك لإيقاظك في وقت السحر والنزول الإلهي:
+  </div>
+  <div class="suhoor-highlight-box">
+    <div style="font-size:0.8rem; color:var(--muted);">وقت السحر المقترح لليوم:</div>
+    <div class="suhoor-time-val" id="suhoorTimeDisplay">--:--</div>
+    <div class="suhoor-countdown-pill" id="suhoorCountdownPill">متبقي --</div>
+  </div>
+  <div class="worship-toggle-row">
+    <span>الاستيقاظ قبل أذان الفجر بـ:</span>
+    <select id="suhoorOffsetSelect" class="weight-input" style="padding:4px 8px; font-size:0.82rem;" onchange="window.ZATOONA_PHASE5.setSuhoorOffset(this.value)">
+      <option value="30">30 دقيقة</option>
+      <option value="45" selected>45 دقيقة (موصى به للوتر والسحور)</option>
+      <option value="60">60 دقيقة (ساعة كاملة)</option>
+      <option value="90">90 دقيقة (ساعة ونصف للقيام الطويل)</option>
+    </select>
+  </div>
+</div>
+
+<!-- 4. Subtle Random Dhikr Card -->
+<div id="randomDhikrCard" class="worship-card">
+  <div class="worship-card-header">
+    <div class="worship-card-title">
+      <span class="worship-emerald-accent">📿</span>
+      <span>تذكير الأذكار الرطب الخفيف</span>
+    </div>
+    <button type="button" class="btn-subtle" style="padding:3px 10px; font-size:0.78rem;" onclick="window.ZATOONA_PHASE5.nextRandomDhikr()">
+      ذكر آخر 🔄
+    </button>
+  </div>
+  <div class="random-dhikr-quote">
+    <div class="random-dhikr-text" id="randomDhikrText">سبحان الله وبحمده، سبحان الله العظيم</div>
+    <div class="random-dhikr-virtue" id="randomDhikrVirtue">كلمتان خفيفتان على اللسان، ثقيلتان في الميزان، حبيبتان إلى الرحمن</div>
+  </div>
+  <div class="worship-toggle-row" style="margin-top:6px;">
+    <span style="font-size:0.8rem;">تذكير عشوائي صامت دوري:</span>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <select id="randomDhikrIntervalSelect" class="weight-input" style="padding:3px 6px; font-size:0.78rem;" onchange="window.ZATOONA_PHASE5.setDhikrInterval(this.value)">
+        <option value="60">كل ساعة</option>
+        <option value="120" selected>كل ساعتين</option>
+        <option value="180">كل 3 ساعات</option>
+        <option value="off">معطل</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- 5. Friday Sunan Interactive Checklist Card -->
+<div id="fridaySunanCard" class="worship-card">
+  <div class="worship-card-header">
+    <div class="worship-card-title">
+      <span class="worship-gold-accent">🌟</span>
+      <span>سنن وآداب يوم الجمعة</span>
+    </div>
+    <span class="friday-badge" id="fridayBadgeIndicator">الجمعة المباركة</span>
+  </div>
+  <div class="worship-subtext">
+    احرص على سنن الحبيب ﷺ لنيل أجر الجمعة العظيم ومغفرة ما بين الجمعتين:
+  </div>
+  <div class="friday-sunan-checklist" id="fridaySunanList">
+    <!-- Populated dynamically -->
+  </div>
+  <div class="salawat-counter-box">
+    <div style="font-size:0.82rem; color:var(--muted);">الصلاة على النبي ﷺ اليوم:</div>
+    <div class="salawat-count-num" id="salawatCountDisplay">0</div>
+    <button type="button" class="salawat-tap-btn" id="salawatTapBtn" onclick="window.ZATOONA_PHASE5.incrementSalawat()">
+      اللهم صلِّ وسلِّم على نبينا محمد 📿
+    </button>
+    <div style="display:flex; justify-content:center; gap:8px; margin-top:10px;">
+      <button type="button" class="btn-subtle" style="font-size:0.75rem; padding:2px 8px;" onclick="window.ZATOONA_PHASE5.addSalawatBatch(10)">+10</button>
+      <button type="button" class="btn-subtle" style="font-size:0.75rem; padding:2px 8px;" onclick="window.ZATOONA_PHASE5.addSalawatBatch(50)">+50</button>
+      <button type="button" class="btn-subtle" style="font-size:0.75rem; padding:2px 8px;" onclick="window.ZATOONA_PHASE5.resetSalawat()">تصفير</button>
+    </div>
+  </div>
+</div>
+
+<!-- 6. Smart Khatma & Quran Reflection Hub Card -->
+<div id="khatmaCard" class="worship-card">
+  <div class="worship-card-header">
+    <div class="worship-card-title">
+      <span class="worship-emerald-accent">📖</span>
+      <span>ختمة القرآن الذكية ومفكرة التدبر</span>
+    </div>
+    <button type="button" class="btn-subtle" style="padding:4px 10px; font-size:0.8rem;" onclick="window.ZATOONA_PHASE5.openKhatmaModal('plan')">
+      ⚙️ الخطة
+    </button>
+  </div>
+  <div class="khatma-progress-container">
+    <div style="display:flex; justify-content:space-between; font-size:0.84rem; font-weight:600;">
+      <span>نسبة إنجاز الختمة:</span>
+      <span id="khatmaPercentText" style="color:#3fb950;">0%</span>
+    </div>
+    <div class="khatma-bar-wrap">
+      <div class="khatma-bar-fill" id="khatmaBarFill" style="width:0%;"></div>
+    </div>
+  </div>
+  <div class="khatma-grid-stats">
+    <div class="khatma-stat-card">
+      <div class="khatma-stat-val" id="khatmaCurrentPage">1</div>
+      <div class="khatma-stat-lbl">الصفحة الحالية (من 604)</div>
+    </div>
+    <div class="khatma-stat-card">
+      <div class="khatma-stat-val" id="khatmaCurrentJuz">1</div>
+      <div class="khatma-stat-lbl">الجزء الحالي (من 30)</div>
+    </div>
+    <div class="khatma-stat-card">
+      <div class="khatma-stat-val" id="khatmaDailyTarget">20</div>
+      <div class="khatma-stat-lbl">ورد اليوم المطلوب (صفحة)</div>
+    </div>
+  </div>
+  <div class="khatma-actions-row">
+    <button type="button" class="btn-primary" style="flex:1; padding:8px 12px; font-size:0.85rem;" onclick="window.ZATOONA_PHASE5.markTodayKhatmaDone()">
+      ✓ قرأت ورد اليوم
+    </button>
+    <button type="button" class="btn-subtle" style="padding:8px 12px; font-size:0.85rem;" onclick="window.ZATOONA_PHASE5.openKhatmaModal('reflections')">
+      📝 مفكرة تدبر الآيات
+    </button>
+  </div>
+</div>
+
+<!-- 7. Missed Worship & Fasting Ledger Card -->
+<div id="missedWorshipCard" class="worship-card">
+  <div class="worship-card-header">
+    <div class="worship-card-title">
+      <span class="worship-gold-accent">⚖️</span>
+      <span>سجل قضاء الصلوات الفائتة وأيام الصيام</span>
+    </div>
+  </div>
+  <div class="worship-subtext">
+    تفريغ الذمة بتوثيق قضاء ما فاتك من صلوات وأيام صيام بعذر (فَدَيْنُ اللَّهِ أَحَقُّ أَنْ يُقْضَى):
+  </div>
+  
+  <!-- Missed Prayers Sub-grid -->
+  <div style="margin-top:12px; font-size:0.84rem; font-weight:700;">الصلوات المفروضة الواجب قضاؤها:</div>
+  <div class="missed-grid" id="missedPrayersGrid">
+    <!-- Populated dynamically -->
+  </div>
+
+  <!-- Missed Fasting Sub-section -->
+  <div style="margin-top:12px; padding:12px; background:var(--bg); border-radius:10px; border:1px solid var(--line);">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+      <div>
+        <div style="font-weight:700; font-size:0.86rem;">أيام الصيام الفائتة (رمضان / نذر):</div>
+        <div style="font-size:0.76rem; color:var(--muted); margin-top:2px;">
+          متبقي عليك: <strong id="missedFastingRemaining" style="color:#e3b341;">0</strong> يوم (تم قضاء: <span id="missedFastingDone">0</span>)
+        </div>
+      </div>
+      <div style="display:flex; gap:6px;">
+        <button type="button" class="btn-subtle" style="padding:4px 8px; font-size:0.78rem;" onclick="window.ZATOONA_PHASE5.logFastMadeUp()">
+          + صمت قضاء اليوم
+        </button>
+        <button type="button" class="btn-subtle" style="padding:4px 8px; font-size:0.78rem;" onclick="window.ZATOONA_PHASE5.editMissedFastingDays()">
+          تعديل الإجمالي ⚙️
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     PHASE 5 MODAL: KHATMA & REFLECTION HUB
+     ========================================================================== -->
+<div class="p5-modal-overlay" id="khatmaReflectionModal" role="dialog" aria-modal="true" aria-labelledby="khatmaModalTitle">
+  <div class="p5-modal-card">
+    <div class="p5-modal-header">
+      <div class="p5-modal-title" id="khatmaModalTitle">
+        <span>📖</span>
+        <span>منظومة الختمة ومفكرة تدبر الآيات</span>
+      </div>
+      <button type="button" class="p5-modal-close" onclick="window.ZATOONA_PHASE5.closeModals()">&times;</button>
+    </div>
+    <div class="p5-modal-body">
+      <!-- Modal Nav Tabs -->
+      <div style="display:flex; gap:8px; margin-bottom:14px; border-bottom:1px solid var(--line); padding-bottom:8px;">
+        <button type="button" class="btn-subtle" id="khatmaTabPlanBtn" style="flex:1;" onclick="window.ZATOONA_PHASE5.switchKhatmaTab('plan')">⚙️ إعدادات الخطة</button>
+        <button type="button" class="btn-subtle" id="khatmaTabReflectBtn" style="flex:1;" onclick="window.ZATOONA_PHASE5.switchKhatmaTab('reflections')">📝 مفكرة التدبر</button>
+      </div>
+
+      <!-- Tab 1: Plan Settings -->
+      <div id="khatmaTabPlanContent">
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <div>
+            <label style="font-size:0.82rem; color:var(--muted); display:block; margin-bottom:4px;">المدة المستهدفة لختم المصحف:</label>
+            <select id="khatmaDurationSelect" class="weight-input" style="width:100%; padding:8px;">
+              <option value="30">30 يوماً (جزء / 20 صفحة يومياً)</option>
+              <option value="15">15 يوماً (جزآن / 40 صفحة يومياً)</option>
+              <option value="60">60 يوماً (نصف جزء / 10 صفحات يومياً)</option>
+              <option value="custom">مخصص (حدد عدد الصفحات اليومي)</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:0.82rem; color:var(--muted); display:block; margin-bottom:4px;">الصفحة التي وصلت إليها الآن (1 - 604):</label>
+            <input type="number" id="khatmaManualPageInput" min="1" max="604" class="weight-input" style="width:100%; padding:8px;">
+          </div>
+          <button type="button" class="btn-primary" style="padding:10px; font-weight:700;" onclick="window.ZATOONA_PHASE5.saveKhatmaPlanSettings()">
+            حفظ إعدادات الختمة 💾
+          </button>
+        </div>
+      </div>
+
+      <!-- Tab 2: Reflections Notebook -->
+      <div id="khatmaTabReflectContent" style="display:none;">
+        <div style="background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:12px; margin-bottom:14px;">
+          <div style="font-weight:700; font-size:0.88rem; margin-bottom:8px;">إضافة تدبر أو فائدة جديدة:</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
+            <input type="text" id="reflectSurahInput" placeholder="اسم السورة (مثلاً: البقرة)" class="weight-input" style="padding:6px 8px; font-size:0.82rem;">
+            <input type="number" id="reflectAyahInput" placeholder="رقم الآية" class="weight-input" style="padding:6px 8px; font-size:0.82rem;">
+          </div>
+          <div style="margin-bottom:8px;">
+            <select id="reflectTagSelect" class="weight-input" style="width:100%; padding:6px 8px; font-size:0.82rem;">
+              <option value="تدبر">#تدبر_وهداية</option>
+              <option value="دعاء">#دعاء_ورجاء</option>
+              <option value="بشارة">#بشارة_وأمل</option>
+              <option value="صبر">#صبر_وثبات</option>
+              <option value="شكر">#شكر_وحَمْد</option>
+            </select>
+          </div>
+          <div style="margin-bottom:8px;">
+            <textarea id="reflectTextInput" rows="3" placeholder="اكتب ما لامس قلبك من معانٍ أو عمل بالآية..." class="weight-input" style="width:100%; padding:8px; font-size:0.84rem; resize:vertical;"></textarea>
+          </div>
+          <button type="button" class="btn-primary" style="width:100%; padding:8px; font-size:0.84rem;" onclick="window.ZATOONA_PHASE5.addReflectionNote()">
+            + حفظ الفائدة في المفكرة
+          </button>
+        </div>
+
+        <div style="font-weight:700; font-size:0.88rem; margin-bottom:8px;">سجل التدبرات المحفوظة:</div>
+        <div id="reflectionsList" style="display:flex; flex-direction:column; gap:8px; max-height:240px; overflow-y:auto;">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

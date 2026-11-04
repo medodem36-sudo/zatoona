@@ -18,4 +18,20 @@
     <string name="widget_daily_habits_description">عرض قائمة العادات والمهارات اليومية ومستوى الإنجاز اليومي على الشاشة الرئيسية.</string>
     <string name="widget_habits_header">عادات اليوم</string>
     <string name="widget_habits_empty">لا توجد عادات مسجلة — اضغط للإضافة</string>
+
+    <!-- Study Widget (Phase 7 - System Polish) -->
+    <string name="widget_study_title">زتونة — المذاكرة والتركيز</string>
+    <string name="widget_study_description">عرض وقت المذاكرة اليومي ومراجعة الكروت السريعة على الشاشة الرئيسية.</string>
+    <string name="widget_study_header">المذاكرة والتركيز</string>
+    <string name="widget_study_fallback">افتح زتونة لمزامنة جلسات المذاكرة</string>
+    <string name="widget_study_start">بدء جلسة تركيز</string>
+    <string name="widget_study_review">مراجعة الكروت</string>
+
+    <!-- Quick Settings Tiles (Phase 7) -->
+    <string name="tile_study_label">جلسة تركيز</string>
+    <string name="tile_gym_label">بدء تمرين</string>
+
+    <!-- All-in-One Daily Widget (Package F / Feature 88) -->
+    <string name="widget_all_in_one_title">زتونة — الملخص اليومي الشامل</string>
+    <string name="widget_all_in_one_description">ويدجت متكامل يجمع الصلاة القادمة وتمرين اليوم وكمية الماء وسلسلة الالتزام على الشاشة الرئيسية.</string>
 </resources>

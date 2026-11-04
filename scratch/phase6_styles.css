@@ -1,0 +1,263 @@
+/* ==========================================================================
+   PHASE 6: ADVANCED SLEEP & LIFE OS STYLES
+   Circadian Cycles, Power Nap, Screen-Free Wind-down, Desk Breaks,
+   Eisenhower Matrix, Critical Task Pinning, Archive, Vacation Freeze & Safar
+   ========================================================================== */
+
+/* 1. Sleep Cycle Calculator Card */
+.sleep-cycle-card {
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 14px;
+  transition: border-color .2s ease;
+}
+.sleep-cycle-card:hover {
+  border-color: var(--accent);
+}
+.sleep-cycle-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+.sleep-cycle-item {
+  background: var(--card-alt);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 12px;
+  text-align: center;
+  position: relative;
+  transition: transform .15s ease, border-color .15s ease;
+}
+.sleep-cycle-item:hover {
+  transform: translateY(-2px);
+  border-color: var(--teal);
+}
+.sleep-cycle-item.golden {
+  border: 1.5px solid #10b981;
+  background: rgba(16, 185, 129, 0.08);
+}
+.sleep-cycle-time {
+  font-family: monospace;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text);
+  margin: 4px 0;
+}
+.sleep-cycle-badge {
+  display: inline-block;
+  font-size: .68rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: var(--card);
+  color: var(--muted);
+  border: 1px solid var(--line);
+}
+.sleep-cycle-item.golden .sleep-cycle-badge {
+  background: #10b981;
+  color: #fff;
+  border-color: #10b981;
+}
+
+/* 2. Power Nap Smart Timer */
+.power-nap-card {
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 14px;
+  text-align: center;
+}
+.nap-timer-display {
+  font-family: monospace;
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--accent);
+  margin: 12px 0;
+  letter-spacing: 2px;
+}
+.nap-presets-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.nap-preset-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--card-alt);
+  color: var(--text);
+  font-size: .82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.nap-preset-btn.active, .nap-preset-btn:hover {
+  border-color: var(--accent);
+  background: var(--card);
+  color: var(--accent);
+}
+.nap-ctrl-btn {
+  padding: 8px 24px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 700;
+  font-size: .9rem;
+  cursor: pointer;
+  transition: background .15s ease;
+}
+.nap-ctrl-btn.start { background: var(--good); color: #fff; }
+.nap-ctrl-btn.stop { background: var(--bad); color: #fff; }
+
+/* 3. Screen-Free Bedtime Widget */
+.screen-free-card {
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.screen-free-streak-badge {
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: .8rem;
+}
+
+/* 4. Sedentary Desk Break Chime */
+.desk-break-card {
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+}
+
+/* 5. Eisenhower Matrix 4-Quadrant View */
+.eisenhower-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 14px;
+  margin-bottom: 14px;
+}
+@media (max-width: 640px) {
+  .eisenhower-container {
+    grid-template-columns: 1fr;
+  }
+}
+.eisenhower-quadrant {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 14px;
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+}
+.eq-q1 { border: 2px solid #ef4444; background: rgba(239, 68, 68, 0.03); }
+.eq-q2 { border: 2px solid #3b82f6; background: rgba(59, 130, 246, 0.03); }
+.eq-q3 { border: 2px solid #f59e0b; background: rgba(245, 158, 11, 0.03); }
+.eq-q4 { border: 2px solid var(--muted); background: rgba(100, 116, 139, 0.03); }
+
+.eq-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed var(--line);
+}
+.eq-title {
+  font-size: .88rem;
+  font-weight: 800;
+}
+.eq-badge {
+  font-size: .7rem;
+  padding: 2px 7px;
+  border-radius: 6px;
+  font-weight: 700;
+}
+.eq-tasks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+.eq-task-item {
+  background: var(--card-alt);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-size: .82rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform .1s ease;
+}
+.eq-task-item:hover {
+  transform: translateX(-2px);
+}
+
+/* 6. Pinned Critical Tasks */
+.pinned-tasks-box {
+  background: rgba(245, 158, 11, 0.06);
+  border: 1.5px solid #f59e0b;
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+}
+.pinned-task-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--card);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-top: 6px;
+  font-size: .84rem;
+}
+
+/* 7. Vacation Freeze & Smart Safar Mode */
+.vacation-safar-card {
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+}
+.safar-banner {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(16, 185, 129, 0.15));
+  border: 1.5px solid #3b82f6;
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.safar-fiqh-box {
+  background: var(--card-alt);
+  border: 1px dashed #3b82f6;
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-top: 10px;
+  font-size: .8rem;
+  color: var(--text);
+  line-height: 1.5;
+}

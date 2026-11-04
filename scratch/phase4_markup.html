@@ -1,0 +1,271 @@
+<!-- ==========================================================================
+     PHASE 4: SMART NUTRITION, PANTRY & BUDGET ENGINE MARKUP
+     ========================================================================== -->
+
+<!-- Top Nutrition Quick Tools Bar & Intelligence Cards Container -->
+<div id="nutritionIntelligenceContainer" style="margin-bottom: 16px;">
+  <!-- Quick Actions Bar -->
+  <div class="nut-quick-bar" id="nutQuickBar">
+    <button type="button" class="nut-quick-btn" id="btnOpenPantrySuggestions" onclick="window.ZATOONA_PHASE4.openPantrySuggestions()">
+      <span class="btn-icon">💡</span>
+      <span>أطبخ إيه من المؤن؟</span>
+    </button>
+    <button type="button" class="nut-quick-btn" id="btnOpenProteinCostCalc" onclick="window.ZATOONA_PHASE4.openProteinCostCalc()">
+      <span class="btn-icon">🥩</span>
+      <span>أرخص جرام بروتين</span>
+    </button>
+    <button type="button" class="nut-quick-btn" id="btnOpenFavoriteCombos" onclick="window.ZATOONA_PHASE4.openFavoriteCombos()">
+      <span class="btn-icon">⚡</span>
+      <span>الوجبات المفضلة</span>
+    </button>
+    <button type="button" class="nut-quick-btn" id="btnOpenCarbCycling" onclick="window.ZATOONA_PHASE4.openCarbCyclingModal()">
+      <span class="btn-icon">🔄</span>
+      <span>تدوير الكارب الذكي</span>
+    </button>
+  </div>
+
+  <!-- Smart Carb Cycling Status Card -->
+  <div class="nut-summary-card" id="carbCyclingStatusCard">
+    <div class="nut-card-header">
+      <div class="nut-card-title">
+        <span>🔄</span>
+        <span>تدوير الكاربوهيدرات اليوم</span>
+      </div>
+      <div id="carbCyclingBadge" class="nut-badge nut-badge-mod">كاربوهيدرات معتدلة</div>
+    </div>
+    <div style="font-size:0.86rem; color:var(--text-muted, #94a3b8); margin-bottom:8px;" id="carbCyclingScheduleHint">
+      مرتبط تلقائياً بجدول التمرين: يوم تمرين معتاد
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:0.82rem;">
+      <div style="background:rgba(255,255,255,0.04); padding:8px 12px; border-radius:10px;">
+        <div style="color:var(--text-muted, #94a3b8);">مستهدف الكارب اليوم:</div>
+        <div style="font-size:1.1rem; font-weight:800; color:#60a5fa;" id="carbCyclingTargetCarbs">200 جم</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.04); padding:8px 12px; border-radius:10px;">
+        <div style="color:var(--text-muted, #94a3b8);">مستهدف السعرات لليوم:</div>
+        <div style="font-size:1.1rem; font-weight:800; color:#34d399;" id="carbCyclingTargetCalories">2,200 سعرة</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Weekly Cumulative Caloric Deficit Card -->
+  <div class="nut-summary-card" id="weeklyDeficitCard">
+    <div class="nut-card-header">
+      <div class="nut-card-title">
+        <span>📉</span>
+        <span>العجز السعري الأسبوعي التراكمي</span>
+      </div>
+      <div id="weeklyDeficitBadge" class="nut-badge nut-badge-opt">عجز صحي فعال</div>
+    </div>
+    <div style="display:flex; justify-content:space-between; font-size:0.86rem; margin-bottom:4px;">
+      <span style="color:var(--text-muted, #94a3b8);">صافي العجز حتى اليوم:</span>
+      <span style="font-weight:700; color:#34d399;" id="weeklyDeficitValue">2,100 سعرة</span>
+    </div>
+    <div class="nut-meter-track">
+      <div class="nut-meter-fill deficit-good" id="weeklyDeficitFill" style="width: 60%;"></div>
+    </div>
+    <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.8rem; color:var(--text-muted, #94a3b8); margin-top:6px;">
+      <span>الدهون المتوقع خسارتها:</span>
+      <span style="font-weight:800; color:var(--text, #f8fafc);" id="weeklyFatLossEstimate">~ 0.27 كجم دهون</span>
+    </div>
+  </div>
+
+  <!-- Sodium-Potassium Balance Card -->
+  <div class="nut-summary-card" id="sodiumPotassiumCard">
+    <div class="nut-card-header">
+      <div class="nut-card-title">
+        <span>⚖️</span>
+        <span>ميزان الصوديوم والبوتاسيوم (احتباس الماء)</span>
+      </div>
+      <div id="naKRatioBadge" class="nut-badge nut-badge-opt">توازن مثالي</div>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:0.82rem; margin-bottom:8px;">
+      <div style="background:rgba(255,255,255,0.03); padding:6px 10px; border-radius:8px;">
+        <span style="color:var(--text-muted, #94a3b8);">صوديوم (Na):</span>
+        <strong id="valTodaySodium" style="margin-right:6px; color:#f87171;">1850 مجم</strong>
+      </div>
+      <div style="background:rgba(255,255,255,0.03); padding:6px 10px; border-radius:8px;">
+        <span style="color:var(--text-muted, #94a3b8);">بوتاسيوم (K):</span>
+        <strong id="valTodayPotassium" style="margin-right:6px; color:#34d399;">2400 مجم</strong>
+      </div>
+    </div>
+    <div style="font-size:0.78rem; color:var(--text-muted, #94a3b8); line-height:1.4;" id="naKAdviceText">
+      النسبة متوازنة وممتازة لدعم عضلة القلب ومنع احتباس السوائل تحت الجلد.
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     PHASE 4 MODALS
+     ========================================================================== -->
+
+<!-- 1. Smart Pantry Meal Suggestions Modal -->
+<div class="p4-modal-overlay" id="pantryMealSuggestionsModal" role="dialog" aria-modal="true" aria-labelledby="pmsTitle">
+  <div class="p4-modal-card">
+    <div class="p4-modal-header">
+      <div class="p4-modal-title" id="pmsTitle">
+        <span>💡</span>
+        <span>أطبخ إيه من المؤن المتاحة؟</span>
+      </div>
+      <button type="button" class="p4-modal-close" onclick="window.ZATOONA_PHASE4.closeModals()">&times;</button>
+    </div>
+    <div class="p4-modal-body">
+      <div style="font-size:0.86rem; color:var(--text-muted, #94a3b8); margin-bottom:12px;">
+        وجبات مقترحة عالية القيمة الغذائية تقارن فورياً مع المخزون المتوفر في ثلاجتك وقسم المؤن:
+      </div>
+      <div style="display:flex; gap:8px; margin-bottom:12px; overflow-x:auto;">
+        <button type="button" class="btn-subtle" style="padding:4px 10px; font-size:0.8rem;" id="pmsFilterAll" onclick="window.ZATOONA_PHASE4.filterPantryMeals('all')">الكل</button>
+        <button type="button" class="btn-subtle" style="padding:4px 10px; font-size:0.8rem;" id="pmsFilterReady" onclick="window.ZATOONA_PHASE4.filterPantryMeals('ready')">✅ متوفرة بالكامل (100%)</button>
+        <button type="button" class="btn-subtle" style="padding:4px 10px; font-size:0.8rem;" id="pmsFilterHighProtein" onclick="window.ZATOONA_PHASE4.filterPantryMeals('protein')">🥩 بروتين عالي (+30g)</button>
+      </div>
+      <div id="pantryMealSuggestionsList"></div>
+    </div>
+    <div class="p4-modal-footer">
+      <button type="button" class="btn-subtle" onclick="window.ZATOONA_PHASE4.closeModals()">إغلاق</button>
+    </div>
+  </div>
+</div>
+
+<!-- 2. Protein-to-Cost Calculator Modal -->
+<div class="p4-modal-overlay" id="proteinCostCalcModal" role="dialog" aria-modal="true" aria-labelledby="pccTitle">
+  <div class="p4-modal-card" style="max-width: 680px;">
+    <div class="p4-modal-header">
+      <div class="p4-modal-title" id="pccTitle">
+        <span>🥩</span>
+        <span>حاسبة أرخص جرام بروتين في السوق المصري</span>
+      </div>
+      <button type="button" class="p4-modal-close" onclick="window.ZATOONA_PHASE4.closeModals()">&times;</button>
+    </div>
+    <div class="p4-modal-body">
+      <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px; margin-bottom:14px; background:rgba(255,255,255,0.03); padding:10px 14px; border-radius:12px;">
+        <div style="font-size:0.88rem;">
+          <label for="pccTargetGrams" style="color:var(--text-muted, #94a3b8); margin-left:6px;">هدفك اليومي من البروتين:</label>
+          <input type="number" id="pccTargetGrams" value="140" min="20" max="350" style="width:75px; padding:4px 8px; border-radius:8px; border:1px solid var(--border, #334155); background:#0f172a; color:#fff; text-align:center;" oninput="window.ZATOONA_PHASE4.renderProteinCostTable()">
+          <span style="font-size:0.85rem; color:var(--text-muted, #94a3b8); margin-right:4px;">جم</span>
+        </div>
+        <button type="button" class="btn-subtle" style="font-size:0.8rem; padding:4px 10px;" onclick="window.ZATOONA_PHASE4.resetProteinCostPrices()">استعادة أسعار السوق</button>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="protein-calc-table" id="proteinCalcTable">
+          <thead>
+            <tr>
+              <th style="width:35px;">#</th>
+              <th>المصدر الغذائي</th>
+              <th>سعر الوحدة</th>
+              <th>صافي البروتين</th>
+              <th>تكلفة الجرام</th>
+              <th>تكلفة هدفك اليومي</th>
+            </tr>
+          </thead>
+          <tbody id="proteinCalcTableBody"></tbody>
+        </table>
+      </div>
+      <div style="margin-top:14px; font-size:0.78rem; color:var(--text-muted, #94a3b8); line-height:1.4;">
+        💡 اضغط على أي سعر في الجدول لتعديله حسب أسعار منطقتك، وسيتم حفظ التعديلات محلياً وتحديث الترتيب فوراً.
+      </div>
+    </div>
+    <div class="p4-modal-footer">
+      <button type="button" class="btn-subtle" onclick="window.ZATOONA_PHASE4.closeModals()">إغلاق</button>
+    </div>
+  </div>
+</div>
+
+<!-- 3. Quick-Add Favorite Combos Modal -->
+<div class="p4-modal-overlay" id="favoriteCombosModal" role="dialog" aria-modal="true" aria-labelledby="favcTitle">
+  <div class="p4-modal-card">
+    <div class="p4-modal-header">
+      <div class="p4-modal-title" id="favcTitle">
+        <span>⚡</span>
+        <span>الوجبات والخلطات المفضلة (Combos)</span>
+      </div>
+      <button type="button" class="p4-modal-close" onclick="window.ZATOONA_PHASE4.closeModals()">&times;</button>
+    </div>
+    <div class="p4-modal-body">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <div style="font-size:0.86rem; color:var(--text-muted, #94a3b8);">خلطات جاهزة تضيفها لجدول يومك بلمسة واحدة:</div>
+        <button type="button" class="btn-subtle" style="font-size:0.8rem; padding:5px 10px;" onclick="window.ZATOONA_PHASE4.openAddComboForm()">+ خلطة جديدة</button>
+      </div>
+      <!-- Add combo mini form -->
+      <div id="addComboForm" style="display:none; background:rgba(255,255,255,0.03); border:1px solid var(--border, #334155); border-radius:12px; padding:12px; margin-bottom:12px;">
+        <div style="font-weight:700; margin-bottom:8px; font-size:0.9rem;">إنشاء خلطة مفضلة جديدة</div>
+        <input type="text" id="comboNameInput" placeholder="اسم الخلطة (مثلاً: فطار الضخامة، وجبة بعد التمرين)" style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--border, #334155); background:#0f172a; color:#fff; margin-bottom:8px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:8px;">
+          <input type="number" id="comboKcalInput" placeholder="السعرات (kcal)" style="padding:6px; border-radius:6px; border:1px solid var(--border, #334155); background:#0f172a; color:#fff; font-size:0.85rem;">
+          <input type="number" id="comboProteinInput" placeholder="بروتين (g)" style="padding:6px; border-radius:6px; border:1px solid var(--border, #334155); background:#0f172a; color:#fff; font-size:0.85rem;">
+          <input type="number" id="comboCarbInput" placeholder="كاربوهيدرات (g)" style="padding:6px; border-radius:6px; border:1px solid var(--border, #334155); background:#0f172a; color:#fff; font-size:0.85rem;">
+          <input type="number" id="comboFatInput" placeholder="دهون (g)" style="padding:6px; border-radius:6px; border:1px solid var(--border, #334155); background:#0f172a; color:#fff; font-size:0.85rem;">
+        </div>
+        <textarea id="comboNotesInput" placeholder="المكونات أو ملاحظات التحضير..." style="width:100%; height:55px; padding:6px 10px; border-radius:8px; border:1px solid var(--border, #334155); background:#0f172a; color:#fff; font-size:0.85rem; margin-bottom:8px;"></textarea>
+        <div style="display:flex; justify-content:flex-end; gap:8px;">
+          <button type="button" class="btn-subtle" onclick="document.getElementById('addComboForm').style.display='none'">إلغاء</button>
+          <button type="button" class="btn-subtle" style="background:var(--accent, #10b981); color:#fff;" onclick="window.ZATOONA_PHASE4.saveNewCombo()">حفظ الخلطة</button>
+        </div>
+      </div>
+      <div id="favoriteCombosList"></div>
+    </div>
+    <div class="p4-modal-footer">
+      <button type="button" class="btn-subtle" onclick="window.ZATOONA_PHASE4.closeModals()">إغلاق</button>
+    </div>
+  </div>
+</div>
+
+<!-- 4. Smart Carb Cycling Settings Modal -->
+<div class="p4-modal-overlay" id="carbCyclingModal" role="dialog" aria-modal="true" aria-labelledby="ccTitle">
+  <div class="p4-modal-card">
+    <div class="p4-modal-header">
+      <div class="p4-modal-title" id="ccTitle">
+        <span>🔄</span>
+        <span>إعدادات مخطط تدوير الكاربوهيدرات</span>
+      </div>
+      <button type="button" class="p4-modal-close" onclick="window.ZATOONA_PHASE4.closeModals()">&times;</button>
+    </div>
+    <div class="p4-modal-body">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; background:rgba(255,255,255,0.03); padding:10px 14px; border-radius:12px;">
+        <div>
+          <div style="font-weight:700; font-size:0.95rem;">تفعيل تدوير الكارب التلقائي</div>
+          <div style="font-size:0.78rem; color:var(--text-muted, #94a3b8);">يتزامن تلقائياً مع جدول تمارين الجيم وأيام الراحة</div>
+        </div>
+        <label class="switch" style="position:relative; display:inline-block; width:44px; height:24px;">
+          <input type="checkbox" id="chkEnableCarbCycling" onchange="window.ZATOONA_PHASE4.toggleCarbCycling(this.checked)" checked>
+          <span class="slider round" style="position:absolute; inset:0; background-color:#334155; border-radius:24px; transition:.3s; cursor:pointer;"></span>
+        </label>
+      </div>
+
+      <div style="display:grid; gap:10px; margin-bottom:14px;">
+        <div style="border:1px solid rgba(239,68,68,0.3); border-radius:12px; padding:12px; background:rgba(239,68,68,0.05);">
+          <div style="font-weight:700; color:#f87171; font-size:0.9rem; margin-bottom:4px;">🏋️‍♂️ أيام التمرين الشاق (High Carb)</div>
+          <div style="font-size:0.78rem; color:var(--text-muted, #94a3b8); margin-bottom:8px;">لأيام تمارين الأرجل والظهر والتمارين المكثفة</div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <label style="font-size:0.85rem;">مستهدف الكارب:</label>
+            <input type="number" id="ccHighGrams" value="300" style="width:75px; padding:4px 8px; border-radius:6px; border:1px solid var(--border, #334155); background:#0f172a; color:#fff; text-align:center;">
+            <span style="font-size:0.85rem;">جم</span>
+          </div>
+        </div>
+
+        <div style="border:1px solid rgba(245,158,11,0.3); border-radius:12px; padding:12px; background:rgba(245,158,11,0.05);">
+          <div style="font-weight:700; color:#fbbf24; font-size:0.9rem; margin-bottom:4px;">💪 أيام التمرين العادي (Moderate Carb)</div>
+          <div style="font-size:0.78rem; color:var(--text-muted, #94a3b8); margin-bottom:8px;">لأيام تمارين الصدر والأكتاف والذراعين</div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <label style="font-size:0.85rem;">مستهدف الكارب:</label>
+            <input type="number" id="ccModGrams" value="200" style="width:75px; padding:4px 8px; border-radius:6px; border:1px solid var(--border, #334155); background:#0f172a; color:#fff; text-align:center;">
+            <span style="font-size:0.85rem;">جم</span>
+          </div>
+        </div>
+
+        <div style="border:1px solid rgba(59,130,246,0.3); border-radius:12px; padding:12px; background:rgba(59,130,246,0.05);">
+          <div style="font-weight:700; color:#60a5fa; font-size:0.9rem; margin-bottom:4px;">🧘‍♂️ أيام الراحة (Low Carb)</div>
+          <div style="font-size:0.78rem; color:var(--text-muted, #94a3b8); margin-bottom:8px;">لأيام الاستشفاء التام وخفض الإنسولين وحرق الدهون</div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <label style="font-size:0.85rem;">مستهدف الكارب:</label>
+            <input type="number" id="ccLowGrams" value="100" style="width:75px; padding:4px 8px; border-radius:6px; border:1px solid var(--border, #334155); background:#0f172a; color:#fff; text-align:center;">
+            <span style="font-size:0.85rem;">جم</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="p4-modal-footer">
+      <button type="button" class="btn-subtle" onclick="window.ZATOONA_PHASE4.closeModals()">إلغاء</button>
+      <button type="button" class="btn-subtle" style="background:var(--accent, #10b981); color:#fff;" onclick="window.ZATOONA_PHASE4.saveCarbCyclingSettings()">حفظ الإعدادات</button>
+    </div>
+  </div>
+</div>

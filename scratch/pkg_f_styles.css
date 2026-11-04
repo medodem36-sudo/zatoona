@@ -1,0 +1,106 @@
+/* ==========================================================================
+   PACKAGE F: NOTES & ANDROID FEATURES STYLES
+   Features 71, 73, 81, 85, 86, 88, 90
+   ========================================================================== */
+
+/* 1. Feature 71: Pin & Color-code notes */
+.note-hub-card.is-pinned {
+  border: 1.5px solid var(--accent, #e67e22) !important;
+  background: var(--card) !important;
+  box-shadow: 0 2px 10px rgba(230, 126, 34, 0.15);
+}
+.note-pin-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(230, 126, 34, 0.15);
+  color: var(--accent, #e67e22);
+  font-size: .72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--accent, #e67e22);
+}
+.note-palette-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-top: 6px;
+}
+.note-color-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 1.5px solid var(--line);
+  transition: transform .15s ease;
+}
+.note-color-dot:hover {
+  transform: scale(1.25);
+}
+
+/* 2. Feature 73: Interactive Checklist Mode in Notes */
+.note-checklist-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 4px 0;
+  cursor: pointer;
+  font-size: .82rem;
+  line-height: 1.5;
+}
+.note-checklist-line.is-done {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+
+/* 3. Feature 85: Wake Lock Toggle & Status */
+.wake-lock-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: .75rem;
+  font-weight: 700;
+  background: var(--card-alt);
+  border: 1px solid var(--line);
+  color: var(--text);
+  cursor: pointer;
+  transition: all .2s ease;
+}
+.wake-lock-pill.active {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: #f59e0b;
+  color: #f59e0b;
+}
+
+/* 4. Feature 90: AMOLED Ultra-Battery Saver Mode (100% Pure Black) */
+body.amoled-battery-saver {
+  --bg: #000000 !important;
+  --card: #050505 !important;
+  --card-alt: #0a0a0a !important;
+  --border: #181818 !important;
+  --line: #181818 !important;
+  background-color: #000000 !important;
+}
+body.amoled-battery-saver * {
+  animation: none !important;
+  transition: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+/* Visual Flash Overlay Fallback */
+.screen-flash-overlay {
+  position: fixed;
+  inset: 0;
+  background: #ffffff;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 999999;
+  transition: opacity .1s ease;
+}
+.screen-flash-overlay.active {
+  opacity: 0.95;
+}

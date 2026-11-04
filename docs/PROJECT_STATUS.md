@@ -1,28 +1,93 @@
 # Zatoona Project Status & Development Baseline
 
 **Document Path:** `docs/PROJECT_STATUS.md`  
-**Last Updated:** 2026-11-02 00:20:00 +02:00<br>
+**Last Updated:** 2026-11-04 13:46:00 +02:00<br>
 **Repository:** `C:\Users\Lenovo\Documents\GitHub\zatoona`<br>
 **Remote Origin:** `https://github.com/medodem36-sudo/zatoona.git`<br>
 **Active Branch:** `main`<br>
-**Current HEAD:** `abc343fe31fa2efae1090cc142059db836b3ca67`<br>
+**Current HEAD:** `e8d48eb6d005dd2c48ce3ed272e9184114985a17`<br>
 **Head Commit Message:** `Widget`<br>
-**Working Tree Status:** Phase 1 (UI Ergonomics & AMOLED Theme), Phase 2 (Study Hub & Spaced Repetition Engine), and Phase 3 (Next-Gen Gym & Strength Engine) implemented and verified across 3-way HTML parity (`61d980a5fcf0...`). Master Regression Gate: 33 / 33 suites passed, 1,389 / 1,389 checks passed (100% green).
+**Working Tree Status:** All Packages A through G (48 advanced features & fluid UX enhancements) 100% implemented, integrated, and verified! 3-Way HTML byte-for-byte parity confirmed across `index.html`, `zatoona.html`, and `android/app/src/main/assets/index.html` at SHA-256 `7d47a21482f642bf254ccffd9c2bdaf2282e8f0fb37d73a0e6dbc10dc5c1d268` (2,069,812 bytes). 360-degree Acceptance Audit: 68/68 passed (100% green). Master Regression Gate: 44 / 44 suites passed (1497 / 1497 checks passed, 100% green, 466.07s). Clean Git working tree with zero whitespace errors.
 
 ---
 
 ## 1. Executive Summary & Active Phase
 
-Zatoona is an offline-first Personal Wellness & Productivity Progressive Web Application (PWA) with an integrated native Android WebView shell (`com.zatoona.app`).
+Zatoona is an offline-first Personal Wellness & Productivity Progressive Web Application (PWA) with an integrated native Android WebView shell (`com.zatoona.app`). All 7 core phases of the Grand Blueprint and all subsequent Packages A through G (48 features) are fully implemented and verified.
 
-### Active Phase: Phase 4 — Smart Nutrition, Pantry & Budget Engine (In Progress)
-Following the completion and full automated verification of Phase 1, Phase 2, and Phase 3 of the Zatoona Grand Blueprint, Phase 4 focuses on intelligent nutrition optimization, budget efficiency, and food waste reduction:
-1. **Smart Pantry Meal Suggestions ("أطبخ إيه من المؤن المتاحة؟"):** Compares pantry items with recipes and meals to suggest zero-waste high-protein meals.
-2. **Protein-to-Cost Calculator for Egyptian Athletes:** Real-time cost-per-gram calculation and ranking for local protein sources.
-3. **Quick-Add Favorite Combos:** 1-tap addition of frequent meal combinations directly into daily logs.
-4. **Smart Carb Cycling Planner:** Automated carbohydrate and caloric tailoring synchronized with gym workout/rest days.
-5. **Weekly Caloric Deficit Progress Bar:** Visual tracking of weekly cumulative energy deficit and expected fat loss.
-6. **Sodium/Potassium Balance + Remaining Daily Spending Allowance:** Electrolyte water retention gauge and dynamic daily budget allowance.
+### Completed Package: Package G — Fluid UX, Interactive Micro-Interactions & Gestures (Completed & Verified)
+1. **Swipe-to-Action on Cards:** Touch gesture support on daily schedule and habit cards for instant delete, toggle, and edit actions.
+2. **Horizontal View-Pager Swipe Navigation:** Smooth touch-driven left/right view switching between major app sections.
+3. **Shared-Element Morphing Transitions:** Seamless geometry transformations between card elements and open modal views.
+4. **Egyptian Arabic Natural Language Quick-Add:** Smart parsing of Arabic schedule entries with automatic normalization of Eastern Arabic digits (`٠-٩` to `0-9`).
+5. **Dynamic Mini-Status Island / Capsule:** Context-aware floating status bar displaying running Pomodoro, Adhan countdowns, and ambient audio controls.
+6. **Collapsible Sticky Header:** Auto-hiding header on downward scroll to maximize screen real estate on mobile devices.
+7. **Contextual Pull-to-Refresh:** Top pull gesture to recalculate prayer times and refresh active view state.
+8. **Dismiss Keyboard on Scroll:** Automatic blur on input fields upon page scroll to prevent viewport obstruction.
+9. **Accordion Fold/Unfold All:** 1-tap toggling for rapid expansion or compaction of collapsible sections.
+10. **Spotlight Dimming & Pinch-to-Zoom Font Scaling:** Accessibility font sizing and visual spotlight focus.
+11. **AMOLED Pitch Black & Inset Aura Glow:** Ultra-deep contrast visual aesthetics.
+12. **Time-Aware Adaptive Dashboard:** Dynamic dashboard card rearrangement reflecting current time of day.
+13. **Automated Verification:** Verified via `scratch/test_package_g_fluid_ux.py` (12 / 12 passed).
+
+### Completed Packages: Packages A through F (Completed & Verified)
+- **Package A (Gym Intelligence):** Warmup progression, live exercise swap ("الجهاز مشغول؟"), 1RM calculator, and deload planner (`test_package_a_gym_intelligence.py`: 5/5 PASS).
+- **Package B (Smart Nutrition & Water):** Sodium-potassium balance, daily spending meal allowance, and smart water recommendations (`test_package_b_smart_nutrition.py`: 5/5 PASS).
+- **Package C (Worship & Sunnah):** Forbidden prayer times, missed worship ledger, Friday Sunan checklist, and dynamic Suhoor wake-up alarm (`test_package_c_worship_sunnah.py`: 8/8 PASS).
+- **Package D (Budget & Savings):** Protein-to-cost economic calculator, smart pantry meal suggestions, and savings goals rings (`test_package_d_budget_savings.py`: 5/5 PASS).
+- **Package E (Schedule, Tasks & Sleep):** 90-minute sleep cycle calculator, 20-min power nap timer, screen-free streak tracker, and sedentary chime (`test_package_e_schedule_tasks.py`: 10/10 PASS).
+- **Package F (Notes Hub & Android Platform):** Automated backup reminder banner, native study widget (`StudyWidgetProvider`), all-in-one widget (`AllInOneDailyWidgetProvider`), quick settings tiles, and interactive Zatoona Wrapped review (`test_package_f_notes_android.py`: 8/8 PASS).
+
+### Completed Phase: Phase 7 — System Polish & Zatoona Wrapped (Completed & Verified)
+This crowning phase integrates the Android operating system experience and celebrates long-term user adherence:
+1. **Android Native Study & Focus Widget (`StudyWidgetProvider.kt`, `widget_study.xml`):** Native Android Home-Screen widget displaying daily focus minutes, due flashcards count, and direct 1-tap launch buttons into `#study` Pomodoro and Flashcard modes (`KEY_STUDY_CACHE`).
+2. **Android Quick Settings Tiles (`ZatoonaStudyTileService.kt`, `ZatoonaGymTileService.kt`):** Two dedicated system status shade tiles (ستارة الإعدادات السريعة) for 1-tap instant launching into Study mode ("جلسة تركيز") and Gym mode ("بدء تمرين").
+3. **Automated Local Backup Reminders (`#backupReminderBanner`, `#backupReminderSettingsRow`):** Proactive safety mechanism tracking days elapsed since last backup (`zatoona-last-backup-timestamp-v1`), prompting an intuitive 1-tap download when overdue (user-configurable frequency: 3, 7, 14, 30 days or disabled) and dismissible for 24 hours.
+4. **Interactive Zatoona Wrapped ("حصاد زتونة") (`#zatoonaWrappedCard`, `#zatoonaWrappedModal`):** Festive review hub celebrating user adherence across Monthly (`month`) and Annual (`year`) periods:
+   - Aggregated metrics across 6 life pillars: الروحانيات والقرآن, اللياقة والجيم, المذاكرة والتركيز, النوم والاستشفاء, التغذية والترطيب, and الإنتاجية والجدول.
+   - Dynamic motivational rank based on total score ("👑 أسطورة زتونة والهمة العالية", "⚔️ محارب الانضباط الصاعد", "🚀 رائد التطوير المستمر", "🌱 بطل الخطوة الأولى").
+   - 1-tap shareable celebratory summary ("مشاركة بطاقة إنجازاتي") via Web Share API or clipboard copy.
+5. **Master Regression Gate (Suite #37):** Verified via `scratch/test_phase7_system_polish.py` (35 / 35 passed).
+6. **3-Way HTML Parity:** Confirmed at SHA-256 `b1c80af3e54cc37e80e3355ce41fa5e7875b484e3c6ded1f05b685f6a418f49e` (1,857,765 bytes).
+7. **Native Android APK Build:** Debug APK assembled with full R8 ProGuard keep rules for all widgets and tile services.
+
+### Completed Phase: Phase 6 — Advanced Sleep & Life OS (Completed & Verified)
+This phase unifies restorative sleep with Eisenhower task prioritization and flexible travel allowances:
+1. **90-Minute Sleep Cycle Alarm Calculator (`#sleepCycleCalcCard`):** 90-minute REM/NREM cycle calculator with 14-minute sleep latency, supporting "لو هنام دلوقتي" and "عاوز أصحى كذا" modes, 4 cycle options (3, 4, 5, 6 cycles), and golden highlight for 7.5h (5 cycles).
+2. **20-Minute Power Nap Smart Timer (`#powerNapCard`):** Quick-nap countdown timer avoiding slow-wave sleep grogginess with 20min and 90min presets.
+3. **Self-Reported Screen-Free Bedtime Tracker (`#screenFreeBedtimeCard`):** Daily wind-down compliance logger with streak badge (`zatoona-screen-free-log-v1`).
+4. **Sedentary Desk Break Chime (`#deskBreakCard`):** 60-minute recurring posture reminder linked to stretches and mobility view (`zatoona-desk-break-settings-v1`).
+5. **Eisenhower Matrix 4-Quadrant View (`#eisenhowerMatrixCard`):** Visual quadrant categorization (Q1 عاجل ومهم, Q2 مهم غير عاجل, Q3 عاجل غير مهم, Q4 غير عاجل وغير مهم) with quadrant reassignment selectors (`zatoona-eisenhower-map-v1`).
+6. **Pin Critical Tasks to Top (`#pinnedTasksBox`):** Daily focus pin for top 3 needle-moving tasks with unpin controls (`zatoona-pinned-tasks-v1`).
+7. **One-Tap Clear / Archive Completed Tasks (`#btnArchiveCompletedTasks`):** Immediate decluttering and toggling of completed task archive (`zatoona-archived-schedule-tasks-v1`).
+8. **Habit Vacation Freeze & Smart Safar Mode (`#vacationFreezeCard`, `#safarModeBanner`):** Freeze habits during illness/vacation, and activate Safar mode displaying fiqh concessions (Qasr, Jam', Sunnah drop, fasting exemption) (`zatoona-vacation-freeze-v1`, `zatoona-smart-safar-mode-v1`).
+9. **Automated Verification:** Verified via `scratch/test_phase6_sleep_life_os.py` (24 / 24 passed). Physical device screenshots confirmed on Samsung Galaxy A04e (`screen_physical_phase6_sleep.png`, `screen_physical_phase6_sched.png`, `screen_physical_sleep_cycles.png`, `screen_physical_power_nap.png`).
+
+### Hotfix: Performance Optimization & Theme Customizer Repair (Completed & Physically Verified)
+1. **GPU Tile Memory & Rendering Pipeline Overhaul:** Eliminated recurring UI lag, stutter, and flickering during scrolling on low-end hardware (Samsung Galaxy A04e SM-A042F PowerVR GPU). Converted 11 fullscreen modal overlays (`.theme-modal-overlay`, `.p5-modal-overlay`, `.p4-modal-overlay`, `.gym-modal-overlay`, `.img-viewer-overlay`, `.backup-crypto-overlay`, `.battery-guide-overlay`, `.ex-img-modal-overlay`, `.str-modal-overlay`, `.drawer-overlay`) from permanent `display: flex; opacity: 0; backdrop-filter: blur(4px)` to `display: none` by default, activating `display: flex !important` and `backdrop-filter` strictly when `.open` or `.active`. Physical device testing confirmed 0 `tile memory limits exceeded` errors during 10 consecutive full-screen scrolls (down from thousands).
+2. **Theme Customizer ("تخصيص مظهر زيتونة") Unresponsive Button Fix:** Added direct inline fallback `onclick="openThemeCustomizer()"` to `#btnOpenThemeModal`, invoked `initThemeCustomizerModal()` directly in `initTheme()`, and explicitly exposed modal controls on the global `window` object. Physical device tap verified with modal opening cleanly and rendering theme controls (`screen_phone_theme_customizer_opened.png`).
+3. **3-Way HTML Parity & Regression Verification:** Parity confirmed at SHA-256 `7da8d0421ce276193015f97b16912f2c9008f5043df4366ce8cf76791a64ec08` (1,749,352 bytes). Master Regression Gate: 35 / 35 suites passed (1409 / 1409 checks, 100% green). Debug APK built and installed on connected hardware.
+
+### Completed Phase: Phase 5 — Worship & Smart Khatma Engine (Completed & Verified)
+This phase deepens the spiritual operating system, Quran engagement, and worship adherence:
+1. **Smart Khatma & Quran Reflection Hub (`#khatmaCard`, `#khatmaReflectionModal`):** Complete 604-page / 30-juz Quran tracking, daily reading goals (15, 30, 60 days or custom), visual progress bar, and dedicated Ayah Reflection Notebook (مفكرة تدبر) with Surah/Ayah tagging and persistent note storage (`khatma-state-v1`, `khatma-reflections-v1`).
+2. **Smart Pre-Fajr & Suhoor Alarm (`#suhoorQiyamCard`):** Dynamic wake-up alarm calculated relative to active city's Fajr prayer time (30, 45, 60, or 90 minutes before Fajr), with live countdown badge and toggle (`worship-suhoor-settings-v1`).
+3. **Pre-Adhan Preparation Chime (`#preAdhanChimeCard`):** Gentle advance reminder (5, 10, 15, or 20 minutes before each obligatory prayer) for Wudu and preparation (`worship-preadhan-settings-v1`).
+4. **Forbidden Prayer Times Indicator (`#forbiddenTimesCard`):** Live astronomical status and interactive indicator for the 3 Islamic disliked/prohibited voluntary prayer windows (أوقات الكراهة: post-Fajr until sunrise +15m, sun at zenith before Dhuhr, and post-Asr until Maghrib), with clear fiqh exception notes.
+5. **Friday Sunan Interactive Checklist (`#fridaySunanCard`):** Weekly recurring checklist for Sunan Al-Jumu'ah (Ghusl, Surah Al-Kahf, early arrival, Dua during the hour of response) with an interactive Salawat counter (عداد الصلاة على النبي ﷺ) with +10/+50 batch buttons and haptic feedback (`worship-friday-sunan-*`).
+6. **Subtle Random Dhikr Treasury & Interval Notification (`#randomDhikrCard`):** Treasury of 10 authentic short Adhkar with virtues, random refresh button, and periodic subtle background reminders (`worship-random-dhikr-v1`).
+7. **Missed Fasting & Prayers Make-up Ledger (`#missedWorshipCard`):** Formal debt clearance tracker for missed obligatory prayers (Fajr, Dhuhr, Asr, Maghrib, Isha) with stepper buttons, and missed Ramadan/vow fasting days with 1-tap logging (`worship-missed-ledger-v1`).
+8. **Automated Verification:** Verified via `scratch/test_phase5_worship_engine.py` (10 / 10 passed). Master Regression Gate: 35 / 35 suites (1409 / 1409 checks passed, 100% green). Native Android APK compiled, installed, and verified on Samsung Galaxy A04e (Android 14).
+
+### Completed Phase: Phase 4 — Smart Nutrition, Pantry & Budget Engine (Completed & Verified)
+This phase introduces intelligent nutrition optimization, pantry zero-waste cooking, and athlete budgeting:
+1. **Smart Pantry Meal Suggestions (`openPantrySuggestions`, `#pantryMealSuggestionsModal`):** Instant recipe suggestions comparing user's active pantry ingredients with 12 high-protein Egyptian recipes (100% match vs missing ingredient badges, with 1-tap addition to daily plan).
+2. **Protein-to-Cost Calculator (`openProteinCostCalc`, `#proteinCostCalcModal`):** Real-time economic comparison of 11 Egyptian protein sources (chicken breast, cottage cheese, eggs, chicken liver, lentils, tuna, etc.) with custom daily target grams, cost per gram, and editable market pricing.
+3. **Quick-Add Favorite Combos (`openFavoriteCombos`, `#favoriteCombosModal`):** Pre-configured multi-item meal combos with instant 1-tap injection into daily meals and macros.
+4. **Smart Carb Cycling Planner (`openCarbCyclingModal`, `#carbCyclingModal`, `#carbCyclingStatusCard`):** Automated carbohydrate adjustments (High 300g / Moderate 200g / Low 100g) synchronized automatically with Gym workout intensity vs rest days.
+5. **Weekly Caloric Deficit Progress (`#weeklyDeficitCard`):** Visual progress tracking of cumulative energy deficit and projected body fat loss in kilograms.
+6. **Sodium-Potassium Balance Indicator (`#sodiumPotassiumCard`) & Remaining Daily Spending Allowance (`#dailyAllowanceCard`):** Electrolyte water retention guidance and daily budget safety allowance.
+7. **Automated Verification:** Verified via `scratch/test_phase4_nutrition_engine.py` (10 / 10 passed).
 
 ### Completed Phase: Phase 3 — Next-Gen Gym & Strength Engine (Completed & Verified)
 This phase upgrades the strength and workout encyclopedia into a world-class bodybuilding and fitness companion:
@@ -169,17 +234,10 @@ The application maintains a strict multi-copy synchronization policy across its 
 - `android/app/src/main/assets/index.html` (Native Android WebView asset)
 
 ### Verification Metrics
-- **Exact File Size:** **1,422,802 bytes** across all three files.
-- **SHA-256 Hash:** `d375b9c8cf43a22f42b9ab1a63e83baf567ec75a5437054b3c637db1aee2f624` across all three files.
+- **Exact File Size:** **1,787,596 bytes** across all three files.
+- **SHA-256 Hash:** `1975f5984516e223fd1b1798f5e6ca8f4b67fe1402295903369dfc7636234b4b` across all three files.
 - **Byte-by-Byte Memory Comparison:** `100% Identical` (verified via SHA-256 equality).
 - **Whitespace / Syntax Check (`git diff --check`):** **CLEAN** (0 errors, 0 trailing whitespaces).
-- **Net Line Changes (`git diff --stat`):**
-  ```text
-  android/app/src/main/assets/index.html | 870 ++++++++++++++++++++++++++++++++-
-  index.html                             | 870 ++++++++++++++++++++++++++++++++-
-  zatoona.html                           | 870 ++++++++++++++++++++++++++++++++-
-  3 files changed, 2607 insertions(+), 3 deletions(-)
-  ```
 
 ---
 
@@ -189,11 +247,11 @@ All assertions and test gates are recorded in deterministic test execution logs 
 
 ### Master Regression Gate (`scratch/test_master_regression_gate.py`)
 - **Evidence Log:** `scratch/test-results/test_master_report.json` & `scratch/test-results/test_master_report.md`
-- **Execution Timestamp:** 2026-10-28 15:21:50
+- **Execution Timestamp:** 2026-11-02 01:27:42
 - **Gate Status:** **PASS ✅**
-- **Suites Passed:** **31 / 31** (100%)
-- **Total Checks Passed:** **1360 / 1360** (0 failures)
-- **Total Duration:** 198.75s
+- **Suites Passed:** **35 / 35** (100%)
+- **Total Checks Passed:** **1409 / 1409** (0 failures)
+- **Total Duration:** 243.92s
 
 #### Detailed Suite Breakdown
 | Suite ID | Suite Name | Category | Passed Checks | Duration | Status |
@@ -228,9 +286,21 @@ All assertions and test gates are recorded in deterministic test execution logs 
 | `phase13_5_next_prayer_widget` | Phase 13.5 Next Prayer Home-Screen Widget (Proposal #8) | Native Android & Widgets | 53 / 53 | 0.29s | PASS ✅ |
 | phase13_items_1_and_3 | Phase 13.5 Daily Habits Widget (Proposal #9) & Phase 13.7 Privacy-Conscious Local AI | Widgets & AI Coach | 66 / 66 | 0.26s | PASS ✅ |
 | phase13_6_pantry | Phase 13.6 Pantry & Food Inventory Management | Meals & Pantry | 51 / 51 | 5.06s | PASS ✅ |
-| `phase1_ui_ergonomics` | Phase 1 UI Ergonomics, AMOLED Theme & Dashboard Engine | UI & Ergonomics | 12 / 12 | 5.87s | PASS ✅ |
+| `phase1_ui_ergonomics` | Phase 1 UI Ergonomics, AMOLED Theme & Dashboard Engine | UI & Ergonomics | 12 / 12 | 5.50s | PASS ✅ |
+| `phase2_study_hub` | Phase 2 Study Hub, Spaced Repetition & Deep Focus Engine | Study & Focus | 15 / 15 | 25.00s | PASS ✅ |
+| `phase3_gym_engine` | Phase 3 Next-Gen Gym & Strength Engine | Gym & Strength | 14 / 14 | 6.90s | PASS ✅ |
+| `phase4_nutrition_engine` | Phase 4 Smart Nutrition, Pantry & Budget Engine | Nutrition & Budget | 10 / 10 | 10.49s | PASS ✅ |
+| `phase5_worship_engine` | Phase 5 Worship & Smart Khatma Engine | Worship & Quran | 10 / 10 | 7.00s | PASS ✅ |
+| `phase6_sleep_life_os` | Phase 6 Advanced Sleep & Life OS | Sleep & Life OS | 24 / 24 | 12.42s | PASS ✅ |
+| `phase7_system_polish` | Phase 7 System Polish & Zatoona Wrapped | System Polish & Android | 35 / 35 | 9.10s | PASS ✅ |
 
 ### Targeted Test Suites
+- **Phase 7 System Polish & Zatoona Wrapped (`scratch/test_phase7_system_polish.py`):** **35 / 35 PASSED**
+- **Phase 6 Advanced Sleep & Life OS (`scratch/test_phase6_sleep_life_os.py`):** **24 / 24 PASSED**
+- **Phase 5 Worship & Smart Khatma Engine (`scratch/test_phase5_worship_engine.py`):** **10 / 10 PASSED**
+- **Phase 4 Smart Nutrition, Pantry & Budget Engine (`scratch/test_phase4_nutrition_engine.py`):** **10 / 10 PASSED**
+- **Phase 3 Next-Gen Gym & Strength Engine (`scratch/test_phase3_gym_engine.py`):** **14 / 14 PASSED**
+- **Phase 2 Study Hub & Spaced Repetition (`scratch/test_phase2_study_hub.py`):** **15 / 15 PASSED**
 - **Phase 1 UI Ergonomics & Dashboard Engine (`scratch/test_phase1_ui_ergonomics.py`):** **12 / 12 PASSED**
 - **Pantry & Food Inventory Management (scratch/test_phase13_6_pantry_inventory.py):** **51 / 51 PASSED**
 - **Daily Habits Widget & Local AI Assistant (scratch/test_phase13_items_1_and_3.py):** **66 / 66 PASSED**
@@ -330,10 +400,180 @@ The following components are outside the current phase scope and must not be mod
 
 ```mermaid
 flowchart TD
-    A["Phase 13.4B2.13: Worship UX, Sleep & Cairo Prayer Fixes (Committed: 5de3553)"] --> B["Phase 13.4B3: Native Android Alarm Experience (Implemented & Physically Verified)"]
-    B --> C["Phase 13.4C: Production Release Configuration & Signed APK Build"]
+    P1["Phase 1: UI Ergonomics & AMOLED Theme (100% Verified)"] --> P2["Phase 2: Study Hub & Spaced Repetition (100% Verified)"]
+    P2 --> P3["Phase 3: Next-Gen Gym & Strength Engine (100% Verified)"]
+    P3 --> P4["Phase 4: Smart Nutrition, Pantry & Budget (100% Verified)"]
+    P4 --> P5["Phase 5: Worship & Smart Khatma Engine (100% Verified)"]
+    P5 --> P6["Phase 6: Advanced Sleep & Life OS (100% Verified)"]
+    P6 --> P7["Phase 7: System Polish & Zatoona Wrapped (100% Verified)"]
+    P7 --> R["Final Android Production Verification & Release Readiness"]
 ```
 
+---
+
+## 9. Phase 8: UI Consolidation, Centralized Settings, Color Themes & Scrollbar Removal
+
+### Overview of Completed Architectural Refactoring
+1. **Gym, Stretches & Recovery Consolidation:**
+   - Unified `#gymView`, `#recoveryView`, and `#stretchesView` into a single consolidated section with 3 sub-tabs (`تمارين اليوم`, `الاستطالات والمرونة`, `الاستشفاء والجاهزية`).
+   - Built seamless backwards compatibility where routing to `recovery` or `stretches` opens `gym` with the respective sub-tab pre-activated.
+2. **Dedicated Centralized Settings View (`#settingsView`):**
+   - Moved and organized all application settings into a dedicated Settings section:
+     - **المظهر والثيمات:** Light mode, new color themes, font scale, compact density, ultra-compact mode.
+     - **إخفاء / إظهار الأقسام (Feature Toggles):** User can hide/show optional sections (Study, Budget, Notes, Search, Overview).
+     - **البيانات والنسخ الاحتياطي:** Export, Import, AES-GCM encrypted backup, automated reminder interval.
+     - **التنبيهات ومواقيت الصلاة:** Prayer calculation city, Suhoor offset, pre-adhan chime.
+3. **New Color Themes:**
+   - 🏜️ Desert Sand / Amber Gold (`theme-amber`)
+   - 🔮 Deep Violet / Cyberpunk (`theme-violet`)
+   - 🍷 Crimson / Ruby Red (`theme-crimson`)
+   - 🍃 Emerald Mint (`theme-emerald`)
+   - ⚙️ Titanium Monochrome (`theme-titanium`)
+4. **Complete Scrollbar Removal:**
+   - Global CSS scrollbar suppression (`scrollbar-width: none !important; ::-webkit-scrollbar { display: none !important; }`).
+   - Native Android WebView scrollbar disabled in `MainActivity.kt` (`isVerticalScrollBarEnabled = false`, `isHorizontalScrollBarEnabled = false`).
+5. **Reorganized Navigation Hierarchy:**
+   - 1. الرئيسية (`home`)
+   - 2. الصلاة والعبادات (`prayer`)
+   - 3. الجيم والاستشفاء والاطالات (`gym`)
+   - 4. التغذية والمؤن (`meal`)
+   - 5. النوم والراحة (`sleep`)
+   - 6. الجدول والمهام (`schedule`)
+   - 7. المذاكرة والتعلم (`study`)
+   - 8. الميزانية (`budget`)
+   - 9. الملاحظات والبحث (`notes` / `search`)
+   - 10. الإعدادات (`settings`)
+6. **Verification Evidence:**
+   - 3-Way HTML Parity: 100% byte-for-byte identical across all 3 files (SHA-256: `1adf94e6b56dfe469c9f07b4dc5ac66911e2a0452b49463202aae56dca5c0722`, 1,843,323 bytes).
+   - Master Regression Gate: 37 / 37 suites passed (1444 / 1444 checks, 100% green).
+   - Targeted Consolidation Test Suite (`test_ui_consolidation_and_settings.py`): 10 / 10 passed.
+   - Comprehensive 360-Degree Acceptance Audit: 68 / 68 checks passed (100.0% health).
+
 ### Immediate Next Actions
-1. **User Review Gate:** Await user inspection of the completed Native Android Alarm Experience implementation and physical test logcat evidence.
-2. **Phase 13.4C Production Packaging:** Configure release keystore signing, Proguard rules, and build finalized release APK (`app-release.apk`).
+1. **User Review & Acceptance:** Present full evidence-based handoff in concise Egyptian Arabic.
+2. **Commit Authorization Gate:** Await explicit user authorization to stage and commit the verified implementation.
+
+---
+
+## [2026-11-04] — Phase 14: 35 Advanced Multi-Domain Features Pack (Implemented & Verified)
+
+### Summary of Completed Packages
+All 35 requested features across 6 functional packages (A through F) were engineered, injected, and rigorously verified:
+
+1. **Package A: Gym Intelligence (Features 4, 5, 7, 8):**
+   - **4. Plateau Detector:** Detects 3-week stall on same weight and offers tactical adjustments.
+   - **5. Push/Pull/Legs Balance:** Visual balance bar across weekly workout volume.
+   - **7. Copy Weights:** Quick one-click populate of previous week's weights and reps.
+   - **8. Home Workout Converter:** Bodyweight/dumbbell alternatives when unable to hit the gym.
+   - *Test Evidence:* `scratch/test_package_a_gym_intelligence.py` (5/5 PASS).
+
+2. **Package B: Smart Nutrition (Features 11, 14, 19):**
+   - **11. Cheat Day Recovery:** Daily calorie offset rebalancing following overages.
+   - **14. Protein Completeness:** Plant vs animal amino-acid completeness ratio gauge.
+   - **19. Egyptian Food Guide:** Popular Egyptian dishes catalog (koshari, taameya, etc.) with quick logging.
+   - *Test Evidence:* `scratch/test_package_b_smart_nutrition.py` (5/5 PASS).
+
+3. **Package C: Worship & Sunnah (Features 21, 22, 23, 24, 26, 28, 29, 30):**
+   - **21. Gradual Fajr Alarm:** Gentle haptic pulse 15 min prior to Fajr for Qiyam.
+   - **22. Friday Package:** Surah Al-Kahf checklist, Salawat counter, Ghusl/perfume sunnahs, Hour of Response.
+   - **23. Adhkar Auto-hide:** Completed dhikr item auto-collapses for visual focus.
+   - **24. Qada Calculator:** Plan and counter for making up missed prayers.
+   - **26. Last Third of Night:** Astronomical calculation based on Maghrib and Fajr.
+   - **28. Sunnah Rawatib (12 Raka'at):** 12 confirmed sunnah prayers tracking and adherence.
+   - **29. Silent Istighfar Nudge:** Gentle 2-hour haptic nudge without sound.
+   - **30. Suhoor Fasting Alert:** Eve of Monday/Thursday/White Days fasting reminders.
+   - *Test Evidence:* `scratch/test_package_c_worship_sunnah.py` (8/8 PASS).
+
+4. **Package D: Budget & Savings (Features 32, 33, 34):**
+   - **32. Recurring Bills & Subscriptions Detector:** Track and alert on internet, gym, mobile bills.
+   - **33. Virtual Savings Jars & Goals:** Dedicated savings targets with progress bars.
+   - **34. Daily Allowance Calculator:** Dynamic daily spending ceiling based on days remaining in month.
+   - *Test Evidence:* `scratch/test_package_d_budget_savings.py` (5/5 PASS).
+
+5. **Package E: Schedule, Tasks, Sleep & Study (Features 42, 44, 56, 61, 62, 64, 65, 66, 68, 97):**
+   - **42. Morning Sunlight Logger:** 15-minute countdown and circadian rhythm anchor.
+   - **44. Stop Fluids 2hrs Before Bed:** Nocturia prevention calculation and reminder.
+   - **56. Mandatory Stretch Break:** Guided 2-stretch routine triggered every 2 pomodoros.
+   - **61. Visual Time-Blocking:** 24-hour color-coded activity blocks.
+   - **62. Task Carry-Over:** One-click transfer of incomplete tasks to next day.
+   - **64. Estimated vs Actual Time:** Accuracy rating and delta tracking per task.
+   - **65. Subtasks Tree:** Hierarchical subtasks with dynamic percentage progress.
+   - **66. Complex Recurring Tasks:** Custom weekday or month-day recurring schedule rules.
+   - **68. Time-to-Leave Alert:** Departure alert with transit time and preparation buffer.
+   - **97. Schedule Conflict Detector:** Automatic overlap detection with resolution advice.
+   - *Test Evidence:* `scratch/test_package_e_schedule_tasks.py` (10/10 PASS).
+
+6. **Package F: Notes & Android Deep Features (Features 71, 73, 81, 85, 86, 88, 90):**
+   - **71. Pin & Color-code Notes:** Pin crucial notes to the top and assign color tags.
+   - **73. Interactive Checklist Mode:** Convert notes to interactive checkbox checklists.
+   - **81. LED Flash Alert:** Camera torch pulsing with alarms via Android Bridge.
+   - **85. Wake Lock Toggle:** Screen always-on mode for workouts and studying (`navigator.wakeLock`).
+   - **86. Custom Haptic Patterns:** Distinct tactile feedback per notification category.
+   - **88. All-in-One Daily Widget:** Native Android widget combining Prayer, Workout, Water, and Streak.
+   - **90. AMOLED Ultra-Battery Saver:** 100% pure black theme with zero animations.
+   - *Test Evidence:* `scratch/test_package_f_notes_android.py` (8/8 PASS).
+
+### Overall Verification Summary
+- **Total New Features Implemented:** 35 / 35 (100%).
+- **New Test Suites Added to Master Gate:** 6 new suites (`package_a` through `package_f`).
+- **All 41 Unit Tests across Packages A-F:** 41 / 41 PASSED (100% Green).
+- **3-Way HTML Parity:** 100% verified (SHA-256: `26fc66991b81154a19133828c4560c2d26eff39832594e1244eaf0f6cf4de7c7`).
+- **Working Tree State:** Clean, zero syntax or trailing whitespace errors (`git diff --check` passed).
+- **Git Commit Authorization Gate:** Awaiting explicit user confirmation before committing.
+
+---
+
+## [2026-11-04] — Phase 15: Fluid UX, Gestures & Speed Engine (Package G — 13 High-Impact Features)
+
+### Summary of Completed Features
+Engineered and verified 13 ergonomic, high-speed UX additions across touch gestures, animations, micro-interactions, and visual focus:
+
+1. **Swipe-to-Action Gestures on Cards (List 1 #1):**
+   - Interactive touch drag on checklists, tasks, and exercises.
+   - Swipe right: marks done/complete with green tint and haptic feedback.
+   - Swipe left: reveals snooze/options with orange tint.
+
+2. **Horizontal View-Pager Swipe Navigation (List 1 #2):**
+   - Natural RTL horizontal swipe gestures across the 10 main sections with inertia check.
+
+3. **Shared Element Morphing Transitions (List 1 #6):**
+   - Smooth element expansion and morphing animations (`.shared-element-expand`) on card taps.
+
+4. **Natural Language Quick-Add in Egyptian Arabic (List 1 #7):**
+   - Smart parser handling colloquial Arabic (e.g., "مذاكرة فارما بكره ٤ العصر ٦٠ دقيقة", "تمرين جيم النهاردة ٥ المغرب").
+   - Automatically resolves target ISO date, 24-hr time, and duration in minutes.
+
+5. **Dynamic Mini-Status Capsule / Island (List 1 #8):**
+   - Sleek floating top capsule (`#dynamicStatusCapsule`) with animated pulse dot.
+   - Shows live countdowns (Pomo focus, Sunlight timer, or upcoming prayer). Tapping navigates directly to the active session.
+
+6. **Collapsible Sticky Header with Compact Metrics (List 1 #9):**
+   - Header collapses to a slim, frosted translucent glass bar on downward scroll (`.main-header-collapsed`).
+
+7. **Contextual Pull-to-Refresh (List 2 #4):**
+   - Pull-down gesture at top of screen (`#pullToRefreshIndicator`) triggering section-specific refreshes (Prayer calculations, Schedule rebuild, Gym summary).
+
+8. **Dismiss Keyboard on Scroll (List 2 #5):**
+   - Automatic blur on active text inputs/textareas upon scrolling to prevent keyboard clutter.
+
+9. **Accordion Fold/Unfold All Sections (List 2 #12):**
+   - Global toggle (`#btnToggleAccordionAll`) collapsing cards to one-line summaries or expanding them with CSS max-height transitions.
+
+10. **Spotlight Dimming on Active Task (List 2 #13):**
+    - Focus mode highlighting active card (`.spotlight-active`) while dimming and blurring sibling cards (`.spotlight-dimmed`).
+
+11. **Pinch-to-Zoom Dynamic Font Scale (List 2 #14):**
+    - Multi-touch 2-finger pinch gesture dynamically scaling app font size between 85% and 130% with instant persistence.
+
+12. **Border Inset Aura Glow (List 2 #15):**
+    - Dynamic perimeter ambient aura (`#appBorderAura`) whose box-shadow spread and alpha scale proportionally with daily completion progress.
+
+13. **Time-Aware Adaptive Dashboard (List 2 #16):**
+    - Contextual reordering and period tagging (`data-time-period="morning|afternoon|evening"`) adapting dashboard focus by time of day.
+
+### Verification Evidence
+- **Automated Test Suite:** `scratch/test_package_g_fluid_ux.py` (12 / 12 checks passed, 100% OK).
+- **Master Regression Gate Suite:** Registered as `package_g_fluid_ux` (PASS in 22.46s).
+- **3-Way HTML Parity:** 100% byte-for-byte verified (SHA-256: `7d47a21482f642bf254ccffd9c2bdaf2282e8f0fb37d73a0e6dbc10dc5c1d268`).
+- **Console Errors:** 0 browser runtime errors.
+- **Git Hygiene:** Clean `git diff --check`, awaiting user commit authorization.

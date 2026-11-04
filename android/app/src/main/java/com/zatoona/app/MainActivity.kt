@@ -37,6 +37,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         webView = WebView(this)
+        webView.isVerticalScrollBarEnabled = false
+        webView.isHorizontalScrollBarEnabled = false
         setContentView(webView)
 
         configureWebSettings(webView.settings)
@@ -154,11 +156,27 @@ class MainActivity : AppCompatActivity() {
     private fun handleBackNavigation() {
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (webView.canGoBack()) {
-                    webView.goBack()
-                } else {
-                    isEnabled = false
-                    onBackPressedDispatcher.onBackPressed()
+                val dismissModalJs = """
+                    (function(){
+                        var modal = document.querySelector('.theme-modal-overlay.open, .p5-modal-overlay.open, .p4-modal-overlay.open, .gym-modal-overlay.open, .drawer-overlay.open, .img-viewer-overlay.open, .backup-crypto-overlay.open, .battery-guide-overlay.open, .ex-img-modal-overlay.open, .str-modal-overlay.open');
+                        if (modal) {
+                            modal.classList.remove('open', 'active');
+                            return 'closed';
+                        }
+                        return 'none';
+                    })()
+                """.trimIndent()
+
+                webView.evaluateJavascript(dismissModalJs) { res ->
+                    if (res != null && res.contains("closed")) {
+                        return@evaluateJavascript
+                    }
+                    if (webView.canGoBack()) {
+                        webView.goBack()
+                    } else {
+                        isEnabled = false
+                        onBackPressedDispatcher.onBackPressed()
+                    }
                 }
             }
         })

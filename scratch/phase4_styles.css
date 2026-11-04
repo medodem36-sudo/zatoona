@@ -1,0 +1,286 @@
+/* ==========================================================================
+   PHASE 4: SMART NUTRITION, PANTRY & BUDGET ENGINE STYLES
+   ========================================================================== */
+
+/* Nutrition Quick Bar */
+.nut-quick-bar {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 6px 2px 12px 2px;
+  margin-bottom: 12px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.nut-quick-bar::-webkit-scrollbar { display: none; }
+.nut-quick-btn {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border, #334155);
+  background: var(--card-bg, #1e293b);
+  color: var(--text, #f8fafc);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.nut-quick-btn:hover, .nut-quick-btn:focus-visible {
+  border-color: var(--accent, #10b981);
+  background: rgba(16, 185, 129, 0.12);
+  transform: translateY(-1px);
+}
+.nut-quick-btn .btn-icon {
+  font-size: 1.05rem;
+}
+
+/* Phase 4 Live Summary Cards */
+.nut-summary-card {
+  background: var(--card-bg, #1e293b);
+  border: 1px solid var(--border, #334155);
+  border-radius: 16px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: border-color 0.2s ease;
+}
+.nut-summary-card:hover {
+  border-color: rgba(16, 185, 129, 0.4);
+}
+.nut-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.nut-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text, #f8fafc);
+}
+.nut-badge {
+  font-size: 0.75rem;
+  padding: 3px 8px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+.nut-badge-high { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+.nut-badge-mod  { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+.nut-badge-low  { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+.nut-badge-opt  { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+
+/* Progress meters */
+.nut-meter-track {
+  width: 100%;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  margin: 8px 0;
+}
+.nut-meter-fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.nut-meter-fill.deficit-good { background: linear-gradient(90deg, #10b981, #059669); }
+.nut-meter-fill.deficit-warn { background: linear-gradient(90deg, #f59e0b, #d97706); }
+.nut-meter-fill.surplus { background: linear-gradient(90deg, #3b82f6, #2563eb); }
+
+/* Modals */
+.p4-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+.p4-modal-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+.p4-modal-card {
+  width: 100%;
+  max-width: 620px;
+  max-height: 90vh;
+  background: var(--bg-surface, #1e293b);
+  border: 1px solid var(--border, #334155);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  transform: scale(0.95);
+  transition: transform 0.25s ease;
+}
+.p4-modal-overlay.open .p4-modal-card {
+  transform: scale(1);
+}
+.p4-modal-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border, #334155);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.p4-modal-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text, #f8fafc);
+}
+.p4-modal-close {
+  background: transparent;
+  border: none;
+  font-size: 1.4rem;
+  color: var(--text-muted, #94a3b8);
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+}
+.p4-modal-body {
+  padding: 16px 20px;
+  overflow-y: auto;
+  flex: 1 1 auto;
+}
+.p4-modal-footer {
+  padding: 12px 20px;
+  border-top: 1px solid var(--border, #334155);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  background: rgba(0,0,0,0.1);
+}
+
+/* Pantry meal suggestion cards */
+.pantry-meal-item {
+  border: 1px solid var(--border, #334155);
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 12px;
+  background: rgba(255,255,255,0.03);
+  transition: border-color 0.2s ease;
+}
+.pantry-meal-item.ready {
+  border-color: rgba(16, 185, 129, 0.5);
+  background: rgba(16, 185, 129, 0.05);
+}
+.pantry-meal-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.pantry-meal-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text, #f8fafc);
+}
+.pantry-meal-macros {
+  display: flex;
+  gap: 8px;
+  font-size: 0.78rem;
+  color: var(--text-muted, #94a3b8);
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.pantry-meal-macros span {
+  background: rgba(255,255,255,0.06);
+  padding: 2px 7px;
+  border-radius: 6px;
+}
+.pantry-ing-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.pantry-ing-chip {
+  font-size: 0.76rem;
+  padding: 3px 8px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.pantry-ing-chip.have {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+.pantry-ing-chip.missing {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* Protein Cost Calculator Table */
+.protein-calc-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 10px;
+  font-size: 0.85rem;
+}
+.protein-calc-table th {
+  padding: 10px 8px;
+  text-align: right;
+  border-bottom: 2px solid var(--border, #334155);
+  color: var(--text-muted, #94a3b8);
+  font-weight: 700;
+}
+.protein-calc-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  color: var(--text, #f8fafc);
+}
+.protein-calc-row:hover td {
+  background: rgba(255,255,255,0.02);
+}
+.protein-rank-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 800;
+  background: rgba(255,255,255,0.1);
+}
+.protein-rank-1 { background: #eab308; color: #000; }
+.protein-rank-2 { background: #94a3b8; color: #000; }
+.protein-rank-3 { background: #b45309; color: #fff; }
+
+/* Favorite Combos */
+.combo-card {
+  border: 1px solid var(--border, #334155);
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 10px;
+  background: rgba(255,255,255,0.02);
+}
+.combo-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}

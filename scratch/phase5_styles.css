@@ -1,0 +1,441 @@
+/* ==========================================================================
+   PHASE 5: WORSHIP & SMART KHATMA ENGINE STYLES
+   ========================================================================== */
+
+.worship-phase5-section {
+  margin: 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.worship-card {
+  background: var(--card-alt, #161b22);
+  border: 1px solid var(--line, #30363d);
+  border-radius: 14px;
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: border-color 0.2s ease, transform 0.15s ease;
+}
+
+.worship-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.worship-card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text, #f0f6fc);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.worship-gold-accent {
+  color: #e3b341;
+}
+
+.worship-emerald-accent {
+  color: #3fb950;
+}
+
+/* 1. Forbidden Prayer Times Card */
+.forbidden-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.forbidden-status-badge.allowed {
+  background: rgba(63, 185, 80, 0.15);
+  color: #3fb950;
+  border: 1px solid rgba(63, 185, 80, 0.4);
+}
+
+.forbidden-status-badge.forbidden {
+  background: rgba(248, 81, 73, 0.15);
+  color: #f85149;
+  border: 1px solid rgba(248, 81, 73, 0.4);
+}
+
+.forbidden-windows-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.forbidden-window-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  background: var(--bg, #0d1117);
+  border-radius: 8px;
+  font-size: 0.82rem;
+  border-right: 4px solid #8b949e;
+}
+
+.forbidden-window-item.active-window {
+  border-right-color: #f85149;
+  background: rgba(248, 81, 73, 0.08);
+}
+
+/* 2. Pre-Adhan Chime & 3. Smart Suhoor */
+.worship-toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  background: var(--bg, #0d1117);
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+.worship-subtext {
+  font-size: 0.76rem;
+  color: var(--muted, #8b949e);
+  margin-top: 2px;
+}
+
+.suhoor-highlight-box {
+  background: linear-gradient(135deg, rgba(88, 166, 255, 0.12), rgba(63, 185, 80, 0.08));
+  border: 1px solid rgba(88, 166, 255, 0.3);
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+  margin: 10px 0;
+}
+
+.suhoor-time-val {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #58a6ff;
+  letter-spacing: 1px;
+  font-family: monospace, sans-serif;
+}
+
+.suhoor-countdown-pill {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 14px;
+  background: rgba(88, 166, 255, 0.2);
+  color: #79c0ff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+/* 4. Smart Khatma */
+.khatma-progress-container {
+  margin: 12px 0;
+}
+
+.khatma-bar-wrap {
+  height: 10px;
+  background: var(--bg, #0d1117);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  margin: 8px 0;
+}
+
+.khatma-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3fb950, #2ea043);
+  border-radius: 6px;
+  transition: width 0.4s ease;
+}
+
+.khatma-grid-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.khatma-stat-card {
+  background: var(--bg, #0d1117);
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+}
+
+.khatma-stat-val {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text, #f0f6fc);
+}
+
+.khatma-stat-lbl {
+  font-size: 0.72rem;
+  color: var(--muted, #8b949e);
+  margin-top: 2px;
+}
+
+.khatma-actions-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+/* Reflection Modal */
+.reflection-card-item {
+  background: var(--bg, #0d1117);
+  border: 1px solid var(--line, #30363d);
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.reflection-ayah-badge {
+  display: inline-block;
+  background: rgba(227, 179, 65, 0.15);
+  color: #e3b341;
+  border-radius: 6px;
+  padding: 2px 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+/* 5. Friday Sunan */
+.friday-badge {
+  background: linear-gradient(135deg, #e3b341, #d29922);
+  color: #000;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.76rem;
+}
+
+.friday-sunan-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.friday-check-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg, #0d1117);
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s ease;
+}
+
+.friday-check-item.done {
+  background: rgba(63, 185, 80, 0.08);
+}
+
+.friday-check-item.done .friday-title {
+  text-decoration: line-through;
+  color: var(--muted, #8b949e);
+}
+
+.salawat-counter-box {
+  background: var(--bg, #0d1117);
+  border: 1px dashed rgba(227, 179, 65, 0.5);
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.salawat-count-num {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #e3b341;
+  font-family: monospace, sans-serif;
+  margin: 4px 0;
+}
+
+.salawat-tap-btn {
+  background: linear-gradient(135deg, #e3b341, #d29922);
+  color: #000;
+  border: none;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 10px 24px;
+  border-radius: 25px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(227, 179, 65, 0.3);
+  transition: transform 0.1s ease, filter 0.15s ease;
+}
+
+.salawat-tap-btn:active {
+  transform: scale(0.96);
+  filter: brightness(1.1);
+}
+
+/* 6. Subtle Random Dhikr */
+.random-dhikr-quote {
+  background: var(--bg, #0d1117);
+  border-right: 4px solid #3fb950;
+  border-radius: 10px;
+  padding: 14px;
+  margin: 10px 0;
+  text-align: center;
+}
+
+.random-dhikr-text {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #3fb950;
+  line-height: 1.6;
+}
+
+.random-dhikr-virtue {
+  font-size: 0.78rem;
+  color: var(--muted, #8b949e);
+  margin-top: 6px;
+}
+
+/* 7. Missed Worship Ledger */
+.missed-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.missed-prayer-card {
+  background: var(--bg, #0d1117);
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+  border: 1px solid var(--line, #30363d);
+}
+
+.missed-prayer-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--muted, #8b949e);
+}
+
+.missed-count-display {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text, #f0f6fc);
+  margin: 4px 0;
+}
+
+.missed-ctrl-btns {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.missed-ctrl-btn {
+  background: var(--card-alt, #21262d);
+  border: 1px solid var(--line, #30363d);
+  color: var(--text, #f0f6fc);
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.missed-ctrl-btn:hover {
+  background: var(--accent, #58a6ff);
+  color: #000;
+}
+
+/* Phase 5 Modals */
+.p5-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.p5-modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.p5-modal-card {
+  background: var(--card, #161b22);
+  border: 1px solid var(--line, #30363d);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 520px;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+  transform: translateY(12px) scale(0.98);
+  transition: transform 0.2s ease;
+}
+
+.p5-modal-overlay.active .p5-modal-card {
+  transform: translateY(0) scale(1);
+}
+
+.p5-modal-header {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line, #30363d);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--card-alt, #1f242c);
+}
+
+.p5-modal-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text, #f0f6fc);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.p5-modal-close {
+  background: none;
+  border: none;
+  color: var(--muted, #8b949e);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.p5-modal-close:hover {
+  color: #f85149;
+}
+
+.p5-modal-body {
+  padding: 16px;
+  overflow-y: auto;
+  font-size: 0.9rem;
+  color: var(--text, #f0f6fc);
+}

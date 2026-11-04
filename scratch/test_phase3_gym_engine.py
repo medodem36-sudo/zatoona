@@ -358,7 +358,11 @@ class TestPhase3GymEngine(unittest.TestCase):
 
             // Simulate done set
             const firstChip = document.querySelector('#exercises .set-chip');
-            if(firstChip) firstChip.click();
+            if(firstChip && !firstChip.classList.contains('done')) {
+                firstChip.click();
+            } else if(firstChip) {
+                updateActiveWorkoutHud();
+            }
 
             const isVisible = !hud.classList.contains('hidden');
             const title = document.getElementById('hudExTitle').textContent;

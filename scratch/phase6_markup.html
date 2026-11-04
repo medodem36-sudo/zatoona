@@ -1,0 +1,152 @@
+<!-- PHASE 6: SLEEP VIEW CARDS (To be inserted into #sleepView after section 2) -->
+<div class="sleep-cycle-card" id="sleepCycleCalcCard">
+  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+    <div>
+      <div style="font-weight:800; font-size:.95rem; color:var(--text);">🔄 حاسبة دورات النوم الذكية (90 دقيقة)</div>
+      <div class="section-hint" style="padding:0; margin:2px 0 0;">استيقظ في نهاية دورة النوم الطبيعية بدون خمول أو كسل ما بعد النوم (Sleep Inertia). متوسط استغراق النوم محسوب بـ 14 دقيقة.</div>
+    </div>
+    <div style="display:flex; gap:6px;">
+      <button type="button" class="nap-preset-btn active" id="btnSleepNowMode" onclick="setSleepCycleMode('now')">لو هنام دلوقتي 🌙</button>
+      <button type="button" class="nap-preset-btn" id="btnWakeTargetMode" onclick="setSleepCycleMode('wake')">عاوز أصحى كذا ⏰</button>
+    </div>
+  </div>
+
+  <div id="wakeTargetInputWrap" style="display:none; margin-top:12px; align-items:center; gap:10px;">
+    <label style="font-size:.82rem; font-weight:700;">ساعة الاستيقاظ المطلوبة:</label>
+    <input type="time" id="targetWakeTimeInput" class="weight-input" value="06:30" onchange="calculateSleepCycles()" style="padding:4px 10px;">
+  </div>
+
+  <div class="sleep-cycle-grid" id="sleepCycleResultsGrid"></div>
+</div>
+
+<div class="power-nap-card" id="powerNapCard">
+  <div style="font-weight:800; font-size:.95rem; color:var(--text); margin-bottom:4px;">⚡ مؤقت القيلولة الذكي السريع</div>
+  <div class="section-hint" style="padding:0; margin:0 0 10px;">قيلولة الـ 20 دقيقة تزيد اليقظة والتركيز دون الدخول في النوم العميق المسبب للثقل والصداع.</div>
+  
+  <div class="nap-presets-row">
+    <button type="button" class="nap-preset-btn active" id="napPreset20" onclick="selectNapPreset(20)">⚡ قيلولة سريعة (20 دقيقة)</button>
+    <button type="button" class="nap-preset-btn" id="napPreset90" onclick="selectNapPreset(90)">🌙 دورة نوم كاملة (90 دقيقة)</button>
+  </div>
+
+  <div class="nap-timer-display" id="napTimerDisplay">20:00</div>
+
+  <div style="display:flex; justify-content:center; gap:10px;">
+    <button type="button" class="nap-ctrl-btn start" id="btnNapStart" onclick="toggleNapTimer()">بدء القيلولة ▶️</button>
+    <button type="button" class="nap-ctrl-btn" id="btnNapReset" onclick="resetNapTimer()" style="background:var(--card-alt); border:1px solid var(--line); color:var(--text);">إعادة ضبط 🔄</button>
+  </div>
+</div>
+
+<div class="screen-free-card" id="screenFreeBedtimeCard">
+  <div>
+    <div style="font-weight:800; font-size:.92rem; color:var(--text);">📵 التوقف عن الشاشات قبل النوم</div>
+    <div class="section-hint" style="padding:0; margin:2px 0 0;">تقليل الضوء الأزرق لرفع إفراز الميلاتونين وتحسين جودة النوم العميق.</div>
+  </div>
+  <div style="display:flex; align-items:center; gap:10px;">
+    <span class="screen-free-streak-badge" id="screenFreeStreakBadge">🔥 0 يوم متتالي</span>
+    <button type="button" class="tbtn" id="btnToggleScreenFree" onclick="toggleScreenFreeBedtime()">✓</button>
+  </div>
+</div>
+
+
+<!-- PHASE 6: SCHEDULE VIEW CARDS (To be inserted into #scheduleView) -->
+<div class="vacation-safar-card" id="vacationSafarCard">
+  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:10px;">
+    <div>
+      <div style="font-weight:800; font-size:.95rem; color:var(--text);">🏖️ تجميد العادات في الإجازات & وضع السفر ✈️</div>
+      <div class="section-hint" style="padding:0; margin:2px 0 0;">احمِ سلاسل إنجازك من الانقطاع أثناء الإجازة، وفعّل رخص الصلاة والسفر الفقهية.</div>
+    </div>
+    <div style="display:flex; gap:8px;">
+      <button type="button" class="nap-preset-btn" id="btnToggleVacationFreeze" onclick="toggleVacationFreezeDialog()">🏖️ تجميد الإجازة</button>
+      <button type="button" class="nap-preset-btn" id="btnToggleSafarMode" onclick="toggleSmartSafarMode()">✈️ وضع السفر</button>
+    </div>
+  </div>
+
+  <div id="vacationFreezeDetails" style="display:none; background:var(--card-alt); border-radius:10px; padding:12px; margin-top:8px;">
+    <div style="font-weight:700; font-size:.82rem; margin-bottom:6px;">تحديد فترة تجميد العادات (حماية الـ Streaks):</div>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+      <label style="font-size:.75rem; color:var(--muted);">من: <input type="date" id="vacationFreezeStart" class="weight-input" style="padding:3px 8px;"></label>
+      <label style="font-size:.75rem; color:var(--muted);">إلى: <input type="date" id="vacationFreezeEnd" class="weight-input" style="padding:3px 8px;"></label>
+      <button type="button" class="save-btn" onclick="saveVacationFreeze()" style="padding:4px 12px; font-size:.78rem;">تفعيل التجميد ❄️</button>
+      <button type="button" class="reset-btn" onclick="clearVacationFreeze()" style="padding:4px 10px; font-size:.78rem;">إلغاء</button>
+    </div>
+    <div id="vacationFreezeStatusText" style="font-size:.75rem; color:#10b981; margin-top:6px; font-weight:600;"></div>
+  </div>
+
+  <div id="safarModeBanner" class="safar-banner" style="display:none;">
+    <div>
+      <div style="font-weight:800; font-size:.9rem; color:#3b82f6;">✈️ وضع السفر والترحال مفعّل</div>
+      <div style="font-size:.75rem; color:var(--text); margin-top:2px;">تم تفعيل رخص السفر الفقهية تلقائياً:</div>
+    </div>
+    <span class="eq-badge" style="background:#3b82f6; color:#fff;">رخص السفر مفعلة</span>
+    <div class="safar-fiqh-box" style="width:100%;">
+      • <b>قصر الصلاة:</b> تُصلّى الصلاة الرباعية (الظهر، العصر، العشاء) ركعتين.<br>
+      • <b>جمع التقديم والتأخير:</b> يجوز جمع الظهر مع العصر، والمغرب مع العشاء بأذان واحد وإقامتين.<br>
+      • <b>إسقاط السنن الرواتب:</b> تسقط السنن الرواتب في السفر تخفيفاً، ما عدا سنة الفجر وركعة الوتر.<br>
+      • <b>رخصة الصيام:</b> يجوز للمسافر الفطر مع قضاء الأيام لاحقاً.
+    </div>
+  </div>
+</div>
+
+<div class="desk-break-card" id="deskBreakCard">
+  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+    <div>
+      <div style="font-weight:800; font-size:.92rem; color:var(--text);">🚶‍♂️ منبه كسر الجلوس والإطالة (كل 60 دقيقة)</div>
+      <div class="section-hint" style="padding:0; margin:2px 0 0;">تنبيه دوري خفيف للوقوف وتحريك المفاصل وتنشيط الدورة الدموية وشرب الماء.</div>
+    </div>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <button type="button" class="reset-btn" onclick="navigateTo('stretches')" style="border-color:var(--teal); color:var(--teal); font-size:.78rem; font-weight:700;">🧘 إطالات سريعة</button>
+      <button type="button" class="tbtn" id="btnToggleDeskBreak" onclick="toggleDeskBreakChime()">✓</button>
+    </div>
+  </div>
+</div>
+
+<div class="pinned-tasks-box" id="pinnedTasksContainer" style="display:none;">
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+    <div style="font-weight:800; font-size:.88rem; color:#f59e0b;">⭐ مهام اليوم الحرجة (Top 3 Priorities)</div>
+    <span class="eq-badge" id="pinnedCountBadge" style="background:rgba(245,158,11,0.2); color:#f59e0b;">0 / 3</span>
+  </div>
+  <div class="section-hint" style="padding:0; margin:2px 0 6px;">ثبت المهام الحاسمة التي تصنع الفارق الأكبر في يومك لتبقى دائماً في بؤرة تركيزك.</div>
+  <div id="pinnedTasksList"></div>
+</div>
+
+<div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:10px;">
+  <div style="display:flex; gap:8px;">
+    <button type="button" class="nap-preset-btn active" id="btnViewTimeline" onclick="setScheduleViewMode('timeline')">📋 الجدول الزمني</button>
+    <button type="button" class="nap-preset-btn" id="btnViewEisenhower" onclick="setScheduleViewMode('eisenhower')">📊 مصفوفة آيزنهاور</button>
+  </div>
+  <div style="display:flex; gap:8px;">
+    <button type="button" class="reset-btn" id="btnClearCompletedSchedule" onclick="archiveCompletedScheduleTasks()" style="border-color:var(--good); color:var(--good); font-size:.78rem; font-weight:700;">🧹 أرشفة المنجز</button>
+    <button type="button" class="reset-btn" id="btnToggleArchivedTasks" onclick="toggleShowArchivedTasks()" style="font-size:.78rem;">📂 إظهار المؤرشف</button>
+  </div>
+</div>
+
+<div id="eisenhowerMatrixView" class="eisenhower-container" style="display:none;">
+  <div class="eisenhower-quadrant eq-q1" id="eqQuadrant1">
+    <div class="eq-header">
+      <div class="eq-title" style="color:#ef4444;">🔥 عاجل ومهم (نفّذ فوراً)</div>
+      <span class="eq-badge" style="background:#ef4444; color:#fff;" id="eqCount1">0</span>
+    </div>
+    <div class="eq-tasks-list" id="eqList1"></div>
+  </div>
+  <div class="eisenhower-quadrant eq-q2" id="eqQuadrant2">
+    <div class="eq-header">
+      <div class="eq-title" style="color:#3b82f6;">🎯 مهم وغير عاجل (خطط له)</div>
+      <span class="eq-badge" style="background:#3b82f6; color:#fff;" id="eqCount2">0</span>
+    </div>
+    <div class="eq-tasks-list" id="eqList2"></div>
+  </div>
+  <div class="eisenhower-quadrant eq-q3" id="eqQuadrant3">
+    <div class="eq-header">
+      <div class="eq-title" style="color:#f59e0b;">⚡ عاجل وغير مهم (فوّض أو قلل)</div>
+      <span class="eq-badge" style="background:#f59e0b; color:#fff;" id="eqCount3">0</span>
+    </div>
+    <div class="eq-tasks-list" id="eqList3"></div>
+  </div>
+  <div class="eisenhower-quadrant eq-q4" id="eqQuadrant4">
+    <div class="eq-header">
+      <div class="eq-title" style="color:var(--muted);">🗑️ غير عاجل وغير مهم (احذف)</div>
+      <span class="eq-badge" style="background:var(--muted); color:#fff;" id="eqCount4">0</span>
+    </div>
+    <div class="eq-tasks-list" id="eqList4"></div>
+  </div>
+</div>

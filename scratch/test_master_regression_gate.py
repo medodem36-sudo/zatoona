@@ -341,6 +341,105 @@ REGISTERED_SUITES = [
         "active": True,
         "description": "Verifies 1RM/RPE calculator, smart warmup sets and plate loader, live exercise swap for busy machines, blacklist exercises manager, muscle recovery heatmap with SVG body map, gym big-numbers focus mode, tempo cadence metronome, injury/pain flagging, and ongoing workout floating HUD with notification bridge."
     },
+    {
+        "id": "phase4_nutrition_engine",
+        "name": "Phase 4 Smart Nutrition, Pantry & Budget Engine",
+        "category": "Nutrition & Budget",
+        "rel_path": "scratch/test_phase4_nutrition_engine.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies smart pantry meal suggestions (أطبخ إيه من المؤن المتاحة؟), Egyptian athlete protein-to-cost calculator, quick-add favorite meal combos, smart carb cycling synced with gym rest/training days, weekly cumulative caloric deficit tracking, sodium-potassium balance indicator, and remaining daily spending allowance in budget view."
+    },
+    {
+        "id": "phase5_worship_engine",
+        "name": "Phase 5 Worship & Smart Khatma Engine",
+        "category": "Worship & Khatma",
+        "rel_path": "scratch/test_phase5_worship_engine.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies smart Khatma progress & Quran reflection notebook, dynamic Suhoor & pre-Fajr alarm, pre-Adhan preparation chime, forbidden prayer times live indicator & windows, Friday Sunan interactive checklist with Salawat counter, subtle random Dhikr treasury & interval reminder, and missed prayers & fasting debt ledger."
+    },
+    {
+        "id": "phase6_sleep_life_os",
+        "name": "Phase 6 Advanced Sleep & Life OS",
+        "category": "Sleep & Life OS",
+        "rel_path": "scratch/test_phase6_sleep_life_os.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies 90-minute sleep cycle calculator, 20-minute power nap smart timer, self-reported screen-free bedtime tracker, sedentary desk break chime, Eisenhower Matrix 4-quadrant view, critical task top pinning, one-tap clear completed archive, and habit vacation freeze & smart safar mode."
+    },
+    {
+        "id": "phase7_system_polish",
+        "name": "Phase 7 System Polish & Zatoona Wrapped",
+        "category": "System Polish & Android",
+        "rel_path": "scratch/test_phase7_system_polish.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies Android native study widget, quick settings tiles, automated local backup reminders, and monthly/annual Zatoona Wrapped."
+    },
+    {
+        "id": "package_a_gym_intelligence",
+        "name": "Package A Gym Intelligence Engine",
+        "category": "Gym Intelligence",
+        "rel_path": "scratch/test_package_a_gym_intelligence.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies Plateau Detector, Push/Pull/Legs weekly balance ratio bar, copy last workout weights, and home workout bodyweight converter."
+    },
+    {
+        "id": "package_b_smart_nutrition",
+        "name": "Package B Smart Nutrition Engine",
+        "category": "Smart Nutrition",
+        "rel_path": "scratch/test_package_b_smart_nutrition.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies Cheat Day Recovery Calculator, Complete vs Incomplete Protein quality analyzer, and Egyptian Popular Food Guide."
+    },
+    {
+        "id": "package_c_worship_sunnah",
+        "name": "Package C Worship & Sunnah Engine",
+        "category": "Worship & Sunnah",
+        "rel_path": "scratch/test_package_c_worship_sunnah.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies Gradual Fajr Alarm, Friday Special Package, Adhkar Auto-hide, Missed Prayer Qada Calculator, Astronomical Last Third of Night, Sunnah Rawatib 12-Rak'ah Tracker, Silent Istighfar Nudge, and Suhoor Fasting Alert."
+    },
+    {
+        "id": "package_d_budget_savings",
+        "name": "Package D Budget & Savings Engine",
+        "category": "Budget & Savings",
+        "rel_path": "scratch/test_package_d_budget_savings.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies Recurring Bills & Subscriptions Detector, Virtual Savings Jars & Goals, and Daily Allowance Calculator."
+    },
+    {
+        "id": "package_e_schedule_tasks",
+        "name": "Package E Schedule, Tasks, Sleep & Study Engine",
+        "category": "Schedule & Tasks",
+        "rel_path": "scratch/test_package_e_schedule_tasks.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies Morning Sunlight Logger, Stop Fluids Reminder, Mandatory Stretch Break, Visual Time-Blocking, Task Carry-Over, Estimated vs Actual Time, Subtasks Tree, Complex Recurring Tasks, Time-to-Leave Alert, and Conflict Detector."
+    },
+    {
+        "id": "package_f_notes_android",
+        "name": "Package F Notes & Android Features Engine",
+        "category": "Notes & Android",
+        "rel_path": "scratch/test_package_f_notes_android.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies Pin & Color Notes, Checklist Mode, LED Flash Alert with Alarm, Wake Lock Toggle, Custom Haptic Patterns, All-in-One Daily Widget, and AMOLED Ultra-Battery Saver Mode."
+    },
+    {
+        "id": "package_g_fluid_ux",
+        "name": "Package G Fluid UX, Gestures & Speed Engine",
+        "category": "UI & Ergonomics",
+        "rel_path": "scratch/test_package_g_fluid_ux.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies Swipe-to-Action Gestures on Cards, Horizontal View-Pager Swipe Navigation, Shared Element Morphing, Egyptian Arabic Natural Language Quick-Add, Dynamic Mini-Status Capsule Island, Collapsible Sticky Header, Contextual Pull-to-Refresh, Dismiss Keyboard on Scroll, Accordion Fold/Unfold, Spotlight Dimming, Pinch-to-Zoom Font Scale, Border Inset Aura Glow, and Time-Aware Adaptive Dashboard."
+    },
     # Superseded / Obsolete historical gates (excluded by default, enabled via --include-superseded)
     {
         "id": "phase9b1_1_gate",

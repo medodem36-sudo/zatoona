@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_aio_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_widget_card"
+    android:padding="12dp">
+
+    <!-- Header bar with title and streak -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="🌿 زتونة — ملخص اليوم"
+            android:textColor="#E6EEF8"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txt_aio_streak"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🔥 7 أيام"
+            android:textColor="#F59E0B"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Metrics Row 1: Prayer & Workout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
+
+        <!-- Next Prayer Box -->
+        <LinearLayout
+            android:id="@+id/btn_aio_prayer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:background="@drawable/bg_widget_pill"
+            android:padding="6dp"
+            android:layout_marginEnd="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🕌 الصلاة القادمة"
+                android:textColor="#94A3B8"
+                android:textSize="9sp" />
+
+            <TextView
+                android:id="@+id/txt_aio_prayer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="العصر 03:15 م"
+                android:textColor="#10B981"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Workout Box -->
+        <LinearLayout
+            android:id="@+id/btn_aio_gym"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:background="@drawable/bg_widget_pill"
+            android:padding="6dp"
+            android:layout_marginStart="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🏋️ تمرين اليوم"
+                android:textColor="#94A3B8"
+                android:textSize="9sp" />
+
+            <TextView
+                android:id="@+id/txt_aio_workout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="تمارين الدفع"
+                android:textColor="#F59E0B"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Metrics Row 2: Water & Quick Launch -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="6dp">
+
+        <TextView
+            android:id="@+id/txt_aio_water"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="💧 الماء: 2.2 / 3.0 لتر"
+            android:textColor="#38BDF8"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/btn_aio_open_app"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="فتح التطبيق ↗"
+            android:textColor="#10B981"
+            android:textSize="10sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</LinearLayout>
