@@ -34,14 +34,20 @@ signing.properties
 /scratch/write_*.py
 /scratch/prompt_*.txt
 /scratch/build_apk.bat
+/scratch/build_*.py
 /scratch/calc_checksums.py
 /scratch/cdp_client.py
 /scratch/create_*.py
 /scratch/debug_*.py
+/scratch/download_*.py
+/scratch/dump_*.py
 /scratch/fix_*.py
 /scratch/locate_*.py
 /scratch/make_full_table.py
+/scratch/match_*.py
+/scratch/package_*.py
 /scratch/print_*.py
+/scratch/resolve_*.py
 /scratch/search_*.py
 /scratch/setup_*.py
 /scratch/sync_*.py
@@ -50,7 +56,16 @@ signing.properties
 /scratch/test_gradle_url.py
 /scratch/test_runner_isolation.py
 /scratch/test_targets.py
+/scratch/test_match_all_89.py
+/scratch/test_queries2.py
+/scratch/test_search_db.py
+/scratch/test_size_cal.py
 /scratch/Phase_13_4B2_6_Controlled_Commits_Report.md
+/scratch/downloads/
+/scratch/*.jpg
+/scratch/*.png
+/scratch/*.json
+/scratch/ex-*.svg
 
 # Python compiled bytecode
 *.py[cod]

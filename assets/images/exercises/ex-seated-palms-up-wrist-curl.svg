@@ -1,51 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="100%" height="100%">
   <defs>
-    <linearGradient id="bgWristCurl" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#f8fafc"/>
-      <stop offset="100%" stop-color="#f1f5f9"/>
-    </linearGradient>
-    <linearGradient id="maleGradWrist" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#334155"/>
-      <stop offset="100%" stop-color="#1e293b"/>
-    </linearGradient>
+    <clipPath id="c">
+      <rect width="300" height="200" rx="10"/>
+    </clipPath>
   </defs>
-  <rect width="300" height="200" rx="14" fill="url(#bgWristCurl)"/>
-  
-  <!-- Floor line -->
-  <line x1="25" y1="175" x2="275" y2="175" stroke="#cbd5e1" stroke-width="2.5" stroke-linecap="round"/>
-
-  <!-- Badge -->
-  <rect x="18" y="14" width="168" height="22" rx="6" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.2"/>
-  <text x="102" y="29" font-family="'IBM Plex Mono', system-ui, sans-serif" font-size="8" font-weight="bold" fill="#334155" text-anchor="middle">SEATED PALMS-UP WRIST CURL</text>
-
-  <!-- Bench / Seat -->
-  <line x1="80" y1="174" x2="80" y2="135" stroke="#475569" stroke-width="5"/>
-  <line x1="140" y1="174" x2="140" y2="135" stroke="#475569" stroke-width="5"/>
-  <line x1="70" y1="130" x2="150" y2="130" stroke="#1e293b" stroke-width="9" stroke-linecap="round"/>
-
-  <!-- Male Athletic Figure Seated, Forearms Resting on Thighs -->
-  <!-- Head & Forward leaning torso -->
-  <circle cx="118" cy="74" r="13" fill="url(#maleGradWrist)"/>
-  <path d="M 118 86 L 105 132" stroke="url(#maleGradWrist)" stroke-width="13" stroke-linecap="round"/>
-  <!-- Thighs horizontal over knees -->
-  <path d="M 105 132 L 175 134 L 180 174" fill="none" stroke="url(#maleGradWrist)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M 172 174 L 194 174" stroke="url(#maleGradWrist)" stroke-width="7" stroke-linecap="round"/>
-
-  <!-- Forearms resting flat on thighs, wrists hanging past knees -->
-  <path d="M 116 94 L 140 125 L 182 125" fill="none" stroke="url(#maleGradWrist)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-
-  <!-- Hands Curling Barbell Upwards (Palms Facing Up) -->
-  <path d="M 182 125 L 190 114" stroke="url(#maleGradWrist)" stroke-width="7" stroke-linecap="round"/>
-  
-  <!-- Barbell in fingers/palms -->
-  <line x1="170" y1="112" x2="225" y2="112" stroke="#64748b" stroke-width="4.5" stroke-linecap="round"/>
-  <rect x="172" y="102" width="6" height="20" rx="2" fill="#0f172a"/>
-  <rect x="218" y="102" width="6" height="20" rx="2" fill="#0f172a"/>
-
-  <!-- Forearm Flexors Highlight -->
-  <path d="M 148 128 L 178 128" stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
-  <circle cx="188" cy="116" r="4" fill="#e65100"/>
-  <!-- Wrist curl upward arrow -->
-  <path d="M 194 130 C 198 126, 198 118, 195 110" fill="none" stroke="#e65100" stroke-width="1.8" stroke-linecap="round"/>
-  <polygon points="194,106 191,114 199,112" fill="#e65100"/>
+  <rect width="300" height="200" rx="10" fill="#0d1117"/>
+  <image width="300" height="200" href="data:image/jpeg;base64,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" clip-path="url(#c)"/>
+  <rect x="8" y="8" width="140" height="20" rx="5" fill="#0f172a" fill-opacity="0.85" stroke="#34D399" stroke-width="1"/>
+  <text x="78" y="22" font-family="system-ui, sans-serif" font-size="8.5" font-weight="bold" fill="#34D399" text-anchor="middle">Seated Wrist Curl</text>
+  <rect x="8" y="174" width="150" height="18" rx="5" fill="#0f172a" fill-opacity="0.85" stroke="#F59E0B" stroke-width="1"/>
+  <text x="83" y="187" font-family="system-ui, sans-serif" font-size="8" font-weight="bold" fill="#F59E0B" text-anchor="middle">🎯 عضلات الساعد والرسغ</text>
 </svg>

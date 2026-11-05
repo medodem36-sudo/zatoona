@@ -1,46 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="100%" height="100%">
   <defs>
-    <linearGradient id="bgBBCurl" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#fff1f2"/>
-      <stop offset="100%" stop-color="#ffe4e6"/>
-    </linearGradient>
-    <linearGradient id="maleGradCurl" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#9f1239"/>
-      <stop offset="100%" stop-color="#881337"/>
-    </linearGradient>
+    <clipPath id="c">
+      <rect width="300" height="200" rx="10"/>
+    </clipPath>
   </defs>
-  <rect width="300" height="200" rx="14" fill="url(#bgBBCurl)"/>
-  
-  <!-- Floor line -->
-  <line x1="25" y1="175" x2="275" y2="175" stroke="#fda4af" stroke-width="2.5" stroke-linecap="round"/>
-
-  <!-- Badge -->
-  <rect x="18" y="14" width="138" height="22" rx="6" fill="#fff1f2" stroke="#fb7185" stroke-width="1.2"/>
-  <text x="87" y="29" font-family="'IBM Plex Mono', system-ui, sans-serif" font-size="8.5" font-weight="bold" fill="#9f1239" text-anchor="middle">STANDING BARBELL CURL</text>
-
-  <!-- Male Athletic Figure Standing Side Profile Curled Up -->
-  <!-- Head -->
-  <circle cx="140" cy="56" r="14" fill="url(#maleGradCurl)"/>
-  <!-- Torso (upright posture, shoulders back) -->
-  <path d="M 140 70 L 142 124" stroke="url(#maleGradCurl)" stroke-width="14" stroke-linecap="round"/>
-  <!-- Legs (straight athletic stance) -->
-  <path d="M 142 124 L 144 174" stroke="url(#maleGradCurl)" stroke-width="11" stroke-linecap="round"/>
-  <path d="M 136 174 L 160 174" stroke="url(#maleGradCurl)" stroke-width="7" stroke-linecap="round"/>
-
-  <!-- Upper Arm pinned strictly to side -->
-  <path d="M 142 78 L 144 108" stroke="url(#maleGradCurl)" stroke-width="8" stroke-linecap="round"/>
-  <!-- Forearm curling Barbell up to upper chest -->
-  <path d="M 144 108 L 168 84" stroke="url(#maleGradCurl)" stroke-width="8" stroke-linecap="round"/>
-
-  <!-- Straight Barbell held in front of chest -->
-  <line x1="120" y1="84" x2="216" y2="84" stroke="#64748b" stroke-width="4.5" stroke-linecap="round"/>
-  <!-- Weight Plates -->
-  <rect x="124" y="70" width="8" height="28" rx="2" fill="#0f172a"/>
-  <rect x="204" y="70" width="8" height="28" rx="2" fill="#0f172a"/>
-
-  <!-- Biceps Peak Contraction Highlight -->
-  <circle cx="154" cy="94" r="5" fill="#e65100"/>
-  <!-- Arc motion arrow -->
-  <path d="M 172 130 C 182 120, 182 100, 175 88" fill="none" stroke="#e65100" stroke-width="2" stroke-linecap="round"/>
-  <polygon points="172,84 180,88 174,94" fill="#e65100"/>
+  <rect width="300" height="200" rx="10" fill="#0d1117"/>
+  <image width="300" height="200" href="data:image/jpeg;base64,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" clip-path="url(#c)"/>
+  <rect x="8" y="8" width="140" height="20" rx="5" fill="#0f172a" fill-opacity="0.85" stroke="#34D399" stroke-width="1"/>
+  <text x="78" y="22" font-family="system-ui, sans-serif" font-size="8.5" font-weight="bold" fill="#34D399" text-anchor="middle">Barbell Curl</text>
+  <rect x="8" y="174" width="150" height="18" rx="5" fill="#0f172a" fill-opacity="0.85" stroke="#F59E0B" stroke-width="1"/>
+  <text x="83" y="187" font-family="system-ui, sans-serif" font-size="8" font-weight="bold" fill="#F59E0B" text-anchor="middle">🎯 عضلة البايسبس</text>
 </svg>

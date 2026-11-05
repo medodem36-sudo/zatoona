@@ -1,52 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="100%" height="100%">
   <defs>
-    <linearGradient id="bgDeadlift" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#f8fafc"/>
-      <stop offset="100%" stop-color="#f1f5f9"/>
-    </linearGradient>
-    <linearGradient id="maleGradDeadlift" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0f172a"/>
-      <stop offset="100%" stop-color="#334155"/>
-    </linearGradient>
+    <clipPath id="c">
+      <rect width="300" height="200" rx="10"/>
+    </clipPath>
   </defs>
-  <rect width="300" height="200" rx="14" fill="url(#bgDeadlift)"/>
-  
-  <!-- Floor line -->
-  <line x1="25" y1="175" x2="275" y2="175" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round"/>
-
-  <!-- Badge -->
-  <rect x="18" y="14" width="144" height="22" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.2"/>
-  <text x="90" y="29" font-family="'IBM Plex Mono', system-ui, sans-serif" font-size="8.5" font-weight="bold" fill="#0f172a" text-anchor="middle">CONVENTIONAL DEADLIFT</text>
-
-  <!-- Motion upward arrow -->
-  <path d="M 60 135 L 60 85" stroke="#e65100" stroke-width="2.2" stroke-linecap="round"/>
-  <polygon points="60,78 55,88 65,88" fill="#e65100"/>
-
-  <!-- Male Athletic Figure in Deadlift Pull (Mid-Shin hinge) -->
-  <!-- Head & Gaze forward-down -->
-  <circle cx="188" cy="68" r="14" fill="url(#maleGradDeadlift)"/>
-  
-  <!-- Torso (rigid flat back, 35 deg angle) -->
-  <path d="M 180 78 L 132 116" stroke="url(#maleGradDeadlift)" stroke-width="14" stroke-linecap="round"/>
-
-  <!-- Thighs (Hips hinged back, knees semi-flexed) -->
-  <path d="M 132 116 L 166 142" stroke="url(#maleGradDeadlift)" stroke-width="13" stroke-linecap="round"/>
-  <!-- Shins (nearly vertical) -->
-  <path d="M 166 142 L 160 174" stroke="url(#maleGradDeadlift)" stroke-width="10" stroke-linecap="round"/>
-  <!-- Feet -->
-  <path d="M 150 174 L 180 174" stroke="url(#maleGradDeadlift)" stroke-width="8" stroke-linecap="round"/>
-
-  <!-- Arms (hanging perfectly straight down from shoulders) -->
-  <path d="M 176 84 L 176 138" stroke="url(#maleGradDeadlift)" stroke-width="8" stroke-linecap="round"/>
-
-  <!-- Barbell at Mid-Shin (close to shins) -->
-  <line x1="100" y1="140" x2="250" y2="140" stroke="#64748b" stroke-width="5" stroke-linecap="round"/>
-  <!-- Olympic Plates touching / near floor -->
-  <rect x="105" y="118" width="10" height="44" rx="2" fill="#020617"/>
-  <rect x="97" y="122" width="7" height="36" rx="2" fill="#1e293b"/>
-  <rect x="235" y="118" width="10" height="44" rx="2" fill="#020617"/>
-  <rect x="246" y="122" width="7" height="36" rx="2" fill="#1e293b"/>
-
-  <!-- Posterior Chain Activation Line (Glutes/Hamstrings/Erectors) -->
-  <path d="M 176 80 L 134 116 L 164 140" fill="none" stroke="#e65100" stroke-width="2.5" stroke-linecap="round"/>
+  <rect width="300" height="200" rx="10" fill="#0d1117"/>
+  <image width="300" height="200" href="data:image/jpeg;base64,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" clip-path="url(#c)"/>
+  <rect x="8" y="8" width="140" height="20" rx="5" fill="#0f172a" fill-opacity="0.85" stroke="#34D399" stroke-width="1"/>
+  <text x="78" y="22" font-family="system-ui, sans-serif" font-size="8.5" font-weight="bold" fill="#34D399" text-anchor="middle">Conventional Deadlift</text>
+  <rect x="8" y="174" width="150" height="18" rx="5" fill="#0f172a" fill-opacity="0.85" stroke="#F59E0B" stroke-width="1"/>
+  <text x="83" y="187" font-family="system-ui, sans-serif" font-size="8" font-weight="bold" fill="#F59E0B" text-anchor="middle">🎯 السلسلة الخلفية والظهر</text>
 </svg>

@@ -1,53 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="100%" height="100%">
   <defs>
-    <linearGradient id="bgLegPress" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#fdf2f8"/>
-      <stop offset="100%" stop-color="#fce7f3"/>
-    </linearGradient>
-    <linearGradient id="maleGradLegPress" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#831843"/>
-      <stop offset="100%" stop-color="#500724"/>
-    </linearGradient>
+    <clipPath id="c">
+      <rect width="300" height="200" rx="10"/>
+    </clipPath>
   </defs>
-  <rect width="300" height="200" rx="14" fill="url(#bgLegPress)"/>
-  
-  <!-- Floor line -->
-  <line x1="25" y1="175" x2="275" y2="175" stroke="#f472b6" stroke-width="2.5" stroke-linecap="round"/>
-
-  <!-- Badge -->
-  <rect x="18" y="14" width="144" height="22" rx="6" fill="#fdf2f8" stroke="#ec4899" stroke-width="1.2"/>
-  <text x="90" y="29" font-family="'IBM Plex Mono', system-ui, sans-serif" font-size="8.5" font-weight="bold" fill="#831843" text-anchor="middle">45° LEG PRESS MACHINE</text>
-
-  <!-- 45-Degree Machine Rails & Frame -->
-  <line x1="120" y1="168" x2="240" y2="48" stroke="#64748b" stroke-width="6" stroke-linecap="round"/>
-  <line x1="140" y1="174" x2="255" y2="58" stroke="#475569" stroke-width="4" stroke-linecap="round"/>
-  <line x1="230" y1="174" x2="230" y2="70" stroke="#94a3b8" stroke-width="4"/>
-
-  <!-- Reclined Machine Seat Pad -->
-  <line x1="68" y1="118" x2="98" y2="152" stroke="#1e293b" stroke-width="10" stroke-linecap="round"/>
-  <line x1="98" y1="154" x2="124" y2="148" stroke="#1e293b" stroke-width="8" stroke-linecap="round"/>
-
-  <!-- Sliding Sled & Footplate (at 45 deg) -->
-  <line x1="205" y1="70" x2="225" y2="90" stroke="#0f172a" stroke-width="8" stroke-linecap="round"/>
-  <!-- Weight Horn with Plates -->
-  <line x1="215" y1="80" x2="195" y2="60" stroke="#94a3b8" stroke-width="5"/>
-  <rect x="188" y="52" width="18" height="8" rx="2" transform="rotate(45 197 56)" fill="#1e293b"/>
-
-  <!-- Male Athletic Figure on Leg Press -->
-  <!-- Head & Neck -->
-  <circle cx="76" cy="112" r="13" fill="url(#maleGradLegPress)"/>
-  <!-- Torso resting on reclined backrest -->
-  <path d="M 86 122 L 108 148" stroke="url(#maleGradLegPress)" stroke-width="13" stroke-linecap="round"/>
-  <!-- Arms holding safety side handles -->
-  <path d="M 95 132 L 110 144" stroke="url(#maleGradLegPress)" stroke-width="6" stroke-linecap="round"/>
-
-  <!-- Legs in deep 90 deg press position against sled plate -->
-  <path d="M 108 148 L 155 116 L 208 82" fill="none" stroke="url(#maleGradLegPress)" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
-
-  <!-- Quads / Glutes activation highlight -->
-  <path d="M 122 140 L 150 120" stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
-  <circle cx="210" cy="80" r="4" fill="#e65100"/>
-  <!-- Push arrow along 45 deg rail -->
-  <path d="M 175 112 L 195 92" stroke="#e65100" stroke-width="2.2" stroke-linecap="round"/>
-  <polygon points="199,87 189,92 195,98" fill="#e65100"/>
+  <rect width="300" height="200" rx="10" fill="#0d1117"/>
+  <image width="300" height="200" href="data:image/jpeg;base64,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" clip-path="url(#c)"/>
+  <rect x="8" y="8" width="140" height="20" rx="5" fill="#0f172a" fill-opacity="0.85" stroke="#34D399" stroke-width="1"/>
+  <text x="78" y="22" font-family="system-ui, sans-serif" font-size="8.5" font-weight="bold" fill="#34D399" text-anchor="middle">Leg Press Machine</text>
+  <rect x="8" y="174" width="150" height="18" rx="5" fill="#0f172a" fill-opacity="0.85" stroke="#F59E0B" stroke-width="1"/>
+  <text x="83" y="187" font-family="system-ui, sans-serif" font-size="8" font-weight="bold" fill="#F59E0B" text-anchor="middle">🎯 عضلات الفخذين</text>
 </svg>

@@ -1,60 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="100%" height="100%">
   <defs>
-    <linearGradient id="bgBackSquat" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#fdf4ff"/>
-      <stop offset="100%" stop-color="#fae8ff"/>
-    </linearGradient>
-    <linearGradient id="maleGradSquat" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#4a044e"/>
-      <stop offset="100%" stop-color="#701a75"/>
-    </linearGradient>
+    <clipPath id="c">
+      <rect width="300" height="200" rx="10"/>
+    </clipPath>
   </defs>
-  <rect width="300" height="200" rx="14" fill="url(#bgBackSquat)"/>
-  
-  <!-- Floor line -->
-  <line x1="25" y1="175" x2="275" y2="175" stroke="#e879f9" stroke-width="2.5" stroke-linecap="round"/>
-
-  <!-- Badge -->
-  <rect x="18" y="14" width="130" height="22" rx="6" fill="#fdf2f8" stroke="#f472b6" stroke-width="1.2"/>
-  <text x="83" y="29" font-family="'IBM Plex Mono', system-ui, sans-serif" font-size="8.5" font-weight="bold" fill="#831843" text-anchor="middle">BARBELL BACK SQUAT</text>
-
-  <!-- Motion arrows -->
-  <path d="M 62 82 L 62 128" stroke="#e65100" stroke-width="2.2" stroke-linecap="round"/>
-  <polygon points="62,135 57,125 67,125" fill="#e65100"/>
-  <polygon points="62,75 57,85 67,85" fill="#e65100"/>
-
-  <!-- Squat Rack Uprights (background) -->
-  <line x1="105" y1="45" x2="105" y2="175" stroke="#cbd5e1" stroke-width="3" stroke-linecap="round"/>
-  <line x1="225" y1="45" x2="225" y2="175" stroke="#cbd5e1" stroke-width="3" stroke-linecap="round"/>
-  <line x1="100" y1="85" x2="110" y2="85" stroke="#94a3b8" stroke-width="3"/>
-  <line x1="220" y1="85" x2="230" y2="85" stroke="#94a3b8" stroke-width="3"/>
-
-  <!-- Athletic Male Figure in Parallel Back Squat (Side View angled) -->
-  <!-- Head & Neck -->
-  <circle cx="174" cy="56" r="14" fill="url(#maleGradSquat)"/>
-  
-  <!-- Torso (flat back, ~45 deg forward incline) -->
-  <path d="M 166 68 L 132 118" stroke="url(#maleGradSquat)" stroke-width="15" stroke-linecap="round"/>
-  
-  <!-- Arms & Hands gripping Barbell on upper traps -->
-  <path d="M 160 76 L 152 70 L 160 66" fill="none" stroke="url(#maleGradSquat)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-
-  <!-- Barbell resting on Upper Traps -->
-  <line x1="85" y1="67" x2="245" y2="67" stroke="#64748b" stroke-width="5" stroke-linecap="round"/>
-  <!-- Plates (Standard 45lb/20kg Olympic Plates) -->
-  <rect x="88" y="45" width="10" height="44" rx="2" fill="#1e293b"/>
-  <rect x="80" y="49" width="7" height="36" rx="2" fill="#334155"/>
-  <rect x="232" y="45" width="10" height="44" rx="2" fill="#1e293b"/>
-  <rect x="243" y="49" width="7" height="36" rx="2" fill="#334155"/>
-
-  <!-- Thigh (parallel to ground at 90 deg hip angle) -->
-  <path d="M 132 118 L 188 120" stroke="url(#maleGradSquat)" stroke-width="14" stroke-linecap="round"/>
-  <!-- Shin (angled forward over toes) -->
-  <path d="M 188 120 L 176 173" stroke="url(#maleGradSquat)" stroke-width="11" stroke-linecap="round"/>
-  <!-- Foot (flat on ground) -->
-  <path d="M 166 174 L 198 174" stroke="url(#maleGradSquat)" stroke-width="8" stroke-linecap="round"/>
-
-  <!-- Highlight Quadriceps & Glute contraction -->
-  <path d="M 142 116 L 178 117" stroke="#e65100" stroke-width="3.5" stroke-linecap="round"/>
-  <circle cx="134" cy="118" r="4.5" fill="#e65100"/>
+  <rect width="300" height="200" rx="10" fill="#0d1117"/>
+  <image width="300" height="200" href="data:image/jpeg;base64,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" clip-path="url(#c)"/>
+  <rect x="8" y="8" width="140" height="20" rx="5" fill="#0f172a" fill-opacity="0.85" stroke="#34D399" stroke-width="1"/>
+  <text x="78" y="22" font-family="system-ui, sans-serif" font-size="8.5" font-weight="bold" fill="#34D399" text-anchor="middle">Barbell Back Squat</text>
+  <rect x="8" y="174" width="150" height="18" rx="5" fill="#0f172a" fill-opacity="0.85" stroke="#F59E0B" stroke-width="1"/>
+  <text x="83" y="187" font-family="system-ui, sans-serif" font-size="8" font-weight="bold" fill="#F59E0B" text-anchor="middle">🎯 عضلات الفخذ والأرداف</text>
 </svg>

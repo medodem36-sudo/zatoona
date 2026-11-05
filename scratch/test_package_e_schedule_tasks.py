@@ -35,10 +35,11 @@ class TestPackageEScheduleTasks(unittest.TestCase):
         timer_disp = self.driver.find_element(By.ID, 'sunlightTimerDisplay')
         self.assertEqual(timer_disp.text.strip(), "15:00", "Default timer should be 15:00")
 
-        # Test logging a 15-min sunlight session
-        logged = self.driver.execute_script("""
-            window.logSunlightSession(15, '2026-11-04');
-            return window.isSunlightLoggedToday('2026-11-04');
+        # Test logging a 15-min sunlight session for today
+        today_iso = self.driver.execute_script("return typeof getTodayIsoSafe === 'function' ? getTodayIsoSafe() : new Date().toISOString().slice(0, 10);")
+        logged = self.driver.execute_script(f"""
+            window.logSunlightSession(15, '{today_iso}');
+            return window.isSunlightLoggedToday('{today_iso}');
         """)
         self.assertTrue(logged, "isSunlightLoggedToday should return True after logging")
 

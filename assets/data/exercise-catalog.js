@@ -97,7 +97,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "أنزل البار ببطء نحو الجزء السفلي من الصدر.",
       "ادفع البار للأعلى بقوة مع الحفاظ على ثبات الجذع، وازفر أثناء الدفع."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-decline-barbell-bench-press.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -190,7 +192,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "ادفع الدمبلز للأعلى بشكل مستقيم مع الزفير وثبات المعصمين.",
       "أنزل الدمبلز ببطء حتى تصلا لمستوى الصدر السفلي وكرر التمرين."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-decline-dumbbell-press.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -250,7 +254,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "أنزل الذراعين للخارج في حركة قوسية واسعة مع الحفاظ على ثني المرفق بزاوية ثابتة بسيطة.",
       "اضغط عضلات الصدر العلوية لإعادة الدمبلز للأعلى مع الزفير."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-incline-dumbbell-flyes.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -278,7 +284,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "مع الحفاظ على انحناء بسيط في المرفقين، اسحب المقبضين للأسفل وللداخل حتى يلتقيا أمام أسفل بطنك.",
       "اعصر عضلات الصدر جيداً لثانية واحدة، ثم عد ببطء لنقطة البداية مع مقاومة وزن الكابل."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-cable-crossover-high-to-low.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -306,7 +314,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "ارفع المقبضين للأعلى وللداخل بحركة قوسية سلسة حتى يلتقيا عند مستوى ذقنك أو أعلى صدرك.",
       "ركّز على عصر الألياف العلوية للصدر، ثم ارجع بتحكم لنقطة البداية."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-cable-crossover-low-to-high.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -336,7 +346,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "أنزل جسمك ببطء حتى يصل المرفقين لزاوية 90 درجة مع الشعور بإطالة عميقة في الصدر.",
       "ادفع بقوة للأعلى للعودة لوضع البداية مع الحفاظ على ميلان الصدر للأمام."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-chest-dips.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -399,7 +411,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "أنزل صدرك ببطء باتجاه يديك مع بقاء المرفقين قريبين من الجذع.",
       "ادفع بقوة لأعلى للتركيز على مركز الصدر وعضلات الترايسبس."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-diamond-push-up.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -429,7 +443,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "ادفع المقابض للأمام بقوة مع الزفير وثبات لوحي الكتف على المسند.",
       "أعد المقابض ببطء وتحكم لموضع البداية دون أن ترتطم الأوزان ببعضها."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-machine-chest-press.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -459,7 +475,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "اضغط بذراعيك للداخل حتى يلتقيا أمام صدرك واعصر عضلات الصدر بقوة لثانية واحدة.",
       "ارجع ببطء مع التحكم في الوزن حتى تشعر بإطالة مريحة لعضلة الصدر دون إجهاد الكتف."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-pec-deck-fly.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -564,7 +582,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "اسحب البار بقوة انفجارية من الأرض حتى يلامس أسفل صدرك.",
       "أعد البار ليستقر تماماً على الأرض عند كل تكرار لتفادي الارتداد أو استخدام عزم الجسم."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-pendlay-row.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -596,7 +616,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "اسحب الوزن باتجاه صدرك مع عصر عضلات الظهر العلوية ولوحي الكتف.",
       "أنزل الوزن بتحكم كامل وتجنب رفع الجذع بالكامل أثناء التجديف."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-t-bar-row.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -627,7 +649,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "اسحب الدمبل نحو جانب الحوض مع توجيه المرفق للخلف والأعلى وقريباً من الجذع.",
       "أنزل الدمبل بسلاسة حتى تشعر بإطالة كاملة في عضلة اللاتس ثم كرر للجانبين."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-one-arm-dumbbell-row.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -690,7 +714,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "اسحب المقبض لأسفل حتى يلامس أعلى الصدر مع عصر عضلات اللاتس السفلية.",
       "اصعد ببطء مع التحكم في المقاومة للشعور بالإطالة الكاملة."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-lat-pulldown-close-grip.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -753,7 +779,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "اسحب البار لأسفل في مسار قوسي واسع باستخدام عضلات اللاتس فقط حتى يلامس فخذيك.",
       "اعصر عضلات اللاتس لثانية واحدة، ثم ارفع الذراعين ببطء لمستوى الرأس وكرر."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-straight-arm-cable-pulldown.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -819,7 +847,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "اسحب جسمك للأعلى مركزاً على عضلات اللاتس والبايسبس حتى يعلو ذقنك البار.",
       "توقف لأجزاء من الثانية بالأعلى ثم انزل بتحكم كامل لوضع البداية."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-chin-up.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -851,7 +881,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "اسحب صدرك للأعلى حتى يلامس البار بواسطة عصر لوحي الكتف.",
       "أنزل جسمك ببطء لوضع التعلق وكرر التمرين."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-inverted-row.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -882,7 +914,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "أنزل الدمبل ببطء في حركة نصف دائرية خلف رأسك حتى تشعر بإطالة قوية في القفص الصدري واللاتس.",
       "اسحب الدمبل للأعلى باستخدام عضلات اللاتس حتى يعود لمستوى الصدر."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-dumbbell-pullover.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -912,7 +946,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "ارفع جذعك للأعلى باستخدام عضلات أسفل الظهر والأرداف حتى يستقيم جسمك تماماً.",
       "تجنب الإفراط في رفع الظهر وتقويسه للخلف فوق المستوى المستقيم."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-back-extensions.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -943,7 +979,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "اسحب المقابض للخلف بقوة مع ضم لوحي الكتف بإحكام لثانية واحدة.",
       "أعد المقابض ببطء للأمام مع مقاومة الوزن وتجنب انفصال الصدر عن الوسادة."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-machine-seated-row.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -1037,7 +1075,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "أثناء دفع الدمبلز للأعلى، قم بتدوير معصميك تدريجياً للخارج حتى يصبح كفّا اليدين متجهين للأمام في قمة الحركة.",
       "أنزل الدمبلز ببطء مع عكس الدوران ليعود كفّا اليدين باتجاه صدرك مجدداً."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-arnold-press.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -1096,7 +1136,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "ارفع الدمبلز جانباً باستخدام الكتف الجانبي مع ثني طفيف في المرفق حتى مستوى الكتف.",
       "يمنع الجلوس استخدام عزم الساقين أو أرجحة الجسم مما يحقق عزلاً فائقاً للعضلة."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-seated-dumbbell-lateral-raise.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -1124,7 +1166,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "ارفع المقبض جانباً حتى يصل ذراعك لمستوى الكتف بالتوازي مع الأرض.",
       "يوفر الكابل شداً مستمراً في كافة أجزاء الحركة، أنزل الذراع ببطء لموضع البداية."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-cable-lateral-raise.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -1153,7 +1197,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "ارفع دمبلاً واحداً (أو كلاهما معاً) للأمام حتى يصل لمستوى العينين أو الكتف.",
       "أنزل الوزن ببطء وتحكم وكرر التبادل بين اليدين."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-front-dumbbell-raise.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -1216,7 +1262,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "ارفع الذراعين جانباً وللأعلى باستخدام الجزء الخلفي من الكتف حتى يصلا لمستوى الجذع.",
       "أنزل الدمبلز ببطء وتجنب أرجحة الجذع."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-rear-delt-dumbbell-fly.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -1246,7 +1294,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "اسحب المقابض للخلف وللخارج في حركة قوسية باستخدام الكتف الخلفي حتى تتجاوز خط الجسم.",
       "أعد المقابض لموضع البداية ببطء مع التحكم في المقاومة."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-reverse-pec-deck.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -1276,7 +1326,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "توقف عندما يصل البار لارتفاع الصدر العلوي دون رفع المرفقين فوق مستوى الكتف المريح.",
       "أنزل البار ببطء لوضع البداية."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-barbell-upright-row.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -1305,7 +1357,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "اثبت لثانية واحدة في قمة الانقباض، ثم أنزل الكتفين ببطء وتحكم.",
       "تجنب تدوير الكتفين في حركة دائرية لحماية أوتار مفصل الكتف."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-barbell-shrugs.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -1333,7 +1387,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "ارفع كتفيك عمودياً نحو الأذنين مع عصر عضلة الترابيس بقوة بالأعلى.",
       "أنزل الدمبلز ببطء وتحكم كامل حتى تشعر بإطالة العضلة."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-dumbbell-shrugs.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -1394,7 +1450,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "ارفع البار نحو صدرك مع عصر البايسبس وثبات المرفقين.",
       "أنزل البار بتحكم تام لتفادي أي إجهاد على مفصل الرسغ."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-ez-bar-bicep-curl.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -1422,7 +1480,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "ارفع دمبلاً واحداً مع تدوير المعصم للأعلى أثناء الصعود (Supination) ليصبح كف اليد متجهاً لكتفك في قمة الرفع.",
       "أنزل الدمبل بسلاسة وكرر الحركة مع الذراع الأخرى بالتبادل."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-alternating-dumbbell-curl.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -1451,7 +1511,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "ارفع الدمبلز للأعلى مع ثبات المرفقين مشيرين للأرض دون تحريكهما للأمام.",
       "اعصر البايسبس بالأعلى ثم أنزل الوزن ببطء كامل لموضع الإطالة."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-incline-dumbbell-curl.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -1507,7 +1569,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "ارفع الحبل باتجاه الصدر مع ثبات المرفقين، وافتح طرفي الحبل قليلاً في قمة الانقباض.",
       "أنزل الوزن ببطء مع الاحتفاظ بالشد المستمر الناتج من الكابل."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-cable-rope-hammer-curl.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -1537,7 +1601,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "ارفع البار للأعلى بثني المرفقين فقط مع عصر البايسبس بقوة في القمة.",
       "أنزل البار ببطء شديد حتى تستقيم الذراعان تقريباً دون قفل المفصل بعنف."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-preacher-curl.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -1565,7 +1631,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "ارفع الدمبل للأعلى نحو وجهك مع التركيز التام على تقلص عضلة البايسبس فقط.",
       "أنزل الدمبل بتحكم كامل وبطء حتى تستقيم الذراع ثم كرر للذراع الأخرى."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-concentration-curl.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -1593,7 +1661,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "قف مستقيماً وثبت المرفقين بجانب الجذع وارفع البار نحو كتفيك.",
       "حافظ على ثبات المرفقين وتحكم في حركة الهبوط المقاومة لوزن الكابل."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-standing-cable-curl.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -1648,7 +1718,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "الصق المرفقين بجانبيك وادفع البار لأسفل حتى تستقيم ذراعاك تماماً مع الزفير.",
       "أعد البار ببطء وتحكم لمستوى الصدر دون تحريك المرفقين."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-triceps-bar-pushdown.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -1704,7 +1776,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "أنزل الدمبل خلف رأسك ببطء عن طريق ثني المرفقين فقط مع الحفاظ على تقاربهما قدر الإمكان.",
       "ادفع الدمبل للأعلى حتى استقامة الذراعين مع الزفير في نهاية الصعود."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-overhead-dumbbell-triceps-extension.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -1731,7 +1805,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "افرد ذراعيك للأمام وللأعلى في خط مستقيم وافتح طرفي الحبل في نهاية الحركة لعصر الترايسبس.",
       "ارجع ببطء لوضع البداية مع مقاومة سحب الكابل."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-overhead-cable-triceps-extension.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -1760,7 +1836,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "أنزل البار ببطء نحو أسفل الصدر مع إبقاء المرفقين قريبين جداً من جانبي الجذع.",
       "ادفع البار للأعلى بقوة بالاعتماد الرئيسي على عضلات الترايسبس."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-close-grip-bench-press.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -1789,7 +1867,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "أبقِ المرفقين قريبين من الجذع وأنزل جسمك حتى يصل المرفقان لزاوية 90 درجة.",
       "ادفع للعودة للأعلى حتى استقامة الذراعين بالاعتماد التام على عضلات الترايسبس."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-parallel-bar-triceps-dips.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -1818,7 +1898,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "أنزل حوضك أمام البنش بثني المرفقين حتى زاوية 90 درجة مع بقاء ظهرك قريباً من حافة البنش.",
       "ادفع براحتي يديك للعودة للأعلى مع الزفير."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-bench-dips.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -1844,7 +1926,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "افرد الساعد للخلف فقط حتى تستقيم الذراع بالكامل بمحاذاة الظهر.",
       "اعصر الترايسبس لثانية، ثم اثنِ الساعد ببطء لزاوية 90 درجة دون إسقاط المرفق."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-dumbbell-kickback.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -1911,7 +1995,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "حافظ على انتصاب واستقامة الجذع العمودي أثناء النزول لتفادي انزلاق البار.",
       "انزل بعمق مع دفع الركبتين باتجاه أصابع القدمين، ثم ادفع للأعلى مع بقاء المرفقين مرتفعين."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-barbell-front-squat.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -2004,7 +2090,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "أنزل ببطء بثني الركبتين حتى يصل الفخذان لمستوى موازٍ للمنصة.",
       "ادفع المنصة بكعبيك للعودة للأعلى مع التركيز على عزل الفخذ الأمامي."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-hack-squat-machine.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -2035,7 +2123,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "انزل حتى يصبح الفخذ الأمامي موازياً للأرض والركبة بزاوية 90 درجة تقريباً.",
       "ادفع بقوة عبر كعب القدم الأمامية للعودة للأعلى وكرر للجانبين."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-bulgarian-split-squat.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -2094,7 +2184,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "افرد ساقيك للأعلى بالكامل مع عصر عضلات الفخذ الأمامية لثانية واحدة.",
       "أنزل الوزن ببطء وتحكم دون ترك الأوزان ترتطم ببعضها."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-leg-extension-machine.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -2124,7 +2216,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "ضع قدمك بالكامل على المنصة وادفع من كعبك لرفع كامل جسمك للأعلى.",
       "اثبت للحظة بالأعلى ثم انزل ببطء بنفس القدم وتحكم في الهبوط."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-step-ups-dumbbell.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -2187,7 +2281,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "أرجع حوضك للخلف مع إبقاء الدمبلز ملاصقين للساقين والظهر مفروداً تماماً.",
       "عند الشعور بالشد الكامل في الخلفيات، اعصر الجلوتس وادفع الحوض للأمام للانتصاب مجدداً."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-romanian-deadlift-dumbbell.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -2277,7 +2373,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "ادفع من كعبيك وارفع حوضك للأعلى حتى يصبح جسمك مستقيماً من الركبتين للكتفين.",
       "اعصر عضلات المؤخرة بقوة لثانية واحدة في القمة ثم أنزل الحوض بتحكم."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-barbell-hip-thrust.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -2306,7 +2404,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "اركل ساقك للخلف وللأعلى باستخدام عضلات المؤخرة فقط دون تقويس أسفل الظهر.",
       "اعصر العضلة لثانية ثم أعد الساق ببطء وكرر."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-cable-glute-kickback.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -2338,7 +2438,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "ادفع حوضك للأمام بقوة انفجارية من عضلات المؤخرة والأوتار الخلفية لمرجحة الوزن لمستوى الصدر.",
       "دع الوزن يهبط بحرية مع امتصاص الحركة بإرجاع الحوض للخلف مجدداً."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-kettlebell-swing.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -2371,7 +2473,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "ادفع الأرض للخارج بقدميك مع فتح الركبتين والوقوف منتصباً مع ثبات الظهر.",
       "أنزل البار بتحكم لموضع البداية."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-sumo-deadlift.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -2426,7 +2530,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "أنزل الكعبين لأسفل بالكامل لتمديد العضلة النعلية (Soleus).",
       "ارفع الكعبين للأعلى بقوة واثبت في قمة الحركة ثم اهبط ببطء."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-seated-calf-raise-machine.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -2452,7 +2558,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "أنزل الكعب لتحقيق أقصى إطالة ثم ادفع للأعلى للوصول لأعلى انقباض.",
       "كرر لكل ساق على حدة لعلاج عدم التماثل العضلي."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-single-leg-dumbbell-calf-raise.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -2478,7 +2586,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "افرد ساقيك مع ثني طفيف جداً في الركبة لتجنب القفل المفصلي.",
       "ادفع المنصة بمشطي القدمين للأمام، ثم اسمح للمنصة بالرجوع لتمديد السمانة بالكامل."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-leg-press-calf-raise.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -2540,7 +2650,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "ارفع حوضك عن الأرض حتى يشكل جسمك خطاً مائلاً مستقيماً وثبّت عضلات الجذع الجانبية.",
       "اثبت للمدة المحددة ثم بدل للجانب الآخر."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-side-plank.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -2597,7 +2709,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "تعلق ببار العقلة وارفع ركبتيك معاً باتجاه صدرك مع تقويس الحوض للأعلى لعصر عضلات البطن.",
       "أنزل ساقيك ببطء لوضع البداية دون أرجحة."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-hanging-knee-raise.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -2623,7 +2737,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "اثنِ جذعك للأسفل مقرباً كوعيك باتجاه فخذيك مع تقويس العمود الفقري وعصر عضلات البطن بقوة.",
       "أرجع جذعك ببطء للأعلى مع مقاومة الكابل دون تحريك الحوض للأمام والخلف."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-cable-kneeling-crunch.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -2653,7 +2769,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "دحرج العجلة للأمام ببطء مع استقامة الجذع وشد البطن حتى يقترب جسمك من الأرض.",
       "اسحب العجلة للخلف باستخدام عضلات البطن واللاتس للعودة لموضع البداية."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-ab-wheel-rollout.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -2679,7 +2797,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "ضم يديك معاً (أو أمسك وزناً خفيفاً) وقم بتدوير جذعك من جانب لآخر بلمس الأرض بجانب حوضك.",
       "تحكم في الحركة وتنفس بانتظام."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-russian-twists.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -2733,7 +2853,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "أنزل معصميك لأسفل ثم ارفعهما للأعلى قدر الإمكان لاستهداف العضلات الباسطة للرسغ.",
       "أنزل ببطء وتحكم."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-seated-palms-down-wrist-curl.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -2763,7 +2885,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "امشِ بخطوات قصيرة وثابتة للأمام لمسافة أو وقت محدد مع الحفاظ على استقامة العمود الفقري والقبضة المحكمة.",
       "أنزل الأوزان بتحكم وثني الركبتين بأمان عند الانتهاء."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-farmers-walk.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -2792,7 +2916,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "اترك جسمك معلقاً مع الحفاظ على ارتخاء بسيط في لوحي الكتف أو سحبهما برفق.",
       "اثبت لأطول فترة ممكنة لتقوية القبضة وفك ضغط فقرات الظهر."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-dead-hang.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -2821,7 +2947,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "اسحب الشريط للخارج جانباً بفتح ذراعيك حتى يلامس الشريط صدرك مع عصر لوحي الكتف.",
       "ارجع ببطء لوضع البداية وكرر الحركة لتحسين استقامة الكتفين وصحة المفصل."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-band-pull-apart.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -2849,7 +2977,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "اثنِ المرفقين لسحب الشريط نحو كتفيك مع ثبات المرفقين بجوار الجذع.",
       "أنزل يديك ببطء مع مقاومة الشد المرن للشريط."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-band-bicep-curl.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -2875,7 +3005,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "أمسك طرفي الشريط والمرفقان ملاصقان لجانبي القفص الصدري.",
       "ادفع لأسفل بفرد الذراعين بالكامل ثم عد ببطء لمستوى الصدر."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-band-triceps-pushdown.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -2903,7 +3035,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "اخطُ خطوات جانبية مع الحفاظ على شد الشريط وتباعد الركبتين.",
       "كرر لعدة خطوات يميناً ثم يساراً لتنشيط عضلات المؤخرة الوسطى."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-band-monster-walk.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -2932,7 +3066,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "اسحب الشريط باتجاه جبهتك أو أنفك مع فتح المرفقين للخارج والأعلى وتدوير الكتفين خارجياً.",
       "ارجع ببطء وسلاسة للحفاظ على صحة الكتف واستقامته."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-band-face-pull.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -2961,7 +3097,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "انزل في قرفصاء كاملة مع دفع الركبتين للخارج واستقامة الظهر.",
       "ادفع من كعبيك للوقوف وازفر مع الصعود."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-kettlebell-goblet-squat.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -2992,7 +3130,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "ادفع الأرض بقدميك وافرد حوضك للوقوف منتصباً مع عصر المؤخرة.",
       "أنزل الوزن للأرض بتحكم بإرجاع الحوض للخلف."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-kettlebell-deadlift.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -3021,7 +3161,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "ادفع الكيتل بيل عمودياً فوق الرأس حتى تستقيم الذراع تماماً.",
       "أنزل الوزن بتحكم للكتف وكرر."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-kettlebell-overhead-press.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -3052,7 +3194,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "انتقل بالتدريج للجلوس على الساعد ثم اليد، ثم ارفع الحوض واسحب الساق تحته لوضع الركوع.",
       "قف بالكامل والذراع لا تزال مفرودة رأسياً للأعلى، ثم اعكس الخطوات بدقة للعودة للأرض."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-kettlebell-turkish-get-up.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -3082,7 +3226,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "أنزل صدرك ببطء نحو الأرض مع الحفاظ على استقامة الجذع.",
       "ادفع بقوة للأعلى مع التركيز على الجزء العلوي من الصدر والكتف الأمامي."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-decline-push-up.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -3111,7 +3257,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "أنزل صدرك باتجاه الحافة مع استقامة الجسم من الرأس إلى الكعبين.",
       "ادفع للأعلى للعودة لوضع البداية."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-incline-push-up.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -3140,7 +3288,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "انحنِ للأمام من الحوض مع إرجاع المؤخرة للخلف واستقامة العمود الفقري حتى يوازي الجذع الأرض تقريباً.",
       "ادفع حوضك للأمام للوقوف مجدداً مع عصر المؤخرة وأسفل الظهر."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-barbell-good-morning.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -3168,7 +3318,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "اسحب المرفق لأسفل وللداخل باتجاه جانب حوضك مع عصر عضلة اللاتس بقوة.",
       "أعد الذراع ببطء للأعلى للإطالة الكاملة ثم كرر للجانب الآخر."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-single-arm-cable-lat-pulldown.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -3200,7 +3352,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "يمنع إسناد الصدر أي إجهاد على أسفل الظهر ويتيح عزلاً مثالياً لعضلات الظهر العلوية.",
       "أنزل الدمبلز ببطء لوضع البداية."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-chest-supported-dumbbell-row.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -3228,7 +3382,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "ارفع الدمبلز للأعلى باتجاه كتفيك مع تثبيت الذراعين عموديتين طوال الحركة.",
       "اعصر البايسبس بقوة في القمة ثم أنزل الوزن ببطء."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-spider-curl.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -3255,7 +3411,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "في قمة الرفع، قم بتدوير المعصمين 180 درجة ليصبح كفّا اليدين متجهين للأسفل.",
       "أنزل الدمبلز ببطء في هذا الوضع لتدريب عضلات الساعد الباسطة ثم أعد تدوير الكفين للأسفل عند البداية."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-zottman-curl.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -3281,7 +3439,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "ثبت المرفق بجانب الجذع وادفع لأسفل حتى تستقيم الذراع تماماً.",
       "أعد اليد ببطء لمستوى الصدر وكرر."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-cable-single-arm-pushdown.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -3309,7 +3469,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "ادفع ركبتيك للأمام ولأسفل مع إمالة الجذع للخلف في خط مستقيم من الركبة للكتف.",
       "انزل حتى تشعر بإطالة هائلة في عضلات الفخذ الأمامية، ثم ادفع للعودة للأعلى."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-sissy-squat-bodyweight.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -3339,7 +3501,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "انزل في نصف قرفصاء ومرجح ذراعيك للخلف ثم اقفز بقوة انفجارية للأعلى للهبوط بنعومة على قمة الصندوق.",
       "افرد ساقيك للوقوف منتصباً على الصندوق، ثم اخطُ خطوة للخلف للنزول بأمان."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-box-jump.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -3368,7 +3532,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "ادفع من كعبيك وارفع حوضك للأعلى حتى يشكل جسمك خطاً مستقيماً من الركبتين للكتفين.",
       "اعصر عضلات المؤخرة بقوة لثانيتين في القمة، ثم أنزل الحوض ببطء."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-bodyweight-glute-bridge.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -3398,7 +3564,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "انحنِ للأمام من الحوض مع مد الساق الحرة للخلف باستقامة لتصبح موازية للأرض.",
       "انزل حتى تشعر بإطالة في الفخذ الخلفي للساق الداعمة ثم ادفع الحوض للأمام للعودة."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-single-leg-dumbbell-rdl.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -3424,7 +3592,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "ارفع كعبيك للأعلى بأقصى ما تستطيع على أطراف أصابع القدمين مع الثبات بالأعلى لثانية.",
       "أنزل كعبيك ببطء وتحكم وكرر."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-bodyweight-calf-raise.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -3450,7 +3620,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "اثنِ ركبة واحدة نحو صدرك مع تدوير الجذع ليقترب الكوع المقابل منها، بينما تمد الساق الأخرى للأمام.",
       "بدّل الجانبين في حركة دائرية انسيابية تشبه التبديل على دراجة هوائية مع تنفس منتظم."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-bicycle-crunch.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -3479,7 +3651,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "مد ذراعك اليمنى للخلف وساقك اليسرى للأمام ببطء وتزامن مقترباً من الأرض دون لمسها.",
       "أعدهما للبداية وبدل مع الذراع اليسرى والساق اليمنى."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-dead-bug.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -3509,7 +3683,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "مد ذراعك اليمنى للأمام وساقك اليسرى للخلف في خط مستقيم واحد مع الجذع.",
       "اثبت لثانية واحدة مع شد عضلات البطن لمنع ميلان الحوض، ثم عد للبداية وبدل للأطراف الأخرى."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-bird-dog.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   },
@@ -3539,7 +3715,9 @@ window.ZATOONA_EXERCISE_CATALOG = [
       "اسحب ركبة واحدة بسرعة نحو صدرك ثم أعدها واسحب الركبة الأخرى بالتبادل بإيقاع رشيق ومنتظم.",
       "حافظ على ثبات الحوض والكتفين طوال التمرين."
     ],
-    "images": [],
+    "images": [
+      "assets/images/exercises/ex-mountain-climbers.svg"
+    ],
     "source": "free-exercise-db / Everkinetic",
     "license": "The Unlicense (Public Domain)"
   }

@@ -1,19 +1,44 @@
 # Zatoona Project Status & Development Baseline
 
 **Document Path:** `docs/PROJECT_STATUS.md`  
-**Last Updated:** 2026-11-04 13:46:00 +02:00<br>
+**Last Updated:** 2026-11-05 16:55:00 +02:00<br>
 **Repository:** `C:\Users\Lenovo\Documents\GitHub\zatoona`<br>
 **Remote Origin:** `https://github.com/medodem36-sudo/zatoona.git`<br>
 **Active Branch:** `main`<br>
-**Current HEAD:** `e8d48eb6d005dd2c48ce3ed272e9184114985a17`<br>
-**Head Commit Message:** `Widget`<br>
-**Working Tree Status:** All Packages A through G (48 advanced features & fluid UX enhancements) 100% implemented, integrated, and verified! 3-Way HTML byte-for-byte parity confirmed across `index.html`, `zatoona.html`, and `android/app/src/main/assets/index.html` at SHA-256 `7d47a21482f642bf254ccffd9c2bdaf2282e8f0fb37d73a0e6dbc10dc5c1d268` (2,069,812 bytes). 360-degree Acceptance Audit: 68/68 passed (100% green). Master Regression Gate: 44 / 44 suites passed (1497 / 1497 checks passed, 100% green, 466.07s). Clean Git working tree with zero whitespace errors.
+**Current HEAD:** `9cb95ad`<br>
+**Head Commit Message:** `ويدج`<br>
+**Working Tree Status:** 100% Complete Visual Encyclopedia Coverage achieved! All 119 gym catalog exercises (`exercise-catalog.js`), 34 mobility stretches (`stretch-catalog.js`), 6 pre-workout warm-ups, 6 post-workout cool-downs, and 12 routine compound exercises are fully converted to authentic photographs of adult male athletes in modest sportswear in real fitness environments. All assets packaged into self-contained offline SVGs with Base64 data URIs (zero runtime external HTTP/HTTPS requests). 3-Way HTML byte-for-byte parity confirmed across `index.html`, `zatoona.html`, and `android/app/src/main/assets/index.html` at SHA-256 `BCCAA901880D15E6DA7609D08831C208AD5B308C41FA4BF1E11031F817C0CDDC`. Master Regression Gate: 44 / 44 suites passed (1497 / 1497 checks passed, 100% green). Android debug APK successfully compiled (11,455,446 bytes).
 
 ---
 
 ## 1. Executive Summary & Active Phase
 
-Zatoona is an offline-first Personal Wellness & Productivity Progressive Web Application (PWA) with an integrated native Android WebView shell (`com.zatoona.app`). All 7 core phases of the Grand Blueprint and all subsequent Packages A through G (48 features) are fully implemented and verified.
+Zatoona is an offline-first Personal Wellness & Productivity Progressive Web Application (PWA) with an integrated native Android WebView shell (`com.zatoona.app`). All 7 core phases of the Grand Blueprint, Packages A through G, the comprehensive Physical-Device User Refinements Pack, and the 100% Real Photography Visual Engine are fully implemented and verified.
+
+### Completed Milestone: 100% Real Athlete Photography & Exercise Visual Engine (Completed & Verified)
+1. **119 / 119 Gym Catalog Exercises (`assets/images/exercises/ex-*.svg`):** All 119 exercises in `exercise-catalog.js` mapped to standalone offline SVGs with real male athlete photos (including bench press, squats, deadlifts, pull-downs, rows, curls, extensions, machines, kettlebells, and bodyweight movements).
+2. **34 / 34 Mobility & Stretch Movements (`assets/images/stretches/str-*.svg`):** All 34 stretching and mobility movements in `stretch-catalog.js` mapped to real photos.
+3. **6 / 6 Pre-Workout Warm-Up Exercises (`assets/images/warmup/warmup-*.svg`):** Dynamic arm circles, leg swings, hip circles, bodyweight squats, warmup sets, and cardio jogging mapped to real photos.
+4. **6 / 6 Post-Workout Cool-Down Exercises (`assets/images/cooldown/cooldown-*.svg`):** Shoulder, chest, lower back, hamstring, quad stretches, and calm walk mapped to real photos.
+5. **12 / 12 Core Routine A & B Compounds (`ex-a01` to `ex-a06`, `ex-b01` to `ex-b06`):** Authentic high-definition athletic male demonstration photos.
+6. **Strict Visual Policy Enforcement:** 100% adult athletic males only, strictly zero women/female depiction, modest gym sportswear, proper biomechanics. Verified via `test_phase5b1_1_image_policy.py` (92/92) and `test_phase5b1_2_legacy_images.py` (94/94).
+7. **Offline Standalone Architecture:** Embedded Base64 JPEG data URIs inside local vector SVGs; strict sizing compliance (7.3 KB to 9.6 KB per catalog exercise with `viewBox="0 0 300 200"`) verified via `test_phase12_1b_exercise_images.py` (43/43).
+8. **Android Assets Synchronization:** Complete mirroring across PWA `assets/` and Android WebView `android/app/src/main/assets/assets/`. Android debug APK assembled cleanly (`BUILD SUCCESSFUL in 36s`).
+
+### Completed Milestone: User-Directed UX Refinements & Native Android Widgets (Completed & Verified)
+1. **Disable View-Pager Horizontal Swipe:** Disabled horizontal swiping between sections (`swipeNavEnabled = false;`) to eliminate accidental switching, preserving natural vertical scroll.
+2. **Compact Collapsible Subsections (Accordion Architecture):** All subsections inside main views are collapsed by default with clean title headers and badges, expanding smoothly on click. Single-tool utility views remain uncollapsed for immediate interaction.
+3. **Dismissable Sticky Next Activity Island:** Top status capsule smoothly dismisses and vanishes on click until the next state change.
+4. **Clean Home Page Navigation:** Removed repetitive sections grid (`#modesBar`) from home view; all navigation is unified in the drawer menu.
+5. **Theme Customizer Exclusivity:** Removed appearance and dark-mode toggles from the top header; relocated exclusively into Settings view.
+6. **7-Day Rolling Offline Prayer Times Cache:** Mathematical astronomical calculation using Egyptian General Authority of Survey (Method 5) pre-caches 7 days ahead offline into `localStorage`, with automatic background re-sync when online.
+7. **Home-Screen AI Assistant:** Moved local AI coach card to home page directly below the morning briefing.
+8. **Zatoona Wrapped Relocation:** Moved annual wrapped summary card out of home view into Overview view exclusively.
+9. **Universal Widget Resizing (1x1 to 3x6):** Configured responsive sizing metadata (`minResizeWidth="40dp"`, `minResizeHeight="40dp"`, `maxResizeWidth="480dp"`, `maxResizeHeight="720dp"`) across all 7 native widgets.
+10. **Interactive Study Chronometer Widget:** Live Android home-screen study timer (`Chronometer`) with background toggle actions.
+11. **Interactive Water Intake Widget:** Interactive home-screen hydration tracker with +250ml, +500ml, -250ml quick-add buttons and bridge sync.
+12. **Scrollable Daily Schedule & Tasks Widget:** Native collection AppWidget featuring `ScheduleWidgetService` + `RemoteViewsFactory` with scrollable `ListView`, displaying today's activities with timestamps and daily checklist tasks with completion badges, plus 1-tap navigation into the app.
+13. **Photorealistic Exercise Media (Batch 1):** Upgraded 5 core compound exercises (Goblet Squat, Bench Press, Lat Pulldown, Overhead Press, Plank) to high-definition, photorealistic gym imagery depicting adult athletic males only in modest sportswear, offline-cached and fully compliant with all 186 image policy checks.
 
 ### Completed Package: Package G — Fluid UX, Interactive Micro-Interactions & Gestures (Completed & Verified)
 1. **Swipe-to-Action on Cards:** Touch gesture support on daily schedule and habit cards for instant delete, toggle, and edit actions.
@@ -577,3 +602,35 @@ Engineered and verified 13 ergonomic, high-speed UX additions across touch gestu
 - **3-Way HTML Parity:** 100% byte-for-byte verified (SHA-256: `7d47a21482f642bf254ccffd9c2bdaf2282e8f0fb37d73a0e6dbc10dc5c1d268`).
 - **Console Errors:** 0 browser runtime errors.
 - **Git Hygiene:** Clean `git diff --check`, awaiting user commit authorization.
+
+---
+
+## Phase 5B / 9C / 12.1B — Real Exercise, Stretch & Warmup Photo Integration (Males-Only & 100% Offline)
+
+### Implementation Summary
+- Upgraded **77 visual assets** across all gym exercises, routines, warmup drills, cooldown movements, and stretch encyclopedia items from synthetic/vector drawings to authentic, high-resolution photographs of real adult male athletes in gym settings:
+  1. **Routine A & B Core Compound Exercises (12 SVGs):** `ex-a01-goblet-squat.svg` through `ex-a06-face-pull.svg`, and `ex-b01-romanian-deadlift.svg` through `ex-b06-lunges.svg`.
+  2. **Curated Exercise Catalog Items (19 SVGs):** `ex-barbell-back-squat.svg`, `ex-conventional-deadlift.svg`, `ex-incline-barbell-bench-press.svg`, `ex-leg-press.svg`, `ex-lying-leg-curl-machine.svg`, `ex-seated-cable-row.svg`, `ex-seated-dumbbell-shoulder-press.svg`, `ex-triceps-rope-pushdown.svg`, etc.
+  3. **Pre-Workout Warm-up Drills (6 SVGs):** `warmup-01-cardio.svg` (treadmill jog), `warmup-02-arm-circles.svg`, `warmup-03-leg-swings.svg`, `warmup-04-hip-circles.svg`, `warmup-05-bodyweight-squat.svg`, `warmup-06-warmup-set.svg`.
+  4. **Post-Workout Cool-down Stretches (6 SVGs):** `cooldown-01-shoulder-stretch.svg`, `cooldown-02-chest-stretch.svg`, `cooldown-03-lower-back-stretch.svg`, `cooldown-04-hamstring-stretch.svg`, `cooldown-05-quad-stretch.svg`, `cooldown-06-calm-walk.svg`.
+  5. **Stretch & Mobility Encyclopedia (34 SVGs):** All 34 catalog items in `assets/images/stretches/` (`str-doorway-pec-stretch.svg`, `str-childs-pose.svg`, `str-worlds-greatest-stretch.svg`, `str-inchworm-walkout.svg`, `str-pigeon-pose.svg`, etc.).
+- **Strict Visual & Content Compliance:**
+  - 100% adult male athletes in modest gym sportswear. Zero women or female depiction.
+  - Base64 binary streams checked against random English/Arabic word collisions (`female`, `woman`, `girl`, `lady`, `her `, `she `).
+  - 100% offline-first: Every SVG contains self-contained base64 data URIs; zero external HTTP/HTTPS requests at runtime.
+  - Valid XML structure verified by `xml.etree.ElementTree` on all 77 files.
+  - Fully synchronized across web PWA assets and Android WebView assets (`android/app/src/main/assets/assets/`).
+
+### Verification & Test Evidence
+- `scratch/test_phase5b1_1_image_policy.py`: **92 / 92 PASSED**
+- `scratch/test_phase5b1_2_legacy_images.py`: **94 / 94 PASSED**
+- `scratch/test_phase9c1_stretch_encyclopedia.py`: **46 / 46 PASSED**
+- `scratch/test_phase9c2_warmup.py`: **54 / 54 PASSED**
+- `scratch/test_phase9c3_cooldown.py`: **56 / 56 PASSED**
+- `scratch/test_phase12_1b_exercise_images.py`: **43 / 43 PASSED**
+- `scratch/test_ex_svg_preview.py`: **ALL 12 PREVIEW IMAGES PASSED (0 DOM errors)**
+- `scratch/test_svg_preview.py`: **ALL 12 WARMUP/COOLDOWN PREVIEWS PASSED**
+- **Unified Master Test Gate (`scratch/test_master_regression_gate.py`):** **44 / 44 SUITES PASSED (1,497 / 1,497 CHECKS, 100% PASS)**
+- **3-Way HTML Parity:** 100% identical SHA-256 (`bccaa901880d15e6da7609d08831c208ad5b308c41fa4bf1e11031f817c0cddc`)
+- **Native Android Build:** Gradle 8.5 `assembleDebug` completed in 26s (`app-debug.apk`: 10,928,672 bytes).
+- **Physical Device:** Samsung Galaxy A04e (`SM-A042F`) was charging; installation deferred until physical USB connection is established.

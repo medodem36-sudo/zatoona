@@ -1,52 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="100%" height="100%">
   <defs>
-    <linearGradient id="bgLatRaise" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#fafaf9"/>
-      <stop offset="100%" stop-color="#f5f5f4"/>
-    </linearGradient>
-    <linearGradient id="maleGradLatRaise" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#292524"/>
-      <stop offset="100%" stop-color="#44403c"/>
-    </linearGradient>
+    <clipPath id="c">
+      <rect width="300" height="200" rx="10"/>
+    </clipPath>
   </defs>
-  <rect width="300" height="200" rx="14" fill="url(#bgLatRaise)"/>
-  
-  <!-- Floor line -->
-  <line x1="25" y1="175" x2="275" y2="175" stroke="#d6d3d1" stroke-width="2.5" stroke-linecap="round"/>
-
-  <!-- Badge -->
-  <rect x="18" y="14" width="158" height="22" rx="6" fill="#f5f5f4" stroke="#a8a29e" stroke-width="1.2"/>
-  <text x="97" y="29" font-family="'IBM Plex Mono', system-ui, sans-serif" font-size="8" font-weight="bold" fill="#292524" text-anchor="middle">STANDING DUMBBELL LATERAL RAISE</text>
-
-  <!-- Male Athletic Figure Front View Raising Dumbbells to Sides -->
-  <!-- Head -->
-  <circle cx="150" cy="54" r="14" fill="url(#maleGradLatRaise)"/>
-  <!-- Torso (athletic V-taper) -->
-  <path d="M 150 68 L 150 120" stroke="url(#maleGradLatRaise)" stroke-width="15" stroke-linecap="round"/>
-  <!-- Legs (shoulder width athletic stance) -->
-  <path d="M 145 120 L 138 174" stroke="url(#maleGradLatRaise)" stroke-width="10" stroke-linecap="round"/>
-  <path d="M 155 120 L 162 174" stroke="url(#maleGradLatRaise)" stroke-width="10" stroke-linecap="round"/>
-
-  <!-- Left Arm Extended Laterally to Shoulder Height (slight elbow bend) -->
-  <path d="M 142 76 L 102 78 L 74 82" fill="none" stroke="url(#maleGradLatRaise)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-  <!-- Left Dumbbell -->
-  <rect x="68" y="78" width="6" height="16" rx="2" fill="#0f172a"/>
-  <rect x="74" y="83" width="8" height="5" rx="1" fill="#64748b"/>
-  <rect x="82" y="78" width="6" height="16" rx="2" fill="#0f172a"/>
-
-  <!-- Right Arm Extended Laterally to Shoulder Height -->
-  <path d="M 158 76 L 198 78 L 226 82" fill="none" stroke="url(#maleGradLatRaise)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-  <!-- Right Dumbbell -->
-  <rect x="212" y="78" width="6" height="16" rx="2" fill="#0f172a"/>
-  <rect x="218" y="83" width="8" height="5" rx="1" fill="#64748b"/>
-  <rect x="226" y="78" width="6" height="16" rx="2" fill="#0f172a"/>
-
-  <!-- Lateral Deltoid Highlights -->
-  <circle cx="138" cy="76" r="4.5" fill="#e65100"/>
-  <circle cx="162" cy="76" r="4.5" fill="#e65100"/>
-  <!-- Curved lift arrows -->
-  <path d="M 95 120 C 85 110, 78 98, 76 88" fill="none" stroke="#e65100" stroke-width="1.8" stroke-linecap="round"/>
-  <polygon points="76,84 72,92 80,91" fill="#e65100"/>
-  <path d="M 205 120 C 215 110, 222 98, 224 88" fill="none" stroke="#e65100" stroke-width="1.8" stroke-linecap="round"/>
-  <polygon points="224,84 220,91 228,92" fill="#e65100"/>
+  <rect width="300" height="200" rx="10" fill="#0d1117"/>
+  <image width="300" height="200" href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDABQODxIPDRQSERIXFhQYHzMhHxwcHz8tLyUzSkFOTUlBSEZSXHZkUldvWEZIZoxob3p9hIWET2ORm4+AmnaBhH//2wBDARYXFx8bHzwhITx/VEhUf39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f3//wAARCACtAQQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDMK5rPvlxMP92tQis2/wD+Pgf7orNGy3KmKMGnYpcVVyuRMjwaXBp+KMUXD2aGhaXFOxS4pXLUbDcUu2nYpcUi0hu2lxTsUuKVyrDcUYp+KMUDsNxT42aN9yHBHejFFAWG4oxTqWgdhuKMU7FAFILDcUuKdRxQA3FGKfijFAWGYoxTsUYoCwzFFPxSYoFYbSU7FJTENpKcaaSKBMKKAaKZN0a5rNvz/pHH90VqMvFZl+P9IH+6KSMY7lWiigDmqNAJFAI9RUsKDy5j/s1Ci7jnt/OgjmlzWQ7cO1KrA96AgFJtGaWhdpjzx1qWSFoiN2ORkYqJcqpUdD196u6gP3iAH+AcUhqUublZUp2KQU4UjdITFKBTgKUCgqw3FBFSBCSABkmrc2k3cUJkdF2gZOGyRSuTJqO5ngZIGQPc9KSdHRYyRt3DOAeakK8VNeRllgA4G3k1aMKqk7KPUz1Vj0J/OnKknYn86lKYbao4FSquBRcqNFLdlYxOw5/nSeSwHb86t4pCKLsboxK2OQG5H6/nV2/G2VQM428VCyA4+tW9SUGcf7oobujKNNxqFEE59afSKPmp+Kk6UMxSYp+KTFADCKTFPNIaYiNqYRUjU3FBm0LGmQfrRVm1QNGTjvRRcxluaD4x1rK1D/j4H+6K0Jofl+VsYOazLwMJhk5+UUII7kQVipYAkDqfSgVbhZY7U+YuQT09aZ/o7dA60yoyEtxkSDqCOajwBwOKniCpvCNuyKrsKBxerY7inGIhN5xtzio9jdqvyOY4EDoHz29qVi5TaaSRTOPWrd799M/3agIR3zsKjsBTrl3lcNgEbeDmiwOT51oRjFOxTVB7j8qkUVJ0LUUClFPA4pQKm5pyi24Hnx54G4V01uqumdzn5dpDHOfesi00a6uWB2GNRzlv8K2rS3nLFSj8H+LgCmkclaUb6M5zUoI4bh1iB2D19e9F0vEX+5W7qmjyNKWgdcsMlH4BPsawriKeNwsi4OOAavYmEueUfIpgfvWp2KTkO2BzT4h1pXOmwgprnFT7aY6jNAmnYligD2/mHHH88inagP8ASeOm0U5IgLPcPvE7c+2aqyQMrANIwwMADsKrocsW3U+8jUfPTytNRCpOGLH3p5DY5qTqS01GYzQVpyilNIdiIikIp7U3FMmxGwpuKkK0wxJ6frTIafQt2bIsR3MAd3eioYrVWTIz1op2OKT953NSZcCsm/H78f7orXuCAOayL4hrn5Tn5RUo1juE3EMYqDtwM1YnIBQN90AZ5qCVowR5Tbvlz171THCSSJrXJEhKcgcc0wjmksGYibq3Ape9D0KpPmbZIByKnu+Cg9qgiGZEHuKnvf8AWgei1PQ2l/EiQd6huZJFvCnOARge1SjORUFzKzXJwPmDY+tOJniHZxJxnHIxTl60xSSMkY9qctQdUWTLWjpCp9pDSY4IAz2zWaDWhp8SyxyE5z0qQqu0Gduu0DAApWBx8uM+9Zul3D3FpG7Nkkc/hxV/k966EjyGNul3Wzk4yoyKw7+NbiwdlG50G5cda3pYy0Drn7ykfpWPa4Ma4GCODUTXU2oyscrFy7mlhH3qmkTZeXC4xhz/ADpkI5aoPTtcdio3HzVOBTGHzUyWiyo/0WMerj+dVb1ZjctsKbcDrV0D/R4R/tr/ADqndyOt04ELMoxyD7Vb2OKFud38yvEHDHdgn2qXBx0pkLEkllK/Wpsg1DO2KVtCJRzQy05etKaQ7EBWk21IRSGmTYhZTUZjk/56D/vmpmOB0JqPzDnmNhTRnNR6/qW7RSIF3HJ55op9uP3C9uvX60VZ58t3YszqGwD0rHvIh9sA57Vsz8Vl3GG1AZ6YB/SojuarzK2og+eq+gqqVK8irdxIJZCy9DTFFXcUad0TWJURyngcc0g61La/cl+lRDrUs3pK0mT265uEHvT7z/j5b24otMCcMeiqSajuHDzuynIJ4NLoaf8AL35DR1H1pboQi5Ynbu4po+8PrUt0q+eSVGSB2oWwp6zXzIsgjIORQKTAwMcU4CpNlceK17OLyrNZAeWyx+lZAralYQacvuuB+VLqTWvaxsaMpXT7f3BP5k1qJ1qhpy7LG3HcRj+VaEYrdbHmT+Jjz0rnwx+3ui8KMH8635W2xM3oM1ztsd99KR1IU/zpT2KpbmVept1K6A6ZB/Sq0PVqmuJRLfXTjoX/AJVDD1asj1o/CTVGR81PzTM/NTEy4v3IB/tj+tQXH+uf602CZnltUPQ5b9SKiurdXupH3uCT2NW9jipN8+nn+Y2M/MakPSooE2AgMT7tzUhz3qDtV+oyg0UlILiGmmnGmNTJbGE80LIUcMADj1prAkYBx71GUfGPNP5UzOTfRGlFzChPcZopYRiGMHnCiirPOe5PNzmsi5z9qYKm5iuB7cYq1JqsJ6RyH8qpSXoNyZkUjOBg1MUzRyViILtUc855HpRzjgD8aVjuJI6GgUM3itCe1LeVLkDOPWmKeaktv9VLUa89KGOn8TJN6qj8EsylRx64qNVKoue4zVm3ljhZmlXIx6VXzlj6dqOhUf4rY5T8y/Wlu5f37DY3GOcUi/eX61Jc/wCtNJbDl8aIAcgHp9aeKb3p4pGsR4PFaV5mWGJkDeSgCliOM1mfeBHTNStdTC1eM4+7yfWmknuRVc004o3Y/FNkiqot7jAGB92rCeLbILzBcD8B/jXGIPkFOP3io9Aa6lBHl3O1bxNazxMkUcu9hwHAA/PNUbO4BhvLjaQ6pnA9K52BS2cHDL0q5IlxAjxRT8SqA52/wkZwKzqRsjSlzOVojIOjGlh6mkgGEIz7U6Icmuc9hXtqS9qj/ip/amDrTE0SW8U63UDTEkAbV+lLPzLJ9TVyX/j4th7N/Ksu4gDTyNvcEsTwat7HDQvfTt+osfenE1FCpVSAxP1p5J71B2ITNJmkzSGgBaa1GaRvrQSyM00k0Pux8uM+9Rt53YrVGcnY1U4RfoKKaGwB9BRVHnj2PBBAI7jFZ09or3TrGAgUA4/CqbT3D/elc/iatWOfKmYkk+ppKLRTlcgLDAAAGBj60bsDpUOH9TTgkx6An8KdjRVfIt2zfupeD+VMUkcByB7VJapKsUgZTkjiofLuVP8AqwfxpP1Kg9btCtHISSNzLUhADEKcjscYq3beYmnTFkwxJwvrWdvkHWFx+FJ6jhOMZNk6ffX60+4I81hnpVeKXMqAowyw7U68MS3D5XJPOaLFSqR5k0xwFOFV1mjGADj8KlE0f98UrM2jUh3JRSv80bD2NRiVD/Gv51YtTG0yh5FVeckn2pWNHJOLsyon3abJlbknHygAE+9Oi+8oqxGY5NOu0wfNdwy/Rf8A9Zrrk7I8dK7GW7hZfrV+44ZRnPyL/KqFrbTXEZmjUbEPJLAVdum2yAdcIvI5HSorO8Tpwn8T5EcP3TSx9TTYj8pojYZNcp6pNnimL96lLDFNjOXH1pkSNOY/6VAPRWrPlPzP9TV6Q/6dEPRD/OsqS6i3MC2Dk1bOKhJJ6vp+o+M8GgmmRsCuQcigmpOzoGaQmkzSE0CFzTnhkWFJWQiN+Fb1qPNPlut8EcLbF8vnPOTTRnOXKQkEnApMUhZT/Gn50bh/eX/voU7GftI33L7HB/Ciq0typb5W4oqjjQCyjUfMrMfZxUgihUMvlSKB2zn+tWZL22Hfd9Fqs16mTthHPqcVheb6G1oIVBGE2rwCc80uUPG9fzqs87t0Cr9BUTbm+8xP41XI3uHtUtjRjaLY5DjA4NQvcwJxuJPsKpKgj5Dsv0anNdSAY852HuAf50/Zon20iZtRATakffqTULXk7fdIX6Co2meRicAk98UqBictWnKuxnzy7jWaWT78hP400R4NWNtJigRBsHpRsHoKn2Zo2UXCyIdg9KPLFTbKChxxii4WRqQaUkkUbh2XKgkdaz5IthkVSdoJwfWt2NX/ALMUKcOyAA+lRRWa7AJWL47YwKzdW3xM1dK+xR0vTop9jSM20scrVvVrN3u/9HcRoEAC/SrsSASoF6U+YqZW+bFZyqvluaxpJOxgLZXajiRTTVt7xc8IfxreABH3xSbfdTUe2fY05PN/eYZjvAP9SD9DTAZk/wBbEUH96t/yyewqpfRoLdhKAAen1q41bu1iZKST95lLTrgtdFn4UKQCTVV7lSW+Q4yeahlwD5URJHc0gTAxmuiyOWM5R2JluUxyGo+0p/tVFggdTSYosjT29Qm+0RnufypfOT++KrkZ/wD1UY9h+VLlQ/bzJjKvZhTS49R+dRFR6CmlB6UcqD28uxKxJ6HFNVWLrz3Haoyg9/zoT926sckA5xTsQ6l90W7lIxL91Rkc0VBcSea4YccetFMzuh5YDqRTTKo6ZNNEPqfypwiUdvzoEHmE9BS4kbrxTgKWi4DBF6mniNR2/OjeucFgDTxgjgjH1pAJgUoWlC0uKQxAooxS1JFC8zYjRmPtQ3Ye5FilCkkADJ9BWjDpZ6zNj/ZX/Gr0VvFCP3alffvWMq8VtqbRoye5mQaZPJguBGvv1/KtOx0tPMwNpI5LMOlPx/tfmKu2UzoNv7sr9efxrKNRzdpPQuUORXitQukj+z/u4wGU+tUtpAyUH4Gr0sh8h1HyhuDtxz+NU2TEeATRUcW9B01JLUtafaidi5JTb0yM1WlAErZ3cE9RV7TriGKIxliJCPmyDz+lVbjJnkK52k8Z60TSUEEJNzZCNhHYUoWP1FPGcc1FcXEVvHucZPZfWsVq7I2bsrsbcSQ28W9j9AOprDuJnncsxwOw7CnzyvPIXfr2A6CottdtOmo6vc46lRy06EQiC9qNgqXbRtrUyItlNKjOKn2+tQrzlv7xzQO4m2mlakxSYoAj20hFPH31HqaMUAREUhFSkU0imIiDFOKKlxRQIlxRilNFIAoxRRQMjaDJJ3YzTfIbsRU4pRRcVit5Ug6D8jS5mX+9+dWKWncLECyTE45J9MVbj1S8hULhdo7FMVHR09alpPdDTa2ZbTX5hw0SH6cVMuvofv25/Ais7r/9fmkKof4V/KodKm+hSqzXU2E1uzb7yuv/AAGrEeqWJPE+36giudMKen5Gk8lT3ap+rwK9vM6s3lpMoC3Ef/fVOARl+V1P0Ncibf0f8xQIJB91h+eKTw6fUartdDtoBtBHNQMh3E5rk1ku4/uSuPo9SDUdQj/5ayfiM1Lw8mrJlKuk72OgurhbVMscsfur61iTTPPIXc5J/Sqr3skrl5MOx6mkFyO6fka1p0uReZFSrz+hYpc1ALlP7rUonjP8RH1FaWM7k1FRiWM/xilDA9GX86ACY4TA6txTQOKbI26XAPCjApw6UAGKTFLmkNAyI8Op/wBoVIw5NRv6+9Sv940CGEUhFONIaAGgUU4UUALRRilxSATFLRS4oASjNLijFACUtGOaMcUAGaKMcUYoAKWkxSgUAFH4UYpQOaAEpcn1oxRimAUEDsKUCkxQFiMxIf4RSeQnvUuKTFFxWIjAvZjTDAezVYxRRcLFUwv7UnlP6VbxSEU7hYZGpVRmn0YoIpDDNJmjHFJigBjng0hulJ5Uj8aeyg5qAwjP3jQrCZJ50Z7kfhS+ZGejj8artHjv+lRninYVy8GX+8v50VRoosO5/9k=" clip-path="url(#c)"/>
+  <rect x="8" y="8" width="140" height="20" rx="5" fill="#0f172a" fill-opacity="0.85" stroke="#34D399" stroke-width="1"/>
+  <text x="78" y="22" font-family="system-ui, sans-serif" font-size="8.5" font-weight="bold" fill="#34D399" text-anchor="middle">Dumbbell Lateral Raise</text>
+  <rect x="8" y="174" width="150" height="18" rx="5" fill="#0f172a" fill-opacity="0.85" stroke="#F59E0B" stroke-width="1"/>
+  <text x="83" y="187" font-family="system-ui, sans-serif" font-size="8" font-weight="bold" fill="#F59E0B" text-anchor="middle">🎯 عضلات الكتف الجانبية</text>
 </svg>
