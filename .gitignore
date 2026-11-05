@@ -59,6 +59,12 @@ signing.properties
 /scratch/test_match_all_89.py
 /scratch/test_queries2.py
 /scratch/test_search_db.py
+/scratch/*.gif
+/scratch/*.html
+/scratch/render_*.py
+/scratch/squat_anim_*.svg
+/scratch/test_squat_anim.svg
+/scratch/test_create_anim.py
 /scratch/test_size_cal.py
 /scratch/Phase_13_4B2_6_Controlled_Commits_Report.md
 /scratch/downloads/
