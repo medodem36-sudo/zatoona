@@ -6375,6 +6375,121 @@ body.ultra-compact .home-card { padding: 10px; margin-bottom: 6px; }
   background: var(--accent); color: #fff;
 }
 
+/* === Reorganization: Floating Bottom Nav & Segmented Sub-Tabs (Phase 17) === */
+.bottom-nav-bar {
+  display: none;
+}
+@media (max-width: 768px) {
+  .bottom-nav-bar {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 58px;
+    background: var(--card);
+    background: color-mix(in srgb, var(--card) 92%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-top: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    z-index: 990;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.12);
+    user-select: none;
+  }
+}
+.bottom-nav-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 6px 0 4px;
+  font-family: inherit;
+  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  touch-action: manipulation;
+  position: relative;
+}
+.bottom-nav-btn .bnb-icon {
+  font-size: 1.25rem;
+  line-height: 1.2;
+  transition: transform 0.18s ease;
+}
+.bottom-nav-btn .bnb-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  margin-top: 2px;
+  letter-spacing: 0.2px;
+}
+.bottom-nav-btn:hover {
+  color: var(--text);
+}
+.bottom-nav-btn.active {
+  color: var(--accent);
+}
+.bottom-nav-btn.active .bnb-icon {
+  transform: translateY(-2px) scale(1.1);
+}
+.bottom-nav-btn.active::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  width: 16px;
+  height: 3px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+/* === Segmented Pillar Sub-Tabs === */
+.pillar-subtabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 6px 2px 12px 2px;
+  margin-bottom: 12px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.pillar-subtabs::-webkit-scrollbar {
+  display: none;
+}
+.pillar-subtab-btn {
+  white-space: nowrap;
+  padding: 7px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background: var(--card-alt);
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  touch-action: manipulation;
+  flex-shrink: 0;
+}
+.pillar-subtab-btn:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+.pillar-subtab-btn.active {
+  background: var(--accent);
+  color: var(--btn-active-text, #ffffff);
+  border-color: var(--accent);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
+}
+
+.quick-act-btn.done-today {
+  border-color: #10b981 !important;
+  background: rgba(16, 185, 129, 0.12) !important;
+  color: #10b981 !important;
+}
+
 /* === Settings View Styles === */
 .settings-section-card {
   background: var(--card); border: 1px solid var(--line); border-radius: 12px;
@@ -6466,6 +6581,96 @@ body.ultra-compact .home-card { padding: 10px; margin-bottom: 6px; }
 }
 .section-accordion-body.collapsed {
   display: none !important;
+}
+
+
+/* ========================================================================== */
+/* PHASE 16: UI CLEANUP, PERFORMANCE & ZEN MODE ENHANCEMENTS                  */
+/* ========================================================================== */
+
+/* Feature #8: Zero 300ms mobile tap delay */
+button, .btn, .stat-card, .drawer-nav-btn, .checklist-item, .chip, [data-nav], summary {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Feature #8: 60fps Hardware Acceleration */
+.drawer-nav, .mobile-drawer, .view, .stat-card, .settings-card, .modal-content {
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Feature #5: Lazy DOM Rendering / Content-visibility */
+.settings-card, .stat-card, #hairAdherenceMatrixTable, .exercise-card, .stretch-card, .table-container {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 120px;
+}
+
+/* Feature #2: Smart Contextual Collapse for Completed Items */
+.checklist-item.done, .prayer-item.done, .habit-item.done, .done-collapsed {
+  opacity: 0.65;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  transform: scale(0.99);
+}
+.checklist-item.done:hover, .prayer-item.done:hover, .habit-item.done:hover {
+  opacity: 0.95;
+  transform: scale(1);
+}
+
+/* Feature #1: Zen Mode (الوضع الهادئ والموجز لتنظيف الشاشة) */
+.zen-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--card-alt);
+  color: var(--text);
+  border: 1px solid var(--line);
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: .78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+}
+.zen-toggle-btn:active {
+  transform: scale(0.96);
+}
+body.zen-mode .zen-toggle-btn {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: #10b981;
+  color: #10b981;
+}
+
+body.zen-mode .section-hint,
+body.zen-mode #appHeader .sub,
+body.zen-mode #appHeader .stamps,
+body.zen-mode .extra-hint,
+body.zen-mode .secondary-hint {
+  display: none !important;
+}
+body.zen-mode .settings-card {
+  margin-top: 8px !important;
+  padding: 10px 12px !important;
+}
+body.zen-mode .stat-card {
+  padding: 8px 10px !important;
+}
+body.zen-mode header#appHeader {
+  margin-bottom: 10px !important;
+}
+body.zen-mode header#appHeader h1 {
+  font-size: 1.15rem !important;
+}
+
+/* Feature #4: Collapsible Details Clean Styling */
+details.settings-card summary {
+  user-select: none;
+  transition: color 0.2s ease;
+}
+details.settings-card summary:hover {
+  color: var(--accent);
 }
 
 </style>
@@ -6697,6 +6902,30 @@ body.ultra-compact .home-card { padding: 10px; margin-bottom: 6px; }
   </div>
 </div>
 
+<!-- Persistent Floating Bottom Navigation Bar (5 Core Hubs) -->
+<nav id="bottomNav" class="bottom-nav-bar" aria-label="التنقل الرئيسي">
+  <button type="button" class="bottom-nav-btn active" data-nav="home" id="bottomNav-home">
+    <span class="bnb-icon" aria-hidden="true">🏠</span>
+    <span class="bnb-label">الرئيسية</span>
+  </button>
+  <button type="button" class="bottom-nav-btn" data-nav="prayer" id="bottomNav-prayer">
+    <span class="bnb-icon" aria-hidden="true">🕌</span>
+    <span class="bnb-label">العبادة</span>
+  </button>
+  <button type="button" class="bottom-nav-btn" data-nav="gym" id="bottomNav-gym">
+    <span class="bnb-icon" aria-hidden="true">💪</span>
+    <span class="bnb-label">اللياقة</span>
+  </button>
+  <button type="button" class="bottom-nav-btn" data-nav="meal" id="bottomNav-meal">
+    <span class="bnb-icon" aria-hidden="true">🍽️</span>
+    <span class="bnb-label">التغذية</span>
+  </button>
+  <button type="button" class="bottom-nav-btn" data-nav="schedule" id="bottomNav-schedule">
+    <span class="bnb-icon" aria-hidden="true">📅</span>
+    <span class="bnb-label">الإنتاجية</span>
+  </button>
+</nav>
+
 <!-- Mobile Drawer Backdrop & Drawer -->
 <div class="drawer-overlay hidden" id="drawerOverlay" aria-hidden="true"></div>
 
@@ -6773,6 +7002,13 @@ body.ultra-compact .home-card { padding: 10px; margin-bottom: 6px; }
       <div class="dnb-text">
         <span class="dnb-label">نظرة عامة</span>
         <span class="dnb-desc">التحليلات والاتجاهات</span>
+      </div>
+    </button>
+    <button type="button" class="drawer-nav-btn" data-nav="hair" id="drawNav-hair">
+      <span class="dnb-icon" aria-hidden="true">💈</span>
+      <div class="dnb-text">
+        <span class="dnb-label">العناية بالشعر</span>
+        <span class="dnb-desc">مينوكسيديل، أكرتين، وديرمارولر</span>
       </div>
     </button>
     <button type="button" class="drawer-nav-btn" data-nav="notes" id="drawNav-notes">
@@ -6916,6 +7152,9 @@ body.ultra-compact .home-card { padding: 10px; margin-bottom: 6px; }
           <span class="menu-icon" aria-hidden="true">☰</span>
           <span class="menu-label">القائمة</span>
         </button>
+        <button type="button" class="zen-toggle-btn" id="btnToggleZenMode" aria-label="تبديل الوضع الهادئ" title="الوضع الهادئ لتنظيف الواجهة">
+          <span id="zenIcon">🌱</span> <span id="zenLabel">هادئ</span>
+        </button>
         <div class="home-return-bar hidden" id="homeReturnBar">
           <button class="home-return-btn" id="homeBtn" type="button" aria-label="الرجوع للرئيسية">🏠 الرئيسية</button>
         </div>
@@ -7008,10 +7247,95 @@ body.ultra-compact .home-card { padding: 10px; margin-bottom: 6px; }
 
   <!-- ===== MEAL MODE ===== -->
   <div id="mealView">
+    <!-- Pillar 3 Segmented Sub-Tabs -->
+    <div class="pillar-subtabs" id="mealSubTabs" role="tablist" aria-label="أقسام التغذية">
+      <button type="button" class="pillar-subtab-btn active" data-subtab="all">🌟 الكل</button>
+      <button type="button" class="pillar-subtab-btn" data-subtab="plan">🍽️ خطة الوجبات</button>
+      <button type="button" class="pillar-subtab-btn" data-subtab="supplements">💊 ليمتليس مان ماكس</button>
+      <button type="button" class="pillar-subtab-btn" data-subtab="pantry">🛒 المؤن والبروتين</button>
+    </div>
     <div style="display:flex; justify-content:flex-end; margin:4px 0 10px;">
       <button type="button" class="reset-btn" id="jumpToShoppingBtn" style="border-color:var(--accent); color:var(--accent); font-weight:700; display:inline-flex; align-items:center; gap:6px;">🛒 الانتقال السريع لقائمة المشتريات</button>
     </div>
     <div id="secNotes-meal"></div>
+    <!-- FEATURE #374: HOUSEHOLD CALORIE BURN CALCULATOR -->
+    <details class="settings-card" id="cardHouseholdCalories" style="margin-top:14px; border-radius:12px;">
+      <summary style="cursor:pointer; color:var(--text); font-weight:700; font-size:.85rem; padding:12px;">
+        🧹 حاسبة استهلاك السعرات في الأعمال المنزلية (#374)
+      </summary>
+      <div style="padding:10px 14px 14px;">
+        <div style="font-size:.75rem; color:var(--muted); margin-bottom:8px;">تقدير الطاقة المستهلكة في النشاط البدني غير التدريبي (NEAT):</div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:6px; font-size:.75rem;">
+          <div style="padding:6px; border-radius:6px; background:var(--card-alt); border:1px solid var(--line);">تنظيف المنزل: <b>150 سعرة / ساعة</b></div>
+          <div style="padding:6px; border-radius:6px; background:var(--card-alt); border:1px solid var(--line);">صعود السلالم: <b>400 سعرة / ساعة</b></div>
+          <div style="padding:6px; border-radius:6px; background:var(--card-alt); border:1px solid var(--line);">ترتيب وغسيل: <b>120 سعرة / ساعة</b></div>
+          <div style="padding:6px; border-radius:6px; background:var(--card-alt); border:1px solid var(--line);">المشي للتسوق: <b>200 سعرة / ساعة</b></div>
+        </div>
+      </div>
+    </details>
+
+    <!-- FEATURE: LIMITLESS MAN MAX SUPPLEMENT ENGINE -->
+    <div class="settings-card" id="cardLimitlessManSupplement" style="margin-top:14px; border:1px solid #3b82f6; border-radius:12px; background:linear-gradient(180deg, rgba(59, 130, 246, 0.08) 0%, var(--card) 100%);">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:1.3rem;">💊</span>
+          <div>
+            <div style="font-size:.95rem; font-weight:800; color:#3b82f6;">مكمل ليمتليس مان ماكس (Limitless Man Max) الأزرق للرجال</div>
+            <div style="font-size:.75rem; color:var(--muted);">تركيبة الفيتامينات والمعادن والمغذيات اليومية المعتمدة للرجال (قرص واحد يومياً)</div>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <span id="limitlessManStatusBadge" class="badge" style="background:#10b981; color:#fff; font-size:.72rem; padding:4px 8px; border-radius:6px; font-weight:700;">مُضاف للروتين ✓</span>
+          <button type="button" class="reset-btn" id="btnToggleLimitlessMan" style="font-size:.72rem; padding:4px 8px; border-color:var(--line); color:var(--text); cursor:pointer;">إزالة من الروتين</button>
+        </div>
+      </div>
+
+      <div id="limitlessManActiveContent">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; padding:12px; border-radius:10px; background:var(--card-alt); border:1px solid var(--line); margin-bottom:14px;">
+          <div>
+            <div style="font-size:.85rem; font-weight:700;" id="limitlessManIntakeLabel">جرعة اليوم: قرص واحد بعد الإفطار أو الغداء</div>
+            <div style="font-size:.72rem; color:var(--muted);" id="limitlessManIntakeSubtext">يُفضل تناوله مع وجبة تحتوي على دهون صحية لامتصاص الفيتامينات الذائبة في الدهون (A, D, E, K).</div>
+          </div>
+          <button type="button" class="btn btn-primary" id="btnCheckLimitlessManToday" style="background:#3b82f6; border-color:#2563eb; color:#fff; font-weight:700; padding:8px 16px; border-radius:8px; font-size:.85rem; cursor:pointer;">
+            💊 تم أخذ الحبة اليوم
+          </button>
+        </div>
+
+        <div style="margin-bottom:14px;">
+          <div style="font-size:.75rem; font-weight:700; color:var(--muted); margin-bottom:6px;">الالتزام خلال آخر 7 أيام:</div>
+          <div id="limitlessManHistoryStrip" style="display:flex; gap:6px; flex-wrap:wrap;"></div>
+        </div>
+
+        <details style="background:var(--bg-2); border:1px solid var(--line); border-radius:8px; padding:8px 12px; margin-bottom:8px;">
+          <summary style="font-size:.8rem; font-weight:700; color:var(--text); cursor:pointer;">
+            🧪 التركيبة التفصيلية ونسبة الاحتياج اليومي (% RDA) — 26 عنصراً
+          </summary>
+          <div style="margin-top:10px; display:grid; grid-template-columns:repeat(auto-fill, minmax(130px, 1fr)); gap:8px;" id="limitlessManFormulaGrid">
+          </div>
+        </details>
+      </div>
+
+      <div id="limitlessManInactiveContent" style="display:none; text-align:center; padding:16px 8px;">
+        <div style="font-size:.85rem; color:var(--muted); margin-bottom:10px;">المكمل مُعطّل حالياً من الروتين اليومي. يمكنك إضافته في أي وقت بنقرة واحدة.</div>
+        <button type="button" class="btn" id="btnEnableLimitlessMan" style="background:#3b82f6; color:#fff; font-weight:700; padding:6px 14px; border-radius:6px; font-size:.8rem; cursor:pointer;">
+          ➕ تفعيل وإضافة ليمتليس مان ماكس للروتين
+        </button>
+      </div>
+    </div>
+
+    <!-- FEATURE #52: COST PER PROTEIN GRAM CALCULATOR -->
+    <details class="settings-card" id="cardCostPerProtein" style="margin-top:14px; border-radius:12px;">
+      <summary style="cursor:pointer; color:var(--text); font-weight:700; font-size:.85rem; padding:12px;">
+        💰 حاسبة التكلفة لكل جرام بروتين فعلي في مصر (#52)
+      </summary>
+      <div style="padding:10px 14px 14px;">
+        <div style="font-size:.75rem; color:var(--muted); margin-bottom:10px;">
+          مقارنة فورية بين مصادر البروتين الأكثر شيوعاً في السوق المصري لحساب تكلفة الجرام الواحد بالجنيه وترتيب الأوفر منها لميزانيتك:
+        </div>
+        <div id="costPerProteinTableContainer" style="overflow-x:auto;"></div>
+      </div>
+    </details>
+
     <details class="settings-card" style="padding:0;">
       <summary style="cursor:pointer; color:var(--accent); font-weight:700; font-size:.85rem; padding:16px;">🎯 أهداف التغذية — Settings</summary>
       <div style="padding:0 16px 16px;">
@@ -7776,6 +8100,114 @@ body.ultra-compact .home-card { padding: 10px; margin-bottom: 6px; }
     <!-- Gym Sub-Tab: Recovery (embedded from recoveryView) -->
     <div id="gymSubPaneRecovery" class="hidden"></div>
     <div id="secNotes-gym"></div>
+    <!-- FEATURE #34: CALISTHENICS PROGRESSION TREE -->
+    <details class="settings-card" id="cardCalisthenicsTree" style="margin-top:14px; border-radius:12px;">
+      <summary style="cursor:pointer; color:var(--text); font-weight:700; font-size:.85rem; padding:12px;">
+        🤸 مسار احتراف تمارين وزن الجسم (Calisthenics Tree) (#34)
+      </summary>
+      <div style="padding:10px 14px 14px;">
+        <div style="font-size:.75rem; color:var(--muted); margin-bottom:10px;">خريطة التدرج من التمارين التأسيسية حتى المهارات المتقدمة:</div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:8px; font-size:.75rem;">
+          <div style="padding:8px; border-radius:8px; background:var(--card-alt); border:1px solid var(--line);">
+            <div style="font-weight:700; color:#3b82f6;">الضغط (Push-Up)</div>
+            <div style="font-size:.7rem; color:var(--muted); margin-top:2px;">ركبتين ➔ عادي ➔ ماسي ➔ ضغط بيد واحدة</div>
+          </div>
+          <div style="padding:8px; border-radius:8px; background:var(--card-alt); border:1px solid var(--line);">
+            <div style="font-weight:700; color:#10b981;">العقلة (Pull-Up)</div>
+            <div style="font-size:.7rem; color:var(--muted); margin-top:2px;">أسترالي ➔ عقلة مساعدة ➔ عقلة كاملة ➔ ذراع واحدة</div>
+          </div>
+          <div style="padding:8px; border-radius:8px; background:var(--card-alt); border:1px solid var(--line);">
+            <div style="font-weight:700; color:#8b5cf6;">المتوازي (Dips)</div>
+            <div style="font-size:.7rem; color:var(--muted); margin-top:2px;">كرسي ➔ متوازي بالباند ➔ متوازي حر ➔ بأوزان إضافية</div>
+          </div>
+          <div style="padding:8px; border-radius:8px; background:var(--card-alt); border:1px solid var(--line);">
+            <div style="font-weight:700; color:#ec4899;">الوقوف على اليدين</div>
+            <div style="font-size:.7rem; color:var(--muted); margin-top:2px;">ثبات عالحائط ➔ توازن حر ➔ ضغط الوقوف (HSPU)</div>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- FEATURE #35: CNS FATIGUE SCORE & #226 TENDON LOAD SHIELD -->
+    <details class="settings-card" id="cardCnsAndTendonShield" style="margin-top:14px; border-radius:12px;">
+      <summary style="cursor:pointer; color:var(--text); font-weight:700; font-size:.85rem; padding:12px;">
+        🧠 إجهاد الجهاز العصبي المركزي (CNS) وحماية الأوتار (#35 و #226)
+      </summary>
+      <div style="padding:10px 14px 14px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:10px;">
+          <div>
+            <div style="font-size:.8rem; font-weight:700;">مؤشر الإجهاد العصبي التراكمي (CNS Fatigue):</div>
+            <div style="font-size:.72rem; color:var(--muted);">محسوب بناء على أوزان التمارين المركبة وشدة الـ RPE هذا الأسبوع</div>
+          </div>
+          <span class="badge" id="cnsFatigueBadge" style="background:#10b981; color:#fff; font-size:.72rem; padding:4px 8px; border-radius:6px; font-weight:700;">طبيعي (جاهز للأوزان) ✓</span>
+        </div>
+        <div style="padding:8px 10px; border-radius:6px; background:var(--card-alt); border:1px solid var(--line); font-size:.75rem;">
+          🛡️ <b>درع الأوتار والمفاصل (#226):</b> حمل أوتار الكتف والركبة ضمن النطاق الآمن. لا يوجد إجهاد تصادمي متكرر.
+        </div>
+      </div>
+    </details>
+
+    <!-- FEATURE #43: SUPERSET LINKER & #223 MUSCLE ASYMMETRY DETECTOR -->
+    <details class="settings-card" id="cardSupersetAndAsymmetry" style="margin-top:14px; border-radius:12px;">
+      <summary style="cursor:pointer; color:var(--text); font-weight:700; font-size:.85rem; padding:12px;">
+        ⚖️ كاشف عدم التماثل العضلي وربط السوبر سيت (#43 و #223)
+      </summary>
+      <div style="padding:10px 14px 14px;">
+        <!-- Asymmetry tool -->
+        <div style="font-size:.8rem; font-weight:700; margin-bottom:6px;">كاشف التماثل بين الجانبين (يمين vs يسار):</div>
+        <div class="sc-grid" style="margin-bottom:8px;">
+          <div class="sc-field">
+            <label>الجانب الأيمن (سم أو كجم)</label>
+            <input type="number" id="asymRight" value="38" step="0.5" class="weight-input" style="width:100%;">
+          </div>
+          <div class="sc-field">
+            <label>الجانب الأيسر (سم أو كجم)</label>
+            <input type="number" id="asymLeft" value="37.5" step="0.5" class="weight-input" style="width:100%;">
+          </div>
+        </div>
+        <button type="button" class="btn" id="btnCheckAsymmetry" style="background:var(--accent); color:#fff; font-size:.75rem; padding:4px 10px; border-radius:6px; cursor:pointer; margin-bottom:8px;">فحص التماثل</button>
+        <div id="asymResultBox" style="font-size:.75rem; color:var(--muted); margin-bottom:12px;">الفارق: 1.3% (تماثل طبيعي ممتاز).</div>
+
+        <!-- Superset tool -->
+        <div style="border-top:1px solid var(--line); padding-top:8px;">
+          <div style="font-size:.8rem; font-weight:700; margin-bottom:4px;">ميزة ربط السوبر سيت (Superset Linker) (#43):</div>
+          <div style="font-size:.72rem; color:var(--muted);">دمج مجموعتين متعاكستين (مثل بايسبس + ترايسبس) مع راحة 45 ثانية بينهما لزيادة الكثافة التدريبية.</div>
+        </div>
+      </div>
+    </details>
+
+    <!-- FEATURE #39: US NAVY BODY FAT CALCULATOR -->
+    <details class="settings-card" id="cardUSNavyFatCalc" style="margin-top:14px; border-radius:12px;">
+      <summary style="cursor:pointer; color:var(--text); font-weight:700; font-size:.85rem; padding:12px;">
+        📐 حاسبة نسبة دهون الجسم بمعادلة البحرية الأمريكية (US Navy) (#39)
+      </summary>
+      <div style="padding:10px 14px 14px;">
+        <div style="font-size:.75rem; color:var(--muted); margin-bottom:12px;">
+          المعادلة المعتمدة عالمياً للرجال بنسبة خطأ ضئيلة دون الحاجة لأجهزة InBody، فقط باستخدام شريط القياس بالسنتيمتر:
+        </div>
+        <div class="sc-grid" style="margin-bottom:10px;">
+          <div class="sc-field">
+            <label>الطول (سم)</label>
+            <input type="number" min="120" max="230" step="1" id="navyFatHeight" class="weight-input" value="175" style="width:100%;">
+          </div>
+          <div class="sc-field">
+            <label>محيط الرقبة (سم)</label>
+            <input type="number" min="20" max="60" step="0.5" id="navyFatNeck" class="weight-input" value="38" style="width:100%;">
+          </div>
+          <div class="sc-field">
+            <label>محيط الخصر عند السرة (سم)</label>
+            <input type="number" min="50" max="160" step="0.5" id="navyFatWaist" class="weight-input" value="84" style="width:100%;">
+          </div>
+        </div>
+        <button type="button" class="btn" id="btnCalculateNavyFat" style="background:var(--accent); color:#fff; font-weight:700; padding:6px 14px; border-radius:6px; font-size:.8rem; cursor:pointer; margin-bottom:10px;">
+          احسب نسبة الدهون
+        </button>
+        <div id="navyFatResultBox" style="padding:10px; border-radius:8px; background:var(--card-alt); border:1px solid var(--line); font-size:.82rem;">
+          أدخل القياسات واضغط على "احسب نسبة الدهون".
+        </div>
+      </div>
+    </details>
+
     <div id="gymPauseBanner" class="hidden"></div>
     <div id="gymSettingsContainer" style="margin-bottom:12px;"></div>
     <div id="gymDayOverrideContainer" style="margin-bottom:12px;"></div>
@@ -7834,6 +8266,51 @@ body.ultra-compact .home-card { padding: 10px; margin-bottom: 6px; }
   <!-- ===== SLEEP MODE ===== -->
   <div id="sleepView" class="hidden">
     <div id="secNotes-sleep"></div>
+    <!-- FEATURE #204: FORGOTTEN SUNAN OF SLEEP -->
+    <div class="settings-card" id="cardSunanOfSleep" style="margin-top:14px; border-radius:12px;">
+      <div style="font-size:.85rem; font-weight:700; color:var(--text); margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+        <span>🌙</span> سنن النوم النبوية المهجورة (#204)
+      </div>
+      <div style="font-size:.75rem; color:var(--muted); margin-bottom:10px;">قائمة سنن ما قبل النوم لإحياء هدي النبي ﷺ والسكينة الروحية:</div>
+      <div id="sunanSleepChecklist" style="display:flex; flex-direction:column; gap:6px;">
+        <label style="display:flex; align-items:center; gap:8px; font-size:.78rem; cursor:pointer;"><input type="checkbox" id="chkSunanDust"> نفض الفراش ثلاثاً قبل الاضطجاع</label>
+        <label style="display:flex; align-items:center; gap:8px; font-size:.78rem; cursor:pointer;"><input type="checkbox" id="chkSunanWudu"> الوضوء قبل النوم كوضوء الصلاة</label>
+        <label style="display:flex; align-items:center; gap:8px; font-size:.78rem; cursor:pointer;"><input type="checkbox" id="chkSunanRightSide"> النوم على الشق الأيمن ووضع اليد تحت الخد</label>
+        <label style="display:flex; align-items:center; gap:8px; font-size:.78rem; cursor:pointer;"><input type="checkbox" id="chkSunanMuawidhat"> قراءة الإخلاص والمعوذات وآية الكرسي والنفث في الكفين</label>
+        <label style="display:flex; align-items:center; gap:8px; font-size:.78rem; cursor:pointer;"><input type="checkbox" id="chkSunanDua"> قول: «باسمك ربي وضعت جنبي وبك أرفعه»</label>
+      </div>
+    </div>
+
+    <!-- FEATURE #244: VITAMIN D3 & EGYPTIAN SUN ANGLE -->
+    <details class="settings-card" id="cardVitDEgyptSun" style="margin-top:14px; border-radius:12px;">
+      <summary style="cursor:pointer; color:var(--text); font-weight:700; font-size:.85rem; padding:12px;">
+        ☀️ حاسبة شمس مصر وفيتامين د3 (#244)
+      </summary>
+      <div style="padding:10px 14px 14px;">
+        <div style="font-size:.75rem; color:var(--muted); margin-bottom:8px;">
+          النافذة المثالية لامتصاص فيتامين د3 بأشعة UVB في المدن المصرية دون احتراق الجلد:
+        </div>
+        <div style="padding:8px 10px; border-radius:6px; background:var(--card-alt); border:1px solid var(--line); font-size:.8rem;">
+          ⏰ التوقيت الذهبي: <b>10:30 ص إلى 01:30 م</b> (مدة: 15-20 دقيقة مع كشف الذراعين والساقين).
+        </div>
+      </div>
+    </details>
+
+    <!-- FEATURE #88 & #85: EYE REST 20-20-20 & RED SHIFT -->
+    <div class="settings-card" id="cardVisualHygiene" style="margin-top:14px; border-radius:12px;">
+      <div style="font-size:.85rem; font-weight:700; color:var(--text); margin-bottom:8px;">
+        👁️ راحة العين والوضع الليلي فائق الحمرة (#85 و #88)
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <button type="button" class="btn" id="btnToggleRedShift" style="background:#dc2626; color:#fff; font-size:.78rem; font-weight:700; padding:6px 12px; border-radius:6px; cursor:pointer;">
+          🔴 تبديل وضع القراءة الحمراء
+        </button>
+        <button type="button" class="btn" id="btnToggleEyeBreak" style="background:var(--accent); color:#fff; font-size:.78rem; font-weight:700; padding:6px 12px; border-radius:6px; cursor:pointer;">
+          👀 مؤقت راحة العين 20-20-20
+        </button>
+      </div>
+    </div>
+
     <div class="section-title"><span class="n">١</span> ملخص النوم</div>
     <div class="summary" id="sleepSummary"></div>
 
@@ -8009,7 +8486,45 @@ body.ultra-compact .home-card { padding: 10px; margin-bottom: 6px; }
 
   <!-- ===== PRAYER MODE ===== -->
   <div id="prayerView" class="hidden">
+    <!-- Pillar 1 Segmented Sub-Tabs -->
+    <div class="pillar-subtabs" id="prayerSubTabs" role="tablist" aria-label="أقسام العبادة">
+      <button type="button" class="pillar-subtab-btn active" data-subtab="all">🌟 الكل</button>
+      <button type="button" class="pillar-subtab-btn" data-subtab="times">🕌 مواقيت الصلاة والأذكار</button>
+      <button type="button" class="pillar-subtab-btn" data-subtab="quran">📖 القرآن والأربعين</button>
+      <button type="button" class="pillar-subtab-btn" data-subtab="fasting">🌙 الصيام والسنن</button>
+    </div>
     <div id="secNotes-prayer"></div>
+    <!-- FEATURE #203: 40 HADITH NAWAWI JOURNAL -->
+    <details class="settings-card" id="card40HadithNawawi" style="margin-top:14px; border-radius:12px;">
+      <summary style="cursor:pointer; color:var(--text); font-weight:700; font-size:.85rem; padding:12px;">
+        📖 مفكرة تدبر الأربعين النووية (40 Hadith) (#203)
+      </summary>
+      <div style="padding:10px 14px 14px;">
+        <div style="font-size:.75rem; color:var(--muted); margin-bottom:10px;">جدول حفظ وتدبر الأحاديث النبوية الجامعة مع التطبيق العملي:</div>
+        <div style="padding:10px; border-radius:8px; background:var(--card-alt); border:1px solid var(--line);">
+          <div style="font-size:.82rem; font-weight:700; color:var(--accent);">الحديث الأول: «إنما الأعمال بالنيات»</div>
+          <div style="font-size:.75rem; color:var(--text); margin-top:4px;">عن أمير المؤمنين عمر بن الخطاب رضي الله عنه: سمعت رسول الله ﷺ يقول: «إنما الأعمال بالنيات، وإنما لكل امرئ ما نوى...»</div>
+          <div style="margin-top:8px; display:flex; justify-content:space-between; align-items:center;">
+            <label style="font-size:.75rem; cursor:pointer;"><input type="checkbox" id="chkHadith1"> تم الحفظ والتدبر</label>
+            <span style="font-size:.7rem; color:var(--muted);">حديث 1 من 42</span>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- FEATURE #290: MINDFUL TAFAKKUR SESSIONS -->
+    <details class="settings-card" id="cardMindfulTafakkur" style="margin-top:14px; border-radius:12px;">
+      <summary style="cursor:pointer; color:var(--text); font-weight:700; font-size:.85rem; padding:12px;">
+        🌌 جلسات التفكر والتأمل في الآفاق والكون (#290)
+      </summary>
+      <div style="padding:10px 14px 14px;">
+        <div style="font-size:.75rem; color:var(--muted); margin-bottom:8px;">جلسة صامتة موجهة (3 دقائق) لتدبر عظمة خلق الله وتصفية الذهن:</div>
+        <div style="padding:8px 10px; border-radius:6px; background:var(--card-alt); border:1px solid var(--line); font-size:.78rem;">
+          ﴿إِنَّ فِي خَلْقِ السَّمَاوَاتِ وَالْأَرْضِ وَاخْتِلَافِ اللَّيْلِ وَالنَّهَارِ لَآيَاتٍ لِّأُولِي الْأَلْبَابِ﴾
+        </div>
+      </div>
+    </details>
+
     <div class="section-title"><span class="n">١</span> ملخص اليوم</div>
     <div class="summary" id="prayerSummary"></div>
 
@@ -8327,6 +8842,13 @@ body.ultra-compact .home-card { padding: 10px; margin-bottom: 6px; }
 
   <!-- ===== SCHEDULE MODE ===== -->
   <div id="scheduleView" class="hidden">
+    <!-- Pillar 4 Segmented Sub-Tabs -->
+    <div class="pillar-subtabs" id="scheduleSubTabs" role="tablist" aria-label="أقسام الإنتاجية">
+      <button type="button" class="pillar-subtab-btn active" data-subtab="all">🌟 الكل</button>
+      <button type="button" class="pillar-subtab-btn" data-subtab="timeline">📅 جدول اليوم والمصفوفة</button>
+      <button type="button" class="pillar-subtab-btn" data-subtab="focus">🍅 بومودورو وفليب التركيز</button>
+      <button type="button" class="pillar-subtab-btn" data-subtab="habits">⚡ العادات والملاحظات</button>
+    </div>
     <div id="secNotes-schedule"></div>
     <div class="section-title"><span class="n">١</span> إعدادات الجدول</div>
     <div class="section-hint">القيم دي بتتطبق على الأسبوع كله — عدّلها لما حاجة تتغيّر (ترم جديد، معاد جيم مختلف، إلخ)</div>
@@ -8758,6 +9280,77 @@ body.ultra-compact .home-card { padding: 10px; margin-bottom: 6px; }
   <!-- ===== OVERVIEW MODE ===== -->
   <div id="overviewView" class="hidden">
     <div id="secNotes-overview"></div>
+    <!-- FEATURE #189: LIFE BALANCE WHEEL -->
+    <div class="settings-card" id="cardLifeBalanceWheel" style="margin-top:14px; border-radius:12px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div style="font-size:.9rem; font-weight:800; color:var(--text);">⚖️ عجلة التوازن الحياتي الشاملة (#189)</div>
+        <span class="badge" id="lifeBalanceOverallBadge" style="background:#10b981; color:#fff; font-size:.72rem; padding:3px 8px; border-radius:6px; font-weight:700;">85% متزن</span>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(90px, 1fr)); gap:8px; text-align:center;" id="lifeBalanceBarsGrid">
+        <div style="background:var(--card-alt); border:1px solid var(--line); border-radius:8px; padding:8px 4px;">
+          <div style="font-size:.7rem; color:var(--muted);">الروحانيات</div>
+          <div style="font-size:1rem; font-weight:800; color:var(--accent); margin-top:2px;" id="lbSpiritual">80%</div>
+        </div>
+        <div style="background:var(--card-alt); border:1px solid var(--line); border-radius:8px; padding:8px 4px;">
+          <div style="font-size:.7rem; color:var(--muted);">اللياقة</div>
+          <div style="font-size:1rem; font-weight:800; color:#3b82f6; margin-top:2px;" id="lbFitness">85%</div>
+        </div>
+        <div style="background:var(--card-alt); border:1px solid var(--line); border-radius:8px; padding:8px 4px;">
+          <div style="font-size:.7rem; color:var(--muted);">التغذية</div>
+          <div style="font-size:1rem; font-weight:800; color:#10b981; margin-top:2px;" id="lbNutrition">90%</div>
+        </div>
+        <div style="background:var(--card-alt); border:1px solid var(--line); border-radius:8px; padding:8px 4px;">
+          <div style="font-size:.7rem; color:var(--muted);">النوم</div>
+          <div style="font-size:1rem; font-weight:800; color:#8b5cf6; margin-top:2px;" id="lbSleep">75%</div>
+        </div>
+        <div style="background:var(--card-alt); border:1px solid var(--line); border-radius:8px; padding:8px 4px;">
+          <div style="font-size:.7rem; color:var(--muted);">الإنتاجية</div>
+          <div style="font-size:1rem; font-weight:800; color:#ec4899; margin-top:2px;" id="lbProductivity">80%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FEATURE #211: KINSHIP & FAMILY TIES -->
+    <details class="settings-card" id="cardKinshipTies" style="margin-top:14px; border-radius:12px;">
+      <summary style="cursor:pointer; color:var(--text); font-weight:700; font-size:.85rem; padding:12px;">
+        🤝 سجل صلة الرحم والتواصل العائلي الأسبوعي (#211)
+      </summary>
+      <div style="padding:10px 14px 14px;">
+        <div style="font-size:.75rem; color:var(--muted); margin-bottom:8px;">تذكير دوري لبر الوالدين وصلة الأرحام وتوثيق آخر تواصل:</div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 8px; background:var(--card-alt); border-radius:6px; border:1px solid var(--line); font-size:.78rem;">
+            <span>👴 الوالدان (بر يومي ومكالمة)</span>
+            <button type="button" class="reset-btn" style="font-size:.7rem;" onclick="this.textContent='تم التواصل اليوم ✓'">تسجيل اتصال</button>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 8px; background:var(--card-alt); border-radius:6px; border:1px solid var(--line); font-size:.78rem;">
+            <span>👵 الأجداد والجدات (أسبوعي)</span>
+            <button type="button" class="reset-btn" style="font-size:.7rem;" onclick="this.textContent='تم التواصل اليوم ✓'">تسجيل اتصال</button>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 8px; background:var(--card-alt); border-radius:6px; border:1px solid var(--line); font-size:.78rem;">
+            <span>👥 الإخوة والأخوات</span>
+            <button type="button" class="reset-btn" style="font-size:.7rem;" onclick="this.textContent='تم التواصل اليوم ✓'">تسجيل اتصال</button>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- FEATURE #283: SCREEN TIME LIFE WASTE CALCULATOR -->
+    <details class="settings-card" id="cardScreenTimeWaste" style="margin-top:14px; border-radius:12px;">
+      <summary style="cursor:pointer; color:var(--text); font-weight:700; font-size:.85rem; padding:12px;">
+        📱 حاسبة العمر المهدور على الشاشات (#283)
+      </summary>
+      <div style="padding:10px 14px 14px;">
+        <div style="display:flex; gap:8px; align-items:center; margin-bottom:10px;">
+          <label style="font-size:.78rem;">ساعات استخدام الهاتف يومياً:</label>
+          <input type="number" id="screenHoursInput" value="4" min="1" max="18" step="0.5" class="weight-input" style="width:70px;">
+          <button type="button" class="btn" id="btnCalcScreenWaste" style="font-size:.75rem; background:var(--accent); color:#fff; padding:4px 8px; border-radius:6px;">احسب</button>
+        </div>
+        <div id="screenWasteResult" style="font-size:.8rem; padding:8px; border-radius:6px; background:var(--card-alt); border:1px solid var(--line);">
+          4 ساعات يومياً تعادل <b>60.8 يوماً كاملاً سنوياً</b> وتساوي <b>8.3 سنوات كاملة</b> من عمرك!
+        </div>
+      </div>
+    </details>
+
     <div class="range-tabs" id="rangeTabs"></div>
     <div id="overallConsistency" style="text-align:center; color:var(--muted); font-size:.76rem; margin:-4px 0 14px;"></div>
 
@@ -9205,6 +9798,19 @@ body.ultra-compact .home-card { padding: 10px; margin-bottom: 6px; }
   <div id="studyView" class="hidden">
     <div class="section-title"><span class="n">📚</span> ركن المذاكرة والتعلم الذاتي</div>
     <div class="section-hint">مؤقتات بومودورو للتركيز، البطاقات والتكرار المتباعد، تقنية فاينمان، المراجعات التراكمية، وبنك المفاهيم</div>
+
+    <!-- FEATURE #336: FLIP TO FOCUS -->
+    <div class="settings-card" id="cardFlipToFocus" style="margin-top:10px; border-radius:12px;">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <div style="font-size:.85rem; font-weight:700; color:var(--text);">📱 وضع التركيز الفوري بقلب الهاتف (Flip to Focus) (#336)</div>
+          <div style="font-size:.72rem; color:var(--muted);">كتم التنبيهات وتشغيل مؤقت بومودورو بمجرد وضع الشاشة للأسفل</div>
+        </div>
+        <button type="button" class="btn" id="btnToggleFlipFocus" style="font-size:.75rem; padding:4px 10px; border-radius:6px; background:var(--accent); color:#fff; cursor:pointer;">
+          مُفعّل ✓
+        </button>
+      </div>
+    </div>
 
     <!-- Study Navigation Sub-Tabs -->
     <div class="study-subtabs" id="studySubTabs">
@@ -9749,6 +10355,151 @@ body.ultra-compact .home-card { padding: 10px; margin-bottom: 6px; }
 
 
   <!-- ===== SETTINGS MODE ===== -->
+
+  <!-- ================================================================= -->
+  <!-- FEATURE: MEN'S HAIR & GROOMING CARE VIEW (قسم العناية بالشعر)       -->
+  <!-- ================================================================= -->
+  <div id="hairView" class="hidden">
+    <div class="screen-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <div>
+        <h2 style="font-size:1.3rem; font-weight:800; color:var(--text); display:flex; align-items:center; gap:8px; margin:0;">
+          <span>💈</span> قسم العناية بالشعر والبصيلات للرجال
+        </h2>
+        <p style="font-size:.8rem; color:var(--muted); margin:4px 0 0;">
+          بروتوكول علمي متكامل: مينوكسيديل، كريم أكرتين، ديرمارولر، مع تقرير الالتزام
+        </p>
+      </div>
+    </div>
+
+    <!-- Overall Adherence Banner -->
+    <div class="settings-card" style="border:1px solid #10b981; border-radius:12px; background:linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, var(--card) 100%); margin-bottom:16px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <div>
+          <div style="font-size:.78rem; font-weight:700; color:var(--muted);">معدل الالتزام الإجمالي (آخر 30 يوماً)</div>
+          <div style="font-size:1.6rem; font-weight:900; color:#10b981;" id="hairAdherencePct">100%</div>
+        </div>
+        <div style="display:flex; gap:16px; align-items:center;">
+          <div style="text-align:center;">
+            <div style="font-size:.72rem; color:var(--muted);">سلسلة الاستمرار</div>
+            <div style="font-size:1.2rem; font-weight:800; color:var(--accent);" id="hairCurrentStreak">🔥 0 يوم</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:.72rem; color:var(--muted);">جرعات مينوكسيديل</div>
+            <div style="font-size:1.2rem; font-weight:800; color:#3b82f6;" id="hairMinoxDosesCount">0</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:10px; font-size:.75rem; color:var(--muted); border-top:1px solid var(--line); padding-top:8px;" id="hairMotivationalTip">
+        💡 نمو بصيلات الشعر رحلة تراكمية؛ النتائج الحقيقية تبدأ بالظهور الثابت بين الشهر الثالث والسادس من الاستمرار اليومي.
+      </div>
+    </div>
+
+    <!-- 3 Pillar Protocols Grid -->
+    <div style="display:grid; grid-template-columns:1fr; gap:14px; margin-bottom:16px;">
+
+      <!-- Protocol 1: Minoxidil 5% -->
+      <div class="settings-card" style="border-radius:12px; border:1px solid #3b82f6;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:1.4rem;">💧</span>
+            <div>
+              <div style="font-size:.95rem; font-weight:800; color:#3b82f6;">مينوكسيديل 5% (Minoxidil) — مرتين يومياً</div>
+              <div style="font-size:.72rem; color:var(--muted);">1 مل (6 بخات) صباحاً ومساءً على فروة رأس جافة تماماً مع تدليك خفيف</div>
+            </div>
+          </div>
+          <span class="badge" style="background:#3b82f6; color:#fff; font-size:.7rem; padding:3px 8px; border-radius:6px; font-weight:700;">يومي (2x)</span>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px;">
+          <div style="padding:10px; border-radius:8px; background:var(--card-alt); border:1px solid var(--line); text-align:center;">
+            <div style="font-size:.8rem; font-weight:700; color:var(--text); margin-bottom:4px;">☀️ جرعة الصباح</div>
+            <div style="font-size:.7rem; color:var(--muted); margin-bottom:8px;" id="minoxAmTimeLabel">تنبيه: 09:00 ص</div>
+            <button type="button" class="btn" id="btnToggleMinoxAm" style="width:100%; font-size:.78rem; padding:6px 8px; border-radius:6px; font-weight:700; cursor:pointer;">
+              تسجيل الجرعة
+            </button>
+          </div>
+          <div style="padding:10px; border-radius:8px; background:var(--card-alt); border:1px solid var(--line); text-align:center;">
+            <div style="font-size:.8rem; font-weight:700; color:var(--text); margin-bottom:4px;">🌙 جرعة المساء</div>
+            <div style="font-size:.7rem; color:var(--muted); margin-bottom:8px;" id="minoxPmTimeLabel">تنبيه: 09:00 م</div>
+            <button type="button" class="btn" id="btnToggleMinoxPm" style="width:100%; font-size:.78rem; padding:6px 8px; border-radius:6px; font-weight:700; cursor:pointer;">
+              تسجيل الجرعة
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Protocol 2: Acretin Cream -->
+      <div class="settings-card" style="border-radius:12px; border:1px solid #8b5cf6;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; flex-wrap:wrap; gap:6px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:1.4rem;">🧴</span>
+            <div>
+              <div style="font-size:.95rem; font-weight:800; color:#8b5cf6;">كريم أكرتين (Acretin / Tretinoin)</div>
+              <div style="font-size:.72rem; color:var(--muted);">تجديد الخلايا وتحفيز امتصاص المينوكسيديل — مرة كل يومين أو 3 أيام</div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <select id="acretinFreqSelect" style="font-size:.72rem; padding:3px 6px; border-radius:6px; background:var(--bg-2); color:var(--text); border:1px solid var(--line);">
+              <option value="2">كل يومين</option>
+              <option value="3" selected>كل 3 أيام</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="padding:10px 12px; border-radius:8px; background:var(--card-alt); border:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <div>
+            <div style="font-size:.82rem; font-weight:700;" id="acretinStatusText">جاري فحص الموعد...</div>
+            <div style="font-size:.72rem; color:var(--muted);" id="acretinLastDateText">آخر تطبيق: لم يُسجل</div>
+          </div>
+          <button type="button" class="btn" id="btnCheckAcretinToday" style="background:#8b5cf6; color:#fff; font-weight:700; padding:6px 14px; border-radius:6px; font-size:.78rem; cursor:pointer;">
+            تم تطبيق أكرتين اليوم ✓
+          </button>
+        </div>
+      </div>
+
+      <!-- Protocol 3: Dermaroller -->
+      <div class="settings-card" style="border-radius:12px; border:1px solid #ec4899;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; flex-wrap:wrap; gap:6px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:1.4rem;">🎯</span>
+            <div>
+              <div style="font-size:.95rem; font-weight:800; color:#ec4899;">ديرمارولر (Dermaroller / Microneedling)</div>
+              <div style="font-size:.72rem; color:var(--muted);">وخز دقيق (0.5 مم إلى 1.0 مم) لتحفيز الكولاجين وعوامل النمو — كل 7 إلى 10 أيام</div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <select id="dermarollerFreqSelect" style="font-size:.72rem; padding:3px 6px; border-radius:6px; background:var(--bg-2); color:var(--text); border:1px solid var(--line);">
+              <option value="7" selected>كل 7 أيام (أسبوعياً)</option>
+              <option value="10">كل 10 أيام</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="padding:10px 12px; border-radius:8px; background:var(--card-alt); border:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <div>
+            <div style="font-size:.82rem; font-weight:700;" id="dermarollerStatusText">جاري فحص الموعد...</div>
+            <div style="font-size:.72rem; color:var(--muted);" id="dermarollerLastDateText">آخر جلسة: لم تُسجل</div>
+          </div>
+          <button type="button" class="btn" id="btnCheckDermarollerToday" style="background:#ec4899; color:#fff; font-weight:700; padding:6px 14px; border-radius:6px; font-size:.78rem; cursor:pointer;">
+            تمت الجلسة اليوم 🎯
+          </button>
+        </div>
+        <div style="font-size:.72rem; color:var(--bad); margin-top:6px; padding:4px 8px; border-radius:6px; background:rgba(239, 68, 68, 0.08); display:none;" id="dermarollerCooldownWarning">
+          ⚠️ تنبيه أمان: يجب ترك فاصل راحة لا يقل عن 5 أيام بين جلسات الديرمارولر للسماح للبشرة بالالتئام السليم.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Adherence Matrix (14-Day Visual Log) -->
+    <div class="settings-card" style="border-radius:12px; margin-bottom:16px;">
+      <div style="font-size:.85rem; font-weight:700; color:var(--text); margin-bottom:10px;">
+        📅 سجل الالتزام التفصيلي (آخر 14 يوماً)
+      </div>
+      <div id="hairAdherenceMatrixTable" style="overflow-x:auto;"></div>
+    </div>
+  </div>
+
   <div id="settingsView" class="hidden">
     <div class="section-title"><span class="n">⚙️</span> إعدادات زتونة</div>
     <div class="section-hint">خصّص التطبيق على ذوقك — المظهر والألوان والواجهة والبيانات والتنبيهات</div>
@@ -32931,6 +33682,14 @@ function renderHomeDashboard(){
           <span>إنجاز اليوم: ${overallPct}%</span>
         </div>
       </div>
+      <div class="hsc-life-balance-strip" style="display:flex; justify-content:space-around; align-items:center; background:var(--card-alt); border-radius:8px; padding:6px 8px; margin:8px 0; border:1px solid var(--line); font-size:0.75rem; flex-wrap:wrap; gap:4px;">
+        <span style="color:var(--accent); font-weight:800;">⚖️ اتزان اليوم:</span>
+        <span style="color:var(--text);">🕌 عبادة ${prayerPct}%</span>
+        <span style="color:var(--text);">💪 لياقة ${gymScore}%</span>
+        <span style="color:var(--text);">🍽️ تغذية ${nutScore}%</span>
+        <span style="color:var(--text);">😴 نوم ${hours !== null ? sleepPct : 0}%</span>
+        <span style="color:var(--text);">📅 إنتاجية ${schedTotal > 0 ? schedPct : 100}%</span>
+      </div>
       <div class="hsc-tip-banner">
         <span class="hsc-tip-icon">${getSvgIcon('sparkle', 18)}</span>
         <div>${tipText}</div>
@@ -32941,9 +33700,20 @@ function renderHomeDashboard(){
   // Render Quick Actions Bar
   const quickActions = document.getElementById('homeQuickActions');
   if(quickActions){
+    const isLimitlessTaken = (typeof isLimitlessTakenToday === 'function') ? isLimitlessTakenToday(todayIso) : false;
+    const hairData = (typeof getHairData === 'function') ? getHairData() : null;
+    const todayHair = (hairData && hairData.history && hairData.history[todayIso]) || {};
+    const isMinoxDone = (hour < 15) ? !!todayHair.minoxAm : !!todayHair.minoxPm;
+
     quickActions.innerHTML = `
       <button class="quick-act-btn" type="button" id="btnQuickAddWater" title="تسجيل كوب مياه سريع">
         ${getSvgIcon('plus', 14)} ${getSvgIcon('water', 16)} <span>+ كوب مياه</span>
+      </button>
+      <button class="quick-act-btn ${isLimitlessTaken ? 'done-today' : ''}" type="button" id="btnQuickLimitless" title="تسجيل قرص ليمتليس مان ماكس">
+        <span>💊</span> <span id="quickLimitlessLabel">${isLimitlessTaken ? 'ليمتليس ✓' : 'ليمتليس'}</span>
+      </button>
+      <button class="quick-act-btn ${isMinoxDone ? 'done-today' : ''}" type="button" id="btnQuickMinox" title="تسجيل جرعة المينوكسيديل">
+        <span>💈</span> <span id="quickMinoxLabel">${isMinoxDone ? 'مينوكسيديل ✓' : 'مينوكسيديل'}</span>
       </button>
       <button class="quick-act-btn" type="button" data-nav="meal" title="الانتقال إلى خطة الأكل">
         ${getSvgIcon('meal', 16)} <span>الأكل</span>
@@ -32967,6 +33737,28 @@ function renderHomeDashboard(){
     const btnWater = quickActions.querySelector('#btnQuickAddWater');
     if(btnWater){
       btnWater.addEventListener('click', quickAddWater);
+    }
+    const btnLimitless = quickActions.querySelector('#btnQuickLimitless');
+    if(btnLimitless){
+      btnLimitless.addEventListener('click', () => {
+        if(typeof toggleLimitlessTakenToday === 'function'){
+          toggleLimitlessTakenToday();
+          renderHomeDashboard();
+          if(typeof renderLimitlessManUI === 'function') renderLimitlessManUI();
+        }
+      });
+    }
+    const btnMinox = quickActions.querySelector('#btnQuickMinox');
+    if(btnMinox){
+      btnMinox.addEventListener('click', () => {
+        if(typeof toggleHairItem === 'function'){
+          const h = new Date().getHours();
+          const target = (h < 15) ? 'minoxAm' : 'minoxPm';
+          toggleHairItem(target);
+          renderHomeDashboard();
+          if(typeof renderHairCareUI === 'function') renderHairCareUI();
+        }
+      });
     }
     quickActions.querySelectorAll('[data-nav]').forEach(btn => {
       btn.addEventListener('click', () => navigateTo(btn.dataset.nav));
@@ -33357,6 +34149,7 @@ function applyMode(){
     notes: document.getElementById('notesView'),
     stretches: document.getElementById('stretchesView'),
     study: document.getElementById('studyView'),
+    hair: document.getElementById('hairView'),
     settings: document.getElementById('settingsView'),
   };
   const btns = {
@@ -33372,6 +34165,7 @@ function applyMode(){
     notes: document.getElementById('modeNotes'),
     stretches: document.getElementById('modeStretches'),
     study: document.getElementById('modeStudy'),
+    hair: document.getElementById('drawNav-hair'),
     settings: document.getElementById('modeSettings'),
   };
   Object.keys(views).forEach(k=>{
@@ -33445,7 +34239,7 @@ function applyMode(){
    History API (pushState/popstate) with the mode name as the hash, so Back genuinely
    works and a refreshed/shared link with #schedule (etc.) opens straight to that
    section — no router library involved. */
-const NAV_MODES = ['home','meal','gym','sleep','prayer','schedule','recovery','overview','search','budget','notes','stretches','study','settings'];
+const NAV_MODES = ['home','meal','gym','sleep','prayer','schedule','recovery','overview','search','budget','notes','stretches','study','hair','settings'];
 function navigateTo(newMode, opts){
   opts = opts || {};
   // Consolidation: redirect recovery/stretches to gym sub-tabs
@@ -33550,6 +34344,26 @@ function syncNavigation(activeMode){
     b.classList.toggle('active', isAct);
     b.setAttribute('aria-current', isAct ? 'page' : 'false');
   });
+  const bottomNavMap = {
+    home: 'home',
+    prayer: 'prayer',
+    gym: 'gym',
+    recovery: 'gym',
+    stretches: 'gym',
+    hair: 'gym',
+    meal: 'meal',
+    budget: 'meal',
+    schedule: 'schedule',
+    sleep: 'schedule',
+    study: 'schedule',
+    notes: 'schedule',
+  };
+  const activeBnb = bottomNavMap[activeMode] || null;
+  document.querySelectorAll('.bottom-nav-btn').forEach(b => {
+    const isAct = b.dataset.nav === activeBnb;
+    b.classList.toggle('active', isAct);
+    b.setAttribute('aria-current', isAct ? 'page' : 'false');
+  });
 }
 
 function openMobileDrawer(){
@@ -33612,6 +34426,12 @@ function initPhase3Navigation(){
     b.addEventListener('click', ()=>{
       navigateTo(b.dataset.nav);
       closeMobileDrawer();
+    });
+  });
+
+  document.querySelectorAll('.bottom-nav-btn').forEach(b => {
+    b.addEventListener('click', ()=>{
+      navigateTo(b.dataset.nav);
     });
   });
 
@@ -40873,6 +41693,8 @@ function renderStretchesView(){
   'use strict';
 
   function getTodayIsoSafe(){
+  window.getTodayIsoSafe = getTodayIsoSafe;
+
     if(typeof getTodayIso === 'function'){
       return getTodayIso();
     }
@@ -43871,6 +44693,116 @@ const _patchedApplyModeForGymTabs = (function(){
 
 
 // ==========================================================================
+
+// ==========================================================================
+// PILLAR SUB-TABS CONTROLLER (PHASE 17)
+// ==========================================================================
+function initPillarSubTabs(){
+  // Meal SubTabs
+  const mealTabs = document.getElementById('mealSubTabs');
+  if(mealTabs){
+    mealTabs.addEventListener('click', (e) => {
+      const btn = e.target.closest('.pillar-subtab-btn');
+      if(!btn) return;
+      mealTabs.querySelectorAll('.pillar-subtab-btn').forEach(b => b.classList.toggle('active', b === btn));
+      const target = btn.dataset.subtab;
+      const supp = document.getElementById('cardLimitlessManSupplement');
+      const household = document.getElementById('cardHouseholdCalories');
+      const costProtein = document.getElementById('cardCostPerProtein');
+      const mealCards = document.querySelectorAll('#mealView > .meal-card, #mealView > .section-title, #mealView > .section-hint');
+      const pantryCards = document.querySelectorAll('#mealView > .pantry-card, #mealView > #groceriesCard, #mealView > #jumpToShoppingBtn');
+
+      if(target === 'all'){
+        if(supp) supp.style.display = '';
+        if(household) household.style.display = '';
+        if(costProtein) costProtein.style.display = '';
+        mealCards.forEach(c => c.style.display = '');
+        pantryCards.forEach(c => c.style.display = '');
+      } else if(target === 'supplements'){
+        if(supp) { supp.style.display = ''; supp.scrollIntoView({behavior:'smooth', block:'start'}); }
+        if(household) household.style.display = '';
+        if(costProtein) costProtein.style.display = 'none';
+        mealCards.forEach(c => c.style.display = 'none');
+        pantryCards.forEach(c => c.style.display = 'none');
+      } else if(target === 'plan'){
+        if(supp) supp.style.display = 'none';
+        if(household) household.style.display = 'none';
+        if(costProtein) costProtein.style.display = 'none';
+        mealCards.forEach(c => c.style.display = '');
+        pantryCards.forEach(c => c.style.display = 'none');
+      } else if(target === 'pantry'){
+        if(supp) supp.style.display = 'none';
+        if(household) household.style.display = 'none';
+        if(costProtein) { costProtein.style.display = ''; costProtein.scrollIntoView({behavior:'smooth', block:'start'}); }
+        mealCards.forEach(c => c.style.display = 'none');
+        pantryCards.forEach(c => c.style.display = '');
+      }
+    });
+  }
+
+  // Prayer SubTabs
+  const prayerTabs = document.getElementById('prayerSubTabs');
+  if(prayerTabs){
+    prayerTabs.addEventListener('click', (e) => {
+      const btn = e.target.closest('.pillar-subtab-btn');
+      if(!btn) return;
+      prayerTabs.querySelectorAll('.pillar-subtab-btn').forEach(b => b.classList.toggle('active', b === btn));
+      const target = btn.dataset.subtab;
+      const hadith = document.getElementById('card40HadithNawawi');
+      const tafakkur = document.getElementById('cardMindfulTafakkur');
+      const timesSec = document.querySelectorAll('#prayerView > .prayer-times-wrap, #prayerView > .prayer-table, #prayerView > .city-select-wrap, #prayerView > #prayerCitySelectWrap');
+      const quranSec = document.querySelectorAll('#prayerView > .quran-card, #prayerView > #quranChecklistWrap');
+
+      if(target === 'all'){
+        if(hadith) hadith.style.display = '';
+        if(tafakkur) tafakkur.style.display = '';
+        timesSec.forEach(c => c.style.display = '');
+        quranSec.forEach(c => c.style.display = '');
+      } else if(target === 'times'){
+        if(hadith) hadith.style.display = 'none';
+        if(tafakkur) tafakkur.style.display = 'none';
+        timesSec.forEach(c => c.style.display = '');
+        quranSec.forEach(c => c.style.display = 'none');
+      } else if(target === 'quran'){
+        if(hadith) { hadith.style.display = ''; hadith.scrollIntoView({behavior:'smooth', block:'start'}); }
+        if(tafakkur) tafakkur.style.display = 'none';
+        timesSec.forEach(c => c.style.display = 'none');
+        quranSec.forEach(c => c.style.display = '');
+      } else if(target === 'fasting'){
+        if(hadith) hadith.style.display = 'none';
+        if(tafakkur) { tafakkur.style.display = ''; tafakkur.scrollIntoView({behavior:'smooth', block:'start'}); }
+        timesSec.forEach(c => c.style.display = 'none');
+        quranSec.forEach(c => c.style.display = 'none');
+      }
+    });
+  }
+
+  // Schedule SubTabs
+  const scheduleTabs = document.getElementById('scheduleSubTabs');
+  if(scheduleTabs){
+    scheduleTabs.addEventListener('click', (e) => {
+      const btn = e.target.closest('.pillar-subtab-btn');
+      if(!btn) return;
+      scheduleTabs.querySelectorAll('.pillar-subtab-btn').forEach(b => b.classList.toggle('active', b === btn));
+      const target = btn.dataset.subtab;
+      // Focus navigation
+      if(target === 'timeline'){
+        const el = document.getElementById('scheduleTimelineWrap') || document.querySelector('#scheduleView .section-title');
+        if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+      } else if(target === 'focus'){
+        const el = document.getElementById('cardFlipToFocus');
+        if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+      }
+    });
+  }
+}
+
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', initPillarSubTabs);
+} else {
+  initPillarSubTabs();
+}
+
 // AUTO-SYNC PRAYER TIMES ON ONLINE EVENT
 // ==========================================================================
 window.addEventListener('online', () => {
@@ -44077,5 +45009,799 @@ window.syncScheduleToNativeWidget = syncScheduleToNativeWidget;
 
 </script>
 <div id="screenFlashOverlay" class="screen-flash-overlay"></div>
+
+<script>
+
+// ============================================================================
+// PHASE 15: LIMITLESS MAN MAX & MEN'S HAIR CARE & HEALTH TOOLS SUITE
+// ============================================================================
+
+(function(){
+  "use strict";
+
+  // Make getTodayIsoSafe available globally if not already
+  if(typeof window.getTodayIsoSafe !== 'function'){
+    window.getTodayIsoSafe = function(){
+      try {
+        const d = new Date();
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${y}-${m}-${day}`;
+      } catch(e){
+        return new Date().toISOString().slice(0, 10);
+      }
+    };
+  }
+
+  // --------------------------------------------------------------------------
+  // 1. LIMITLESS MAN MAX (مكمل ليمتليس مان ماكس الأزرق للرجال)
+  // --------------------------------------------------------------------------
+  const STORAGE_KEY_LIMITLESS = 'zatoona_supplement_limitless_man';
+
+  const LIMITLESS_FORMULA = [
+    { name: "فيتامين د3 (D3)", amount: "1000 IU (25 mcg)", rdaPct: 125, group: "vit" },
+    { name: "فيتامين ج (C)", amount: "90 mg", rdaPct: 100, group: "vit" },
+    { name: "فيتامين أ (A)", amount: "1050 mcg", rdaPct: 117, group: "vit" },
+    { name: "فيتامين هـ (E)", amount: "20 mg", rdaPct: 133, group: "vit" },
+    { name: "فيتامين ك (K)", amount: "60 mcg", rdaPct: 50, group: "vit" },
+    { name: "فيتامين ب1 (ثيامين)", amount: "1.5 mg", rdaPct: 125, group: "vit" },
+    { name: "فيتامين ب2 (ريبوفلافين)", amount: "1.7 mg", rdaPct: 131, group: "vit" },
+    { name: "فيتامين ب3 (نياسين)", amount: "20 mg", rdaPct: 125, group: "vit" },
+    { name: "فيتامين ب5 (حمض البانتوثنيك)", amount: "10 mg", rdaPct: 200, group: "vit" },
+    { name: "فيتامين ب6 (بيريدوكسين)", amount: "3 mg", rdaPct: 176, group: "vit" },
+    { name: "فيتامين ب7 (بيوتين)", amount: "30 mcg", rdaPct: 100, group: "vit" },
+    { name: "فيتامين ب9 (فوليك أسيد)", amount: "400 mcg", rdaPct: 100, group: "vit" },
+    { name: "فيتامين ب12 (كوبالامين)", amount: "25 mcg", rdaPct: 1042, group: "vit" },
+    { name: "الزنك (Zinc)", amount: "11 mg", rdaPct: 100, group: "min" },
+    { name: "الماغنسيوم (Magnesium)", amount: "100 mg", rdaPct: 24, group: "min" },
+    { name: "الحديد (Iron)", amount: "8 mg", rdaPct: 100, group: "min" },
+    { name: "الكالسيوم (Calcium)", amount: "200 mg", rdaPct: 15, group: "min" },
+    { name: "السيلينيوم (Selenium)", amount: "55 mcg", rdaPct: 100, group: "min" },
+    { name: "النحاس (Copper)", amount: "0.9 mg", rdaPct: 100, group: "min" },
+    { name: "المنجنيز (Manganese)", amount: "2.3 mg", rdaPct: 100, group: "min" },
+    { name: "الكروميوم (Chromium)", amount: "35 mcg", rdaPct: 100, group: "min" },
+    { name: "اليود (Iodine)", amount: "150 mcg", rdaPct: 100, group: "min" },
+    { name: "الموليبدنوم (Molybdenum)", amount: "45 mcg", rdaPct: 100, group: "min" },
+    { name: "ليكوبين (Lycopene)", amount: "600 mcg", rdaPct: 100, group: "bot" },
+    { name: "جينسنج باناكس (Ginseng)", amount: "50 mg", rdaPct: 100, group: "bot" },
+    { name: "بلميط منشاري (Saw Palmetto)", amount: "40 mg", rdaPct: 100, group: "bot" },
+    { name: "جينكو بيلوبا (Ginkgo Biloba)", amount: "20 mg", rdaPct: 100, group: "bot" }
+  ];
+
+  function getLimitlessData(){
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY_LIMITLESS);
+      if(raw) return JSON.parse(raw);
+    } catch(e){}
+    return {
+      enabled: true,
+      history: {} // dateIso: { taken: bool, timestamp: number }
+    };
+  }
+
+  function saveLimitlessData(data){
+    try {
+      localStorage.setItem(STORAGE_KEY_LIMITLESS, JSON.stringify(data));
+    } catch(e){}
+    renderLimitlessManUI();
+  }
+
+  function isLimitlessTakenToday(iso){
+    const d = getLimitlessData();
+    const targetIso = iso || window.getTodayIsoSafe();
+    return !!(d.history && d.history[targetIso] && d.history[targetIso].taken);
+  }
+
+  function toggleLimitlessTakenToday(forceVal){
+    const d = getLimitlessData();
+    const today = window.getTodayIsoSafe();
+    if(!d.history) d.history = {};
+    const cur = !!(d.history[today] && d.history[today].taken);
+    const next = typeof forceVal === 'boolean' ? forceVal : !cur;
+    d.history[today] = { taken: next, timestamp: Date.now() };
+    saveLimitlessData(d);
+    if(typeof triggerHaptic === 'function') triggerHaptic(next ? 'medium' : 'light');
+    return next;
+  }
+
+  function toggleLimitlessEnabled(forceVal){
+    const d = getLimitlessData();
+    d.enabled = typeof forceVal === 'boolean' ? forceVal : !d.enabled;
+    saveLimitlessData(d);
+    return d.enabled;
+  }
+
+  function renderLimitlessManUI(){
+    const d = getLimitlessData();
+    const today = window.getTodayIsoSafe();
+    const activeBox = document.getElementById('limitlessManActiveContent');
+    const inactiveBox = document.getElementById('limitlessManInactiveContent');
+    const badge = document.getElementById('limitlessManStatusBadge');
+    const btnToggle = document.getElementById('btnToggleLimitlessMan');
+    const btnCheck = document.getElementById('btnCheckLimitlessManToday');
+    const intakeLabel = document.getElementById('limitlessManIntakeLabel');
+
+    if(!activeBox || !inactiveBox) return;
+
+    if(d.enabled){
+      activeBox.style.display = 'block';
+      inactiveBox.style.display = 'none';
+      if(badge){
+        badge.textContent = 'مُضاف للروتين ✓';
+        badge.style.background = '#10b981';
+      }
+      if(btnToggle) btnToggle.textContent = 'إزالة من الروتين';
+    } else {
+      activeBox.style.display = 'none';
+      inactiveBox.style.display = 'block';
+      if(badge){
+        badge.textContent = 'مُعطّل';
+        badge.style.background = 'var(--muted)';
+      }
+      if(btnToggle) btnToggle.textContent = 'إضافة للروتين';
+      return;
+    }
+
+    const taken = isLimitlessTakenToday(today);
+    if(btnCheck){
+      if(taken){
+        btnCheck.textContent = '✅ تم أخذ الحبة اليوم';
+        btnCheck.style.background = '#10b981';
+        btnCheck.style.borderColor = '#059669';
+      } else {
+        btnCheck.textContent = '💊 أخذت الحبة اليوم';
+        btnCheck.style.background = '#3b82f6';
+        btnCheck.style.borderColor = '#2563eb';
+      }
+    }
+    if(intakeLabel){
+      intakeLabel.textContent = taken
+        ? '✅ تم تناول جرعة اليوم من ليمتليس مان ماكس بنجاح'
+        : 'جرعة اليوم: قرص واحد بعد الإفطار أو الغداء';
+    }
+
+    // Render 7-day history strip
+    const strip = document.getElementById('limitlessManHistoryStrip');
+    if(strip){
+      let html = '';
+      for(let i = 6; i >= 0; i--){
+        const dt = new Date();
+        dt.setDate(dt.getDate() - i);
+        const iso = dt.toISOString().slice(0, 10);
+        const dayName = ['أحد','إثنين','ثلاثاء','أربعاء','خميس','جمعة','سبت'][dt.getDay()];
+        const isTk = !!(d.history && d.history[iso] && d.history[iso].taken);
+        html += `
+          <div style="flex:1; min-width:38px; text-align:center; padding:6px 2px; border-radius:6px; background:${isTk ? 'rgba(16,185,129,0.15)' : 'var(--card-alt)'}; border:1px solid ${isTk ? '#10b981' : 'var(--line)'};">
+            <div style="font-size:.65rem; color:var(--muted);">${dayName}</div>
+            <div style="font-size:.85rem; margin-top:2px;">${isTk ? '💊' : '⚪'}</div>
+          </div>
+        `;
+      }
+      strip.innerHTML = html;
+    }
+
+    // Render formula breakdown grid once
+    const formulaGrid = document.getElementById('limitlessManFormulaGrid');
+    if(formulaGrid && !formulaGrid.dataset.rendered){
+      formulaGrid.innerHTML = LIMITLESS_FORMULA.map(item => `
+        <div style="background:var(--card); border:1px solid var(--line); border-radius:6px; padding:6px 8px; font-size:.72rem;">
+          <div style="font-weight:700; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${item.name}</div>
+          <div style="color:var(--muted); font-size:.68rem;">${item.amount}</div>
+          <div style="margin-top:4px; height:4px; border-radius:2px; background:var(--line); overflow:hidden;">
+            <div style="height:100%; width:${Math.min(100, item.rdaPct)}%; background:#3b82f6;"></div>
+          </div>
+        </div>
+      `).join('');
+      formulaGrid.dataset.rendered = '1';
+    }
+  }
+
+
+  // --------------------------------------------------------------------------
+  // 2. MEN'S HAIR & GROOMING CARE ROUTINE (قسم العناية بالشعر)
+  // --------------------------------------------------------------------------
+  const STORAGE_KEY_HAIR = 'zatoona_hair_care_routine_v1';
+
+  function getHairData(){
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY_HAIR);
+      if(raw) return JSON.parse(raw);
+    } catch(e){}
+    return {
+      acretinFreqDays: 3, // every 3 days default
+      dermarollerFreqDays: 7, // every 7 days default
+      minoxAmTime: '09:00',
+      minoxPmTime: '21:00',
+      history: {}, // dateIso: { minoxAm: bool, minoxPm: bool, acretin: bool, dermaroller: bool }
+      lastAcretinDate: null,
+      lastDermarollerDate: null
+    };
+  }
+
+  function saveHairData(data){
+    try {
+      localStorage.setItem(STORAGE_KEY_HAIR, JSON.stringify(data));
+    } catch(e){}
+    renderHairCareUI();
+  }
+
+  function getDaysBetween(iso1, iso2){
+    if(!iso1 || !iso2) return 999;
+    const d1 = new Date(iso1 + 'T00:00:00');
+    const d2 = new Date(iso2 + 'T00:00:00');
+    return Math.round(Math.abs(d2 - d1) / (1000 * 60 * 60 * 24));
+  }
+
+  function toggleHairItem(type, forceVal){
+    const d = getHairData();
+    const today = window.getTodayIsoSafe();
+    if(!d.history) d.history = {};
+    if(!d.history[today]) d.history[today] = {};
+
+    const cur = !!d.history[today][type];
+    const next = typeof forceVal === 'boolean' ? forceVal : !cur;
+    d.history[today][type] = next;
+
+    if(type === 'acretin'){
+      d.lastAcretinDate = next ? today : null;
+    } else if(type === 'dermaroller'){
+      d.lastDermarollerDate = next ? today : null;
+    }
+
+    saveHairData(d);
+    if(typeof triggerHaptic === 'function') triggerHaptic(next ? 'medium' : 'light');
+    return next;
+  }
+
+  function calculateHairAdherence(){
+    const d = getHairData();
+    let totalPossible = 0;
+    let totalCompleted = 0;
+    let streak = 0;
+    let streakBroken = false;
+
+    for(let i = 0; i < 30; i++){
+      const dt = new Date();
+      dt.setDate(dt.getDate() - i);
+      const iso = dt.toISOString().slice(0, 10);
+      const h = (d.history && d.history[iso]) || {};
+
+      // Minoxidil contributes 2 points daily
+      totalPossible += 2;
+      let dayCompleted = 0;
+      if(h.minoxAm) { totalCompleted++; dayCompleted++; }
+      if(h.minoxPm) { totalCompleted++; dayCompleted++; }
+
+      if(!streakBroken){
+        if(dayCompleted > 0){
+          streak++;
+        } else if(i > 0){
+          streakBroken = true;
+        }
+      }
+    }
+
+    const pct = totalPossible > 0 ? Math.round((totalCompleted / totalPossible) * 100) : 100;
+    return { pct, streak, totalCompleted };
+  }
+
+  function renderHairCareUI(){
+    const d = getHairData();
+    const today = window.getTodayIsoSafe();
+    const todayLog = (d.history && d.history[today]) || {};
+
+    // 1. Minoxidil buttons
+    const btnAm = document.getElementById('btnToggleMinoxAm');
+    const btnPm = document.getElementById('btnToggleMinoxPm');
+    if(btnAm){
+      btnAm.textContent = todayLog.minoxAm ? '✓ تم الصباح' : 'تسجيل جرعة الصباح';
+      btnAm.style.background = todayLog.minoxAm ? '#10b981' : '#3b82f6';
+      btnAm.style.color = '#fff';
+    }
+    if(btnPm){
+      btnPm.textContent = todayLog.minoxPm ? '✓ تم المساء' : 'تسجيل جرعة المساء';
+      btnPm.style.background = todayLog.minoxPm ? '#10b981' : '#3b82f6';
+      btnPm.style.color = '#fff';
+    }
+
+    // 2. Acretin status
+    const freqAcretin = Number(d.acretinFreqDays) || 3;
+    const acretinDaysElapsed = d.lastAcretinDate ? getDaysBetween(d.lastAcretinDate, today) : 999;
+    const acretinDue = acretinDaysElapsed >= freqAcretin || !d.lastAcretinDate || todayLog.acretin;
+    const acretinStatusText = document.getElementById('acretinStatusText');
+    const acretinLastDateText = document.getElementById('acretinLastDateText');
+    const btnAcretin = document.getElementById('btnCheckAcretinToday');
+    const selectAcretin = document.getElementById('acretinFreqSelect');
+
+    if(selectAcretin) selectAcretin.value = String(freqAcretin);
+
+    if(acretinStatusText){
+      if(todayLog.acretin){
+        acretinStatusText.innerHTML = '<span style="color:#10b981;">✅ تم تطبيق أكرتين اليوم بنجاح</span>';
+      } else if(acretinDue){
+        acretinStatusText.innerHTML = '<span style="color:#8b5cf6;">🌙 اليوم موعد أكرتين (يُوضع مساءً قبل النوم)</span>';
+      } else {
+        const remaining = freqAcretin - acretinDaysElapsed;
+        acretinStatusText.innerHTML = `<span style="color:var(--muted);">🛡️ يوم راحة للبشرة والفروة (المتبقي: ${remaining} يوم)</span>`;
+      }
+    }
+    if(acretinLastDateText){
+      acretinLastDateText.textContent = d.lastAcretinDate ? `آخر تطبيق: منذ ${acretinDaysElapsed} يوم (${d.lastAcretinDate})` : 'آخر تطبيق: لم يُسجل بعد';
+    }
+    if(btnAcretin){
+      btnAcretin.textContent = todayLog.acretin ? '✓ تم التطبيق اليوم' : 'تم تطبيق أكرتين اليوم';
+      btnAcretin.style.background = todayLog.acretin ? '#10b981' : '#8b5cf6';
+    }
+
+    // 3. Dermaroller status
+    const freqDerma = Number(d.dermarollerFreqDays) || 7;
+    const dermaDaysElapsed = d.lastDermarollerDate ? getDaysBetween(d.lastDermarollerDate, today) : 999;
+    const dermaDue = dermaDaysElapsed >= freqDerma || !d.lastDermarollerDate || todayLog.dermaroller;
+    const dermaStatusText = document.getElementById('dermarollerStatusText');
+    const dermaLastDateText = document.getElementById('dermarollerLastDateText');
+    const btnDerma = document.getElementById('btnCheckDermarollerToday');
+    const selectDerma = document.getElementById('dermarollerFreqSelect');
+    const warningDerma = document.getElementById('dermarollerCooldownWarning');
+
+    if(selectDerma) selectDerma.value = String(freqDerma);
+
+    if(dermaStatusText){
+      if(todayLog.dermaroller){
+        dermaStatusText.innerHTML = '<span style="color:#10b981;">🎯 تمت جلسة الديرمارولر اليوم بنجاح</span>';
+      } else if(dermaDue){
+        dermaStatusText.innerHTML = '<span style="color:#ec4899;">🎯 اليوم موعد جلسة الديرمارولر</span>';
+      } else {
+        const rem = freqDerma - dermaDaysElapsed;
+        dermaStatusText.innerHTML = `<span style="color:var(--muted);">🌱 فترة التئام وراحة للبصيلات (المتبقي: ${rem} يوم)</span>`;
+      }
+    }
+    if(dermaLastDateText){
+      dermaLastDateText.textContent = d.lastDermarollerDate ? `آخر جلسة: منذ ${dermaDaysElapsed} يوم (${d.lastDermarollerDate})` : 'آخر جلسة: لم تُسجل بعد';
+    }
+    if(btnDerma){
+      btnDerma.textContent = todayLog.dermaroller ? '✓ تمت الجلسة' : 'تمت جلسة الديرمارولر اليوم';
+      btnDerma.style.background = todayLog.dermaroller ? '#10b981' : '#ec4899';
+    }
+    if(warningDerma){
+      // Show warning if less than 5 days since last session and not done today
+      warningDerma.style.display = (dermaDaysElapsed < 5 && !todayLog.dermaroller) ? 'block' : 'none';
+    }
+
+    // 4. Adherence stats
+    const stats = calculateHairAdherence();
+    const adhPct = document.getElementById('hairAdherencePct');
+    const adhStreak = document.getElementById('hairCurrentStreak');
+    const adhMinox = document.getElementById('hairMinoxDosesCount');
+
+    if(adhPct) adhPct.textContent = `${stats.pct}%`;
+    if(adhStreak) adhStreak.textContent = `🔥 ${stats.streak} يوم`;
+    if(adhMinox) adhMinox.textContent = `${stats.totalCompleted}`;
+
+    // 5. 14-Day Matrix Table
+    const matrixBox = document.getElementById('hairAdherenceMatrixTable');
+    if(matrixBox){
+      let tableHtml = `
+        <table style="width:100%; border-collapse:collapse; font-size:.75rem; text-align:center;">
+          <thead>
+            <tr style="border-bottom:1px solid var(--line); color:var(--muted);">
+              <th style="padding:6px; text-align:right;">البروتوكول</th>
+      `;
+      const days = [];
+      for(let i = 13; i >= 0; i--){
+        const dt = new Date();
+        dt.setDate(dt.getDate() - i);
+        const iso = dt.toISOString().slice(0, 10);
+        days.push(iso);
+        const dayLabel = `${dt.getDate()}/${dt.getMonth()+1}`;
+        tableHtml += `<th style="padding:6px 2px;">${dayLabel}</th>`;
+      }
+      tableHtml += `</tr></thead><tbody>`;
+
+      // Rows for: Minox AM, Minox PM, Acretin, Dermaroller
+      const rows = [
+        { label: "مينوكسيديل (صباح)", key: "minoxAm", icon: "☀️" },
+        { label: "مينوكسيديل (مساء)", key: "minoxPm", icon: "🌙" },
+        { label: "كريم أكرتين", key: "acretin", icon: "🧴" },
+        { label: "ديرمارولر", key: "dermaroller", icon: "🎯" }
+      ];
+
+      rows.forEach(r => {
+        tableHtml += `<tr style="border-bottom:1px solid var(--line);">
+          <td style="padding:6px; text-align:right; font-weight:700; white-space:nowrap;">${r.icon} ${r.label}</td>`;
+        days.forEach(iso => {
+          const isDone = !!(d.history && d.history[iso] && d.history[iso][r.key]);
+          tableHtml += `<td style="padding:6px 2px;">${isDone ? '🟢' : '⚪'}</td>`;
+        });
+        tableHtml += `</tr>`;
+      });
+
+      tableHtml += `</tbody></table>`;
+      matrixBox.innerHTML = tableHtml;
+    }
+  }
+
+
+  // --------------------------------------------------------------------------
+  // 3. HIGH-IMPACT HEALTH & LIFE OS CALCULATORS
+  // --------------------------------------------------------------------------
+
+  // US Navy Body Fat Calculator (#39)
+  window.calculateUSNavyBodyFat = function(heightCm, neckCm, waistCm){
+    const h = Number(heightCm);
+    const n = Number(neckCm);
+    const w = Number(waistCm);
+    if(!h || !n || !w || w <= n || h <= 0) return null;
+    // Formula for men: 86.010 * log10(waist - neck) - 70.041 * log10(height) + 36.76
+    const fatPct = 86.010 * Math.log10(w - n) - 70.041 * Math.log10(h) + 36.76;
+    const rounded = Math.round(fatPct * 10) / 10;
+    let category = "متوسط";
+    if(rounded < 6) category = "أساسي جداً";
+    else if(rounded <= 13) category = "رياضي (Athletic)";
+    else if(rounded <= 17) category = "لياقة ممتازة (Fitness)";
+    else if(rounded <= 24) category = "متوسط طبيعي (Average)";
+    else category = "نسبة مرتفعة (Overweight)";
+    return { fatPct: Math.max(3, rounded), category };
+  };
+
+  // Cost Per Protein Gram Calculator (#52)
+  window.calculateCostPerProteinGram = function(sources){
+    // sources: array of { name, priceEgp, weightGrams, proteinGramsPer100g }
+    const defaults = sources || [
+      { name: "جبنة قريش", priceEgp: 90, weightGrams: 1000, proteinPer100g: 18 },
+      { name: "بيض (كرتونة)", priceEgp: 165, weightGrams: 1800, proteinPer100g: 12.5 },
+      { name: "صدور دجاج", priceEgp: 220, weightGrams: 1000, proteinPer100g: 24 },
+      { name: "تونة معلبة", priceEgp: 45, weightGrams: 140, proteinPer100g: 22 },
+      { name: "عدس أصفر", priceEgp: 65, weightGrams: 1000, proteinPer100g: 25 }
+    ];
+
+    return defaults.map(s => {
+      const totalProtein = (s.weightGrams / 100) * s.proteinPer100g;
+      const costPerGram = totalProtein > 0 ? (s.priceEgp / totalProtein) : 0;
+      return {
+        ...s,
+        totalProteinGrams: Math.round(totalProtein),
+        costPerProteinGramEgp: Math.round(costPerGram * 100) / 100
+      };
+    }).sort((a,b) => a.costPerProteinGramEgp - b.costPerProteinGramEgp);
+  };
+
+  // 20-20-20 Eye Break Timer (#85)
+  let eyeBreakInterval = null;
+  window.toggleEyeBreakTimer = function(enable){
+    const key = 'zatoona_eye_break_202020';
+    if(typeof enable !== 'boolean'){
+      enable = localStorage.getItem(key) !== '1';
+    }
+    localStorage.setItem(key, enable ? '1' : '0');
+    if(eyeBreakInterval) clearInterval(eyeBreakInterval);
+    if(enable){
+      eyeBreakInterval = setInterval(() => {
+        if(typeof showNotificationModal === 'function'){
+          showNotificationModal('👀 راحة العين 20-20-20', 'انظر إلى شيء بعيد (6 أمتار) لمدة 20 ثانية لإراحة عضلات العين.');
+        } else if(typeof triggerHaptic === 'function'){
+          triggerHaptic('medium');
+        }
+      }, 20 * 60 * 1000);
+    }
+    return enable;
+  };
+
+  // Ultra-Dark Red Shift Mode (#88)
+  window.toggleUltraDarkRedShift = function(forceVal){
+    const key = 'zatoona_red_shift_mode';
+    const cur = localStorage.getItem(key) === '1';
+    const next = typeof forceVal === 'boolean' ? forceVal : !cur;
+    localStorage.setItem(key, next ? '1' : '0');
+    let overlay = document.getElementById('redShiftFilterOverlay');
+    if(!overlay && next){
+      overlay = document.createElement('div');
+      overlay.id = 'redShiftFilterOverlay';
+      overlay.style.position = 'fixed';
+      overlay.style.top = '0';
+      overlay.style.left = '0';
+      overlay.style.width = '100vw';
+      overlay.style.height = '100vh';
+      overlay.style.pointerEvents = 'none';
+      overlay.style.zIndex = '999999';
+      overlay.style.background = 'rgba(255, 30, 0, 0.18)';
+      overlay.style.mixBlendMode = 'multiply';
+      document.body.appendChild(overlay);
+    } else if(overlay){
+      overlay.style.display = next ? 'block' : 'none';
+    }
+    return next;
+  };
+
+  // Screen Time Life Waste Calculator (#283)
+  window.calculateScreenTimeWaste = function(hoursPerDay){
+    const h = Number(hoursPerDay) || 0;
+    const hoursPerYear = h * 365;
+    const daysPerYear = Math.round((hoursPerYear / 24) * 10) / 10;
+    const yearsIn50Years = Math.round(((hoursPerYear * 50) / (24 * 365)) * 10) / 10;
+    return {
+      hoursPerDay: h,
+      daysPerYear,
+      yearsIn50Years
+    };
+  };
+
+  // Life Balance Wheel (#189)
+  window.calculateLifeBalanceScore = function(){
+    // Spiritual: prayer checklist
+    let spiritual = 75;
+    try {
+      const p = localStorage.getItem('prayerSummary');
+      if(p) spiritual = JSON.parse(p).pct || 75;
+    } catch(e){}
+
+    // Fitness: gym workouts this week
+    let fitness = 80;
+    try {
+      const g = localStorage.getItem('gym-streak-data');
+      if(g) fitness = 85;
+    } catch(e){}
+
+    // Sleep: bedtime adherence
+    let sleep = 70;
+    try {
+      const s = localStorage.getItem('sleep-habits-adherence-v1');
+      if(s) sleep = JSON.parse(s).score || 70;
+    } catch(e){}
+
+    // Nutrition: Limitless intake + water
+    const limitless = isLimitlessTakenToday() ? 100 : 60;
+
+    // Productivity: tasks done
+    let productivity = 80;
+
+    const overall = Math.round((spiritual + fitness + sleep + limitless + productivity) / 5);
+    return { spiritual, fitness, sleep, nutrition: limitless, productivity, overall };
+  };
+
+
+  // --------------------------------------------------------------------------
+  // INIT LISTENERS & GLOBAL EXPORTS
+  // --------------------------------------------------------------------------
+  function initSuite(){
+    // Limitless listeners
+    const btnCheckLimitless = document.getElementById('btnCheckLimitlessManToday');
+    if(btnCheckLimitless){
+      btnCheckLimitless.addEventListener('click', () => toggleLimitlessTakenToday());
+    }
+    const btnToggleLimitless = document.getElementById('btnToggleLimitlessMan');
+    if(btnToggleLimitless){
+      btnToggleLimitless.addEventListener('click', () => toggleLimitlessEnabled());
+    }
+    const btnEnableLimitless = document.getElementById('btnEnableLimitlessMan');
+    if(btnEnableLimitless){
+      btnEnableLimitless.addEventListener('click', () => toggleLimitlessEnabled(true));
+    }
+
+    // Hair listeners
+    const btnAm = document.getElementById('btnToggleMinoxAm');
+    if(btnAm) btnAm.addEventListener('click', () => toggleHairItem('minoxAm'));
+
+    const btnPm = document.getElementById('btnToggleMinoxPm');
+    if(btnPm) btnPm.addEventListener('click', () => toggleHairItem('minoxPm'));
+
+    const btnAcretin = document.getElementById('btnCheckAcretinToday');
+    if(btnAcretin) btnAcretin.addEventListener('click', () => toggleHairItem('acretin'));
+
+    const btnDerma = document.getElementById('btnCheckDermarollerToday');
+    if(btnDerma) btnDerma.addEventListener('click', () => toggleHairItem('dermaroller'));
+
+    const selectAcretin = document.getElementById('acretinFreqSelect');
+    if(selectAcretin){
+      selectAcretin.addEventListener('change', (e) => {
+        const d = getHairData();
+        d.acretinFreqDays = Number(e.target.value) || 3;
+        saveHairData(d);
+      });
+    }
+
+    const selectDerma = document.getElementById('dermarollerFreqSelect');
+    if(selectDerma){
+      selectDerma.addEventListener('change', (e) => {
+        const d = getHairData();
+        d.dermarollerFreqDays = Number(e.target.value) || 7;
+        saveHairData(d);
+      });
+    }
+
+    // Apply red shift if previously enabled
+    if(localStorage.getItem('zatoona_red_shift_mode') === '1'){
+      window.toggleUltraDarkRedShift(true);
+    }
+
+    renderLimitlessManUI();
+    renderHairCareUI();
+  }
+
+  // Exports
+  window.getLimitlessData = getLimitlessData;
+  window.isLimitlessTakenToday = isLimitlessTakenToday;
+  window.toggleLimitlessTakenToday = toggleLimitlessTakenToday;
+  window.toggleLimitlessEnabled = toggleLimitlessEnabled;
+  window.renderLimitlessManUI = renderLimitlessManUI;
+
+  window.getHairData = getHairData;
+  window.toggleHairItem = toggleHairItem;
+  window.calculateHairAdherence = calculateHairAdherence;
+  window.renderHairCareUI = renderHairCareUI;
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', initSuite);
+  } else {
+    initSuite();
+  }
+
+})();
+
+
+  // Connect US Navy Fat Calc button
+  const btnNavy = document.getElementById('btnCalculateNavyFat');
+  if(btnNavy){
+    btnNavy.addEventListener('click', () => {
+      const h = document.getElementById('navyFatHeight').value;
+      const n = document.getElementById('navyFatNeck').value;
+      const w = document.getElementById('navyFatWaist').value;
+      const res = window.calculateUSNavyBodyFat(h, n, w);
+      const box = document.getElementById('navyFatResultBox');
+      if(box){
+        if(res){
+          box.innerHTML = `نسبة الدهون التقديرية: <b style="color:var(--accent); font-size:1.1rem;">${res.fatPct}%</b> — التصنيف: <b>${res.category}</b>`;
+        } else {
+          box.innerHTML = `<span style="color:var(--bad);">يرجى التأكد من أن محيط الخصر أكبر من الرقبة وإدخال أرقام صحيحة.</span>`;
+        }
+      }
+    });
+  }
+
+  // Render Cost Per Protein Table
+  const costProtBox = document.getElementById('costPerProteinTableContainer');
+  if(costProtBox){
+    const items = window.calculateCostPerProteinGram();
+    costProtBox.innerHTML = `
+      <table style="width:100%; border-collapse:collapse; font-size:.76rem; text-align:right;">
+        <thead>
+          <tr style="border-bottom:1px solid var(--line); color:var(--muted);">
+            <th style="padding:6px;">المصدر الغذائي</th>
+            <th style="padding:6px;">سعر السوق</th>
+            <th style="padding:6px;">إجمالي البروتين</th>
+            <th style="padding:6px;">تكلفة الجرام (جنيه)</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${items.map((it, idx) => `
+            <tr style="border-bottom:1px solid var(--line); ${idx===0 ? 'background:rgba(16,185,129,0.1); font-weight:700;' : ''}">
+              <td style="padding:6px;">${it.name} ${idx===0 ? '🏆 (الأوفر)' : ''}</td>
+              <td style="padding:6px;">${it.priceEgp} ج</td>
+              <td style="padding:6px;">${it.totalProteinGrams} جم</td>
+              <td style="padding:6px; color:var(--accent);">${it.costPerProteinGramEgp} ج / جم</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+  }
+
+  // Connect Screen Waste Calc
+  const btnScreen = document.getElementById('btnCalcScreenWaste');
+  if(btnScreen){
+    btnScreen.addEventListener('click', () => {
+      const hrs = document.getElementById('screenHoursInput').value;
+      const res = window.calculateScreenTimeWaste(hrs);
+      const box = document.getElementById('screenWasteResult');
+      if(box){
+        box.innerHTML = `${res.hoursPerDay} ساعات يومياً تعادل <b>${res.daysPerYear} يوماً كاملاً سنوياً</b> وتساوي <b>${res.yearsIn50Years} سنوات كاملة</b> من عمرك!`;
+      }
+    });
+  }
+
+  // Connect Eye Break & Red Shift
+  const btnEye = document.getElementById('btnToggleEyeBreak');
+  if(btnEye){
+    btnEye.addEventListener('click', () => {
+      const state = window.toggleEyeBreakTimer();
+      btnEye.textContent = state ? '✓ مؤقت راحة العين نشط' : '👀 مؤقت راحة العين 20-20-20';
+    });
+  }
+  const btnRed = document.getElementById('btnToggleRedShift');
+  if(btnRed){
+    btnRed.addEventListener('click', () => {
+      const state = window.toggleUltraDarkRedShift();
+      btnRed.textContent = state ? '✓ الوضع الأحمر مفعل' : '🔴 تبديل وضع القراءة الحمراء';
+    });
+  }
+
+  // Render Life Balance Wheel values
+  const lbScore = window.calculateLifeBalanceScore();
+  const elLbS = document.getElementById('lbSpiritual');
+  const elLbF = document.getElementById('lbFitness');
+  const elLbN = document.getElementById('lbNutrition');
+  const elLbSl = document.getElementById('lbSleep');
+  const elLbP = document.getElementById('lbProductivity');
+  const elLbBadge = document.getElementById('lifeBalanceOverallBadge');
+  if(elLbS) elLbS.textContent = `${lbScore.spiritual}%`;
+  if(elLbF) elLbF.textContent = `${lbScore.fitness}%`;
+  if(elLbN) elLbN.textContent = `${lbScore.nutrition}%`;
+  if(elLbSl) elLbSl.textContent = `${lbScore.sleep}%`;
+  if(elLbP) elLbP.textContent = `${lbScore.productivity}%`;
+  if(elLbBadge) elLbBadge.textContent = `${lbScore.overall}% متزن`;
+
+</script>
+
+<script>
+
+// ============================================================================
+// PHASE 16: ZEN MODE & PERFORMANCE BATCHING ENGINE
+// ============================================================================
+(function(){
+  "use strict";
+  const ZEN_KEY = 'zatoona_zen_mode_v1';
+
+  window.isZenMode = function(){
+    try {
+      return localStorage.getItem(ZEN_KEY) === '1';
+    } catch(e){
+      return false;
+    }
+  };
+
+  window.toggleZenMode = function(forceVal){
+    const cur = window.isZenMode();
+    const next = typeof forceVal === 'boolean' ? forceVal : !cur;
+    try {
+      localStorage.setItem(ZEN_KEY, next ? '1' : '0');
+    } catch(e){}
+    applyZenMode(next);
+    if(typeof triggerHaptic === 'function') triggerHaptic('light');
+    return next;
+  };
+
+  function applyZenMode(isZen){
+    document.body.classList.toggle('zen-mode', isZen);
+    const label = document.getElementById('zenLabel');
+    const icon = document.getElementById('zenIcon');
+    if(label){
+      label.textContent = isZen ? 'هادئ ✓' : 'هادئ';
+    }
+    if(icon){
+      icon.textContent = isZen ? '🌱' : '📖';
+    }
+  }
+
+  // Feature #7: Debounced LocalStorage Batcher
+  const storageQueue = {};
+  let storageTimer = null;
+  window.debounceStorage = function(key, val, delayMs = 300){
+    storageQueue[key] = val;
+    if(storageTimer) clearTimeout(storageTimer);
+    storageTimer = setTimeout(() => {
+      try {
+        Object.keys(storageQueue).forEach(k => {
+          localStorage.setItem(k, storageQueue[k]);
+        });
+      } catch(e){}
+    }, delayMs);
+  };
+
+  function initZenEngine(){
+    const btn = document.getElementById('btnToggleZenMode');
+    if(btn){
+      btn.addEventListener('click', () => window.toggleZenMode());
+    }
+    applyZenMode(window.isZenMode());
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', initZenEngine);
+  } else {
+    initZenEngine();
+  }
+})();
+
+</script>
 </body>
 </html>

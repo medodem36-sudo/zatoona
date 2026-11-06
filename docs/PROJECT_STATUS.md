@@ -634,3 +634,97 @@ Engineered and verified 13 ergonomic, high-speed UX additions across touch gestu
 - **3-Way HTML Parity:** 100% identical SHA-256 (`bccaa901880d15e6da7609d08831c208ad5b308c41fa4bf1e11031f817c0cddc`)
 - **Native Android Build:** Gradle 8.5 `assembleDebug` completed in 26s (`app-debug.apk`: 10,928,672 bytes).
 - **Physical Device:** Samsung Galaxy A04e (`SM-A042F`) was charging; installation deferred until physical USB connection is established.
+
+
+## Phase 15 — Limitless Man Max Supplement, Men's Hair Care Routine & Health Tools Suite
+
+### Implementation Summary
+1. **Limitless Man Max (ليمتليس مان ماكس الأزرق للرجال) Supplement Engine:**
+   - Integrated pharmaceutical-grade dietary supplement panel into `mealView`.
+   - Complete 26-element formula with daily recommended allowance (% RDA) breakdown:
+     - 13 Vitamins: D3 (1000 IU), C (90 mg), A, E, K, B1, B2, B3, B5, B6, B7 Biotin, B9 Folic Acid (400 mcg), B12 (25 mcg).
+     - 10 Minerals: Zinc (11 mg - 100% RDA), Magnesium (100 mg), Iron (8 mg), Calcium (200 mg), Selenium (55 mcg), Copper, Manganese, Chromium, Iodine, Molybdenum.
+     - Vitality Botanicals: Lycopene (600 mcg), Panax Ginseng (50 mg), Saw Palmetto (40 mg), Ginkgo Biloba (20 mg).
+   - One-tap daily intake logger (`💊 أخذت الحبة اليوم` / `✅ تم أخذ الحبة اليوم`) with timestamp and 7-day adherence dot strip.
+   - User control to add or remove the supplement from active daily routine (`toggleLimitlessEnabled`).
+   - Local persistence under `zatoona_supplement_limitless_man`.
+
+2. **Men's Hair & Scalp Care Routine Engine (قسم العناية بالشعر والبصيلات للرجال):**
+   - Added dedicated top-level view (`#hairView`), drawer navigation item (`#drawNav-hair`), and home screen stat card (`#homeCardHairCare`).
+   - **Minoxidil 5% (مينوكسيديل):** Twice-daily protocol (جرعة الصباح ☀️ + جرعة المساء 🌙) with 09:00 AM / 09:00 PM alerts and independent dosage logging.
+   - **Acretin Cream (كريم أكرتين / Tretinoin):** Configurable frequency (every 2 or 3 days), status engine (موعد التطبيق vs يوم راحة للبشرة), countdown tracker, and intake logging.
+   - **Dermaroller / Microneedling (ديرمارولر 0.5 - 1.0 mm):** Configurable frequency (every 7 or 10 days), strict healing rest safeguard warning (< 5 days interval protection), and session tracking.
+   - **Adherence & Consistency Report (تقرير الالتزام والانتظام):** 30-day adherence rate (%), continuous streak counter, and comprehensive 14-day visual matrix table tracking all 4 daily protocols.
+   - Local persistence under `zatoona_hair_care_routine_v1`.
+
+3. **High-Impact Health & Life OS Calculators (Proposals Suite):**
+   - **#39 US Navy Body Fat Calculator:** Accurate circumference formula (Height, Neck, Waist) in `gymView`.
+   - **#52 Cost Per Protein Gram Calculator:** Live Egyptian market comparison (قريش، بيض، صدور فراخ، تونة، عدس) ranked by lowest cost per gram in `mealView`.
+   - **#204 Sunan of Sleep Checklist:** Bedtime prophetic sunnahs (نفض الفراش، الوضوء، الشق الأيمن، المعوذات، دعاء النوم) in `sleepView`.
+   - **#244 Vitamin D3 Egyptian Sun Angle Calculator:** Peak UVB synthesis hours in Egyptian cities (10:30 AM - 01:30 PM) in `sleepView`.
+   - **#85 & #88 Eye Break 20-20-20 & Ultra-Dark Red Shift Mode:** Melatonin-protecting monochromatic red filter and screen rest timer in `sleepView`.
+   - **#189 Life Balance Wheel:** 5-domain radar balance score (Spiritual, Fitness, Nutrition, Sleep, Productivity) in `overviewView`.
+   - **#211 Kinship & Family Ties Log:** Weekly family communication tracker in `overviewView`.
+   - **#283 Screen Time Life Waste Calculator:** Interactive lifetime hours-to-years converter in `overviewView`.
+
+### Verification & Test Evidence
+- Targeted test suite: `scratch/test_phase15_hair_supplements_suite.py`: **13 / 13 PASSED (100%)**
+- Master Regression Gate: `scratch/test_master_regression_gate.py`: **45 / 45 SUITES PASSED (1,510 / 1,510 CHECKS, 100% PASS)**
+- 3-Way HTML Parity verified: `index.html`, `zatoona.html`, `android/app/src/main/assets/index.html` all share identical SHA-256 (`4F34718A73D4737825AF614B16A1E5CF51396E9543309B96E9F2EF6554928080`).
+- Git syntax compliance: `git diff --check` returned **0 warnings / 0 trailing whitespace flaws**.
+- Android Gradle compilation: `assembleDebug` completed in 24s (`BUILD SUCCESSFUL`).
+
+
+## Phase 16 — UI Cleanup, Zen Mode & Performance Acceleration Engine
+
+### Implementation Summary
+1. **Zen / Essential Focus Mode Engine (#1):**
+   - Added persistent top-nav toggle button (`#btnToggleZenMode`) switching between Full Detailed Mode and Zen Mode (`body.zen-mode`).
+   - In Zen Mode: hides verbose sub-headers, stamps, secondary hints, and reduces card margins and padding for clean, distraction-free daily focus.
+   - Preserves state in `localStorage` under `zatoona_zen_mode_v1`.
+2. **Smart Contextual Collapse for Completed Items (#2):**
+   - Completed checklist and prayer items automatically transition to a collapsed, low-opacity state (`.done-collapsed`, opacity 0.65, scale 0.99), visually decluttering the screen as daily items are accomplished.
+3. **Collapsible Tools & Calculators Accordion Standardization (#4):**
+   - Standardized all heavy tools, encyclopedias, and calculators into `<details class="settings-card">` accordions with smooth hover styling and collapsed defaults.
+4. **Lazy DOM Rendering via `content-visibility: auto` (#5):**
+   - Applied `content-visibility: auto; contain-intrinsic-size: auto 120px;` across all major card collections, tables, and off-screen views, skipping layout and paint for off-screen nodes and dramatically boosting scrolling frame rates on budget devices.
+5. **Debounced LocalStorage Batcher (#7):**
+   - Implemented `window.debounceStorage(key, value, delayMs)` to batch rapid state writes and avoid flash memory I/O stalls during fast interactions.
+6. **Hardware Acceleration & Zero Mobile Tap Delay (#8):**
+   - Applied `touch-action: manipulation; -webkit-tap-highlight-color: transparent;` on all interactive buttons, cards, and chips to eliminate the 300ms mobile tap delay.
+   - Added GPU 3D transforms (`transform: translate3d(0,0,0); backface-visibility: hidden;`) to drawers, views, and cards for 60fps animations.
+
+### Verification & Test Evidence
+- Targeted test suite: `scratch/test_phase16_ui_cleanup_perf.py`: **6 / 6 PASSED (100%)**
+- Master Regression Gate: `scratch/test_master_regression_gate.py`: **46 / 46 SUITES PASSED (1,516 / 1,516 CHECKS, 100% PASS)**
+- 3-Way HTML Parity verified: `index.html`, `zatoona.html`, `android/app/src/main/assets/index.html` all share identical SHA-256 (`B550FB02FF88D80D690FD742600E292308A3EE5917150332E20B05B0166BF4B4`).
+- Git syntax compliance: `git diff --check` returned **0 warnings / 0 trailing whitespace flaws**.
+- Android Gradle compilation: `assembleDebug` completed in 36s (`BUILD SUCCESSFUL`).
+
+---
+
+## Phase 17: UI Reorganization, Floating Bottom Nav & Segmented Sub-Tabs Engine
+- **Status:** Implemented & 100% Verified
+- **5-Hub Persistent Floating Bottom Nav (`#bottomNav`):** Thumb-friendly navigation bar featuring 5 core life pillars:
+  - 🏠 **الرئيسية (Home):** Unified My Day dashboard.
+  - 🕌 **العبادة (Worship):** Prayers, Quran, Sunan, and Adhkar.
+  - 💪 **اللياقة (Gym & Body):** Workouts, Hair care, Stretches, and Recovery.
+  - 🍽️ **التغذية (Nutrition):** Meals, Limitless Man Max supplement, Pantry, and Budget.
+  - 📅 **الإنتاجية (Productivity):** Daily timeline, Pomodoro, Notes, and Sleep.
+  - **Ergonomics & Compatibility:** Styled with `position: sticky; bottom: 0;`, backdrop-filter blur, high z-index, zero click-interception for background forms, and auto-syncing active pillar mapping across all 15 application modes.
+- **One-Tap Quick Actions Bar (`#homeQuickActions`):** Elevated into an instant action strip on the Home dashboard:
+  - `[ + كوب مياه 💧 ]`: Logs 250ml hydration immediately.
+  - `[ 💊 ليمتليس / ليمتليس ✓ ]`: 1-tap intake logger for Limitless Man Max Blue tablet (`zatoona_limitless_man_supplement_v1`).
+  - `[ 💈 مينوكسيديل / مينوكسيديل ✓ ]`: 1-tap dose logger for Minoxidil AM/PM (`zatoona_hair_routine_v1`).
+  - Quick-navigation pills for all core pillars.
+- **Daily Life Balance Strip (`.hsc-life-balance-strip`):** Consolidated into `#homeSummaryCard` on the Home dashboard, displaying real-time completion percentages across the 5 life dimensions (Worship, Fitness, Nutrition, Sleep, Productivity).
+- **Segmented Sub-Tabs for Long View Reduction:**
+  - `mealView` (`#mealSubTabs`): 🌟 الكل (default), 🍽️ خطة الوجبات, 💊 ليمتليس مان ماكس, 🛒 المؤن والبروتين.
+  - `prayerView` (`#prayerSubTabs`): 🌟 الكل (default), 🕌 مواقيت الصلاة والأذكار, 📖 القرآن والأربعين, 🌙 الصيام والسنن.
+  - `scheduleView` (`#scheduleSubTabs`): 🌟 الكل (default), 📅 جدول اليوم والمصفوفة, 🍅 بومودورو وفليب التركيز, ⚡ العادات والملاحظات.
+  - Retains 100% DOM element accessibility and Selenium selector compatibility while eliminating vertical scroll fatigue.
+- **Verification & Test Evidence:**
+  - Targeted test suite: `scratch/test_phase17_reorganization_suite.py`: **9 / 9 PASSED (100%)**
+  - Master Regression Gate: `scratch/test_master_regression_gate.py`: **47 / 47 SUITES PASSED (1,525 / 1,525 CHECKS, 100% PASS)**
+  - 3-Way HTML Parity verified: `index.html`, `zatoona.html`, `android/app/src/main/assets/index.html` all share identical SHA-256 (`5F26552D4C8141C8DD1253203150FB31F571C27DDE173E0DD85C18B3EA25B14A`).
+  - Git syntax compliance: `git diff --check` returned **0 warnings / 0 trailing whitespace flaws**.

@@ -440,6 +440,33 @@ REGISTERED_SUITES = [
         "active": True,
         "description": "Verifies Swipe-to-Action Gestures on Cards, Horizontal View-Pager Swipe Navigation, Shared Element Morphing, Egyptian Arabic Natural Language Quick-Add, Dynamic Mini-Status Capsule Island, Collapsible Sticky Header, Contextual Pull-to-Refresh, Dismiss Keyboard on Scroll, Accordion Fold/Unfold, Spotlight Dimming, Pinch-to-Zoom Font Scale, Border Inset Aura Glow, and Time-Aware Adaptive Dashboard."
     },
+    {
+        "id": "phase15_hair_supplements",
+        "name": "Phase 15 Limitless Man Max & Men's Hair Care & Health Tools Suite",
+        "category": "Nutrition, Grooming & Health Tools",
+        "rel_path": "scratch/test_phase15_hair_supplements_suite.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies Limitless Man Max blue supplement with 26 vitamins and minerals RDA breakdown, toggleable active routine, Men's Hair & Grooming routine (Minoxidil 2x, Acretin 2-3 days, Dermaroller 7-10 days, adherence report and 14-day matrix), US Navy Fat Calculator, Cost per Protein Gram Calculator, Sunan of Sleep, Vitamin D3 Egyptian Sun, 20-20-20 Eye Rest, Red Shift, and Life Balance Wheel."
+    },
+    {
+        "id": "phase16_ui_cleanup_perf",
+        "name": "Phase 16 UI Cleanup, Zen Mode & Performance Acceleration Engine",
+        "category": "UI & Ergonomics",
+        "rel_path": "scratch/test_phase16_ui_cleanup_perf.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies Zen / Essential Focus Mode toggle (#1), smart contextual collapse for completed items (#2), unified collapsible details accordions (#4), lazy DOM content-visibility rendering (#5), debounced localStorage batching (#7), and 60fps hardware acceleration with zero tap delay (#8)."
+    },
+    {
+        "id": "phase17_reorganization",
+        "name": "Phase 17 UI Reorganization, Floating Bottom Nav & Segmented Sub-Tabs",
+        "category": "UI & Navigation",
+        "rel_path": "scratch/test_phase17_reorganization_suite.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies 5-Hub Persistent Floating Bottom Nav, One-Tap Quick Action pills (Water, Limitless Man, Minoxidil), Pillar Segmented Sub-Tabs (Meal, Prayer, Schedule), and daily Life Balance status."
+    },
     # Superseded / Obsolete historical gates (excluded by default, enabled via --include-superseded)
     {
         "id": "phase9b1_1_gate",
