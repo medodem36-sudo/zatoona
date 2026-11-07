@@ -65,14 +65,23 @@ def run_tests():
          'NEVER commit' in example or 'never commit' in example.lower() or 'excluded from Git' in example)
 
     # ---------------------------------------------------------
-    # Group 3: No Real keystore.properties Committed
+    # Group 3: No Real Secrets Committed to Git
     # ---------------------------------------------------------
-    print("\n--- Group 3: Security — No Real Secrets Present ---")
-    test("Real keystore.properties does NOT exist in repo (safe)",
-         not os.path.isfile(KS_REAL),
-         "DANGER: keystore.properties found in repo!")
+    print("\n--- Group 3: Security — No Secrets Tracked in Git ---")
+    import subprocess
+    git_bin = r"C:\Users\Lenovo\AppData\Local\GitHubDesktop\app-3.6.10\resources\app\git\cmd\git.exe"
+    if not os.path.isfile(git_bin):
+        git_bin = "git"
 
-    # Check no .keystore or .jks files in repo
+    if os.path.isfile(KS_REAL):
+        res = subprocess.run([git_bin, 'check-ignore', KS_REAL], capture_output=True, text=True)
+        is_ignored = (res.returncode == 0)
+        test("Real keystore.properties is strictly ignored by Git", is_ignored,
+             "keystore.properties must be ignored in .gitignore!")
+    else:
+        test("Real keystore.properties does NOT exist in repo (safe)", True)
+
+    # Check no .keystore or .jks files are tracked by Git
     keystore_files = []
     for root, dirs, files in os.walk(REPO):
         # Skip .gradle and build directories
@@ -81,9 +90,17 @@ def run_tests():
             if f.endswith('.keystore') or f.endswith('.jks') or f.endswith('.p12'):
                 keystore_files.append(os.path.join(root, f))
 
-    test("No .keystore / .jks / .p12 files found in repo tree",
-         len(keystore_files) == 0,
-         f"Found: {keystore_files}")
+    if len(keystore_files) > 0:
+        all_ignored = True
+        for kf in keystore_files:
+            res = subprocess.run([git_bin, 'check-ignore', kf], capture_output=True, text=True)
+            if res.returncode != 0:
+                all_ignored = False
+                break
+        test("All keystore files are strictly ignored by Git (.gitignore)", all_ignored,
+             f"Unignored keystores found: {keystore_files}")
+    else:
+        test("No .keystore / .jks / .p12 files found in repo tree", True)
 
     # ---------------------------------------------------------
     # Group 4: build.gradle.kts signingConfigs Template

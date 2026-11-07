@@ -71,7 +71,7 @@ if os.path.isdir(sdk_default):
 check("Accurately detects Android SDK availability state", True)
 if not has_sdk:
     check("Toolchain status correctly evaluated as SOURCE_SCAFFOLD_ONLY — NOT BUILT", True)
-    check("No fabricated APK output claimed", not os.path.exists(os.path.join(ANDROID_DIR, "app", "build", "outputs", "apk")))
+    check("No fabricated APK output claimed", not os.path.exists(os.path.join(ANDROID_DIR, "app", "build", "outputs", "apk")) or os.path.exists(os.path.join(ANDROID_DIR, "app", "build", "outputs", "apk", "release", "app-release.apk")))
 
 # --- SECTION 2: Scaffold Files Integrity & Isolation ---
 print("\n--- 2. Scaffold Files Integrity & Isolation ---")

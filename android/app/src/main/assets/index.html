@@ -7166,28 +7166,40 @@ body.compact-density .section-hint {
 .sec-reorder-group {
   display: inline-flex;
   align-items: center;
-  gap: 3px;
-  margin-inline-start: 6px;
-  opacity: 0.65;
+  gap: 4px;
+  margin-inline-start: 8px;
+  opacity: 0.85;
   transition: opacity 0.2s ease;
+  user-select: none;
 }
-.sec-reorder-group:hover {
+.sec-reorder-group:hover, .sec-reorder-group:focus-within {
   opacity: 1;
 }
 .sec-reorder-btn {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid var(--line, rgba(255, 255, 255, 0.15));
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--line, rgba(255, 255, 255, 0.2));
   border-radius: 6px;
-  color: var(--text-muted, #94a3b8);
-  font-size: 0.65rem;
-  padding: 2px 5px;
+  color: var(--text, #cbd5e1);
+  font-size: 0.72rem;
+  padding: 3px 6px;
   cursor: pointer;
   line-height: 1;
+  min-width: 26px;
+  min-height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
 }
-.sec-reorder-btn:hover {
+.sec-reorder-btn:hover, .sec-reorder-btn:active {
   background: var(--accent, #10b981);
   color: #ffffff;
   border-color: var(--accent, #10b981);
+}
+.haptic-strength-btn.active {
+  background: var(--accent, #10b981) !important;
+  color: #ffffff !important;
+  border-color: var(--accent, #10b981) !important;
 }
 
 /* === Gym Sub-Tabs === */
@@ -7988,7 +8000,12 @@ details.settings-card summary:hover {
     </div>
 
 <header id="appHeader">
-  <h1 id="pageTitle">🍽️ الخطة الغذائية الأسبوعية</h1>
+  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+    <h1 id="pageTitle" style="margin:0;">🍽️ الخطة الغذائية الأسبوعية</h1>
+    <button type="button" class="btn-subtle" id="btnHeaderSectionOrder" onclick="openCurrentSectionOrderModal()" title="إعادة ترتيب بطاقات ومكونات هذا القسم" style="font-size:0.75rem; padding:4px 9px; border-radius:8px; border:1px solid var(--line); display:inline-flex; align-items:center; gap:5px; cursor:pointer;">
+      <span aria-hidden="true">🔃</span> <span>ترتيب البطاقات</span>
+    </button>
+  </div>
   <div class="sub" id="pageSub">عجز سعرات لخسارة ~3.5 كجم شهريًا — تابع أكلك وشربك ومشترياتك وتمرينك أول بأول</div>
   <div class="stamps">
     <div class="stamp" id="stampKcal">🎯 ~1700 سعرة/يوم</div>
@@ -8001,7 +8018,12 @@ details.settings-card summary:hover {
 <div class="container">
 
   <div class="home-hero hidden" id="homeHero">
-    <div class="hh-badge" id="homeGreetingBadge">🌿 زتونة — رفيقك اليومي</div>
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+      <div class="hh-badge" id="homeGreetingBadge">🌿 زتونة — رفيقك اليومي</div>
+      <button type="button" class="btn-subtle" id="btnHomeSectionOrder" onclick="openSectionOrderModal('homeHero')" title="إعادة ترتيب بطاقات الرئيسية" style="font-size:0.75rem; padding:4px 9px; border-radius:8px; border:1px solid var(--line); display:inline-flex; align-items:center; gap:5px; cursor:pointer;">
+        <span aria-hidden="true">🔃</span> <span>ترتيب بطاقات الرئيسية</span>
+      </button>
+    </div>
     <div class="hh-icon" aria-hidden="true">
       <img src="./icons/icon-any.svg" alt="شعار زتونة" class="hh-logo" width="68" height="68">
     </div>
@@ -8021,16 +8043,16 @@ details.settings-card summary:hover {
   </div>
 </div>
 
-    <div class="morning-briefing-card" id="morningBriefingCard"></div>
-    <div class="home-summary-card" id="homeSummaryCard"></div>
+    <div class="morning-briefing-card" id="morningBriefingCard" data-sec-block="morning-briefing"></div>
+    <div class="home-summary-card" id="homeSummaryCard" data-sec-block="home-summary"></div>
 
     <!-- Privacy-Conscious Local AI Assistant Card (Phase 13.7) -->
-    <div class="card" id="aiCoachCard" style="background:var(--card-alt); border:1px solid var(--line); border-radius:12px; padding:16px; margin-bottom:16px;"></div>
-    <div class="home-quick-actions" id="homeQuickActions"></div>
+    <div class="card" id="aiCoachCard" data-sec-block="ai-coach" style="background:var(--card-alt); border:1px solid var(--line); border-radius:12px; padding:16px; margin-bottom:16px;"></div>
+    <div class="home-quick-actions" id="homeQuickActions" data-sec-block="quick-actions"></div>
     <div class="dashboard-toolbar" id="dashboardToolbar"></div>
-    <div class="home-stats-grid" id="homeStatsGrid"></div>
-    <div id="homeStreaksCard" class="info-card" style="margin-top:16px;"></div>
-    <div id="secNotes-home" style="margin-top:16px;"></div>
+    <div class="home-stats-grid" id="homeStatsGrid" data-sec-block="stats-grid"></div>
+    <div id="homeStreaksCard" class="info-card" data-sec-block="home-streaks" style="margin-top:16px;"></div>
+    <div id="secNotes-home" data-sec-block="home-notes" style="margin-top:16px;"></div>
   </div>
 
   <div class="modes" id="modesBar" role="navigation" aria-label="الأقسام الرئيسية">
@@ -8097,7 +8119,7 @@ details.settings-card summary:hover {
     </details>
 
     <!-- FEATURE: LIMITLESS MAN MAX SUPPLEMENT ENGINE -->
-    <div class="settings-card" id="cardLimitlessManSupplement" style="margin-top:14px; border:1px solid #3b82f6; border-radius:12px; background:linear-gradient(180deg, rgba(59, 130, 246, 0.08) 0%, var(--card) 100%);">
+    <div class="settings-card" id="cardLimitlessManSupplement" data-sec-block="limitless-supplements" style="margin-top:14px; border:1px solid #3b82f6; border-radius:12px; background:linear-gradient(180deg, rgba(59, 130, 246, 0.08) 0%, var(--card) 100%);">
       <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
         <div style="display:flex; align-items:center; gap:8px;">
           <span style="font-size:1.3rem;">💊</span>
@@ -8146,7 +8168,7 @@ details.settings-card summary:hover {
     </div>
 
     <!-- FEATURE #52: COST PER PROTEIN GRAM CALCULATOR -->
-    <details class="settings-card" id="cardCostPerProtein" style="margin-top:14px; border-radius:12px;">
+    <details class="settings-card" id="cardCostPerProtein" data-sec-block="cost-per-protein" style="margin-top:14px; border-radius:12px;">
       <summary style="cursor:pointer; color:var(--text); font-weight:700; font-size:.85rem; padding:12px;">
         💰 حاسبة التكلفة لكل جرام بروتين فعلي في مصر (#52)
       </summary>
@@ -9024,7 +9046,7 @@ details.settings-card summary:hover {
     </details>
 
     <!-- FEATURE #35: CNS FATIGUE SCORE & #226 TENDON LOAD SHIELD -->
-    <details class="settings-card" id="cardCnsAndTendonShield" style="margin-top:14px; border-radius:12px;">
+    <details class="settings-card" id="cardCnsAndTendonShield" data-sec-block="cns-tendon-shield" style="margin-top:14px; border-radius:12px;">
       <summary style="cursor:pointer; color:var(--text); font-weight:700; font-size:.85rem; padding:12px;">
         🧠 إجهاد الجهاز العصبي المركزي (CNS) وحماية الأوتار (#35 و #226)
       </summary>
@@ -9043,7 +9065,7 @@ details.settings-card summary:hover {
     </details>
 
     <!-- FEATURE #43: SUPERSET LINKER & #223 MUSCLE ASYMMETRY DETECTOR -->
-    <details class="settings-card" id="cardSupersetAndAsymmetry" style="margin-top:14px; border-radius:12px;">
+    <details class="settings-card" id="cardSupersetAndAsymmetry" data-sec-block="superset-asymmetry" style="margin-top:14px; border-radius:12px;">
       <summary style="cursor:pointer; color:var(--text); font-weight:700; font-size:.85rem; padding:12px;">
         ⚖️ كاشف عدم التماثل العضلي وربط السوبر سيت (#43 و #223)
       </summary>
@@ -9072,7 +9094,7 @@ details.settings-card summary:hover {
     </details>
 
     <!-- FEATURE #39: US NAVY BODY FAT CALCULATOR -->
-    <details class="settings-card" id="cardUSNavyFatCalc" style="margin-top:14px; border-radius:12px;">
+    <details class="settings-card" id="cardUSNavyFatCalc" data-sec-block="usnavy-fat-calc" style="margin-top:14px; border-radius:12px;">
       <summary style="cursor:pointer; color:var(--text); font-weight:700; font-size:.85rem; padding:12px;">
         📐 حاسبة نسبة دهون الجسم بمعادلة البحرية الأمريكية (US Navy) (#39)
       </summary>
@@ -9104,10 +9126,10 @@ details.settings-card summary:hover {
     </details>
 
     <div id="gymPauseBanner" class="hidden"></div>
-    <div id="gymSettingsContainer" style="margin-bottom:12px;"></div>
+    <div id="gymSettingsContainer" data-sec-block="gym-settings" style="margin-bottom:12px;"></div>
     <div id="gymDayOverrideContainer" style="margin-bottom:12px;"></div>
     <div id="gymExManagerContainer" style="margin-bottom:14px;"></div>
-    <div id="gymEncyclopediaContainer" style="margin-bottom:18px;"></div>
+    <div id="gymEncyclopediaContainer" data-sec-block="gym-encyclopedia" style="margin-bottom:18px;"></div>
     <div id="gymToolsQuickBarContainer" style="margin-bottom:16px;"></div>
     <div id="gymHomeWorkoutBanner" class="hidden" style="margin-bottom:14px; background:linear-gradient(135deg, rgba(59,130,246,0.15), rgba(16,185,129,0.15)); border:1px solid var(--accent); border-radius:12px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; gap:10px;">
       <div style="font-size:0.85rem; font-weight:600;">🏠 وضع التمرين المنزلي مفعّل (بدائل بوزن الجسم والأدوات المنزلية)</div>
@@ -9162,7 +9184,7 @@ details.settings-card summary:hover {
   <div id="sleepView" class="hidden">
     <div id="secNotes-sleep"></div>
     <!-- FEATURE #204: FORGOTTEN SUNAN OF SLEEP -->
-    <div class="settings-card" id="cardSunanOfSleep" style="margin-top:14px; border-radius:12px;">
+    <div class="settings-card" id="cardSunanOfSleep" data-sec-block="sunan-sleep" style="margin-top:14px; border-radius:12px;">
       <div style="font-size:.85rem; font-weight:700; color:var(--text); margin-bottom:8px; display:flex; align-items:center; gap:6px;">
         <span>🌙</span> سنن النوم النبوية المهجورة (#204)
       </div>
@@ -9177,7 +9199,7 @@ details.settings-card summary:hover {
     </div>
 
     <!-- FEATURE #244: VITAMIN D3 & EGYPTIAN SUN ANGLE -->
-    <details class="settings-card" id="cardVitDEgyptSun" style="margin-top:14px; border-radius:12px;">
+    <details class="settings-card" id="cardVitDEgyptSun" data-sec-block="vit-d-sun" style="margin-top:14px; border-radius:12px;">
       <summary style="cursor:pointer; color:var(--text); font-weight:700; font-size:.85rem; padding:12px;">
         ☀️ حاسبة شمس مصر وفيتامين د3 (#244)
       </summary>
@@ -9192,7 +9214,7 @@ details.settings-card summary:hover {
     </details>
 
     <!-- FEATURE #88 & #85: EYE REST 20-20-20 & RED SHIFT -->
-    <div class="settings-card" id="cardVisualHygiene" style="margin-top:14px; border-radius:12px;">
+    <div class="settings-card" id="cardVisualHygiene" data-sec-block="visual-hygiene" style="margin-top:14px; border-radius:12px;">
       <div style="font-size:.85rem; font-weight:700; color:var(--text); margin-bottom:8px;">
         👁️ راحة العين والوضع الليلي فائق الحمرة (#85 و #88)
       </div>
@@ -9408,7 +9430,7 @@ details.settings-card summary:hover {
     </details>
 
     <!-- FEATURE #290: MINDFUL TAFAKKUR SESSIONS -->
-    <details class="settings-card" id="cardMindfulTafakkur" style="margin-top:14px; border-radius:12px;">
+    <details class="settings-card" id="cardMindfulTafakkur" data-sec-block="mindful-tafakkur" style="margin-top:14px; border-radius:12px;">
       <summary style="cursor:pointer; color:var(--text); font-weight:700; font-size:.85rem; padding:12px;">
         🌌 جلسات التفكر والتأمل في الآفاق والكون (#290)
       </summary>
@@ -9439,10 +9461,10 @@ details.settings-card summary:hover {
     <div class="checklist" id="prayerTimes"></div>
 
     <!-- Qibla Compass Card (Phase 13.8B / Proposal #10) -->
-    <div class="card" id="qiblaCard" style="background:var(--card-alt); border:1px solid var(--line); border-radius:12px; padding:14px; margin:14px 0 16px;"></div>
+    <div class="card" id="qiblaCard" data-sec-block="qibla" style="background:var(--card-alt); border:1px solid var(--line); border-radius:12px; padding:14px; margin:14px 0 16px;"></div>
 
     <!-- Phase 5: Forbidden Times Card -->
-    <div id="forbiddenTimesCard" class="worship-card">
+    <div id="forbiddenTimesCard" data-sec-block="forbidden-times" class="worship-card">
       <div class="worship-card-header">
         <div class="worship-card-title">
           <span class="worship-gold-accent">🚫</span>
@@ -9896,8 +9918,8 @@ details.settings-card summary:hover {
     <div id="scheduleFallbackNote" class="fallback-note hidden"></div>
     <div id="scheduleConflictBanner" class="conflict-banner hidden"></div>
     <div id="scheduleTrimNote" class="trim-note hidden"></div>
-    <div class="info-card" id="scheduleTimeEngineCard" style="margin-bottom:12px;"></div>
-    <div class="info-card" id="scheduleStudyCard" style="margin-bottom:12px;"></div>
+    <div class="info-card" id="scheduleTimeEngineCard" data-sec-block="schedule-timeline" style="margin-bottom:12px;"></div>
+    <div class="info-card" id="scheduleStudyCard" data-sec-block="schedule-study" style="margin-bottom:12px;"></div>
     <div style="display:flex; justify-content:flex-end; gap:8px; margin-bottom:10px; flex-wrap:wrap;">
       <button class="reset-btn" id="scheduleFullGenBtn" style="border-color:var(--accent-dim); color:var(--accent-dim); font-weight:700;">🏗️ بناء الجدول من الأول</button>
       <button class="reset-btn" id="scheduleRecalcBtn" style="border-color:var(--accent); color:var(--accent);">🔄 إعادة حساب اليوم</button>
@@ -10219,7 +10241,7 @@ details.settings-card summary:hover {
   <div id="overviewView" class="hidden">
     <div id="secNotes-overview"></div>
     <!-- FEATURE #189: LIFE BALANCE WHEEL -->
-    <div class="settings-card" id="cardLifeBalanceWheel" style="margin-top:14px; border-radius:12px;">
+    <div class="settings-card" id="cardLifeBalanceWheel" data-sec-block="life-balance" style="margin-top:14px; border-radius:12px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
         <div style="font-size:.9rem; font-weight:800; color:var(--text);">⚖️ عجلة التوازن الحياتي الشاملة (#189)</div>
         <span class="badge" id="lifeBalanceOverallBadge" style="background:#10b981; color:#fff; font-size:.72rem; padding:3px 8px; border-radius:6px; font-weight:700;">85% متزن</span>
@@ -10249,7 +10271,7 @@ details.settings-card summary:hover {
     </div>
 
     <!-- FEATURE #211: KINSHIP & FAMILY TIES -->
-    <details class="settings-card" id="cardKinshipTies" style="margin-top:14px; border-radius:12px;">
+    <details class="settings-card" id="cardKinshipTies" data-sec-block="kinship-ties" style="margin-top:14px; border-radius:12px;">
       <summary style="cursor:pointer; color:var(--text); font-weight:700; font-size:.85rem; padding:12px;">
         🤝 سجل صلة الرحم والتواصل العائلي الأسبوعي (#211)
       </summary>
@@ -10273,7 +10295,7 @@ details.settings-card summary:hover {
     </details>
 
     <!-- FEATURE #283: SCREEN TIME LIFE WASTE CALCULATOR -->
-    <details class="settings-card" id="cardScreenTimeWaste" style="margin-top:14px; border-radius:12px;">
+    <details class="settings-card" id="cardScreenTimeWaste" data-sec-block="screen-waste" style="margin-top:14px; border-radius:12px;">
       <summary style="cursor:pointer; color:var(--text); font-weight:700; font-size:.85rem; padding:12px;">
         📱 حاسبة العمر المهدور على الشاشات (#283)
       </summary>
@@ -10292,7 +10314,7 @@ details.settings-card summary:hover {
     <div class="range-tabs" id="rangeTabs"></div>
     <div id="overallConsistency" style="text-align:center; color:var(--muted); font-size:.76rem; margin:-4px 0 14px;"></div>
 
-    <div id="adjustmentCard"></div>
+    <div id="adjustmentCard" data-sec-block="plan-adjustment"></div>
 
 <!-- 2. Zatoona Wrapped Dashboard Launcher Card (Home Dashboard) -->
 <div class="zatoona-wrapped-card" id="zatoonaWrappedCard">
@@ -10306,7 +10328,7 @@ details.settings-card summary:hover {
   <button class="wrapped-card-open-btn" onclick="openZatoonaWrappedModal()">عرض الحصاد 🎁</button>
 </div>
 
-    <div class="info-card" id="dailyNotesCard">
+    <div class="info-card" id="dailyNotesCard" data-sec-block="daily-notes">
       <h4>📝 ملاحظات اليوم — <span id="dailyNotesDateLabel" class="mono"></span></h4>
       <textarea class="notes-input" id="dailyNotesInput" placeholder="اكتب أي حاجة حابب تفتكرها عن يومك... (منفصلة عن ملاحظات الاستشفاء)"></textarea>
       <div style="display:flex; justify-content:flex-end; margin-top:8px;">
@@ -10316,7 +10338,7 @@ details.settings-card summary:hover {
     </div>
 
     <!-- Daily Progress Summary & Social Accountability Card (Proposal #13) -->
-    <div class="card" id="dailyShareCard" style="background:var(--card-alt); border:1px solid var(--line); border-radius:12px; padding:16px; margin-bottom:16px;"></div>
+    <div class="card" id="dailyShareCard" data-sec-block="daily-share" style="background:var(--card-alt); border:1px solid var(--line); border-radius:12px; padding:16px; margin-bottom:16px;"></div>
 
 
 
@@ -10349,7 +10371,7 @@ details.settings-card summary:hover {
         </div>
       </div>
     </div>
-    <div class="info-card" id="weightChartCard">
+    <div class="info-card" id="weightChartCard" data-sec-block="weight-chart">
       <h4>📉 اتجاه الوزن (للفترة المختارة فوق)</h4>
       <div id="weightChart"></div>
     </div>
@@ -10359,11 +10381,11 @@ details.settings-card summary:hover {
 
     <div class="section-title"><span class="n">٨</span> مراجعة الأسبوع الحالي</div>
     <div class="section-hint">للأسبوع اللي شغّال عليه فوق في التقويم — مش الفترة المختارة في التابات</div>
-    <div class="info-card" id="weeklyReviewCard"></div>
+    <div class="info-card" id="weeklyReviewCard" data-sec-block="weekly-review"></div>
 
     <div class="section-title"><span class="n">٩</span> الميزانية الأسبوعية للوقت</div>
     <div class="section-hint">إجمالي كل بند على مدار الأسبوع كله (بالساعات) — عشان تشوف هل الخطة متوازنة فعلًا</div>
-    <div class="info-card" id="weeklyBudgetCard"></div>
+    <div class="info-card" id="weeklyBudgetCard" data-sec-block="weekly-budget"></div>
 
     <div class="section-title"><span class="n">١٠</span> إدارة البيانات والنسخ الاحتياطي</div>
     <div class="info-card" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
@@ -10375,7 +10397,7 @@ details.settings-card summary:hover {
     </div>
 
     <div class="section-title"><span class="n">١١</span> نظام التنبيهات والتذكيرات</div>
-    <div id="notifStatusCard" class="settings-card" style="margin-bottom:12px;"></div>
+    <div id="notifStatusCard" data-sec-block="reminders-mgmt" class="settings-card" style="margin-bottom:12px;"></div>
     <details class="settings-card" style="padding:0;">
       <summary style="cursor:pointer; color:var(--accent); font-weight:700; font-size:.85rem; padding:16px;" id="reminderFormSummary">➕ إضافة تذكير جديد</summary>
       <div style="padding:0 16px 16px;">
@@ -10463,10 +10485,10 @@ details.settings-card summary:hover {
     <div class="section-hint">الميزانية = المحدد مقدمًا، المصروف = الفعلي، والمتبقي هو اللي ممكن تدّخره — كل شهر بميزانيته الخاصة</div>
     <div class="summary" id="budgetSummary"></div>
     <div id="budgetNoBudgetHint" class="fallback-note hidden"></div>
-    <div class="info-card" id="budgetFoodSplitCard" style="margin-top:12px;"></div>
+    <div class="info-card" id="budgetFoodSplitCard" data-sec-block="budget-food-split" style="margin-top:12px;"></div>
 
     <!-- Package D: Daily Allowance Card -->
-    <div class="nut-summary-card" id="dailyAllowanceCard" style="margin-top:12px;">
+    <div class="nut-summary-card" id="dailyAllowanceCard" data-sec-block="budget-allowance" style="margin-top:12px;">
       <div class="nut-card-header">
         <div class="nut-card-title">
           <span>💳</span>
@@ -10484,7 +10506,7 @@ details.settings-card summary:hover {
     </div>
 
     <!-- Package D: Upcoming Subscriptions & Bills Card -->
-    <div class="nut-summary-card" id="upcomingSubscriptionsCard" style="margin-top:12px;">
+    <div class="nut-summary-card" id="upcomingSubscriptionsCard" data-sec-block="budget-subscriptions" style="margin-top:12px;">
       <div class="nut-card-header">
         <div class="nut-card-title">
           <span>📅</span>
@@ -10498,7 +10520,7 @@ details.settings-card summary:hover {
     </div>
 
     <!-- Package D: Virtual Savings Jars & Goals Card -->
-    <div class="nut-summary-card" id="savingsGoalsCard" style="margin-top:12px;">
+    <div class="nut-summary-card" id="savingsGoalsCard" data-sec-block="budget-savings" style="margin-top:12px;">
       <div class="nut-card-header">
         <div class="nut-card-title">
           <span>🏺</span>
@@ -10738,7 +10760,7 @@ details.settings-card summary:hover {
     <div class="section-hint">مؤقتات بومودورو للتركيز، البطاقات والتكرار المتباعد، تقنية فاينمان، المراجعات التراكمية، وبنك المفاهيم</div>
 
     <!-- FEATURE #336: FLIP TO FOCUS -->
-    <div class="settings-card" id="cardFlipToFocus" style="margin-top:10px; border-radius:12px;">
+    <div class="settings-card" id="cardFlipToFocus" data-sec-block="flip-focus" style="margin-top:10px; border-radius:12px;">
       <div style="display:flex; justify-content:space-between; align-items:center;">
         <div>
           <div style="font-size:.85rem; font-weight:700; color:var(--text);">📱 وضع التركيز الفوري بقلب الهاتف (Flip to Focus) (#336)</div>
@@ -11659,6 +11681,131 @@ details.settings-card summary:hover {
           <div class="settings-row-desc">مزامنة بيانات الصلاة والتمرين والماء مع ويدجت الشاشة الرئيسية.</div>
         </div>
         <button type="button" class="reset-btn" id="btnSyncAllInOneWidget" onclick="syncAllInOneWidgetData()" style="border-color:#10b981; color:#10b981; font-weight:700; font-size:.78rem; padding:4px 10px;">🔄 مزامنة الويدجت</button>
+      </div>
+    </div>
+
+    <!-- 5A. Haptic Feedback Control Center -->
+    <div class="settings-section-card" id="settingsHapticCard">
+      <div class="settings-section-title">📳 التحكم بالاهتزاز وقوة اللمس (Haptic Feedback)</div>
+      <div class="settings-row">
+        <div>
+          <div class="settings-row-label">الاهتزاز اللمسي العام</div>
+          <div class="settings-row-desc">تشغيل أو إيقاف التفاعل اللمسي لجميع أزرار وقوائم وتنبيهات التطبيق</div>
+        </div>
+        <button type="button" class="settings-toggle on" id="settingsHapticMasterToggle" onclick="toggleHapticsMaster()"></button>
+      </div>
+
+      <div style="margin-top:12px; padding-top:10px; border-top:1px dashed var(--line);">
+        <div class="settings-row-label" style="margin-bottom:4px; font-size:0.88rem;">قوة شدة الاهتزاز (مستوى النبضة)</div>
+        <div class="settings-row-desc" style="margin-bottom:8px;">اختر الشدة المريحة لأصابعك — الافتراضي ناعم وخفيف جداً لراحة يدك</div>
+        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px;" id="hapticStrengthGrid">
+          <button type="button" class="btn-subtle haptic-strength-btn active" data-haptic-strength="gentle" onclick="setHapticsStrengthChoice('gentle')" style="font-weight:700; font-size:0.8rem; padding:8px 4px; text-align:center; border-radius:8px;">
+            🌱 خفيف جداً<br><span style="font-size:0.7rem; font-weight:normal; color:var(--muted);">(٨ مللي ثانية)</span>
+          </button>
+          <button type="button" class="btn-subtle haptic-strength-btn" data-haptic-strength="normal" onclick="setHapticsStrengthChoice('normal')" style="font-weight:700; font-size:0.8rem; padding:8px 4px; text-align:center; border-radius:8px;">
+            ⚖️ طبيعي متزن<br><span style="font-size:0.7rem; font-weight:normal; color:var(--muted);">(١٥ مللي ثانية)</span>
+          </button>
+          <button type="button" class="btn-subtle haptic-strength-btn" data-haptic-strength="strong" onclick="setHapticsStrengthChoice('strong')" style="font-weight:700; font-size:0.8rem; padding:8px 4px; text-align:center; border-radius:8px;">
+            ⚡ واضح وقوي<br><span style="font-size:0.7rem; font-weight:normal; color:var(--muted);">(٢٨ مللي ثانية)</span>
+          </button>
+        </div>
+      </div>
+
+      <div style="margin-top:12px; padding-top:10px; border-top:1px dashed var(--line);">
+        <div class="settings-row-label" style="margin-bottom:6px; font-size:0.88rem;">تخصيص الاهتزاز حسب الوظيفة والأقسام:</div>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div class="settings-row" style="padding:4px 0;">
+            <span style="font-size:0.82rem; color:var(--text);">🔘 نقر أزرار التطبيق والتنقل</span>
+            <button type="button" class="settings-toggle on" id="hapticToggleButtons" onclick="toggleHapticSubFeature('buttons')"></button>
+          </div>
+          <div class="settings-row" style="padding:4px 0;">
+            <span style="font-size:0.82rem; color:var(--text);">📿 عداد التسبيح والأذكار اليومية</span>
+            <button type="button" class="settings-toggle on" id="hapticToggleAzkar" onclick="toggleHapticSubFeature('azkar')"></button>
+          </div>
+          <div class="settings-row" style="padding:4px 0;">
+            <span style="font-size:0.82rem; color:var(--text);">⏱️ مؤقتات التمرين والمذاكرة وساعة الإيقاف</span>
+            <button type="button" class="settings-toggle on" id="hapticToggleTimers" onclick="toggleHapticSubFeature('timers')"></button>
+          </div>
+          <div class="settings-row" style="padding:4px 0;">
+            <span style="font-size:0.82rem; color:var(--text);">🔔 التنبيهات والإشعارات الفورية المنبثقة</span>
+            <button type="button" class="settings-toggle on" id="hapticToggleAlerts" onclick="toggleHapticSubFeature('alerts')"></button>
+          </div>
+          <div class="settings-row" style="padding:4px 0;">
+            <span style="font-size:0.82rem; color:var(--text);">📝 تسجيل البيانات (الماء، الأكل، التمارين)</span>
+            <button type="button" class="settings-toggle on" id="hapticToggleLogging" onclick="toggleHapticSubFeature('logging')"></button>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:12px; padding-top:10px; border-top:1px dashed var(--line); display:flex; justify-content:space-between; align-items:center;">
+        <button type="button" class="btn" id="btnTestHapticFeedback" onclick="testHapticFeedbackNow()" style="background:var(--accent); color:#fff; font-weight:700; font-size:0.82rem; padding:7px 16px; border-radius:8px;">
+          📳 تجربة الاهتزاز الآن
+        </button>
+        <span id="txtHapticTestStatus" style="font-size:0.75rem; color:var(--muted);">اضغط لتجربة الشدة المختارة</span>
+      </div>
+    </div>
+
+    <!-- 5B. Audio & Sound Control Center -->
+    <div class="settings-section-card" id="settingsAudioCard">
+      <div class="settings-section-title">🔊 أصوات التطبيق والنغمات والمنبهات (Audio & Chimes)</div>
+      <div class="settings-row">
+        <div>
+          <div class="settings-row-label">أصوات التطبيق العامة</div>
+          <div class="settings-row-desc">تشغيل أو كتم المؤثرات الصوتية ونغمات المنبهات والتذكيرات</div>
+        </div>
+        <button type="button" class="settings-toggle on" id="settingsAudioMasterToggle" onclick="toggleAudioMaster()"></button>
+      </div>
+
+      <div style="margin-top:12px; padding-top:10px; border-top:1px dashed var(--line);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <div class="settings-row-label" style="font-size:0.88rem;">مستوى صوت التطبيق العام</div>
+          <span id="settingsAudioVolumeLabel" style="font-weight:700; font-size:0.85rem; color:var(--accent);">70%</span>
+        </div>
+        <input type="range" min="0" max="100" step="5" value="70" id="settingsAudioVolumeSlider" oninput="updateAudioVolumeSetting(this.value)" style="width:100%; accent-color:var(--accent);">
+      </div>
+
+      <div style="margin-top:12px; padding-top:10px; border-top:1px dashed var(--line);">
+        <div class="settings-row-label" style="margin-bottom:4px; font-size:0.88rem;">نغمة التنبيهات والتذكيرات (Tone)</div>
+        <div class="settings-row-desc" style="margin-bottom:8px;">اختر نغمتك المفضلة لتنبيهات المنبهات، الأذكار، والإشعارات</div>
+        <select id="settingsAudioToneSelect" class="str-filter-dropdown" style="width:100%; font-size:0.85rem; padding:8px;" onchange="saveAudioToneSetting(this.value)">
+          <option value="calm">🎐 رنين هادئ وتدريجي (Calm Zen Chime)</option>
+          <option value="bell">🔔 جرس كلاسيكي نقي (Crystal Bell)</option>
+          <option value="water">💧 قطرة ماء رقمية ناعمة (Water Drop Tone)</option>
+          <option value="success">🎵 نغمة إنجاز متصاعدة (Success Melody)</option>
+        </select>
+      </div>
+
+      <div style="margin-top:12px; padding-top:10px; border-top:1px dashed var(--line);">
+        <div class="settings-row-label" style="margin-bottom:6px; font-size:0.88rem;">تخصيص الأصوات حسب الاستخدام:</div>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div class="settings-row" style="padding:4px 0;">
+            <span style="font-size:0.82rem; color:var(--text);">🔘 صوت نقر الأزرار والتنقل (Click)</span>
+            <button type="button" class="settings-toggle" id="audioToggleButtons" onclick="toggleAudioSubFeature('buttons')"></button>
+          </div>
+          <div class="settings-row" style="padding:4px 0;">
+            <span style="font-size:0.82rem; color:var(--text);">📿 رنين تذكيرات الأذكار الدورية والتسبيح</span>
+            <button type="button" class="settings-toggle on" id="audioToggleAzkar" onclick="toggleAudioSubFeature('azkar')"></button>
+          </div>
+          <div class="settings-row" style="padding:4px 0;">
+            <span style="font-size:0.82rem; color:var(--text);">⏱️ رنين انتهاء مؤقتات التمرين والمذاكرة</span>
+            <button type="button" class="settings-toggle on" id="audioToggleTimers" onclick="toggleAudioSubFeature('timers')"></button>
+          </div>
+          <div class="settings-row" style="padding:4px 0;">
+            <span style="font-size:0.82rem; color:var(--text);">🔔 أصوات التنبيهات المنبثقة ورسائل المساعد</span>
+            <button type="button" class="settings-toggle on" id="audioToggleAlerts" onclick="toggleAudioSubFeature('alerts')"></button>
+          </div>
+          <div class="settings-row" style="padding:4px 0;">
+            <span style="font-size:0.82rem; color:var(--text);">📝 صوت تسجيل البيانات والمهام والماء</span>
+            <button type="button" class="settings-toggle on" id="audioToggleLogging" onclick="toggleAudioSubFeature('logging')"></button>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:12px; padding-top:10px; border-top:1px dashed var(--line); display:flex; justify-content:space-between; align-items:center;">
+        <button type="button" class="btn" id="btnTestAppAudio" onclick="testAppAudioNow()" style="background:var(--accent); color:#fff; font-weight:700; font-size:0.82rem; padding:7px 16px; border-radius:8px;">
+          🔊 تجربة الصوت والنغمة الآن
+        </button>
+        <span id="txtAudioTestStatus" style="font-size:0.75rem; color:var(--muted);">اضغط لسماع النغمة المختارة</span>
       </div>
     </div>
 
@@ -14776,19 +14923,345 @@ function getSavedTheme(){
   return (saved === 'dark' || saved === 'light') ? saved : 'light';
 }
 
-/* ================= PHASE 1: HAPTIC FEEDBACK & ENHANCED THEME ENGINE ================= */
-function triggerHaptic(type = 'light'){
+/* ================= PHASE 24: CENTRALIZED HAPTIC & AUDIO ENGINE ================= */
+const DEFAULT_HAPTICS_CONFIG = {
+  enabled: true,
+  strength: 'gentle', // 'gentle' (8ms), 'normal' (15ms), 'strong' (28ms)
+  buttons: true,
+  azkar: true,
+  timers: true,
+  alerts: true,
+  logging: true
+};
+
+function loadHapticsSettings(){
+  try {
+    const raw = localStorage.getItem('zatoona-haptics-config');
+    if(raw){
+      const parsed = JSON.parse(raw);
+      if(parsed && typeof parsed === 'object'){
+        return Object.assign({}, DEFAULT_HAPTICS_CONFIG, parsed);
+      }
+    }
+  } catch(e){}
+  return Object.assign({}, DEFAULT_HAPTICS_CONFIG);
+}
+
+function saveHapticsSettings(cfg){
+  try {
+    localStorage.setItem('zatoona-haptics-config', JSON.stringify(cfg));
+  } catch(e){}
+}
+
+function getHapticDuration(strength, type){
+  let base = 8; // gentle default
+  if(strength === 'normal') base = 15;
+  if(strength === 'strong') base = 28;
+
+  if(type === 'heavy' || type === 'warning') return Math.round(base * 1.8);
+  if(type === 'light' || type === 'gentle') return Math.max(5, Math.round(base * 0.8));
+  return base;
+}
+
+function triggerHaptic(categoryOrType = 'buttons', specificType = null){
+  const cfg = loadHapticsSettings();
+  if(!cfg.enabled) return;
+
+  const knownCats = ['buttons', 'azkar', 'timers', 'alerts', 'logging'];
+  const knownTypes = ['gentle', 'light', 'medium', 'normal', 'heavy', 'warning'];
+
+  let cat = 'buttons';
+  let type = 'normal';
+
+  if(typeof categoryOrType === 'number'){
+    let ms = categoryOrType;
+    if(cfg.strength === 'gentle') ms = Math.max(6, Math.round(ms * 0.35));
+    else if(cfg.strength === 'normal') ms = Math.max(8, Math.round(ms * 0.65));
+    _doVibrate(ms);
+    return;
+  }
+
+  if(knownCats.includes(categoryOrType)){
+    cat = categoryOrType;
+    type = specificType || 'normal';
+  } else if(knownTypes.includes(categoryOrType)){
+    type = categoryOrType;
+    cat = 'buttons';
+  }
+
+  if(cfg[cat] === false) return;
+
+  const ms = getHapticDuration(cfg.strength, type);
+  _doVibrate(ms);
+}
+
+function _doVibrate(ms){
   try {
     if(window.ZatoonaNativeBridge && typeof window.ZatoonaNativeBridge.triggerHaptic === 'function'){
-      const ms = type === 'heavy' ? 40 : (type === 'medium' ? 25 : 15);
       window.ZatoonaNativeBridge.triggerHaptic(ms);
       return;
     }
     if(typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function'){
-      const pattern = type === 'heavy' ? [25, 40, 25] : (type === 'medium' ? 25 : 15);
-      navigator.vibrate(pattern);
+      navigator.vibrate(ms);
     }
   } catch(e){}
+}
+
+function toggleHapticsMaster(){
+  const cfg = loadHapticsSettings();
+  cfg.enabled = !cfg.enabled;
+  saveHapticsSettings(cfg);
+  syncHapticsUI();
+  if(cfg.enabled) triggerHaptic('buttons', 'gentle');
+}
+
+function setHapticsStrengthChoice(strength){
+  const cfg = loadHapticsSettings();
+  cfg.strength = (strength === 'strong' || strength === 'normal') ? strength : 'gentle';
+  saveHapticsSettings(cfg);
+  syncHapticsUI();
+  triggerHaptic('buttons', 'normal');
+}
+
+function toggleHapticSubFeature(subKey){
+  const cfg = loadHapticsSettings();
+  cfg[subKey] = cfg[subKey] === false ? true : false;
+  saveHapticsSettings(cfg);
+  syncHapticsUI();
+  if(cfg[subKey]) triggerHaptic('buttons', 'gentle');
+}
+
+function testHapticFeedbackNow(){
+  const cfg = loadHapticsSettings();
+  const ms = getHapticDuration(cfg.strength, 'normal');
+  _doVibrate(ms);
+  const statusEl = document.getElementById('txtHapticTestStatus');
+  if(statusEl){
+    statusEl.textContent = `تم الاهتزاز بنجاح (${ms} مللي ثانية)`;
+    statusEl.style.color = 'var(--accent)';
+    setTimeout(() => {
+      statusEl.textContent = 'اضغط لتجربة الشدة المختارة';
+      statusEl.style.color = 'var(--muted)';
+    }, 2200);
+  }
+}
+
+function syncHapticsUI(){
+  const cfg = loadHapticsSettings();
+  const masterToggle = document.getElementById('settingsHapticMasterToggle');
+  if(masterToggle) masterToggle.classList.toggle('on', !!cfg.enabled);
+
+  document.querySelectorAll('#hapticStrengthGrid .haptic-strength-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.hapticStrength === cfg.strength);
+  });
+
+  const subs = ['buttons', 'azkar', 'timers', 'alerts', 'logging'];
+  subs.forEach(s => {
+    const el = document.getElementById('hapticToggle' + s.charAt(0).toUpperCase() + s.slice(1));
+    if(el) el.classList.toggle('on', cfg[s] !== false);
+  });
+}
+
+/* --- Centralized Audio Engine --- */
+const DEFAULT_AUDIO_CONFIG = {
+  enabled: true,
+  volume: 70, // 0 to 100
+  tone: 'calm', // 'calm' | 'bell' | 'water' | 'success'
+  buttons: false, // subtle click, off by default to maintain quietness
+  azkar: true,
+  timers: true,
+  alerts: true,
+  logging: true
+};
+
+function loadAudioSettings(){
+  try {
+    const raw = localStorage.getItem('zatoona-audio-config');
+    if(raw){
+      const parsed = JSON.parse(raw);
+      if(parsed && typeof parsed === 'object'){
+        return Object.assign({}, DEFAULT_AUDIO_CONFIG, parsed);
+      }
+    }
+  } catch(e){}
+  return Object.assign({}, DEFAULT_AUDIO_CONFIG);
+}
+
+function saveAudioSettings(cfg){
+  try {
+    localStorage.setItem('zatoona-audio-config', JSON.stringify(cfg));
+  } catch(e){}
+}
+
+function playAppSound(category = 'alerts', specificTone = null){
+  const cfg = loadAudioSettings();
+  if(!cfg.enabled) return;
+  if(category && cfg[category] === false) return;
+
+  const tone = specificTone || cfg.tone || 'calm';
+  const volume = Math.min(1.0, Math.max(0.0, (cfg.volume !== undefined ? cfg.volume : 70) / 100));
+  if(volume <= 0) return;
+
+  try {
+    const AudioClass = window.AudioContext || window.webkitAudioContext;
+    if(!AudioClass) return;
+    if(!window._zatoonaAppAudioCtx){
+      window._zatoonaAppAudioCtx = new AudioClass();
+    }
+    const ctx = window._zatoonaAppAudioCtx;
+    if(ctx.state === 'suspended'){
+      ctx.resume();
+    }
+    const now = ctx.currentTime;
+
+    if(tone === 'click'){
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(600, now);
+      gain.gain.setValueAtTime(volume * 0.08, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.04);
+      return;
+    }
+
+    if(tone === 'calm'){
+      const freqs = [523.25, 659.25, 783.99];
+      freqs.forEach((f, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(f, now + idx * 0.08);
+        gain.gain.setValueAtTime(volume * 0.15, now + idx * 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.7);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + idx * 0.08);
+        osc.stop(now + idx * 0.08 + 0.7);
+      });
+      return;
+    }
+
+    if(tone === 'bell'){
+      const osc1 = ctx.createOscillator();
+      const osc2 = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(880, now);
+      osc2.type = 'sine';
+      osc2.frequency.setValueAtTime(1760, now);
+      gain.gain.setValueAtTime(volume * 0.22, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.9);
+      osc1.connect(gain);
+      osc2.connect(gain);
+      gain.connect(ctx.destination);
+      osc1.start(now);
+      osc2.start(now);
+      osc1.stop(now + 0.9);
+      osc2.stop(now + 0.9);
+      return;
+    }
+
+    if(tone === 'water'){
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(950, now);
+      osc.frequency.exponentialRampToValueAtTime(420, now + 0.18);
+      gain.gain.setValueAtTime(volume * 0.25, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.25);
+      return;
+    }
+
+    if(tone === 'success'){
+      const notes = [698.46, 880.00, 1046.50];
+      notes.forEach((f, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(f, now + idx * 0.1);
+        gain.gain.setValueAtTime(volume * 0.2, now + idx * 0.1);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.1 + 0.5);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + idx * 0.1);
+        osc.stop(now + idx * 0.1 + 0.5);
+      });
+      return;
+    }
+  } catch(e){}
+}
+
+function toggleAudioMaster(){
+  const cfg = loadAudioSettings();
+  cfg.enabled = !cfg.enabled;
+  saveAudioSettings(cfg);
+  syncAudioUI();
+  if(cfg.enabled) playAppSound('alerts', 'calm');
+}
+
+function updateAudioVolumeSetting(val){
+  const cfg = loadAudioSettings();
+  cfg.volume = parseInt(val, 10) || 0;
+  saveAudioSettings(cfg);
+  const lbl = document.getElementById('settingsAudioVolumeLabel');
+  if(lbl) lbl.textContent = cfg.volume + '%';
+}
+
+function saveAudioToneSetting(val){
+  const cfg = loadAudioSettings();
+  cfg.tone = val || 'calm';
+  saveAudioSettings(cfg);
+  playAppSound('alerts', cfg.tone);
+}
+
+function toggleAudioSubFeature(subKey){
+  const cfg = loadAudioSettings();
+  cfg[subKey] = cfg[subKey] === false ? true : false;
+  saveAudioSettings(cfg);
+  syncAudioUI();
+  if(cfg[subKey]) playAppSound(subKey);
+}
+
+function testAppAudioNow(){
+  const cfg = loadAudioSettings();
+  playAppSound(null, cfg.tone);
+  const statusEl = document.getElementById('txtAudioTestStatus');
+  if(statusEl){
+    statusEl.textContent = `جاري تشغيل النغمة (${cfg.tone})...`;
+    statusEl.style.color = 'var(--accent)';
+    setTimeout(() => {
+      statusEl.textContent = 'اضغط لسماع النغمة المختارة';
+      statusEl.style.color = 'var(--muted)';
+    }, 2200);
+  }
+}
+
+function syncAudioUI(){
+  const cfg = loadAudioSettings();
+  const masterToggle = document.getElementById('settingsAudioMasterToggle');
+  if(masterToggle) masterToggle.classList.toggle('on', !!cfg.enabled);
+
+  const slider = document.getElementById('settingsAudioVolumeSlider');
+  if(slider) slider.value = cfg.volume !== undefined ? cfg.volume : 70;
+  const lbl = document.getElementById('settingsAudioVolumeLabel');
+  if(lbl) lbl.textContent = (cfg.volume !== undefined ? cfg.volume : 70) + '%';
+
+  const toneSel = document.getElementById('settingsAudioToneSelect');
+  if(toneSel) toneSel.value = cfg.tone || 'calm';
+
+  const subs = ['buttons', 'azkar', 'timers', 'alerts', 'logging'];
+  subs.forEach(s => {
+    const el = document.getElementById('audioToggle' + s.charAt(0).toUpperCase() + s.slice(1));
+    if(el) el.classList.toggle('on', cfg[s] !== false);
+  });
 }
 
 function loadThemeAccent(){
@@ -29371,6 +29844,187 @@ async function generateAiCoachAdvice(category, iso, options = {}){
 
 let activeAiCoachCategory = 'all';
 let aiCoachSettingsOpen = false;
+let activeAiCoachTab = 'chat'; // 'chat' | 'analysis'
+
+function loadAiCoachChatHistory(){
+  const raw = storageGetJSON('ai-coach-chat-history', null);
+  if(Array.isArray(raw) && raw.length > 0){
+    return raw;
+  }
+  return [
+    {
+      role: 'assistant',
+      text: 'أهلاً بك يا بطل! 👋 أنا كوتش زتونة، مستشارك الشخصي للعبادة والتمرين والنوم والتغذية والمذاكرة. اسألني أي سؤال عن يومك وأنا معاك خطوة بخطوة بربطه ببياناتك الفعلية.',
+      timestamp: Date.now()
+    }
+  ];
+}
+
+function saveAiCoachChatHistory(history){
+  if(!Array.isArray(history)) return;
+  storageSet('ai-coach-chat-history', JSON.stringify(history.slice(-50)));
+}
+
+function clearAiCoachChatHistory(){
+  const defaultHistory = [
+    {
+      role: 'assistant',
+      text: 'تم مسح المحادثة السابقة. أهلاً بك يا بطل في بداية جديدة! 👋 اسألني أي سؤال عن صلواتك، تمارينك، شرب الماء، نومك، أو تنظيم وقتك وأنا جاهز أجاوبك فوراً.',
+      timestamp: Date.now()
+    }
+  ];
+  storageSet('ai-coach-chat-history', JSON.stringify(defaultHistory));
+}
+
+function generateLocalAiChatResponse(prompt, stats, iso){
+  const p = (prompt || '').trim().toLowerCase();
+
+  // 1. Overall Day Evaluation & Summary (Check First)
+  if(/(ملخص|تقييم|قيم|درجتي|أدائي|ادائي|تقييمي)/i.test(p)){
+    let score = 0;
+    if(stats.worship.fardDone >= 5) score += 25; else score += (stats.worship.fardDone * 4);
+    if(stats.nutrition.water >= 6) score += 20; else score += (stats.nutrition.water * 3);
+    if(stats.gym.hasSession || stats.gym.isRestDay) score += 20;
+    if(stats.sleep.hours !== null && stats.sleep.hours >= 6.5) score += 20;
+    if(stats.habits.total > 0 && stats.habits.done >= stats.habits.total / 2) score += 15;
+
+    return `📊 **تقييم أداء يوم ${iso}:**\nمعدل التوافق العام لليوم: **${score}%**\n\n• العبادات: ${stats.worship.fardDone}/5 صلوات فريضة.\n• شرب الماء: ${stats.nutrition.water}/8 أكواب.\n• التمرين: ${stats.gym.hasSession ? 'جلسة تمرين مكتملة' : (stats.gym.isRestDay ? 'يوم راحة مخصص' : 'لم يسجل تمرين')}.\n• النوم: ${stats.sleep.hours !== null ? stats.sleep.hours.toFixed(1) + ' ساعة' : 'لم يسجل بعد'}.\n• العادات: ${stats.habits.done} من ${stats.habits.total} منجزة.\n\n${score >= 80 ? '🌟 أداء أسطوري! يوم متوازن وقوي جداً في كل الجوانب، استمر على هذا المستوى.' : (score >= 50 ? '🌱 أداء طيب وفي الاتجاه الصحيح. ركز على تقفيل الصلاة أو زيادة شرب الماء قبل نهاية اليوم.' : '💪 بداية اليوم محتاجة دفعة، متقلقش، تقدر تعوض دلوقتي وتبدأ بإنهاء كوباية ماء وصلاة الفريضة.')}`;
+  }
+
+  // 2. Water & Hydration
+  if(/(ماء|مياه|عطش|سوائل|شرب|أكواب|اكواب|ازازة)/i.test(p)){
+    const w = stats.nutrition.water || 0;
+    const remaining = Math.max(0, 8 - w);
+    if(w >= 8){
+      return `💧 **سجل المياه لليوم (${iso}):**\nأنت شربت ${w} من 8 أكواب (100%+ إنجاز ممتاز!)\n\nما شاء الله يا بطل، ترطيب جسمك في القمة النهاردة. الترطيب ده هو سر النشاط وسرعة الاستشفاء العضلي وتقليل إجهاد المفاصل. استمر في شرب رشفات منتظمة حتى موعد النوم.`;
+    } else if(w >= 4){
+      return `💧 **سجل المياه لليوم (${iso}):**\nأنت شربت ${w} من 8 أكواب (باقي لك ${remaining} أكواب).\n\nأداء طيب، بس لسه محتاجين نرفع المعدل. اشرب كوبين كبار دلوقتي ووزع الباقي على مدار الساعات اللي جاية قبل النوم، ومتستناش لحد ما تحس بالعطش لأن الإحساس بالعطش معناه إن الجسم بدأ يدخل في جفاف خفيف.`;
+    } else {
+      return `💧 **تنبيه عاجل لشرب الماء (${iso}):**\nأنت مسجل ${w} أكواب فقط من أصل 8 مستهدفة!\n\nمعدل شربك منخفض جداً النهاردة وممكن يسبب لك خمول، صداع، وصعوبة في التركيز وبطء استشفاء. قوم دلوقتي املأ كوباية ماء كبيرة واشربها بهدوء، وخلي إزازة ماء دايماً في مجال رؤيتك وأنت بتذاكر أو بتشتغل.`;
+    }
+  }
+
+  // 3. Nutrition, Food & Protein
+  if(/(بروتين|أكل|اكل|طعام|تغذية|وجب|سعرات|دايت|رجيم|تخسيس|ضخامة|ميزانية)/i.test(p)){
+    return `🥗 **أفضل مصادر بروتين اقتصادية وصحية:**\n• **البيض:** البروتين الكامل الأرخص والأعلى قيمة بيولوجية (البيضة ~ 6-7 جم بروتين).\n• **الجبنة القريش:** منجم بروتين الكازين بطيء الامتصاص (100 جم ~ 12-14 جم بروتين)، ممتازة جداً في العشاء قبل النوم.\n• **التونة والسردين:** بروتين وأوميجا 3 لدعم المفاصل والقلب.\n• **الفول والعدس والحمص:** بروتينات نباتية غنية بالألياف والمعادن، ادمجهم مع البيض لوجبة متكاملة.\n• **اللبن والشوفان:** وجبة سريعة وممتازة كفطور أو بعد التمرين مع معلقة عسل وموزة.`;
+  }
+
+  // 4. Study, Focus & Pomodoro
+  if(/(مذاكر|دراسة|بومودورو|مؤقت|فقاعة)/i.test(p)){
+    return `📚 **تقنية البومودورو وجلسات التركيز في زيتونة:**\n• استخدم مؤقت المذاكرة في قسم المذاكرة داخل التطبيق.\n• **ميزة حصرية:** لما تبدأ الجلسة وتخرج من التطبيق، هتظهر لك **الفقاعة العائمة** على شاشة الموبايل وتعد الوقت قدامك وتفكرك بهدفك بدون ما تشتتك.\n• **النظام الأمثل:** 25 دقيقة تركيز بنسبة 100% في مهمة واحدة محددة، ثم 5 دقائق راحة تامة تبعد فيها عن المكتب وتشرب ماء.`;
+  }
+
+  // 5. Prayer, Worship & Fajr
+  if(/(صلاة|صلوات|صليت|أصلي|اذان|أذان|فجر|قيام|وتر|نوافل|سنن|ركع|قرآن|مصحف|أذكار|اذكار)/i.test(p)){
+    const fard = stats.worship.fardDone || 0;
+    const sunnah = stats.worship.sunnahDone || 0;
+    if(/جيم|تمرين|رياض/i.test(p)){
+      return `🕌 **تنسيق مواعيد الصلاة مع الجيم:**\nأفضل قاعدة ذهبية للتوفيق بينهم بدون تفريط:\n1. **تمرين بعد العصر:** ابدأ تمرينك بحيث تخلصه وتلحق وضوءك وصلاة المغرب جماعة في وقتها.\n2. **تمرين بعد المغرب:** صلي المغرب بهدوء، اتمرن 45-60 دقيقة، وانهي تمرينك على أذان العشاء.\n3. **شنطة الجيم:** خلي فيها دايماً سجادة جيب خفيفة وتيشرت نظيف احتياطي لو وقت الصلاة أذن وأنت في الصالة.\n\nالصلاة هي عمود اليوم وسر البركة والراحة النفسية، لما ترتب يومك حول الصلاة كل حاجة تانية بتظبط.`;
+    }
+    if(/فجر|اصحى|استيقاظ/i.test(p)){
+      return `🌅 **نصائح للاستيقاظ لصلاة الفجر بنشاط:**\n1. **منبه الفجر التصاعدي:** فعّله من قسم الصلاة في التطبيق، بيصحيك بنغمة ناعمة ومتدرجة بدون فزع.\n2. **النوم المبكر:** اتبع روتين التهدئة قبل النوم وادخل السرير قبل موعد الفجر بـ 6 إلى 7 ساعات على الأقل.\n3. **الموبايل بعيد عن السرير:** حط الموبايل بعيد عن إيدك بمسافة خطوتين عشان تضطر تقوم تقف تطفيه.\n4. **النية الصادقة ودعاء النوم:** نم على طهارة واطلب من ربنا العون على الاستيقاظ.`;
+    }
+    return `🕌 **سجل العبادات لليوم (${iso}):**\n• الصلوات المفروضة: ${fard} من 5.\n• السنن المؤكدة: ${sunnah} ركعات.\n• قيام الليل والوتر: ${stats.worship.qiyamDone ? '✓ تم بفضل الله' : 'لسه متسجلش'}.\n• القرآن الكريم: ${stats.worship.quranCount} أوراد.\n\n${fard === 5 ? 'ما شاء الله! يومك كان مبارك في الصلوات الخمسة. زود ركعتي الشفع والوتر قبل ما تنام عشان تختم يومك بنور.' : 'الصلاة هي أول ما يُحاسب عليه العبد وسر السكينة والتوفيق. لو فاتتك صلاة متكسلش، صلها فوراً وجدد العهد.'}`;
+  }
+
+  // 6. Gym, Workout & Fitness
+  if(/(جيم|تمرين|تمارين|عضل|حديد|اوزان|أوزان|صدر|ظهر|رجل|باي|تراي|كارديو|إحماء|تسخين|اطالات|استشفاء)/i.test(p)){
+    const hasGym = stats.gym.hasSession;
+    const isRest = stats.gym.isRestDay;
+    if(/استشفاء|ألم|وجع|عضلي/i.test(p)){
+      return `🏋️ **التعامل مع الألم العضلي والاستشفاء (DOMS):**\nالألم اللي بتحس بيه بعد التمرين ده رد فعل طبيعي للتكيف العضلي، ولتسريعه:\n1. **البروتين الكافي:** خد من 1.6 إلى 2 جم بروتين لكل كيلو من وزنك يومياً.\n2. **الإطالات الخفيفة:** ادخل على قسم الإطالات في التطبيق واعمل إطالات خفيفة للعضلة المتألمة.\n3. **النوم العميق:** 80% من هرمون النمو وإصلاح الألياف بيفرز أثناء النوم العميق.\n4. **الماء:** الجفاف بيزود الشد العضلي والألم، حافظ على 8 أكواب يومياً.`;
+    }
+    return `🏋️ **حالة التدريب لليوم (${iso}):**\n${hasGym ? `✓ تم تسجيل جلسة تمرين اليوم (${stats.gym.exercisesCount} تمارين مسجلة). إنجاز قوي وممتاز!` : (isRest ? 'اليوم مسجل كيوم راحة واستشفاء. الراحة بتبني العضلات زي التمرين بالظبط!' : 'لسه متسجلش جلسة تمرين اليوم في التطبيق.')}\n\nنصيحة الكوتش: ركز دايماً على التكنيك السليم قبل زيادة الأوزان، وخلي التسخين من 5-10 دقايق أساسي لتجنب الإصابات.`;
+  }
+
+  // 7. Sleep, Insomnia & Rest
+  if(/(نوم|أنام|انام|أرق|ارق|سهر|قلق|نعاس|روتين نوم|روتين هادي)/i.test(p)){
+    const sleepH = stats.sleep.hours;
+    return `🌙 **روتين النوم الهادئ والتغلب على الأرق:**\n${sleepH !== null ? `أنت سجلت نوم ${sleepH.toFixed(1)} ساعة في آخر ليلة.` : 'سجل ساعات نومك في قسم النوم لمتابعة جودة استشفائك.'}\n\nخطوات عملية لنوم عميق الليلة:\n1. **ابعد الموبايل:** اقفل الشاشات تماماً قبل النوم بـ 30 دقيقة عشان مخك يفرز الميلاتونين طبيعي.\n2. **مشروب دافئ:** كوب ينسون أو نعناع أو بابونج بدون سكر.\n3. **درجة حرارة الغرفة:** خلي الأوضة باردة ومظلمة تماماً وهادية.\n4. **أذكار النوم:** اقرأ آية الكرسي والمعوذات بهدوء وخد 10 أنفاس عميقة وبطيئة (شهيق 4 ثواني - زفير 6 ثواني).`;
+  }
+
+  // 8. Motivation & Encouragement
+  if(/(تعب|زهق|كسل|إحباط|احباط|مش قادر|تحفيز|شجعني)/i.test(p)){
+    return `💪 **رسالة من القلب يا بطل:**\nكل الأبطال الكبار بتمر عليهم أيام بيكون فيها الشغف صفر والكسل عالي، الفرق بين اللي بيوصل واللي بيقف مش المشاعر، لكن "الاستمرارية المنضبطة".\n\nمتطلبش من نفسك المثالية 100% كل يوم؛ لو مش قادر تتمرن ساعة، اتمرن ربع ساعة، لو مش قادر تقرأ جزء قرآن، اقرأ صفحة، لو مكسل تقوم، ابدأ بكوباية مياه وصلي الفريضة.\n\nالخطوة الصغيرة اللي بتعملها وأنت مش في أحسن حالاتك هي اللي بتبني شخصيتك الحقيقية. توكل على الله وخد خطوة واحدة دلوقتي!`;
+  }
+
+  // 9. Default Helpful Assistant Response
+  return `🤖 **أهلاً بك يا بطل!**\nأنا كوتش زتونة ومتابع معاك كل تفاصيل يومك (${iso}).\n\nتقدر تسألني عن أي حاجة:\n• شرب الماء والترطيب ونظامك الغذائي.\n• توفيق مواعيد الصلاة والعبادة مع الجيم والمذاكرة.\n• الاستشفاء العضلي، ألم العضلات، والتمارين.\n• التغلب على الأرق وتحسين جودة النوم.\n• تنظيم جلسات المذاكرة بالبومودورو والفقاعة العائمة.\n\nقولي بتفكر في إيه وحابب نركز على إيه دلوقتي؟ ✨`;
+}
+
+async function sendAiChatMessage(userPrompt){
+  if(!userPrompt || !userPrompt.trim()) return;
+  const prompt = userPrompt.trim();
+  const iso = toISO(weekDates[selectedIdx]);
+  const settings = loadAiCoachSettings();
+  const stats = analyzeDailyWellnessStats(iso);
+
+  // Add user message to history
+  const history = loadAiCoachChatHistory();
+  history.push({ role: 'user', text: prompt, timestamp: Date.now() });
+  saveAiCoachChatHistory(history);
+  renderAiCoachCard();
+
+  // Scroll to bottom
+  const msgBox = document.getElementById('aiCoachChatMessages');
+  if(msgBox) msgBox.scrollTop = msgBox.scrollHeight;
+
+  // Show typing indicator
+  const typingEl = document.getElementById('aiCoachChatTyping');
+  if(typingEl) typingEl.style.display = 'block';
+
+  let replyText = '';
+
+  // If Gemini enabled and key provided
+  if(settings.enabled && settings.provider === 'gemini' && settings.apiKey && settings.apiKey.trim()){
+    try {
+      const summaryText = typeof generateDailySummaryText === 'function' ? generateDailySummaryText(iso) : JSON.stringify(stats);
+      const systemInstruction = `أنت "كوتش زتونة الذكي"، مستشار ومساعد شخصي ودود ومحفز يتحدث باللهجة المصرية الطبيعية الراقية. أنت مدمج في تطبيق "زيتونة" (تطبيق إسلامي وصحي ورياضي وإنتاجي). أسلوبك داعم وعملي ومختصر. لديك بيانات يوم المستخدم الحالية (${iso}): ${summaryText}. أجب عن سؤال المستخدم بذكاء وربط ببياناته عند الحاجة.`;
+
+      const contents = [
+        {
+          role: 'user',
+          parts: [{ text: `${systemInstruction}\n\nالسؤال:\n${prompt}` }]
+        }
+      ];
+
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${encodeURIComponent(settings.apiKey.trim())}`;
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents })
+      });
+
+      if(!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = await response.json();
+      const generated = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      if(generated && generated.trim()){
+        replyText = generated.trim();
+      }
+    } catch(err){
+      console.warn('[AiChat] Gemini failed, using local engine:', err);
+      replyText = generateLocalAiChatResponse(prompt, stats, iso);
+    }
+  }
+
+  if(!replyText){
+    replyText = generateLocalAiChatResponse(prompt, stats, iso);
+  }
+
+  if(typingEl) typingEl.style.display = 'none';
+
+  // Add assistant response to history
+  history.push({ role: 'assistant', text: replyText, timestamp: Date.now() });
+  saveAiCoachChatHistory(history);
+  renderAiCoachCard();
+
+  // Subtle audio / haptic feedback
+  if(typeof playChimeAlert === 'function') playChimeAlert();
+  if(navigator.vibrate) try{ navigator.vibrate(30); } catch(e){}
+
+  const newMsgBox = document.getElementById('aiCoachChatMessages');
+  if(newMsgBox) newMsgBox.scrollTop = newMsgBox.scrollHeight;
+}
 
 function renderAiCoachCard(){
   const card = document.getElementById('aiCoachCard');
@@ -29394,7 +30048,7 @@ function renderAiCoachCard(){
       <div style="background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px; font-size:.8rem; line-height:1.6; color:var(--text);">
         <p style="margin:0 0 10px;">
           🔒 <strong>ضمان الخصوصية والتشغيل المحلي:</strong>
-          كوتش زتونة يحلل بيانات يومك (الصلوات، النوم، التمارين، شرب المياه، والعادات) محلياً على جهازك ويقدم لك توصيات شخصية عملية في كل المجالات بدون إرسال أي بيانات لخوادم خارجية افتراضياً.
+          كوتش زتونة يحلل بيانات يومك (الصلوات، النوم، التمارين، شرب المياه، والعادات) محلياً على جهازك ويقدم لك محادثة ذكية وتوصيات شخصية عملية في كل المجالات بدون إرسال أي بيانات لخوادم خارجية افتراضياً.
         </p>
         <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:12px;">
           <button type="button" class="reset-btn" id="btnEnableAiCoach" style="padding:6px 16px; font-size:.82rem; border-color:var(--good); color:var(--good); font-weight:700;">
@@ -29416,9 +30070,11 @@ function renderAiCoachCard(){
     return;
   }
 
+  const chatHistory = loadAiCoachChatHistory();
+
   // Active Enabled View
   card.innerHTML = `
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
       <div style="display:flex; align-items:center; gap:8px;">
         <span style="font-size:1.4rem;">🤖</span>
         <div>
@@ -29428,7 +30084,7 @@ function renderAiCoachCard(){
               ${settings.provider === 'gemini' ? '🌐 Gemini AI' : '🔒 محلي 100%'}
             </span>
           </div>
-          <div style="font-size:.74rem; color:var(--muted); margin-top:2px;">تحليل أداء ${iso} وتقديم توجيهات عملية فورية</div>
+          <div style="font-size:.74rem; color:var(--muted); margin-top:2px;">مستشارك الشخصي للعبادة والتمرين والإنتاجية (${iso})</div>
         </div>
       </div>
       <div style="display:flex; gap:6px;">
@@ -29470,53 +30126,206 @@ function renderAiCoachCard(){
       </div>
     </div>
 
-    <!-- Category selector chips -->
-    <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px;">
-      <button type="button" class="reset-btn ai-cat-chip" data-cat="all" style="padding:4px 10px; font-size:.76rem; border-radius:16px; border-color:${activeAiCoachCategory === 'all' ? 'var(--primary)' : 'var(--line)'}; background:${activeAiCoachCategory === 'all' ? 'rgba(6,170,196,0.15)' : 'transparent'}; color:${activeAiCoachCategory === 'all' ? 'var(--primary)' : 'var(--text)'}; font-weight:600;">
-        ✨ التحليل الشامل
+    <!-- Mode Selector Tabs: Chat vs Analysis -->
+    <div style="display:flex; gap:6px; margin-bottom:10px; border-bottom:1px solid var(--line); padding-bottom:8px;">
+      <button type="button" class="reset-btn" id="btnTabAiChat" style="flex:1; padding:6px 12px; font-size:.82rem; border-radius:18px; font-weight:700; ${activeAiCoachTab === 'chat' ? 'background:rgba(6,170,196,0.18); border-color:var(--primary); color:var(--primary);' : 'border-color:transparent; color:var(--muted);'}">
+        💬 محادثة وشات الكوتش
       </button>
-      <button type="button" class="reset-btn ai-cat-chip" data-cat="prayer" style="padding:4px 10px; font-size:.76rem; border-radius:16px; border-color:${activeAiCoachCategory === 'prayer' ? 'var(--primary)' : 'var(--line)'}; background:${activeAiCoachCategory === 'prayer' ? 'rgba(6,170,196,0.15)' : 'transparent'}; color:${activeAiCoachCategory === 'prayer' ? 'var(--primary)' : 'var(--text)'}; font-weight:600;">
-        🕌 العبادات
-      </button>
-      <button type="button" class="reset-btn ai-cat-chip" data-cat="gym" style="padding:4px 10px; font-size:.76rem; border-radius:16px; border-color:${activeAiCoachCategory === 'gym' ? 'var(--primary)' : 'var(--line)'}; background:${activeAiCoachCategory === 'gym' ? 'rgba(6,170,196,0.15)' : 'transparent'}; color:${activeAiCoachCategory === 'gym' ? 'var(--primary)' : 'var(--text)'}; font-weight:600;">
-        🏋️ التمرين
-      </button>
-      <button type="button" class="reset-btn ai-cat-chip" data-cat="nutrition" style="padding:4px 10px; font-size:.76rem; border-radius:16px; border-color:${activeAiCoachCategory === 'nutrition' ? 'var(--primary)' : 'var(--line)'}; background:${activeAiCoachCategory === 'nutrition' ? 'rgba(6,170,196,0.15)' : 'transparent'}; color:${activeAiCoachCategory === 'nutrition' ? 'var(--primary)' : 'var(--text)'}; font-weight:600;">
-        💧 التغذية والماء
-      </button>
-      <button type="button" class="reset-btn ai-cat-chip" data-cat="sleep" style="padding:4px 10px; font-size:.76rem; border-radius:16px; border-color:${activeAiCoachCategory === 'sleep' ? 'var(--primary)' : 'var(--line)'}; background:${activeAiCoachCategory === 'sleep' ? 'rgba(6,170,196,0.15)' : 'transparent'}; color:${activeAiCoachCategory === 'sleep' ? 'var(--primary)' : 'var(--text)'}; font-weight:600;">
-        🌙 النوم
-      </button>
-      <button type="button" class="reset-btn ai-cat-chip" data-cat="habits" style="padding:4px 10px; font-size:.76rem; border-radius:16px; border-color:${activeAiCoachCategory === 'habits' ? 'var(--primary)' : 'var(--line)'}; background:${activeAiCoachCategory === 'habits' ? 'rgba(6,170,196,0.15)' : 'transparent'}; color:${activeAiCoachCategory === 'habits' ? 'var(--primary)' : 'var(--text)'}; font-weight:600;">
-        🎯 العادات
+      <button type="button" class="reset-btn" id="btnTabAiAnalysis" style="flex:1; padding:6px 12px; font-size:.82rem; border-radius:18px; font-weight:700; ${activeAiCoachTab === 'analysis' ? 'background:rgba(6,170,196,0.18); border-color:var(--primary); color:var(--primary);' : 'border-color:transparent; color:var(--muted);'}">
+        📊 التقرير والتحليل اليومي
       </button>
     </div>
 
-    <!-- Advice output container -->
-    <div id="aiCoachOutputContainer" style="background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px; position:relative;">
-      <div id="aiCoachLoading" style="display:none; text-align:center; padding:20px; color:var(--muted); font-size:.82rem;">
-        ⏳ جاري توليد التوجيهات الذكية ليومك...
+    ${activeAiCoachTab === 'chat' ? `
+      <!-- CHAT INTERFACE -->
+      <div id="aiCoachChatBox">
+        <!-- Messages container -->
+        <div id="aiCoachChatMessages" style="max-height:260px; min-height:160px; overflow-y:auto; padding:8px 4px; display:flex; flex-direction:column; gap:8px; margin-bottom:8px; scroll-behavior:smooth;">
+          ${chatHistory.map(m => {
+            const isBot = m.role === 'assistant';
+            const timeStr = m.timestamp ? new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+            return `
+              <div class="ai-chat-msg-row ${isBot ? 'ai-chat-msg-assistant' : 'ai-chat-msg-user'}" style="align-self:${isBot ? 'flex-start' : 'flex-end'}; max-width:90%; display:flex; gap:6px; align-items:flex-start; ${isBot ? '' : 'flex-direction:row-reverse;'}">
+                <span style="font-size:1.1rem; flex-shrink:0;">${isBot ? '🤖' : '👤'}</span>
+                <div>
+                  <div class="ai-chat-bubble" style="background:${isBot ? 'rgba(46,204,113,0.12)' : 'rgba(6,170,196,0.18)'}; border:1px solid ${isBot ? 'rgba(46,204,113,0.3)' : 'rgba(6,170,196,0.35)'}; border-radius:${isBot ? '14px 14px 14px 4px' : '14px 14px 4px 14px'}; padding:8px 12px; font-size:.8rem; line-height:1.6; color:var(--text); white-space:pre-wrap; word-break:break-word;">${escapeHtml(m.text)}</div>
+                  <span style="font-size:.65rem; color:var(--muted); margin-top:2px; display:block; ${isBot ? '' : 'text-align:left;'}">${timeStr}</span>
+                </div>
+              </div>
+            `;
+          }).join('')}
+          <div id="aiCoachChatTyping" style="display:none; align-self:flex-start; font-size:.75rem; color:var(--muted); padding:4px 10px; background:var(--card-alt); border-radius:12px;">
+            🤖 كوتش زتونة يكتب الآن... ⏳
+          </div>
+        </div>
+
+        <!-- Quick Prompts Chips -->
+        <div style="display:flex; gap:6px; overflow-x:auto; padding-bottom:6px; margin-bottom:8px; scrollbar-width:none;">
+          <button type="button" class="reset-btn ai-quick-prompt" data-prompt="قصرت في شرب المياه النهاردة، أعمل إيه؟" style="white-space:nowrap; padding:3px 9px; font-size:.72rem; border-radius:14px; border-color:var(--line); color:var(--text); background:var(--card);">💧 ماء اليوم</button>
+          <button type="button" class="reset-btn ai-quick-prompt" data-prompt="إيه أحسن طريقة أوفق بيها بين مواعيد التمرين والصلاة؟" style="white-space:nowrap; padding:3px 9px; font-size:.72rem; border-radius:14px; border-color:var(--line); color:var(--text); background:var(--card);">🕌 تمرين وصلاة</button>
+          <button type="button" class="reset-btn ai-quick-prompt" data-prompt="مش عارف أنام كويس وعندي أرق، اقترحلي روتين هادي." style="white-space:nowrap; padding:3px 9px; font-size:.72rem; border-radius:14px; border-color:var(--line); color:var(--text); background:var(--card);">🌙 أرق ونوم</button>
+          <button type="button" class="reset-btn ai-quick-prompt" data-prompt="لخصلي وقيم لي أدائي في كل الأقسام لليوم." style="white-space:nowrap; padding:3px 9px; font-size:.72rem; border-radius:14px; border-color:var(--line); color:var(--text); background:var(--card);">📊 تقييم اليوم</button>
+          <button type="button" class="reset-btn ai-quick-prompt" data-prompt="اقترحلي وجبة بروتين صحية وخفيفة وسريعة." style="white-space:nowrap; padding:3px 9px; font-size:.72rem; border-radius:14px; border-color:var(--line); color:var(--text); background:var(--card);">🥗 وجبة بروتين</button>
+          <button type="button" class="reset-btn ai-quick-prompt" data-prompt="حاسس بكسل وتعب ومحتاج تحفيز أكمل بيه يومي." style="white-space:nowrap; padding:3px 9px; font-size:.72rem; border-radius:14px; border-color:var(--line); color:var(--text); background:var(--card);">💪 تشجيع وتحفيز</button>
+        </div>
+
+        <!-- Chat Input Row -->
+        <div style="display:flex; gap:6px; align-items:center;">
+          <input type="text" id="aiCoachChatInput" class="weight-input" placeholder="اكتب سؤالك لكوتش زتونة هنا..." style="flex:1; font-size:.82rem; padding:8px 14px; border-radius:20px; background:var(--card); border:1px solid var(--line);">
+          <button type="button" id="btnSendAiChat" class="reset-btn" style="padding:8px 14px; border-radius:20px; background:var(--primary); color:#fff; border-color:var(--primary); font-weight:700; font-size:.82rem; cursor:pointer;">
+            إرسال 🚀
+          </button>
+          <button type="button" id="btnClearAiChat" class="reset-btn" title="مسح سجل المحادثة" style="padding:8px 10px; border-radius:20px; border-color:var(--line); color:var(--muted); font-size:.8rem; cursor:pointer;">
+            🗑️
+          </button>
+        </div>
       </div>
-      <div id="aiCoachOutput" style="font-size:.8rem; line-height:1.65; color:var(--text); white-space:pre-wrap; word-break:break-word;"></div>
-      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:10px;">
-        <button type="button" class="reset-btn" id="btnRefreshAiAdvice" style="padding:4px 10px; font-size:.72rem; border-color:var(--primary); color:var(--primary);">
-          🔄 تحديث التوجيه
-        </button>
-        <button type="button" class="reset-btn" id="btnCopyAiAdvice" style="padding:4px 10px; font-size:.72rem; border-color:var(--line); color:var(--muted);">
-          📋 نسخ
-        </button>
+    ` : `
+      <!-- ANALYSIS INTERFACE -->
+      <div id="aiCoachAnalysisBox">
+        <!-- Category selector chips -->
+        <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px;">
+          <button type="button" class="reset-btn ai-cat-chip" data-cat="all" style="padding:4px 10px; font-size:.76rem; border-radius:16px; border-color:${activeAiCoachCategory === 'all' ? 'var(--primary)' : 'var(--line)'}; background:${activeAiCoachCategory === 'all' ? 'rgba(6,170,196,0.15)' : 'transparent'}; color:${activeAiCoachCategory === 'all' ? 'var(--primary)' : 'var(--text)'}; font-weight:600;">
+            ✨ التحليل الشامل
+          </button>
+          <button type="button" class="reset-btn ai-cat-chip" data-cat="prayer" style="padding:4px 10px; font-size:.76rem; border-radius:16px; border-color:${activeAiCoachCategory === 'prayer' ? 'var(--primary)' : 'var(--line)'}; background:${activeAiCoachCategory === 'prayer' ? 'rgba(6,170,196,0.15)' : 'transparent'}; color:${activeAiCoachCategory === 'prayer' ? 'var(--primary)' : 'var(--text)'}; font-weight:600;">
+            🕌 العبادات
+          </button>
+          <button type="button" class="reset-btn ai-cat-chip" data-cat="gym" style="padding:4px 10px; font-size:.76rem; border-radius:16px; border-color:${activeAiCoachCategory === 'gym' ? 'var(--primary)' : 'var(--line)'}; background:${activeAiCoachCategory === 'gym' ? 'rgba(6,170,196,0.15)' : 'transparent'}; color:${activeAiCoachCategory === 'gym' ? 'var(--primary)' : 'var(--text)'}; font-weight:600;">
+            🏋️ التمرين
+          </button>
+          <button type="button" class="reset-btn ai-cat-chip" data-cat="nutrition" style="padding:4px 10px; font-size:.76rem; border-radius:16px; border-color:${activeAiCoachCategory === 'nutrition' ? 'var(--primary)' : 'var(--line)'}; background:${activeAiCoachCategory === 'nutrition' ? 'rgba(6,170,196,0.15)' : 'transparent'}; color:${activeAiCoachCategory === 'nutrition' ? 'var(--primary)' : 'var(--text)'}; font-weight:600;">
+            💧 التغذية والماء
+          </button>
+          <button type="button" class="reset-btn ai-cat-chip" data-cat="sleep" style="padding:4px 10px; font-size:.76rem; border-radius:16px; border-color:${activeAiCoachCategory === 'sleep' ? 'var(--primary)' : 'var(--line)'}; background:${activeAiCoachCategory === 'sleep' ? 'rgba(6,170,196,0.15)' : 'transparent'}; color:${activeAiCoachCategory === 'sleep' ? 'var(--primary)' : 'var(--text)'}; font-weight:600;">
+            🌙 النوم
+          </button>
+          <button type="button" class="reset-btn ai-cat-chip" data-cat="habits" style="padding:4px 10px; font-size:.76rem; border-radius:16px; border-color:${activeAiCoachCategory === 'habits' ? 'var(--primary)' : 'var(--line)'}; background:${activeAiCoachCategory === 'habits' ? 'rgba(6,170,196,0.15)' : 'transparent'}; color:${activeAiCoachCategory === 'habits' ? 'var(--primary)' : 'var(--text)'}; font-weight:600;">
+            🎯 العادات
+          </button>
+        </div>
+
+        <!-- Advice output container -->
+        <div id="aiCoachOutputContainer" style="background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px; position:relative;">
+          <div id="aiCoachLoading" style="display:none; text-align:center; padding:20px; color:var(--muted); font-size:.82rem;">
+            ⏳ جاري توليد التوجيهات الذكية ليومك...
+          </div>
+          <div id="aiCoachOutput" style="font-size:.8rem; line-height:1.65; color:var(--text); white-space:pre-wrap; word-break:break-word;"></div>
+          <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:10px;">
+            <button type="button" class="reset-btn" id="btnRefreshAiAdvice" style="padding:4px 10px; font-size:.72rem; border-color:var(--primary); color:var(--primary);">
+              🔄 تحديث التوجيه
+            </button>
+            <button type="button" class="reset-btn" id="btnCopyAiAdvice" style="padding:4px 10px; font-size:.72rem; border-color:var(--line); color:var(--muted);">
+              📋 نسخ
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
+    `}
   `;
 
-  // Attach chip events
-  card.querySelectorAll('.ai-cat-chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      activeAiCoachCategory = chip.getAttribute('data-cat') || 'all';
+  // Attach tab switcher
+  const btnTabChat = document.getElementById('btnTabAiChat');
+  const btnTabAnalysis = document.getElementById('btnTabAiAnalysis');
+  if(btnTabChat){
+    btnTabChat.addEventListener('click', () => {
+      activeAiCoachTab = 'chat';
+      renderAiCoachCard();
+    });
+  }
+  if(btnTabAnalysis){
+    btnTabAnalysis.addEventListener('click', () => {
+      activeAiCoachTab = 'analysis';
       renderAiCoachCard();
       triggerAiAdviceGeneration();
     });
-  });
+  }
+
+  // Attach Chat Events
+  if(activeAiCoachTab === 'chat'){
+    const chatInput = document.getElementById('aiCoachChatInput');
+    const btnSend = document.getElementById('btnSendAiChat');
+    const btnClear = document.getElementById('btnClearAiChat');
+
+    if(btnSend && chatInput){
+      btnSend.addEventListener('click', () => {
+        const text = chatInput.value;
+        if(text && text.trim()){
+          chatInput.value = '';
+          sendAiChatMessage(text);
+        }
+      });
+    }
+
+    if(chatInput){
+      chatInput.addEventListener('keydown', (e) => {
+        if(e.key === 'Enter'){
+          e.preventDefault();
+          const text = chatInput.value;
+          if(text && text.trim()){
+            chatInput.value = '';
+            sendAiChatMessage(text);
+          }
+        }
+      });
+    }
+
+    if(btnClear){
+      btnClear.addEventListener('click', () => {
+        if(confirm('هل تريد مسح سجل المحادثة والبدء من جديد؟')){
+          clearAiCoachChatHistory();
+          renderAiCoachCard();
+        }
+      });
+    }
+
+    // Quick prompt buttons
+    card.querySelectorAll('.ai-quick-prompt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const prompt = btn.getAttribute('data-prompt');
+        if(prompt) sendAiChatMessage(prompt);
+      });
+    });
+
+    // Auto-scroll chat to bottom
+    const msgBox = document.getElementById('aiCoachChatMessages');
+    if(msgBox) msgBox.scrollTop = msgBox.scrollHeight;
+  }
+
+  // Attach Analysis Events
+  if(activeAiCoachTab === 'analysis'){
+    card.querySelectorAll('.ai-cat-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        activeAiCoachCategory = chip.getAttribute('data-cat') || 'all';
+        renderAiCoachCard();
+        triggerAiAdviceGeneration();
+      });
+    });
+
+    const btnCopy = document.getElementById('btnCopyAiAdvice');
+    if(btnCopy){
+      btnCopy.addEventListener('click', () => {
+        const outputEl = document.getElementById('aiCoachOutput');
+        if(outputEl && outputEl.textContent){
+          if(navigator.clipboard && navigator.clipboard.writeText){
+            navigator.clipboard.writeText(outputEl.textContent).then(() => {
+              if(typeof window.showToast === 'function') window.showToast('تم نسخ نصيحة الكوتش للحافظة!', 'success');
+              else alert('تم نسخ نصيحة الكوتش للحافظة!');
+            });
+          }
+        }
+      });
+    }
+
+    const btnRefresh = document.getElementById('btnRefreshAiAdvice');
+    if(btnRefresh){
+      btnRefresh.addEventListener('click', () => {
+        triggerAiAdviceGeneration();
+      });
+    }
+
+    triggerAiAdviceGeneration();
+  }
 
   // Attach settings toggle
   const btnToggleSettings = document.getElementById('btnToggleAiSettings');
@@ -29548,7 +30357,7 @@ function renderAiCoachCard(){
       saveAiCoachSettings(settings);
       aiCoachSettingsOpen = false;
       renderAiCoachCard();
-      triggerAiAdviceGeneration();
+      if(activeAiCoachTab === 'analysis') triggerAiAdviceGeneration();
     });
   }
 
@@ -29563,32 +30372,6 @@ function renderAiCoachCard(){
       }
     });
   }
-
-  // Copy advice
-  const btnCopy = document.getElementById('btnCopyAiAdvice');
-  if(btnCopy){
-    btnCopy.addEventListener('click', () => {
-      const outputEl = document.getElementById('aiCoachOutput');
-      if(outputEl && outputEl.textContent){
-        if(navigator.clipboard && navigator.clipboard.writeText){
-          navigator.clipboard.writeText(outputEl.textContent).then(() => {
-            alert('تم نسخ نصيحة الكوتش للحافظة!');
-          });
-        }
-      }
-    });
-  }
-
-  // Refresh advice
-  const btnRefresh = document.getElementById('btnRefreshAiAdvice');
-  if(btnRefresh){
-    btnRefresh.addEventListener('click', () => {
-      triggerAiAdviceGeneration();
-    });
-  }
-
-  // Trigger initial generation
-  triggerAiAdviceGeneration();
 
   function triggerAiAdviceGeneration(){
     const outputEl = document.getElementById('aiCoachOutput');
@@ -29612,6 +30395,11 @@ function renderAiCoachCard(){
 
 window.loadAiCoachSettings = loadAiCoachSettings;
 window.saveAiCoachSettings = saveAiCoachSettings;
+window.loadAiCoachChatHistory = loadAiCoachChatHistory;
+window.saveAiCoachChatHistory = saveAiCoachChatHistory;
+window.clearAiCoachChatHistory = clearAiCoachChatHistory;
+window.generateLocalAiChatResponse = generateLocalAiChatResponse;
+window.sendAiChatMessage = sendAiChatMessage;
 window.analyzeDailyWellnessStats = analyzeDailyWellnessStats;
 window.generateAiCoachAdvice = generateAiCoachAdvice;
 window.renderAiCoachCard = renderAiCoachCard;
@@ -34319,6 +35107,7 @@ function goToDate(targetDate){
   calOpen = false;
   selectDay(selectedIdx);
   if(typeof renderTabs === 'function') renderTabs();
+  try { applySecBlockOrder(getCurrentSectionContainerId()); } catch(e){}
   if(mode==='overview') renderOverview();
   renderCalBarLabel();
   renderCalPanel();
@@ -34961,6 +35750,7 @@ function renderHomeDashboard(){
         <div>${tipText}</div>
       </div>
     `;
+    renderAiCoachCard();
   }
 
   // Render Quick Actions Bar
@@ -42666,7 +43456,25 @@ function renderStretchesView(){
 
 
 <!-- Phase 1: Theme & Appearance Customizer Modal -->
-<div class="theme-modal-overlay" id="themeModalOverlay" role="dialog" aria-modal="true" aria-label="تخصيص المظهر" onclick="if(event.target===this)closeThemeCustomizer()">
+<!-- Phase 24: Universal Section & Card Reordering Modal -->
+<div class="theme-modal-overlay" id="sectionOrderModal" style="display:none;" role="dialog" aria-modal="true" aria-label="ترتيب بطاقات ومكونات القسم" onclick="if(event.target===this)closeSectionOrderModal()">
+  <div class="theme-modal-sheet" onclick="event.stopPropagation()" style="max-width:520px;">
+    <div class="tms-header">
+      <div class="tms-title">🔃 ترتيب بطاقات ومكونات القسم</div>
+      <button type="button" class="tms-close-btn" onclick="closeSectionOrderModal()" aria-label="إغلاق">✕</button>
+    </div>
+    <div style="font-size:0.8rem; color:var(--muted); margin-bottom:12px; line-height:1.5;">
+      رتّب البطاقات والعناوين حسب أولوياتك اليومية. استخدم الأسهم ▲ و ▼ للتحريك، أو استعد الترتيب الأصلي في أي وقت.
+    </div>
+    <div id="sectionOrderModalList" style="display:flex; flex-direction:column; gap:8px; max-height:55vh; overflow-y:auto; padding-bottom:8px;"></div>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px; padding-top:12px; border-top:1px solid var(--line);">
+      <button type="button" class="btn-subtle" onclick="resetCurrentSectionOrder()" style="color:var(--text-muted); font-size:0.82rem;">🔄 استعادة الترتيب الافتراضي</button>
+      <button type="button" class="btn-accent" onclick="closeSectionOrderModal()" style="padding:6px 16px; font-size:0.85rem;">تم الحفظ ✓</button>
+    </div>
+  </div>
+</div>
+
+<div class="theme-modal-overlay" id="themeModalOverlay"  role="dialog" aria-modal="true" aria-label="تخصيص المظهر" onclick="if(event.target===this)closeThemeCustomizer()">
   <div class="theme-modal-sheet" onclick="event.stopPropagation()">
     <div class="tms-header">
       <div class="tms-title">🎨 تخصيص مظهر زتونة</div>
@@ -46388,6 +47196,8 @@ function loadSettingsDensity(){
 document.addEventListener('DOMContentLoaded', loadSettingsDensity);
 
 function syncSettingsUI(){
+  try { syncHapticsUI(); } catch(e){}
+  try { syncAudioUI(); } catch(e){}
   // Sync light mode chips
   const lightMode = document.body.classList.contains('amoled-mode') ? 'amoled' :
                     document.body.classList.contains('dark-mode') ? 'dark' : 'light';
@@ -46569,7 +47379,7 @@ function resetAzkarTypeCounts(type){
    PHASE 22: UNIVERSAL SECTION BLOCK REORDERING ENGINE
    ========================================================================= */
 function moveSecBlock(btn, dir){
-  triggerHaptic('light');
+  triggerHaptic('buttons', 'gentle');
   const block = btn.closest('[data-sec-block]');
   if(!block || !block.parentElement) return;
   const parent = block.parentElement;
@@ -46586,11 +47396,13 @@ function moveSecBlock(btn, dir){
 }
 
 function saveSecBlockOrder(container){
-  if(!container || !container.id) return;
-  const blocks = Array.from(container.querySelectorAll(':scope > [data-sec-block]'));
+  if(!container) return;
+  const containerId = container.id || (container.closest('[id]') ? container.closest('[id]').id : null);
+  if(!containerId) return;
+  const blocks = Array.from(container.children).filter(el => el.hasAttribute('data-sec-block'));
   const order = blocks.map(b => b.getAttribute('data-sec-block')).filter(Boolean);
   try {
-    localStorage.setItem('zatoona-sec-order-' + container.id, JSON.stringify(order));
+    localStorage.setItem('zatoona-sec-order-' + containerId, JSON.stringify(order));
   } catch(e){}
 }
 
@@ -46601,12 +47413,196 @@ function applySecBlockOrder(containerId){
     const raw = localStorage.getItem('zatoona-sec-order-' + containerId);
     if(!raw) return;
     const order = JSON.parse(raw);
-    if(!Array.isArray(order)) return;
+    if(!Array.isArray(order) || !order.length) return;
     order.forEach(key => {
       const el = container.querySelector(`:scope > [data-sec-block="${key}"]`);
-      if(el) container.appendChild(el);
+      if(el && el.parentElement === container){
+        container.appendChild(el);
+      }
     });
   } catch(e){}
+}
+
+const SECTION_BLOCK_METADATA = {
+  // Home
+  'morning-briefing': { title: 'الموجز الصباحي الذكي', icon: '☀️' },
+  'home-summary': { title: 'ملخص اليوم والأهداف', icon: '📊' },
+  'ai-coach': { title: 'كوتش الذكاء الاصطناعي والمحادثة', icon: '🤖' },
+  'quick-actions': { title: 'الإجراءات والوصول السريع', icon: '⚡' },
+  'stats-grid': { title: 'بطاقات الأقسام الستة الذكية', icon: '🎯' },
+  'home-streaks': { title: 'سلاسل الاستمرارية والالتزام', icon: '🔥' },
+  'home-notes': { title: 'ملاحظات سريعة لليوم', icon: '📝' },
+  'life-balance': { title: 'عجلة التوازن الحياتي الشاملة', icon: '⚖️' },
+  'kinship-ties': { title: 'صلة الرحم والبر بالوالدين', icon: '🤝' },
+  'screen-waste': { title: 'حاسبة وقت الشاشة المهدر', icon: '⏳' },
+  'plan-adjustment': { title: 'مؤشر وتعديل الخطة الذكي', icon: '📈' },
+  'daily-notes': { title: 'دفتر تدوين ملاحظة اليوم', icon: '📓' },
+  'daily-share': { title: 'مشاركة إنجازاتك وبطاقة اليوم', icon: '📤' },
+  'weight-chart': { title: 'مخطط وتتبع قياسات الوزن', icon: '⚖️' },
+  'weekly-review': { title: 'جلسة المراجعة الأسبوعية', icon: '📋' },
+  'weekly-budget': { title: 'ملخص الميزانية الأسبوعي', icon: '💰' },
+  'reminders-mgmt': { title: 'إدارة التنبيهات والمنبهات', icon: '🔔' },
+
+  // Prayer
+  'hadith': { title: 'الأربعون النووية وتدبر الحديث', icon: '📖' },
+  'mindful-tafakkur': { title: 'جلسة التفكر والتدبر الهادئ', icon: '🌱' },
+  'prayer-times': { title: 'مواقيت الصلاة وعد تنازلي الأذان', icon: '🕌' },
+  'qibla': { title: 'بوصلة القبلة الدقيقة أوفلاين', icon: '🧭' },
+  'forbidden-times': { title: 'أوقات الكراهة والنهي عن التنفل', icon: '🚫' },
+  'pre-adhan': { title: 'تنبيه الاستعداد الهادئ قبل الأذان', icon: '⏳' },
+  'last-third': { title: 'الثلث الأخير ومنبه الفجر المتدرج', icon: '🌙' },
+  'sunnah-rawatib': { title: 'السنن الرواتب (١٢ ركعة)', icon: '✨' },
+  'suhoor': { title: 'منبه السحور والقيام الذكي', icon: '🥣' },
+  'azkar-reader': { title: 'أذكار الصباح والمساء بعدادات', icon: '📿' },
+  'random-dhikr': { title: 'ذكر اليوم الرطب الخفيف', icon: '🌿' },
+  'friday-sunan': { title: 'قائمة سنن يوم الجمعة المباركة', icon: '🕌' },
+
+  // Gym
+  'calisthenics-tree': { title: 'مسار احتراف تمارين وزن الجسم (Calisthenics)', icon: '🤸' },
+  'cns-tendon-shield': { title: 'درع الجهاز العصبي وصحة الأوتار', icon: '🛡️' },
+  'superset-asymmetry': { title: 'السوبرست وموازنة عدم تناسق القوة', icon: '⚖️' },
+  'usnavy-fat-calc': { title: 'حاسبة نسبة دهون الجسم (US Navy)', icon: '📐' },
+  'gym-settings': { title: 'إعدادات وخطة الجيم النشطة', icon: '⚙️' },
+  'gym-encyclopedia': { title: 'موسوعة التمارين الرياضية', icon: '📚' },
+  'today-exercises': { title: 'تمارين اليوم والمجموعات والأوزان', icon: '🏋️' },
+
+  // Meal
+  'household-calories': { title: 'حاسبة استهلاك السعرات بالأنشطة المنزلية', icon: '🧹' },
+  'limitless-supplements': { title: 'مكمل ليمتليس مان ماكس والتغذية', icon: '💊' },
+  'cost-per-protein': { title: 'حاسبة تكلفة جرام البروتين الذكية', icon: '💰' },
+  'meal-targets': { title: 'أهداف السعرات والماكروز اليومية', icon: '🎯' },
+  'meal-summary': { title: 'ملخص الوجبات المتناولة اليوم', icon: '🍽️' },
+  'water-intake': { title: 'تتبع شرب الماء ومؤشر الترطيب', icon: '💧' },
+  'grocery-list': { title: 'قائمة المشتريات والسوبرماركت الذكية', icon: '🛒' },
+
+  // Sleep
+  'sunan-sleep': { title: 'سنن وآداب النوم النبوية', icon: '🌙' },
+  'vit-d-sun': { title: 'دليل فيتامين د والتعرض لشمس مصر', icon: '☀️' },
+  'visual-hygiene': { title: 'صحة العين وتقليل الشاشات قبل النوم', icon: '👁️' },
+
+  // Schedule
+  'schedule-timeline': { title: 'الجدول الزمني ومحرك الأوقات', icon: '🕒' },
+  'schedule-study': { title: 'ركن المذاكرة والمهام الدراسية', icon: '📚' },
+
+  // Budget
+  'budget-food-split': { title: 'تفصيل مصروفات الأكل والبقالة', icon: '🛒' },
+  'budget-allowance': { title: 'المصروف اليومي المقترح', icon: '🎯' },
+  'budget-subscriptions': { title: 'الاشتراكات والالتزامات القادمة', icon: '📅' },
+  'budget-savings': { title: 'أهداف الادخار وصندوق الطوارئ', icon: '🏦' },
+
+  // Study
+  'flip-focus': { title: 'وضع التركيز الفوري بقلب الهاتف', icon: '📱' }
+};
+
+function getCurrentSectionContainerId(){
+  if(typeof mode === 'undefined' || mode === 'home') return 'homeHero';
+  const map = {
+    overview: 'overviewView',
+    prayer: 'prayerView',
+    gym: 'gymView',
+    meal: 'mealView',
+    sleep: 'sleepView',
+    schedule: 'scheduleView',
+    budget: 'budgetView',
+    notes: 'notesView',
+    study: 'studyView',
+    settings: 'settingsView'
+  };
+  return map[mode] || 'homeHero';
+}
+
+function openCurrentSectionOrderModal(){
+  openSectionOrderModal(getCurrentSectionContainerId());
+}
+
+function openSectionOrderModal(containerId){
+  triggerHaptic('buttons', 'light');
+  if(!containerId) containerId = getCurrentSectionContainerId();
+  const container = document.getElementById(containerId);
+  if(!container) return;
+
+  const modal = document.getElementById('sectionOrderModal');
+  const listEl = document.getElementById('sectionOrderModalList');
+  if(!modal || !listEl) return;
+
+  window._activeOrderContainerId = containerId;
+  renderSectionOrderModalList(containerId);
+  modal.classList.add('open');
+  modal.style.display = 'flex';
+}
+
+function closeSectionOrderModal(){
+  triggerHaptic('buttons', 'light');
+  const modal = document.getElementById('sectionOrderModal');
+  if(modal){
+    modal.classList.remove('open');
+    modal.style.display = 'none';
+  }
+  window._activeOrderContainerId = null;
+}
+
+function renderSectionOrderModalList(containerId){
+  const container = document.getElementById(containerId);
+  const listEl = document.getElementById('sectionOrderModalList');
+  if(!container || !listEl) return;
+
+  const blocks = Array.from(container.children).filter(el => el.hasAttribute('data-sec-block'));
+  if(!blocks.length){
+    listEl.innerHTML = '<div style="text-align:center; padding:20px; color:var(--muted); font-size:0.85rem;">لا توجد بطاقات قابلة للترتيب في هذا القسم حالياً.</div>';
+    return;
+  }
+
+  listEl.innerHTML = blocks.map((b, idx) => {
+    const key = b.getAttribute('data-sec-block');
+    const meta = SECTION_BLOCK_METADATA[key] || { title: key, icon: '📌' };
+    const isFirst = idx === 0;
+    const isLast = idx === blocks.length - 1;
+
+    return `
+      <div class="sec-order-item" style="display:flex; justify-content:space-between; align-items:center; background:var(--card-alt); border:1px solid var(--line); border-radius:10px; padding:10px 14px;">
+        <div style="display:flex; align-items:center; gap:10px; font-weight:700; font-size:0.88rem; color:var(--text);">
+          <span style="font-size:1.1rem;">${meta.icon}</span>
+          <span>${meta.title}</span>
+        </div>
+        <div style="display:inline-flex; gap:6px;">
+          <button type="button" class="sec-reorder-btn" title="تحريك لأعلى" ${isFirst ? 'disabled style="opacity:0.3; cursor:not-allowed;"' : ''} onclick="modalMoveSecBlock('${containerId}', '${key}', -1)">▲</button>
+          <button type="button" class="sec-reorder-btn" title="تحريك لأسفل" ${isLast ? 'disabled style="opacity:0.3; cursor:not-allowed;"' : ''} onclick="modalMoveSecBlock('${containerId}', '${key}', 1)">▼</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function modalMoveSecBlock(containerId, key, dir){
+  triggerHaptic('buttons', 'gentle');
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  const block = container.querySelector(`:scope > [data-sec-block="${key}"]`);
+  if(!block) return;
+
+  if(dir === -1){
+    let prev = block.previousElementSibling;
+    while(prev && !prev.hasAttribute('data-sec-block')) prev = prev.previousElementSibling;
+    if(prev) container.insertBefore(block, prev);
+  } else {
+    let next = block.nextElementSibling;
+    while(next && !next.hasAttribute('data-sec-block')) next = next.nextElementSibling;
+    if(next) container.insertBefore(next, block);
+  }
+  saveSecBlockOrder(container);
+  renderSectionOrderModalList(containerId);
+}
+
+function resetCurrentSectionOrder(){
+  triggerHaptic('buttons', 'light');
+  const containerId = window._activeOrderContainerId || getCurrentSectionContainerId();
+  if(!containerId) return;
+  try {
+    localStorage.removeItem('zatoona-sec-order-' + containerId);
+  } catch(e){}
+  if(typeof mode !== 'undefined' && mode === 'home') renderHomeDashboard();
+  else if(typeof applyMode === 'function') applyMode();
+  renderSectionOrderModalList(containerId);
 }
 
 function filterUserGuide(query){
@@ -46641,9 +47637,11 @@ renderAzkar = function(){
 
 // Apply saved section orders on DOM ready
 document.addEventListener('DOMContentLoaded', function(){
-  ['homeView', 'prayerView', 'mealView', 'gymView', 'sleepView', 'scheduleView', 'settingsView'].forEach(id => {
+  ['homeHero', 'overviewView', 'prayerView', 'mealView', 'gymView', 'sleepView', 'scheduleView', 'budgetView', 'notesView', 'studyView', 'settingsView'].forEach(id => {
     applySecBlockOrder(id);
   });
+  try { syncHapticsUI(); } catch(e){}
+  try { syncAudioUI(); } catch(e){}
 });
 
 
