@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Permissions for offline status, alarms, notifications, reboot recovery, and AI online access -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Zatoona"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:usesCleartextTraffic="false">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:theme="@style/Theme.Zatoona.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Alarm receiver for scheduled reminder triggers -->
+        <receiver
+            android:name=".AlarmReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.zatoona.app.ALARM_TRIGGER" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Alarm Full-Screen Lock-Screen Activity -->
+        <activity
+            android:name=".AlarmActivity"
+            android:exported="true"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.Zatoona.AlarmActivity">
+            <intent-filter>
+                <action android:name="com.zatoona.app.ACTION_ALARM_DISPLAY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!-- Foreground Service for alarm audio, vibration, and lifecycle -->
+        <service
+            android:name=".AlarmService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Alarm and reminder alerting service for continuous looping alarm audio, vibration, and full-screen dismissal" />
+        </service>
+
+        <!-- Broadcast receiver for device reboot, time changes, and package update -->
+        <receiver
+            android:name=".BootReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Quick Access Home-Screen Widget (Phase 13.5 / Proposal #7) -->
+        <receiver
+            android:name=".QuickAccessWidgetProvider"
+            android:exported="true"
+            android:label="@string/widget_quick_access_title">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_quick_access_info" />
+        </receiver>
+
+        <!-- Next Prayer Home-Screen Widget (Proposal #8 / Phase 13.5 Extension) -->
+        <receiver
+            android:name=".NextPrayerWidgetProvider"
+            android:exported="true"
+            android:label="@string/widget_next_prayer_title">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_next_prayer_info" />
+        </receiver>
+
+        <!-- Daily Habits Home-Screen Widget (Proposal #9 / Phase 13.5 Extension) -->
+        <receiver
+            android:name=".DailyHabitsWidgetProvider"
+            android:exported="true"
+            android:label="@string/widget_daily_habits_title">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_daily_habits_info" />
+        </receiver>
+
+        <!-- Study & Focus Home-Screen Widget (Phase 7 - System Polish) -->
+        <receiver
+            android:name=".StudyWidgetProvider"
+            android:exported="true"
+            android:label="@string/widget_study_title">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.zatoona.app.ACTION_TOGGLE_STUDY_TIMER" />
+                <action android:name="com.zatoona.app.ACTION_RESET_STUDY_TIMER" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_study_info" />
+        </receiver>
+
+        <!-- Water Tracker Home-Screen Widget (Interactive Hydration) -->
+        <receiver
+            android:name=".WaterWidgetProvider"
+            android:exported="true"
+            android:label="@string/widget_water_title">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.zatoona.app.ACTION_ADD_WATER" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_water_info" />
+        </receiver>
+
+        <!-- Daily Schedule Home-Screen Widget -->
+        <receiver
+            android:name=".ScheduleWidgetProvider"
+            android:exported="true"
+            android:label="@string/widget_schedule_title">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_schedule_info" />
+        </receiver>
+
+        <!-- Service providing collection data for ScheduleWidget scrollable ListView -->
+        <service
+            android:name=".ScheduleWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"
+            android:exported="false" />
+
+        <!-- All-in-One Daily Home-Screen Widget (Package F / Feature 88) -->
+        <receiver
+            android:name=".AllInOneDailyWidgetProvider"
+            android:exported="true"
+            android:label="@string/widget_all_in_one_title">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_all_in_one_info" />
+        </receiver>
+
+        <!-- Quick Settings Tile: Study & Focus (Phase 7) -->
+        <service
+            android:name=".ZatoonaStudyTileService"
+            android:label="@string/tile_study_label"
+            android:icon="@mipmap/ic_launcher"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <!-- Quick Settings Tile: Gym & Workout (Phase 7) -->
+        <service
+            android:name=".ZatoonaGymTileService"
+            android:label="@string/tile_gym_label"
+            android:icon="@mipmap/ic_launcher"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <!-- Floating Study & Pomodoro Bubble Service -->
+        <service
+            android:name=".FloatingStudyBubbleService"
+            android:exported="false" />
+
+    </application>
+
+</manifest>

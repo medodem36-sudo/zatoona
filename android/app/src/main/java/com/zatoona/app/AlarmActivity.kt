@@ -7,6 +7,10 @@ import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.media.RingtoneManager
 import android.os.Build
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
@@ -44,6 +48,35 @@ class AlarmActivity : AppCompatActivity() {
     private var localMediaPlayer: MediaPlayer? = null
     private var localVibrator: Vibrator? = null
 
+    // 598. Flip-to-Dismiss / Snooze Physical Sensor Listener
+    private var sensorManager: SensorManager? = null
+    private var accelerometer: Sensor? = null
+    private var isFaceDown = false
+    private var lastFlipTime = 0L
+
+    private val sensorListener = object : SensorEventListener {
+        override fun onSensorChanged(event: SensorEvent?) {
+            if (event?.sensor?.type == Sensor.TYPE_ACCELEROMETER) {
+                val z = event.values[2]
+                // When phone is placed face-down, Z acceleration is near -9.8 m/s^2
+                if (z < -8.0) {
+                    val now = System.currentTimeMillis()
+                    if (!isFaceDown && (now - lastFlipTime > 1500)) {
+                        isFaceDown = true
+                        lastFlipTime = now
+                        android.util.Log.i(TAG, "Flip-to-Dismiss gesture detected! Dismissing alarm.")
+                        runOnUiThread {
+                            triggerDismiss()
+                        }
+                    }
+                } else if (z > 2.0) {
+                    isFaceDown = false
+                }
+            }
+        }
+        override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
+    }
+
     private lateinit var swipeTrack: FrameLayout
     private lateinit var swipeHandle: FrameLayout
     private lateinit var tvSwipeHint: TextView
@@ -64,6 +97,17 @@ class AlarmActivity : AppCompatActivity() {
         setupSwipeToDismiss()
         setupListeners()
         startLocalAudioAndVibration()
+
+        // Register Flip-to-Dismiss accelerometer sensor listener
+        try {
+            sensorManager = getSystemService(Context.SENSOR_SERVICE) as? SensorManager
+            accelerometer = sensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+            accelerometer?.let {
+                sensorManager?.registerListener(sensorListener, it, SensorManager.SENSOR_DELAY_UI)
+            }
+        } catch (e: Exception) {
+            android.util.Log.w(TAG, "Failed to register accelerometer: ${e.message}")
+        }
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -291,6 +335,9 @@ class AlarmActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         stopLocalAudioAndVibration()
+        try {
+            sensorManager?.unregisterListener(sensorListener)
+        } catch (e: Exception) {}
         AlarmService.onAlarmDismissed = null
         super.onDestroy()
     }

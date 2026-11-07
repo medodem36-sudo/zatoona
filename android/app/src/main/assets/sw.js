@@ -127,7 +127,7 @@
    Added 19 curated exercise SVG assets with original adult male-only SVGs to SHELL_ASSETS.
    Cache version bumped from v23 (const CACHE_VERSION = 'v23') to v24 for full offline caching. */
 
-const CACHE_VERSION = 'v24';
+const CACHE_VERSION = 'v25';
 const SHELL_CACHE = 'zatoona-shell-' + CACHE_VERSION;
 const RUNTIME_CACHE = 'zatoona-runtime-' + CACHE_VERSION;
 const CURRENT_CACHES = [SHELL_CACHE, RUNTIME_CACHE];
@@ -246,6 +246,7 @@ const RUNTIME_HOSTS = [
 ];
 
 self.addEventListener('install', (event) => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(SHELL_CACHE)
       .then((cache) => cache.addAll(SHELL_ASSETS))

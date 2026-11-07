@@ -4,11 +4,15 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.session.MediaSession
+import android.media.session.PlaybackState
 import android.net.Uri
+import android.view.KeyEvent
 import android.os.Build
 import android.os.Bundle
 import android.webkit.JsPromptResult
 import android.webkit.JsResult
+import android.webkit.PermissionRequest
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
@@ -30,6 +34,19 @@ class MainActivity : AppCompatActivity() {
 
     private var pendingTargetMode: String? = null
     private var isPageLoaded = false
+    private var mediaSession: MediaSession? = null
+
+    private val audioPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { _ -> }
+
+    private fun requestAudioPermissionIfNeeded() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            audioPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+        }
+    }
 
     private val notificationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -55,8 +72,12 @@ class MainActivity : AppCompatActivity() {
 
         handleNotificationIntent(intent)
 
-        // Load trusted local PWA bundle
-        webView.loadUrl(ZatoonaAssetLoader.ENTRY_URL)
+        // Clear web resource cache so updated APK assets are immediately picked up
+        webView.clearCache(true)
+
+        // Load trusted local PWA bundle with cache-busting timestamp to bypass stale Service Worker match
+        val entryUrl = "${ZatoonaAssetLoader.ENTRY_URL}?v=${System.currentTimeMillis()}"
+        webView.loadUrl(entryUrl)
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -156,6 +177,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun configureWebChromeClient() {
         webView.webChromeClient = object : WebChromeClient() {
+            override fun onPermissionRequest(request: PermissionRequest?) {
+                runOnUiThread {
+                    request?.grant(request.resources)
+                }
+            }
+
             override fun onJsAlert(
                 view: WebView?,
                 url: String?,
@@ -227,6 +254,50 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+        // 591. Bluetooth Headset Media Button Capture
+    private fun setupMediaSession() {
+        try {
+            mediaSession = MediaSession(this, "ZatoonaMediaSession").apply {
+                setCallback(object : MediaSession.Callback() {
+                    override fun onMediaButtonEvent(mediaButtonIntent: Intent): Boolean {
+                        val keyEvent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            mediaButtonIntent.getParcelableExtra(Intent.EXTRA_KEY_EVENT, KeyEvent::class.java)
+                        } else {
+                            @Suppress("DEPRECATION")
+                            mediaButtonIntent.getParcelableExtra(Intent.EXTRA_KEY_EVENT)
+                        }
+                        if (keyEvent?.action == KeyEvent.ACTION_UP) {
+                            when (keyEvent.keyCode) {
+                                KeyEvent.KEYCODE_HEADSETHOOK,
+                                KeyEvent.KEYCODE_MEDIA_PLAY,
+                                KeyEvent.KEYCODE_MEDIA_PAUSE,
+                                KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> {
+                                    runOnUiThread {
+                                        webView.evaluateJavascript(
+                                            "if(typeof window.onNativeMediaButtonPressed === 'function'){ window.onNativeMediaButtonPressed(); }",
+                                            null
+                                        )
+                                    }
+                                    return true
+                                }
+                            }
+                        }
+                        return super.onMediaButtonEvent(mediaButtonIntent)
+                    }
+                })
+                setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS or MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS)
+                val state = PlaybackState.Builder()
+                    .setActions(PlaybackState.ACTION_PLAY_PAUSE or PlaybackState.ACTION_PLAY)
+                    .setState(PlaybackState.STATE_PLAYING, 0, 1.0f)
+                    .build()
+                setPlaybackState(state)
+                isActive = true
+            }
+        } catch (e: Exception) {
+            // Gracefully ignore media session initialization error
+        }
+    }
+
     private fun attachBridge() {
         // Expose JavaScript bridge only to the trusted local bundle
         webView.addJavascriptInterface(bridge, ZatoonaBridge.BRIDGE_NAME)
@@ -237,7 +308,7 @@ class MainActivity : AppCompatActivity() {
             override fun handleOnBackPressed() {
                 val dismissModalJs = """
                     (function(){
-                        var modal = document.querySelector('.theme-modal-overlay.open, .p5-modal-overlay.open, .p4-modal-overlay.open, .gym-modal-overlay.open, .drawer-overlay.open, .img-viewer-overlay.open, .backup-crypto-overlay.open, .battery-guide-overlay.open, .ex-img-modal-overlay.open, .str-modal-overlay.open');
+                        var modal = document.querySelector('.ai-chat-fullscreen-overlay.open, .theme-modal-overlay.open, .p5-modal-overlay.open, .p4-modal-overlay.open, .gym-modal-overlay.open, .drawer-overlay.open, .img-viewer-overlay.open, .backup-crypto-overlay.open, .battery-guide-overlay.open, .ex-img-modal-overlay.open, .str-modal-overlay.open');
                         if (modal) {
                             modal.classList.remove('open', 'active');
                             return 'closed';
@@ -262,6 +333,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
+        mediaSession?.release()
+        mediaSession = null
         webView.removeJavascriptInterface(ZatoonaBridge.BRIDGE_NAME)
         webView.destroy()
         super.onDestroy()

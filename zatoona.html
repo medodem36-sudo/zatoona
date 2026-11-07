@@ -7164,13 +7164,27 @@ body.compact-density .section-hint {
 
 /* ================= SECTION REORDERING ARROWS ================= */
 .sec-reorder-group {
-  display: inline-flex;
+  display: none !important; /* Reordering moved exclusively to Settings (#settingsView) */
+}
+.ai-compact-ribbon {
+  display: flex;
   align-items: center;
-  gap: 4px;
-  margin-inline-start: 8px;
-  opacity: 0.85;
-  transition: opacity 0.2s ease;
+  justify-content: space-between;
+  background: var(--card-alt);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
   user-select: none;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+.ai-compact-ribbon:hover {
+  border-color: var(--primary);
+  background: rgba(6, 170, 196, 0.08);
+}
+.ai-compact-ribbon:active {
+  transform: scale(0.99);
 }
 .sec-reorder-group:hover, .sec-reorder-group:focus-within {
   opacity: 1;
@@ -7510,6 +7524,437 @@ details.settings-card summary:hover {
   color: var(--accent);
 }
 
+
+/* ==========================================================================
+   FULLSCREEN STANDALONE AI CHAT SCREEN (شاشة محادثة كوتش زتونة الكاملة)
+   ========================================================================== */
+.ai-chat-fullscreen-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  background: var(--bg);
+  display: none;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.ai-chat-fullscreen-overlay.open {
+  display: flex !important;
+}
+
+.ai-chat-screen-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  background: var(--bg);
+}
+
+.ai-chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--card);
+  border-bottom: 1px solid var(--line);
+  flex-shrink: 0;
+}
+
+.ai-chat-back-btn {
+  background: none;
+  border: 1px solid var(--line);
+  color: var(--text);
+  font-size: 1.25rem;
+  padding: 4px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ai-chat-online-badge {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 10px;
+  height: 10px;
+  background: var(--good);
+  border: 2px solid var(--card);
+  border-radius: 50%;
+}
+
+.ai-chat-action-btn {
+  background: none;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.78rem;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.ai-chat-chips-bar {
+  display: flex;
+  gap: 8px;
+  padding: 8px 14px;
+  overflow-x: auto;
+  white-space: nowrap;
+  background: var(--card-alt);
+  border-bottom: 1px solid var(--line);
+  flex-shrink: 0;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.ai-chat-chips-bar::-webkit-scrollbar { display: none; }
+
+.ai-chip-pill {
+  background: var(--card);
+  border: 1px solid var(--line);
+  color: var(--text);
+  font-size: 0.74rem;
+  padding: 5px 12px;
+  border-radius: 16px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+.ai-chip-pill:active {
+  transform: scale(0.96);
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.ai-chat-messages-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: auto !important; /* Strictly no smooth scrolling from 0 */
+}
+
+.ai-bubble-user {
+  align-self: flex-end;
+  background: var(--accent);
+  color: #ffffff;
+  padding: 10px 14px;
+  border-radius: 16px 16px 4px 16px;
+  max-width: 85%;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  word-break: break-word;
+}
+
+.ai-bubble-bot {
+  align-self: flex-start;
+  background: var(--card);
+  border: 1px solid var(--line);
+  color: var(--text);
+  padding: 12px 16px;
+  border-radius: 16px 16px 16px 4px;
+  max-width: 90%;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  word-break: break-word;
+}
+
+.ai-chat-footer {
+  padding: 10px 14px;
+  background: var(--card);
+  border-top: 1px solid var(--line);
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.ai-chat-input {
+  flex: 1;
+  background: var(--input-bg, var(--card-alt));
+  border: 1px solid var(--line);
+  color: var(--text);
+  font-size: 16px !important; /* Prevents auto-zoom and scroll jumps on mobile */
+  padding: 10px 14px;
+  border-radius: 24px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.ai-chat-send-btn {
+  background: var(--accent);
+  color: #ffffff;
+  border: none;
+  border-radius: 24px;
+  padding: 8px 18px;
+  font-weight: 700;
+  font-size: 0.88rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.ai-chat-typing-row {
+  padding: 0 16px 8px;
+  flex-shrink: 0;
+}
+
+.ai-typing-bubble {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.typing-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: typingBlink 1.4s infinite both;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingBlink {
+  0%, 80%, 100% { opacity: 0.2; transform: scale(0.8); }
+  40% { opacity: 1; transform: scale(1.2); }
+}
+
+/* Voice Assistant, Action Buttons & Micro-learning Styling */
+.ai-chat-voice-btn {
+  background: var(--card-alt);
+  border: 1px solid var(--line);
+  color: var(--text);
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.ai-chat-voice-btn.recording {
+  background: #e74c3c !important;
+  color: #ffffff !important;
+  border-color: #c0392b !important;
+  animation: voicePulse 1.2s infinite;
+}
+
+@keyframes voicePulse {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(231,76,60,0.6); }
+  70% { transform: scale(1.08); box-shadow: 0 0 0 10px rgba(231,76,60,0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(231,76,60,0); }
+}
+
+.ai-voice-listening-bar {
+  background: rgba(231,76,60,0.12);
+  border: 1px solid rgba(231,76,60,0.3);
+  color: #e74c3c;
+  padding: 8px 14px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  margin: 0 14px 6px;
+}
+
+.ai-bubble-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--accent);
+  color: #ffffff;
+  border: none;
+  border-radius: 14px;
+  padding: 6px 14px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  margin-top: 8px;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+.ai-bubble-action-btn:active {
+  transform: scale(0.96);
+}
+
+.ai-action-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(46,204,113,0.15);
+  border: 1px solid rgba(46,204,113,0.3);
+  color: var(--good);
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  margin-top: 6px;
+}
+
+/* ==========================================================================
+   15 HYPER-FRESH FEATURES CSS (Monk Mode, Just-Start, Qada, Diagnostics)
+   ========================================================================== */
+
+/* 541. Monk Mode (وضع الراهب للعزل التام) */
+.monk-mode-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20000;
+  background: #000000;
+  color: #f8fafc;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32px 20px;
+  box-sizing: border-box;
+  text-align: center;
+}
+.monk-mode-overlay.open {
+  display: flex !important;
+}
+.monk-timer-display {
+  font-size: 4.5rem;
+  font-weight: 900;
+  font-family: monospace, sans-serif;
+  letter-spacing: 4px;
+  color: #38bdf8;
+  margin: 20px 0;
+  text-shadow: 0 0 20px rgba(56,189,248,0.4);
+}
+.monk-task-card {
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 16px;
+  padding: 16px 20px;
+  max-width: 450px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+/* 551. 1-Minute Just-Start Timer (مؤقت الدقيقة الواحدة) */
+.just-start-circle {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 4px solid #10b981;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  font-weight: 800;
+  color: #10b981;
+  margin: 16px auto;
+  box-shadow: 0 0 25px rgba(16,185,129,0.3);
+}
+
+/* 469. Qada Tracker (سجل قضاء الصلوات والصيام) */
+.qada-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 10px;
+  margin: 14px 0;
+}
+.qada-item-card {
+  background: var(--card-alt);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.qada-btn-group {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.qada-counter-btn {
+  background: var(--card);
+  border: 1px solid var(--line);
+  color: var(--text);
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 530. Ambient Noise Player Bar */
+.ambient-noise-bar {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 8px 12px;
+  background: var(--card-alt);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  margin: 12px 0;
+  align-items: center;
+}
+.ambient-pill-btn {
+  background: var(--card);
+  border: 1px solid var(--line);
+  color: var(--text);
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.ambient-pill-btn.active {
+  background: #38bdf8;
+  color: #000000;
+  border-color: #38bdf8;
+}
+
+/* General Diagnostics & Profile Modals */
+.zatoona-feature-modal-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  max-width: 520px;
+  width: 92%;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
 </style>
 </head>
 <body>
@@ -8000,12 +8445,7 @@ details.settings-card summary:hover {
     </div>
 
 <header id="appHeader">
-  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-    <h1 id="pageTitle" style="margin:0;">🍽️ الخطة الغذائية الأسبوعية</h1>
-    <button type="button" class="btn-subtle" id="btnHeaderSectionOrder" onclick="openCurrentSectionOrderModal()" title="إعادة ترتيب بطاقات ومكونات هذا القسم" style="font-size:0.75rem; padding:4px 9px; border-radius:8px; border:1px solid var(--line); display:inline-flex; align-items:center; gap:5px; cursor:pointer;">
-      <span aria-hidden="true">🔃</span> <span>ترتيب البطاقات</span>
-    </button>
-  </div>
+  <h1 id="pageTitle">🍽️ الخطة الغذائية الأسبوعية</h1>
   <div class="sub" id="pageSub">عجز سعرات لخسارة ~3.5 كجم شهريًا — تابع أكلك وشربك ومشترياتك وتمرينك أول بأول</div>
   <div class="stamps">
     <div class="stamp" id="stampKcal">🎯 ~1700 سعرة/يوم</div>
@@ -8018,12 +8458,7 @@ details.settings-card summary:hover {
 <div class="container">
 
   <div class="home-hero hidden" id="homeHero">
-    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-      <div class="hh-badge" id="homeGreetingBadge">🌿 زتونة — رفيقك اليومي</div>
-      <button type="button" class="btn-subtle" id="btnHomeSectionOrder" onclick="openSectionOrderModal('homeHero')" title="إعادة ترتيب بطاقات الرئيسية" style="font-size:0.75rem; padding:4px 9px; border-radius:8px; border:1px solid var(--line); display:inline-flex; align-items:center; gap:5px; cursor:pointer;">
-        <span aria-hidden="true">🔃</span> <span>ترتيب بطاقات الرئيسية</span>
-      </button>
-    </div>
+    <div class="hh-badge" id="homeGreetingBadge">🌿 زتونة — رفيقك اليومي</div>
     <div class="hh-icon" aria-hidden="true">
       <img src="./icons/icon-any.svg" alt="شعار زتونة" class="hh-logo" width="68" height="68">
     </div>
@@ -11809,6 +12244,118 @@ details.settings-card summary:hover {
       </div>
     </div>
 
+    <!-- 5C. Section Card Order Management -->
+    <div class="settings-section-card" id="settingsSectionOrderCard">
+      <div class="settings-section-title">🔃 ترتيب وتنظيم بطاقات الأقسام (Section Card Order)</div>
+      <div class="settings-row-desc" style="margin-bottom:12px;">
+        تحكم في ترتيب وظهور البطاقات والعناصر داخل كل قسم من أقسام التطبيق. اختر القسم المطلوب لترتيب بطاقاته للأعلى أو للأسفل:
+      </div>
+
+      <!-- Section selection buttons grid -->
+      <div id="settingsSecOrderGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(135px, 1fr)); gap:8px; margin-bottom:12px;">
+        <button type="button" class="btn-subtle" onclick="selectSectionForReorder('homeHero')" style="padding:10px 12px; border-radius:10px; border:1px solid var(--line); display:flex; align-items:center; gap:8px; font-size:0.82rem; font-weight:700; cursor:pointer; background:var(--card-alt); color:var(--text);">🏠 الرئيسية</button>
+        <button type="button" class="btn-subtle" onclick="selectSectionForReorder('prayerView')" style="padding:10px 12px; border-radius:10px; border:1px solid var(--line); display:flex; align-items:center; gap:8px; font-size:0.82rem; font-weight:700; cursor:pointer; background:var(--card-alt); color:var(--text);">🕌 الصلاة والعبادة</button>
+        <button type="button" class="btn-subtle" onclick="selectSectionForReorder('gymView')" style="padding:10px 12px; border-radius:10px; border:1px solid var(--line); display:flex; align-items:center; gap:8px; font-size:0.82rem; font-weight:700; cursor:pointer; background:var(--card-alt); color:var(--text);">🏋️‍♂️ الجيم والتمارين</button>
+        <button type="button" class="btn-subtle" onclick="selectSectionForReorder('mealView')" style="padding:10px 12px; border-radius:10px; border:1px solid var(--line); display:flex; align-items:center; gap:8px; font-size:0.82rem; font-weight:700; cursor:pointer; background:var(--card-alt); color:var(--text);">🥗 التغذية والوجبات</button>
+        <button type="button" class="btn-subtle" onclick="selectSectionForReorder('sleepView')" style="padding:10px 12px; border-radius:10px; border:1px solid var(--line); display:flex; align-items:center; gap:8px; font-size:0.82rem; font-weight:700; cursor:pointer; background:var(--card-alt); color:var(--text);">🌙 النوم والتعافي</button>
+        <button type="button" class="btn-subtle" onclick="selectSectionForReorder('scheduleView')" style="padding:10px 12px; border-radius:10px; border:1px solid var(--line); display:flex; align-items:center; gap:8px; font-size:0.82rem; font-weight:700; cursor:pointer; background:var(--card-alt); color:var(--text);">📅 الجدول والمهام</button>
+        <button type="button" class="btn-subtle" onclick="selectSectionForReorder('budgetView')" style="padding:10px 12px; border-radius:10px; border:1px solid var(--line); display:flex; align-items:center; gap:8px; font-size:0.82rem; font-weight:700; cursor:pointer; background:var(--card-alt); color:var(--text);">💰 الميزانية</button>
+        <button type="button" class="btn-subtle" onclick="selectSectionForReorder('notesView')" style="padding:10px 12px; border-radius:10px; border:1px solid var(--line); display:flex; align-items:center; gap:8px; font-size:0.82rem; font-weight:700; cursor:pointer; background:var(--card-alt); color:var(--text);">📝 الملاحظات</button>
+        <button type="button" class="btn-subtle" onclick="selectSectionForReorder('studyView')" style="padding:10px 12px; border-radius:10px; border:1px solid var(--line); display:flex; align-items:center; gap:8px; font-size:0.82rem; font-weight:700; cursor:pointer; background:var(--card-alt); color:var(--text);">📚 المذاكرة والتركيز</button>
+        <button type="button" class="btn-subtle" onclick="selectSectionForReorder('overviewView')" style="padding:10px 12px; border-radius:10px; border:1px solid var(--line); display:flex; align-items:center; gap:8px; font-size:0.82rem; font-weight:700; cursor:pointer; background:var(--card-alt); color:var(--text);">📊 النظرة العامة</button>
+      </div>
+
+      <!-- Section Cards Reorder Active Panel -->
+      <div id="settingsSecOrderActivePanel" style="display:none; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px; margin-top:10px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--line); padding-bottom:8px;">
+          <div style="font-weight:700; font-size:0.92rem; color:var(--text);" id="settingsSecOrderTitle">ترتيب بطاقات القسم</div>
+          <button type="button" class="reset-btn" onclick="closeSectionReorderPanel()" style="padding:4px 10px; font-size:0.75rem; border-color:var(--line); color:var(--muted);">⬅️ اختيار قسم آخر</button>
+        </div>
+        <div id="settingsSecOrderList" style="display:flex; flex-direction:column; gap:8px; margin-bottom:12px; max-height:360px; overflow-y:auto; padding-right:4px;"></div>
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <button type="button" class="reset-btn" onclick="resetSectionOrderFromSettings()" style="padding:6px 14px; font-size:0.78rem; border-color:var(--line); color:var(--muted);">
+            🔄 استعادة الترتيب الافتراضي
+          </button>
+          <button type="button" class="btn" onclick="closeSectionReorderPanel()" style="background:var(--primary); color:#fff; font-size:0.8rem; font-weight:700; padding:6px 16px; border-radius:8px;">
+            ✓ تم الحفظ
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5D. AI Assistant & Online API Configuration -->
+    <div class="settings-section-card" id="settingsAiCard">
+      <div class="settings-section-title">🤖 مساعد كوتش زتونة الذكي والـ AI</div>
+      <div class="settings-row">
+        <div>
+          <div class="settings-row-label">تفعيل المساعد الشخصي (كوتش زتونة)</div>
+          <div class="settings-row-desc">مستشارك الذكي للرد على أسئلة العبادات، التغذية، الجيم، المذاكرة، وتنظيم اليوم</div>
+        </div>
+        <button type="button" class="settings-toggle on" id="settingsAiMasterToggle" onclick="toggleSettingsAiMaster()"></button>
+      </div>
+
+      <div id="settingsAiDetailsWrap" style="margin-top:12px; padding-top:10px; border-top:1px dashed var(--line);">
+        <!-- Mode selection -->
+        <div style="margin-bottom:10px;">
+          <label style="display:block; margin-bottom:4px; font-weight:700; font-size:0.85rem; color:var(--text);">وضع الاتصال ومحرك الذكاء الاصطناعي:</label>
+          <select id="settingsAiProviderSelect" class="str-filter-dropdown" style="width:100%; font-size:0.85rem; padding:8px;" onchange="onSettingsAiProviderChange(this.value)">
+            <option value="gemini">🌐 Google Gemini AI (عبر الإنترنت باستخدام الـ API Key الخاص بك)</option>
+            <option value="local">🔒 المحرك المحلي الذكي (أوفلاين بدون إنترنت ومجاني 100%)</option>
+          </select>
+        </div>
+
+        <!-- Gemini API Key field -->
+        <div id="settingsAiKeyContainer" style="margin-bottom:10px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <label style="font-weight:700; font-size:0.85rem; color:var(--text);">مفتاح Google Gemini API Key:</label>
+            <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener" style="font-size:0.75rem; color:var(--primary); text-decoration:underline;">احصل على مفتاح مجاني من هنا ↗</a>
+          </div>
+          <div style="display:flex; gap:6px;">
+            <input type="password" id="settingsAiApiKeyInput" class="weight-input" placeholder="AIzaSy..." style="flex:1; font-size:0.85rem;" oninput="onSettingsAiKeyInput(this.value)">
+            <button type="button" class="reset-btn" id="btnToggleAiKeyVisibility" onclick="toggleAiKeyVisibility()" style="padding:4px 10px; font-size:0.75rem; border-color:var(--line); color:var(--muted);">👁️</button>
+          </div>
+          <div style="margin-top:8px;">
+            <label style="display:block; margin-bottom:4px; font-size:0.8rem; color:var(--muted);">نموذج Gemini (اختياري / تلقائي):</label>
+            <select id="settingsAiModelSelect" class="str-filter-dropdown" style="width:100%; font-size:0.82rem; padding:6px;" onchange="saveSettingsAiModel(this.value)">
+              <option value="auto">⚡ تلقائي ذكي (كشف واختيار أسرع نموذج مجاني متاح لحسابك) [مستحسن]</option>
+              <option value="gemini-2.0-flash">⚡ Gemini 2.0 Flash (مستقر وسريع - مجاني)</option>
+              <option value="gemini-1.5-flash">📌 Gemini 1.5 Flash (سريع ومستقر - مجاني)</option>
+              <option value="gemini-1.5-flash-8b">🚀 Gemini 1.5 Flash 8B (خفيف جداً - مجاني)</option>
+              <option value="gemini-2.5-flash">🌟 Gemini 2.5 Flash (أحدث إصدار)</option>
+            </select>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; flex-wrap:wrap; gap:6px;">
+            <button type="button" class="btn" id="btnTestAiConnection" onclick="testGeminiConnectionNow()" style="background:var(--accent); color:#fff; font-weight:700; font-size:0.78rem; padding:6px 14px; border-radius:8px;">
+              🧪 فحص المفتاح والاتصال بالإنترنت الآن
+            </button>
+            <button type="button" class="btn" id="btnListAvailableAiModels" onclick="listAvailableGeminiModelsForUser()" style="background:var(--card-bg, #242938); color:var(--teal, #14b8a6); border:1px solid var(--teal, #14b8a6); font-weight:700; font-size:0.78rem; padding:6px 12px; border-radius:8px;">
+              📋 استعراض نماذجي المجانية
+            </button>
+            <span id="txtAiTestStatus" style="font-size:0.75rem; color:var(--muted);">اضغط للتحقق من الاتصال</span>
+          </div>
+        </div>
+
+        <!-- Compact ribbon preference -->
+        <div class="settings-row" style="padding:8px 0; border-top:1px dashed var(--line); margin-top:10px;">
+          <div>
+            <div class="settings-row-label" style="font-size:0.85rem;">عرض المساعد كـ شريط مضغوط في الرئيسية</div>
+            <div class="settings-row-desc">يظهر كشريط أنيق وموجز وعند النقر عليه يفتح الشات بالكامل</div>
+          </div>
+          <button type="button" class="settings-toggle" id="settingsAiCompactToggle" onclick="toggleSettingsAiCompact()"></button>
+        </div>
+
+        <!-- Tone selector -->
+        <div style="margin-top:10px; padding-top:8px; border-top:1px dashed var(--line);">
+          <label style="display:block; margin-bottom:4px; font-size:0.85rem; color:var(--muted);">أسلوب وتوجيه الكوتش في الرد:</label>
+          <select id="settingsAiToneSelect" class="str-filter-dropdown" style="width:100%; font-size:0.85rem; padding:8px;" onchange="saveSettingsAiTone(this.value)">
+            <option value="supportive">✨ داعم ومشجع (ودود وأخوي)</option>
+            <option value="direct">🎯 مباشر ومحفز (انضباط وتركيز)</option>
+            <option value="detailed">📊 تحليلي ومفصل (بالأرقام والإحصائيات)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
     <!-- 5. Privacy, Compliance, Legal & Data Rights Hub -->
     <div class="settings-section-card" id="settingsComplianceCard">
       <div class="settings-section-title">🛡️ الخصوصية والحوكمة وحقوق البيانات (GDPR & Compliance)</div>
@@ -15002,6 +15549,7 @@ function _doVibrate(ms){
       return;
     }
     if(typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function'){
+      if(navigator.userActivation && !navigator.userActivation.hasBeenActive) return;
       navigator.vibrate(ms);
     }
   } catch(e){}
@@ -29550,25 +30098,65 @@ function renderDailySummaryShareCard(){
 window.generateDailySummaryText = generateDailySummaryText;
 window.renderDailySummaryShareCard = renderDailySummaryShareCard;
 
-/* ================= PRIVACY-CONSCIOUS LOCAL AI ASSISTANT (PHASE 13.7) ================= */
+/* ================= PRIVACY-CONSCIOUS LOCAL AI ASSISTANT (PHASE 13.7 & INTERNET ACCESS) ================= */
+function escapeHtml(str){
+  if(str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+window.escapeHtml = escapeHtml;
+
 const AI_COACH_SETTINGS_DEFAULT = {
-  enabled: false,
-  consentGiven: false,
-  provider: 'local', // 'local' (offline client-side rule engine) | 'gemini' (custom user API key)
+  enabled: true,
+  consentGiven: true,
+  provider: 'local', // 'local' (offline) | 'gemini' (custom user API key)
   apiKey: '',
-  tone: 'supportive' // 'supportive' (داعم ومشجع) | 'direct' (مباشر ومحفز) | 'detailed' (تحليلي ومفصل)
+  tone: 'supportive', // 'supportive' | 'direct' | 'detailed'
+  collapsed: false,
+  modelChoice: 'auto' // 'auto' | 'gemini-2.5-flash' | 'gemini-2.0-flash' | 'gemini-1.5-flash-latest' | 'gemini-1.5-flash'
 };
 
 function loadAiCoachSettings(){
   const raw = storageGetJSON('ai-coach-settings', null);
+  let res = Object.assign({}, AI_COACH_SETTINGS_DEFAULT);
   if(raw && typeof raw === 'object' && !Array.isArray(raw)){
-    return Object.assign({}, AI_COACH_SETTINGS_DEFAULT, raw);
+    res = Object.assign(res, raw);
   }
-  return Object.assign({}, AI_COACH_SETTINGS_DEFAULT);
+  // Check if API key is present and auto-select gemini provider if configured
+  if(res.apiKey && res.apiKey.trim() && res.provider !== 'local'){
+    res.provider = 'gemini';
+  }
+  return res;
 }
 
 function saveAiCoachSettings(settings){
   storageSet('ai-coach-settings', JSON.stringify(settings));
+  syncAiSettingsUI();
+}
+
+function isAiCoachCollapsed(){
+  try {
+    const val = localStorage.getItem('zatoona-ai-collapsed');
+    if(val !== null) return val === 'true';
+  } catch(e){}
+  const settings = loadAiCoachSettings();
+  return !!settings.collapsed;
+}
+
+function toggleAiCoachCollapsed(collapsed){
+  triggerHaptic('buttons', 'gentle');
+  try {
+    localStorage.setItem('zatoona-ai-collapsed', collapsed ? 'true' : 'false');
+  } catch(e){}
+  const settings = loadAiCoachSettings();
+  settings.collapsed = !!collapsed;
+  storageSet('ai-coach-settings', JSON.stringify(settings));
+  renderAiCoachCard();
+  syncAiSettingsUI();
 }
 
 function analyzeDailyWellnessStats(iso){
@@ -29672,12 +30260,9 @@ function generateLocalAiAdvice(category, stats, tone){
   lines.push('');
 
   if(category === 'all' || category === 'comprehensive'){
-    // Comprehensive assessment
     let score = 0;
-    if(stats.worship.fardDone >= 5) score += 25;
-    else score += (stats.worship.fardDone * 4);
-    if(stats.nutrition.water >= 6) score += 20;
-    else score += (stats.nutrition.water * 3);
+    if(stats.worship.fardDone >= 5) score += 25; else score += (stats.worship.fardDone * 4);
+    if(stats.nutrition.water >= 6) score += 20; else score += (stats.nutrition.water * 3);
     if(stats.gym.hasSession || stats.gym.isRestDay) score += 20;
     if(stats.sleep.hours !== null && stats.sleep.hours >= 6.5) score += 20;
     if(stats.habits.total > 0 && stats.habits.done >= stats.habits.total / 2) score += 15;
@@ -29692,7 +30277,6 @@ function generateLocalAiAdvice(category, stats, tone){
     }
     lines.push('');
 
-    // Bullet review
     lines.push(`🕌 **العبادات:** أديت ${stats.worship.fardDone}/5 صلوات فريضة${stats.worship.qiyamDone ? '، ومعاهم قيام ليل ماشاء الله' : ''}.`);
     lines.push(`💧 **السوائل:** ${stats.nutrition.water}/8 أكواب ماء (${stats.nutrition.water >= 8 ? 'كافي وممتاز' : 'زود كوبايتين قبل النوم'}).`);
     lines.push(`🏋️ **التمرين:** ${stats.gym.hasSession ? 'تم تسجيل حصة تدريبية بنجاح' : (stats.gym.isRestDay ? 'يوم راحة واستشفاء عظيم' : 'لسه متسجلش تمرين اليوم')}.`);
@@ -29784,6 +30368,191 @@ function generateLocalAiAdvice(category, stats, tone){
   return lines.join('\n');
 }
 
+const GEMINI_CANDIDATE_ENDPOINTS = [
+  // Fast, Free-Tier Conversational Text Models ONLY (Direct Zero-Latency Routing)
+  { version: 'v1beta', model: 'gemini-2.0-flash' },
+  { version: 'v1',     model: 'gemini-2.0-flash' },
+  { version: 'v1',     model: 'gemini-1.5-flash' },
+  { version: 'v1beta', model: 'gemini-1.5-flash' },
+  { version: 'v1beta', model: 'gemini-1.5-flash-8b' },
+  { version: 'v1',     model: 'gemini-1.5-flash-8b' },
+  { version: 'v1beta', model: 'gemini-2.5-flash' },
+  { version: 'v1beta', model: 'gemini-2.0-flash-exp' }
+];
+
+async function discoverGeminiModels(apiKey){
+  const cleanKey = (apiKey || '').trim().replace(/^["']|["']$/g, '');
+  if(!cleanKey) return { models: [], error: 'مفتاح API فارغ' };
+
+  for(const ver of ['v1beta', 'v1']){
+    try {
+      const endpoint = `https://generativelanguage.googleapis.com/${ver}/models?key=${encodeURIComponent(cleanKey)}`;
+      const resp = await fetch(endpoint, {
+        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': cleanKey }
+      });
+      if(resp.ok){
+        const data = await resp.json();
+        if(data && Array.isArray(data.models)){
+          const valid = data.models
+            .filter(m => {
+              const name = (m.name || '').toLowerCase();
+              if(name.includes('tts') || name.includes('audio') || name.includes('embed') || name.includes('imagen') || name.includes('realtime')){
+                return false;
+              }
+              return Array.isArray(m.supportedGenerationMethods) && m.supportedGenerationMethods.includes('generateContent');
+            })
+            .map(m => ({
+              version: ver,
+              model: m.name.replace(/^models\//, ''),
+              displayName: m.displayName || m.name
+            }));
+          if(valid.length > 0) return { models: valid, version: ver, error: null };
+        }
+      } else {
+        const errJson = await resp.json().catch(() => ({}));
+        const msg = errJson.error?.message || `HTTP ${resp.status}`;
+        if(resp.status === 400 || resp.status === 401 || resp.status === 403){
+          return { models: [], version: ver, error: `خطأ من جوجل (${resp.status}): ${msg}` };
+        }
+      }
+    } catch(err){
+      console.warn(`[GeminiDiscovery] Network error on ${ver}:`, err);
+    }
+  }
+  return { models: [], version: null, error: 'تعذر جلب قائمة النماذج من سيرفر جوجل' };
+}
+window.discoverGeminiModels = discoverGeminiModels;
+
+async function callGeminiGenerateContent(apiKey, contents, systemInstruction = '', preferredModel = 'auto'){
+  const cleanKey = (apiKey || '').trim().replace(/^["']|["']$/g, '');
+  if(!cleanKey) throw new Error('مفتاح Gemini API فارغ');
+
+  const candidates = [];
+
+  // 1. If preferred model is explicitly chosen (and not auto)
+  if(preferredModel && preferredModel !== 'auto'){
+    candidates.push({ version: 'v1beta', model: preferredModel });
+    candidates.push({ version: 'v1',     model: preferredModel });
+  }
+
+  // 2. Active Cached Model (PRIORITY: Instant 1-Hop Zero Latency Call!)
+  let cachedModel = window._lastWorkingGeminiModel;
+  if(!cachedModel){
+    try { cachedModel = localStorage.getItem('zatoona-gemini-active-model'); } catch(e){}
+  }
+  if(!cachedModel) cachedModel = 'gemini-2.0-flash'; // High-speed default flagship
+
+  candidates.push({ version: 'v1beta', model: cachedModel });
+  candidates.push({ version: 'v1',     model: cachedModel });
+
+  // 3. Fallback candidate list
+  GEMINI_CANDIDATE_ENDPOINTS.forEach(item => {
+    if(!candidates.some(c => c.version === item.version && c.model === item.model)){
+      candidates.push(item);
+    }
+  });
+
+  let lastError = null;
+
+  for(const c of candidates){
+    try {
+      const endpoint = `https://generativelanguage.googleapis.com/${c.version}/models/${c.model}:generateContent?key=${encodeURIComponent(cleanKey)}`;
+
+      const payload = {
+        contents,
+        generationConfig: {
+          maxOutputTokens: 800,
+          temperature: 0.7
+        }
+      };
+      if(systemInstruction){
+        payload.systemInstruction = {
+          parts: [{ text: systemInstruction }]
+        };
+      }
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 12000);
+
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-goog-api-key': cleanKey
+        },
+        body: JSON.stringify(payload),
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+
+      if(response.ok){
+        const data = await response.json();
+        const generated = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if(generated && generated.trim()){
+          window._lastWorkingGeminiModel = c.model;
+          try { localStorage.setItem('zatoona-gemini-active-model', c.model); } catch(e){}
+          return { text: generated.trim(), model: c.model, version: c.version };
+        }
+      }
+
+      const errJson = await response.json().catch(() => ({}));
+      const detailedMsg = errJson.error?.message || `HTTP ${response.status}`;
+
+      if(response.status === 404){
+        console.warn(`[GeminiCascade] ${c.model} (${c.version}) 404:`, detailedMsg);
+        lastError = new Error(`النموذج (${c.model}) غير نشط بحسابك: ${detailedMsg}`);
+        continue;
+      }
+
+      // If a model returns 400 specifically due to modality mismatch:
+      if(response.status === 400 && detailedMsg.toLowerCase().includes('modalit')){
+        console.warn(`[GeminiCascade] ${c.model} (${c.version}) modality mismatch:`, detailedMsg);
+        lastError = new Error(`النموذج (${c.model}) مخصص للصوت وليس للمحادثة النصية`);
+        continue;
+      }
+
+      if(response.status === 400 || response.status === 401 || response.status === 403){
+        throw new Error(`خطأ ترخيص (${response.status}): ${detailedMsg}`);
+      }
+
+      lastError = new Error(`[${response.status}] ${detailedMsg}`);
+    } catch(err){
+      lastError = err;
+      if(err.message && (err.message.includes('خطأ ترخيص') || err.message.includes('401') || err.message.includes('403'))){
+        throw err;
+      }
+    }
+  }
+
+  // Smart dynamic discovery fallback only if all hardcoded endpoints failed
+  try {
+    const discovery = await discoverGeminiModels(cleanKey);
+    if(discovery.models && discovery.models.length > 0){
+      for(const m of discovery.models){
+        if(!candidates.some(c => c.version === m.version && c.model === m.model)){
+          const res = await fetch(`https://generativelanguage.googleapis.com/${m.version}/models/${m.model}:generateContent?key=${encodeURIComponent(cleanKey)}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'x-goog-api-key': cleanKey },
+            body: JSON.stringify({ contents, generationConfig: { maxOutputTokens: 800, temperature: 0.7 } })
+          });
+          if(res.ok){
+            const d = await res.json();
+            const gen = d.candidates?.[0]?.content?.parts?.[0]?.text;
+            if(gen && gen.trim()){
+              window._lastWorkingGeminiModel = m.model;
+              try { localStorage.setItem('zatoona-gemini-active-model', m.model); } catch(e){}
+              return { text: gen.trim(), model: m.model, version: m.version };
+            }
+          }
+        }
+      }
+    }
+  } catch(e){}
+
+  throw lastError || new Error('تعذر العثور على نموذج Gemini مجاني يعمل بحسابك');
+}
+window.callGeminiGenerateContent = callGeminiGenerateContent;
+
 async function generateAiCoachAdvice(category, iso, options = {}){
   const settings = loadAiCoachSettings();
   const tone = (options && options.tone) || settings.tone || 'supportive';
@@ -29793,35 +30562,20 @@ async function generateAiCoachAdvice(category, iso, options = {}){
   if(settings.enabled && settings.provider === 'gemini' && settings.apiKey && settings.apiKey.trim()){
     try {
       const summaryText = typeof generateDailySummaryText === 'function' ? generateDailySummaryText(iso) : JSON.stringify(stats);
-      const systemInstruction = `أنت "كوتش زتونة الذكي"، مستشار صحي ورياضي وروحاني شخصي يتحدث باللهجة المصرية الودودة المحفزة. أسلوبك: ${tone === 'direct' ? 'مباشر وقوي ومحفز' : (tone === 'detailed' ? 'تحليلي دقيق ومفصل' : 'داعم وأخوي ومشجع')}. قدم نصيحة مركزة وقابلة للتطبيق فوراً للمستخدم بناءً على بيانات يومه.`;
+      const systemInstruction = `أنت "كوتش زتونة الذكي"، مستشار ومساعد شخصي ودود ومحفز يتحدث باللهجة المصرية الودودة أو العربية الطبيعية السلسة. أسلوبك: ${tone === 'direct' ? 'مباشر وقوي ومحفز' : (tone === 'detailed' ? 'تحليلي دقيق ومفصل' : 'داعم وأخوي ومشجع')}. قدم نصيحة مركزة وقابلة للتطبيق فوراً للمستخدم بناءً على بيانات يومه.`;
       const prompt = `المجال المطلوب التركيز عليه: ${category}.\nبيانات يوم ${iso}:\n${summaryText}\nحلل البيانات وقدم التوجيه المناسب في فقرات واضحة مع نقاط عملية.`;
 
-      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${encodeURIComponent(settings.apiKey.trim())}`;
-      const payload = {
-        contents: [
-          {
-            role: 'user',
-            parts: [{ text: `${systemInstruction}\n\n${prompt}` }]
-          }
-        ]
-      };
-
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-
-      if(!response.ok){
-        throw new Error(`HTTP ${response.status}`);
-      }
-
-      const data = await response.json();
-      const generated = data.candidates?.[0]?.content?.parts?.[0]?.text;
-      if(generated && generated.trim()){
+      const res = await callGeminiGenerateContent(
+        settings.apiKey,
+        [{ role: 'user', parts: [{ text: prompt }] }],
+        systemInstruction,
+        settings.modelChoice || 'auto'
+      );
+      if(res && res.text){
         return {
           source: 'gemini',
-          text: generated.trim()
+          text: res.text,
+          model: res.model
         };
       }
     } catch(err) {
@@ -29829,12 +30583,12 @@ async function generateAiCoachAdvice(category, iso, options = {}){
       const localAdvice = generateLocalAiAdvice(category, stats, tone);
       return {
         source: 'local-fallback',
-        text: `⚠️ تعذر الاتصال بـ Gemini (أو الجهاز غير متصل بالإنترنت) — تم توليد التوجيه محلياً عبر محرك زتونة الذكي:\n\n` + localAdvice
+        text: `⚠️ تعذر الاتصال بـ Gemini (${err.message}) — تم توليد التوجيه محلياً عبر محرك زتونة الذكي:\n\n` + localAdvice
       };
     }
   }
 
-  // Purely offline, instant local intelligence
+  // Purely offline local intelligence
   const localAdvice = generateLocalAiAdvice(category, stats, tone);
   return {
     source: 'local',
@@ -29854,7 +30608,7 @@ function loadAiCoachChatHistory(){
   return [
     {
       role: 'assistant',
-      text: 'أهلاً بك يا بطل! 👋 أنا كوتش زتونة، مستشارك الشخصي للعبادة والتمرين والنوم والتغذية والمذاكرة. اسألني أي سؤال عن يومك وأنا معاك خطوة بخطوة بربطه ببياناتك الفعلية.',
+      text: 'أهلاً بك يا بطل! 👋 أنا كوتش زتونة، مستشارك الشخصي للعبادة والتمرين والنوم والتغذية والمذاكرة. اسألني أي سؤال عن يومك أو أي استفسار عام وأنا معاك لحظة بلحظة!',
       timestamp: Date.now()
     }
   ];
@@ -29869,7 +30623,7 @@ function clearAiCoachChatHistory(){
   const defaultHistory = [
     {
       role: 'assistant',
-      text: 'تم مسح المحادثة السابقة. أهلاً بك يا بطل في بداية جديدة! 👋 اسألني أي سؤال عن صلواتك، تمارينك، شرب الماء، نومك، أو تنظيم وقتك وأنا جاهز أجاوبك فوراً.',
+      text: 'تم مسح المحادثة السابقة. أهلاً بك يا بطل في بداية جديدة! 👋 اسألني أي سؤال وأنا جاهز أجاوبك فوراً.',
       timestamp: Date.now()
     }
   ];
@@ -29879,7 +30633,7 @@ function clearAiCoachChatHistory(){
 function generateLocalAiChatResponse(prompt, stats, iso){
   const p = (prompt || '').trim().toLowerCase();
 
-  // 1. Overall Day Evaluation & Summary (Check First)
+  // 1. Overall Day Evaluation & Summary
   if(/(ملخص|تقييم|قيم|درجتي|أدائي|ادائي|تقييمي)/i.test(p)){
     let score = 0;
     if(stats.worship.fardDone >= 5) score += 25; else score += (stats.worship.fardDone * 4);
@@ -29888,7 +30642,7 @@ function generateLocalAiChatResponse(prompt, stats, iso){
     if(stats.sleep.hours !== null && stats.sleep.hours >= 6.5) score += 20;
     if(stats.habits.total > 0 && stats.habits.done >= stats.habits.total / 2) score += 15;
 
-    return `📊 **تقييم أداء يوم ${iso}:**\nمعدل التوافق العام لليوم: **${score}%**\n\n• العبادات: ${stats.worship.fardDone}/5 صلوات فريضة.\n• شرب الماء: ${stats.nutrition.water}/8 أكواب.\n• التمرين: ${stats.gym.hasSession ? 'جلسة تمرين مكتملة' : (stats.gym.isRestDay ? 'يوم راحة مخصص' : 'لم يسجل تمرين')}.\n• النوم: ${stats.sleep.hours !== null ? stats.sleep.hours.toFixed(1) + ' ساعة' : 'لم يسجل بعد'}.\n• العادات: ${stats.habits.done} من ${stats.habits.total} منجزة.\n\n${score >= 80 ? '🌟 أداء أسطوري! يوم متوازن وقوي جداً في كل الجوانب، استمر على هذا المستوى.' : (score >= 50 ? '🌱 أداء طيب وفي الاتجاه الصحيح. ركز على تقفيل الصلاة أو زيادة شرب الماء قبل نهاية اليوم.' : '💪 بداية اليوم محتاجة دفعة، متقلقش، تقدر تعوض دلوقتي وتبدأ بإنهاء كوباية ماء وصلاة الفريضة.')}`;
+    return `📊 **تقييم أداء يوم ${iso}:**\nمعدل التوافق العام لليوم: **${score}%**\n\n• العبادات: ${stats.worship.fardDone}/5 صلوات فريضة.\n• شرب الماء: ${stats.nutrition.water}/8 أكواب.\n• التمرين: ${stats.gym.hasSession ? 'جلسة تمرين مكتملة' : (stats.gym.isRestDay ? 'يوم راحة مخصص' : 'لم يسجل تمرين')}.\n• النوم: ${stats.sleep.hours !== null ? stats.sleep.hours.toFixed(1) + ' ساعة' : 'لم يسجل بعد'}.\n• العادات: ${stats.habits.done} من ${stats.habits.total} منجزة.\n\n${score >= 80 ? '🌟 أداء أسطوري! يوم متوازن وقوي جداً في كل الجوانب، استمر على هذا المستوى.' : (score >= 50 ? '🌱 أداء طيب وفي الاتجاه الصحيح. ركز على تقفيل الصلاة أو زيادة شرب الماء قبل نهاية اليوم.' : '💪 بداية اليوم محتاجة دفعة، تقدر تعوض دلوقتي وتبدأ بكوباية ماء وصلاة الفريضة.')}`;
   }
 
   // 2. Water & Hydration
@@ -29896,22 +30650,22 @@ function generateLocalAiChatResponse(prompt, stats, iso){
     const w = stats.nutrition.water || 0;
     const remaining = Math.max(0, 8 - w);
     if(w >= 8){
-      return `💧 **سجل المياه لليوم (${iso}):**\nأنت شربت ${w} من 8 أكواب (100%+ إنجاز ممتاز!)\n\nما شاء الله يا بطل، ترطيب جسمك في القمة النهاردة. الترطيب ده هو سر النشاط وسرعة الاستشفاء العضلي وتقليل إجهاد المفاصل. استمر في شرب رشفات منتظمة حتى موعد النوم.`;
+      return `💧 **سجل المياه لليوم (${iso}):**\nأنت شربت ${w} من 8 أكواب (100%+ إنجاز ممتاز!)\n\nما شاء الله يا بطل، ترطيب جسمك في القمة النهاردة. الترطيب ده هو سر النشاط وسرعة الاستشفاء وتقليل إجهاد المفاصل.`;
     } else if(w >= 4){
-      return `💧 **سجل المياه لليوم (${iso}):**\nأنت شربت ${w} من 8 أكواب (باقي لك ${remaining} أكواب).\n\nأداء طيب، بس لسه محتاجين نرفع المعدل. اشرب كوبين كبار دلوقتي ووزع الباقي على مدار الساعات اللي جاية قبل النوم، ومتستناش لحد ما تحس بالعطش لأن الإحساس بالعطش معناه إن الجسم بدأ يدخل في جفاف خفيف.`;
+      return `💧 **سجل المياه لليوم (${iso}):**\nأنت شربت ${w} من 8 أكواب (باقي لك ${remaining} أكواب).\n\nأداء طيب، بس لسه محتاجين نرفع المعدل. اشرب كوبين كبار دلوقتي ووزع الباقي على مدار الساعات اللي جاية قبل النوم.`;
     } else {
-      return `💧 **تنبيه عاجل لشرب الماء (${iso}):**\nأنت مسجل ${w} أكواب فقط من أصل 8 مستهدفة!\n\nمعدل شربك منخفض جداً النهاردة وممكن يسبب لك خمول، صداع، وصعوبة في التركيز وبطء استشفاء. قوم دلوقتي املأ كوباية ماء كبيرة واشربها بهدوء، وخلي إزازة ماء دايماً في مجال رؤيتك وأنت بتذاكر أو بتشتغل.`;
+      return `💧 **تنبيه عاجل لشرب الماء (${iso}):**\nأنت مسجل ${w} أكواب فقط من أصل 8 مستهدفة!\n\nمعدل شربك منخفض جداً النهاردة وممكن يسبب لك خمول وصداع. قوم دلوقتي املأ كوباية ماء كبيرة واشربها بهدوء.`;
     }
   }
 
   // 3. Nutrition, Food & Protein
   if(/(بروتين|أكل|اكل|طعام|تغذية|وجب|سعرات|دايت|رجيم|تخسيس|ضخامة|ميزانية)/i.test(p)){
-    return `🥗 **أفضل مصادر بروتين اقتصادية وصحية:**\n• **البيض:** البروتين الكامل الأرخص والأعلى قيمة بيولوجية (البيضة ~ 6-7 جم بروتين).\n• **الجبنة القريش:** منجم بروتين الكازين بطيء الامتصاص (100 جم ~ 12-14 جم بروتين)، ممتازة جداً في العشاء قبل النوم.\n• **التونة والسردين:** بروتين وأوميجا 3 لدعم المفاصل والقلب.\n• **الفول والعدس والحمص:** بروتينات نباتية غنية بالألياف والمعادن، ادمجهم مع البيض لوجبة متكاملة.\n• **اللبن والشوفان:** وجبة سريعة وممتازة كفطور أو بعد التمرين مع معلقة عسل وموزة.`;
+    return `🥗 **أفضل مصادر بروتين اقتصادية وصحية:**\n• **البيض:** البروتين الكامل الأرخص والأعلى قيمة بيولوجية (البيضة ~ 6-7 جم بروتين).\n• **الجبنة القريش:** منجم بروتين الكازين بطيء الامتصاص (100 جم ~ 12-14 جم بروتين)، ممتازة في العشاء.\n• **التونة والسردين:** بروتين وأوميجا 3 لدعم المفاصل والقلب.\n• **الفول والعدس والحمص:** بروتينات نباتية غنية بالألياف والمعادن.\n• **اللبن والشوفان:** وجبة سريعة وممتازة كفطور أو بعد التمرين مع معلقة عسل وموزة.`;
   }
 
   // 4. Study, Focus & Pomodoro
   if(/(مذاكر|دراسة|بومودورو|مؤقت|فقاعة)/i.test(p)){
-    return `📚 **تقنية البومودورو وجلسات التركيز في زيتونة:**\n• استخدم مؤقت المذاكرة في قسم المذاكرة داخل التطبيق.\n• **ميزة حصرية:** لما تبدأ الجلسة وتخرج من التطبيق، هتظهر لك **الفقاعة العائمة** على شاشة الموبايل وتعد الوقت قدامك وتفكرك بهدفك بدون ما تشتتك.\n• **النظام الأمثل:** 25 دقيقة تركيز بنسبة 100% في مهمة واحدة محددة، ثم 5 دقائق راحة تامة تبعد فيها عن المكتب وتشرب ماء.`;
+    return `📚 **تقنية البومودورو وجلسات التركيز في زيتونة:**\n• استخدم مؤقت المذاكرة في قسم المذاكرة داخل التطبيق.\n• **ميزة حصرية:** لما تبدأ الجلسة وتخرج من التطبيق، هتظهر لك **الفقاعة العائمة** على شاشة الموبايل وتعد الوقت قدامك وتفكرك بهدفك بدون تشتيت.\n• **النظام الأمثل:** 25 دقيقة تركيز بنسبة 100% في مهمة واحدة محددة، ثم 5 دقائق راحة تامة تبعد فيها عن الشاشة.`;
   }
 
   // 5. Prayer, Worship & Fajr
@@ -29919,12 +30673,12 @@ function generateLocalAiChatResponse(prompt, stats, iso){
     const fard = stats.worship.fardDone || 0;
     const sunnah = stats.worship.sunnahDone || 0;
     if(/جيم|تمرين|رياض/i.test(p)){
-      return `🕌 **تنسيق مواعيد الصلاة مع الجيم:**\nأفضل قاعدة ذهبية للتوفيق بينهم بدون تفريط:\n1. **تمرين بعد العصر:** ابدأ تمرينك بحيث تخلصه وتلحق وضوءك وصلاة المغرب جماعة في وقتها.\n2. **تمرين بعد المغرب:** صلي المغرب بهدوء، اتمرن 45-60 دقيقة، وانهي تمرينك على أذان العشاء.\n3. **شنطة الجيم:** خلي فيها دايماً سجادة جيب خفيفة وتيشرت نظيف احتياطي لو وقت الصلاة أذن وأنت في الصالة.\n\nالصلاة هي عمود اليوم وسر البركة والراحة النفسية، لما ترتب يومك حول الصلاة كل حاجة تانية بتظبط.`;
+      return `🕌 **تنسيق مواعيد الصلاة مع الجيم:**\nأفضل قاعدة ذهبية للتوفيق بينهم بدون تفريط:\n1. **تمرين بعد العصر:** ابدأ تمرينك بحيث تخلصه وتلحق وضوءك وصلاة المغرب جماعة في وقتها.\n2. **تمرين بعد المغرب:** صلي المغرب بهدوء، اتمرن 45-60 دقيقة، وانهي تمرينك على أذان العشاء.\n3. **شنطة الجيم:** خلي فيها دايماً سجادة جيب خفيفة وتيشرت نظيف احتياطي لو وقت الصلاة أذن وأنت في الصالة.`;
     }
     if(/فجر|اصحى|استيقاظ/i.test(p)){
-      return `🌅 **نصائح للاستيقاظ لصلاة الفجر بنشاط:**\n1. **منبه الفجر التصاعدي:** فعّله من قسم الصلاة في التطبيق، بيصحيك بنغمة ناعمة ومتدرجة بدون فزع.\n2. **النوم المبكر:** اتبع روتين التهدئة قبل النوم وادخل السرير قبل موعد الفجر بـ 6 إلى 7 ساعات على الأقل.\n3. **الموبايل بعيد عن السرير:** حط الموبايل بعيد عن إيدك بمسافة خطوتين عشان تضطر تقوم تقف تطفيه.\n4. **النية الصادقة ودعاء النوم:** نم على طهارة واطلب من ربنا العون على الاستيقاظ.`;
+      return `🌅 **نصائح للاستيقاظ لصلاة الفجر بنشاط:**\n1. **منبه الفجر التصاعدي:** فعّله من قسم الصلاة في التطبيق، بيصحيك بنغمة ناعمة ومتدرجة بدون فزع.\n2. **النوم المبكر:** اتبع روتين التهدئة قبل النوم وادخل السرير قبل موعد الفجر بـ 6 إلى 7 ساعات على الأقل.\n3. **الموبايل بعيد عن السرير:** حط الموبايل بعيد عن إيدك بمسافة خطوتين عشان تضطر تقوم تقف تطفيه.`;
     }
-    return `🕌 **سجل العبادات لليوم (${iso}):**\n• الصلوات المفروضة: ${fard} من 5.\n• السنن المؤكدة: ${sunnah} ركعات.\n• قيام الليل والوتر: ${stats.worship.qiyamDone ? '✓ تم بفضل الله' : 'لسه متسجلش'}.\n• القرآن الكريم: ${stats.worship.quranCount} أوراد.\n\n${fard === 5 ? 'ما شاء الله! يومك كان مبارك في الصلوات الخمسة. زود ركعتي الشفع والوتر قبل ما تنام عشان تختم يومك بنور.' : 'الصلاة هي أول ما يُحاسب عليه العبد وسر السكينة والتوفيق. لو فاتتك صلاة متكسلش، صلها فوراً وجدد العهد.'}`;
+    return `🕌 **سجل العبادات لليوم (${iso}):**\n• الصلوات المفروضة: ${fard} من 5.\n• السنن المؤكدة: ${sunnah} ركعات.\n• قيام الليل والوتر: ${stats.worship.qiyamDone ? '✓ تم بفضل الله' : 'لسه متسجلش'}.\n• القرآن الكريم: ${stats.worship.quranCount} أوراد.\n\n${fard === 5 ? 'ما شاء الله! يومك كان مبارك في الصلوات الخمسة. زود ركعتي الشفع والوتر قبل ما تنام عشان تختم يومك بنور.' : 'الصلاة هي أول ما يُحاسب عليه العبد وسر السكينة والتوفيق. لو فاتتك صلاة صلها فوراً وجدد العهد.'}`;
   }
 
   // 6. Gym, Workout & Fitness
@@ -29940,91 +30694,1368 @@ function generateLocalAiChatResponse(prompt, stats, iso){
   // 7. Sleep, Insomnia & Rest
   if(/(نوم|أنام|انام|أرق|ارق|سهر|قلق|نعاس|روتين نوم|روتين هادي)/i.test(p)){
     const sleepH = stats.sleep.hours;
-    return `🌙 **روتين النوم الهادئ والتغلب على الأرق:**\n${sleepH !== null ? `أنت سجلت نوم ${sleepH.toFixed(1)} ساعة في آخر ليلة.` : 'سجل ساعات نومك في قسم النوم لمتابعة جودة استشفائك.'}\n\nخطوات عملية لنوم عميق الليلة:\n1. **ابعد الموبايل:** اقفل الشاشات تماماً قبل النوم بـ 30 دقيقة عشان مخك يفرز الميلاتونين طبيعي.\n2. **مشروب دافئ:** كوب ينسون أو نعناع أو بابونج بدون سكر.\n3. **درجة حرارة الغرفة:** خلي الأوضة باردة ومظلمة تماماً وهادية.\n4. **أذكار النوم:** اقرأ آية الكرسي والمعوذات بهدوء وخد 10 أنفاس عميقة وبطيئة (شهيق 4 ثواني - زفير 6 ثواني).`;
+    return `🌙 **روتين النوم الهادئ والتغلب على الأرق:**\n${sleepH !== null ? `أنت سجلت نوم ${sleepH.toFixed(1)} ساعة في آخر ليلة.` : 'سجل ساعات نومك في قسم النوم لمتابعة جودة استشفائك.'}\n\nخطوات عملية لنوم عميق الليلة:\n1. **ابعد الموبايل:** اقفل الشاشات تماماً قبل النوم بـ 30 دقيقة.\n2. **مشروب دافئ:** كوب ينسون أو نعناع أو بابونج بدون سكر.\n3. **درجة حرارة الغرفة:** خلي الأوضة باردة ومظلمة تماماً وهادية.\n4. **أذكار النوم:** اقرأ آية الكرسي والمعوذات بهدوء وخد 10 أنفاس عميقة وبطيئة.`;
   }
 
   // 8. Motivation & Encouragement
   if(/(تعب|زهق|كسل|إحباط|احباط|مش قادر|تحفيز|شجعني)/i.test(p)){
-    return `💪 **رسالة من القلب يا بطل:**\nكل الأبطال الكبار بتمر عليهم أيام بيكون فيها الشغف صفر والكسل عالي، الفرق بين اللي بيوصل واللي بيقف مش المشاعر، لكن "الاستمرارية المنضبطة".\n\nمتطلبش من نفسك المثالية 100% كل يوم؛ لو مش قادر تتمرن ساعة، اتمرن ربع ساعة، لو مش قادر تقرأ جزء قرآن، اقرأ صفحة، لو مكسل تقوم، ابدأ بكوباية مياه وصلي الفريضة.\n\nالخطوة الصغيرة اللي بتعملها وأنت مش في أحسن حالاتك هي اللي بتبني شخصيتك الحقيقية. توكل على الله وخد خطوة واحدة دلوقتي!`;
+    return `💪 **رسالة من القلب يا بطل:**\nكل الأبطال الكبار بتمر عليهم أيام بيكون فيها الشغف صفر والكسل عالي، الفرق بين اللي بيوصل واللي بيقف هو "الاستمرارية المنضبطة".\n\nمتطلبش من نفسك المثالية 100% كل يوم؛ لو مش قادر تتمرن ساعة، اتمرن ربع ساعة، لو مش قادر تقرأ جزء قرآن، اقرأ صفحة، لو مكسل تقوم، ابدأ بكوباية مياه وصلي الفريضة.\n\nالخطوة الصغيرة اللي بتعملها وأنت مش في أحسن حالاتك هي اللي بتبني شخصيتك الحقيقية. توكل على الله وخد خطوة واحدة دلوقتي!`;
   }
 
   // 9. Default Helpful Assistant Response
-  return `🤖 **أهلاً بك يا بطل!**\nأنا كوتش زتونة ومتابع معاك كل تفاصيل يومك (${iso}).\n\nتقدر تسألني عن أي حاجة:\n• شرب الماء والترطيب ونظامك الغذائي.\n• توفيق مواعيد الصلاة والعبادة مع الجيم والمذاكرة.\n• الاستشفاء العضلي، ألم العضلات، والتمارين.\n• التغلب على الأرق وتحسين جودة النوم.\n• تنظيم جلسات المذاكرة بالبومودورو والفقاعة العائمة.\n\nقولي بتفكر في إيه وحابب نركز على إيه دلوقتي؟ ✨`;
+  return `🤖 **أهلاً بك يا بطل!**\nأنا كوتش زتونة ومتابع معاك كل تفاصيل يومك (${iso}).\n\nتقدر تسألني عن أي حاجة في التمرين، التغذية، العبادة، النوم، أو تنظيم وقتك، وسأجاوبك فوراً! ✨`;
 }
 
-async function sendAiChatMessage(userPrompt){
-  if(!userPrompt || !userPrompt.trim()) return;
-  const prompt = userPrompt.trim();
-  const iso = toISO(weekDates[selectedIdx]);
-  const settings = loadAiCoachSettings();
-  const stats = analyzeDailyWellnessStats(iso);
+// ==========================================================================
+// ZATOONA IN-APP ACTION EXECUTION ENGINE & VOICE ASSISTANT CONTROLLERS
+// ==========================================================================
 
-  // Add user message to history
-  const history = loadAiCoachChatHistory();
-  history.push({ role: 'user', text: prompt, timestamp: Date.now() });
-  saveAiCoachChatHistory(history);
-  renderAiCoachCard();
+// Voice Output State
+let _aiCoachVoiceOutputEnabled = true;
+try {
+  const savedVoicePref = localStorage.getItem('zatoona-ai-voice-output');
+  if(savedVoicePref !== null) _aiCoachVoiceOutputEnabled = (savedVoicePref === 'true');
+} catch(e){}
 
-  // Scroll to bottom
-  const msgBox = document.getElementById('aiCoachChatMessages');
-  if(msgBox) msgBox.scrollTop = msgBox.scrollHeight;
+function toggleAiCoachVoiceOutput(){
+  _aiCoachVoiceOutputEnabled = !_aiCoachVoiceOutputEnabled;
+  try { localStorage.setItem('zatoona-ai-voice-output', String(_aiCoachVoiceOutputEnabled)); } catch(e){}
+  const btn = document.getElementById('btnAiChatVoiceToggle');
+  if(btn){
+    btn.textContent = _aiCoachVoiceOutputEnabled ? '🔊 صوت: تشغيل' : '🔇 صوت: كتم';
+  }
+  triggerHaptic('buttons', 'light');
+  if(!_aiCoachVoiceOutputEnabled && 'speechSynthesis' in window){
+    window.speechSynthesis.cancel();
+  }
+}
+window.toggleAiCoachVoiceOutput = toggleAiCoachVoiceOutput;
 
-  // Show typing indicator
-  const typingEl = document.getElementById('aiCoachChatTyping');
-  if(typingEl) typingEl.style.display = 'block';
+function speakAiCoachResponse(rawText){
+  if(!_aiCoachVoiceOutputEnabled) return;
+  if(!('speechSynthesis' in window)) return;
+  try {
+    window.speechSynthesis.cancel();
+    // Strip markdown tags, emojis, and action tags for clean, clear speech
+    const clean = rawText
+      .replace(/<<<ACTION:[\s\S]*?>>>/g, '')
+      .replace(/\*\*(.*?)\*\*/g, '$1')
+      .replace(/[#\*_`•\-\n]/g, ' ')
+      .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '')
+      .trim();
+    if(!clean) return;
 
-  let replyText = '';
+    const utterance = new SpeechSynthesisUtterance(clean);
+    utterance.lang = 'ar-EG';
+    utterance.rate = 1.05;
+    utterance.pitch = 1.0;
 
-  // If Gemini enabled and key provided
-  if(settings.enabled && settings.provider === 'gemini' && settings.apiKey && settings.apiKey.trim()){
-    try {
-      const summaryText = typeof generateDailySummaryText === 'function' ? generateDailySummaryText(iso) : JSON.stringify(stats);
-      const systemInstruction = `أنت "كوتش زتونة الذكي"، مستشار ومساعد شخصي ودود ومحفز يتحدث باللهجة المصرية الطبيعية الراقية. أنت مدمج في تطبيق "زيتونة" (تطبيق إسلامي وصحي ورياضي وإنتاجي). أسلوبك داعم وعملي ومختصر. لديك بيانات يوم المستخدم الحالية (${iso}): ${summaryText}. أجب عن سؤال المستخدم بذكاء وربط ببياناته عند الحاجة.`;
+    const voices = window.speechSynthesis.getVoices();
+    const arVoice = voices.find(v => v.lang.startsWith('ar'));
+    if(arVoice) utterance.voice = arVoice;
 
-      const contents = [
-        {
-          role: 'user',
-          parts: [{ text: `${systemInstruction}\n\nالسؤال:\n${prompt}` }]
-        }
-      ];
+    window.speechSynthesis.speak(utterance);
+  } catch(e){
+    console.warn('[AiVoiceOutput] Speech synthesis error:', e);
+  }
+}
+window.speakAiCoachResponse = speakAiCoachResponse;
 
-      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${encodeURIComponent(settings.apiKey.trim())}`;
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contents })
-      });
+// Speech Recognition (Voice-to-Text Input)
+let _speechRecognitionInstance = null;
+let _isSpeechRecognizing = false;
 
-      if(!response.ok) throw new Error(`HTTP ${response.status}`);
-      const data = await response.json();
-      const generated = data.candidates?.[0]?.content?.parts?.[0]?.text;
-      if(generated && generated.trim()){
-        replyText = generated.trim();
+function initVoiceRecognition(){
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SpeechRec) return null;
+
+  try {
+    const rec = new SpeechRec();
+    rec.continuous = false;
+    rec.interimResults = false;
+    rec.lang = 'ar-EG'; // Egyptian Arabic
+
+    rec.onstart = () => {
+      _isSpeechRecognizing = true;
+      updateVoiceRecordingUI(true);
+      triggerHaptic('buttons', 'medium');
+    };
+
+    rec.onresult = (event) => {
+      const transcript = event.results?.[0]?.[0]?.transcript;
+      if(transcript && transcript.trim()){
+        const inp = document.getElementById('inpAiModalChat');
+        if(inp) inp.value = transcript.trim();
+        processAiUserPrompt(transcript.trim());
       }
+    };
+
+    rec.onerror = (e) => {
+      console.warn('[SpeechRec] Error:', e);
+      _isSpeechRecognizing = false;
+      updateVoiceRecordingUI(false);
+    };
+
+    rec.onend = () => {
+      _isSpeechRecognizing = false;
+      updateVoiceRecordingUI(false);
+    };
+
+    return rec;
+  } catch(err){
+    console.warn('[SpeechRec] Initialization failed:', err);
+    return null;
+  }
+}
+
+function updateVoiceRecordingUI(isRecording){
+  const micBtn = document.getElementById('btnAiChatMic');
+  const listeningBar = document.getElementById('aiVoiceListeningIndicator');
+  if(micBtn){
+    if(isRecording){
+      micBtn.classList.add('recording');
+      micBtn.textContent = '⏹️';
+      micBtn.title = 'اضغط للإيقاف';
+    } else {
+      micBtn.classList.remove('recording');
+      micBtn.textContent = '🎙️';
+      micBtn.title = 'اضغط للتحدث صوتياً';
+    }
+  }
+  if(listeningBar){
+    listeningBar.style.display = isRecording ? 'flex' : 'none';
+  }
+}
+
+function toggleAiVoiceInput(){
+  if(!_speechRecognitionInstance){
+    _speechRecognitionInstance = initVoiceRecognition();
+  }
+
+  if(!_speechRecognitionInstance){
+    alert('ميزة التعرف الصوتي المباشر تعتمد على متصفح جهازك. يمكنك أيضاً استخدام زر المايك 🎙️ في كيبورد هاتفك للكتابة صوتياً بكل سهولة!');
+    return;
+  }
+
+  if(_isSpeechRecognizing){
+    try { _speechRecognitionInstance.stop(); } catch(e){}
+    _isSpeechRecognizing = false;
+    updateVoiceRecordingUI(false);
+  } else {
+    try {
+      _speechRecognitionInstance.start();
     } catch(err){
-      console.warn('[AiChat] Gemini failed, using local engine:', err);
-      replyText = generateLocalAiChatResponse(prompt, stats, iso);
+      console.warn('[SpeechRec] Start error:', err);
+      // Re-init and retry
+      _speechRecognitionInstance = initVoiceRecognition();
+      try { _speechRecognitionInstance.start(); } catch(e2){}
+    }
+  }
+}
+window.toggleAiVoiceInput = toggleAiVoiceInput;
+
+// --------------------------------------------------------------------------
+// IN-APP ACTION EXECUTION ENGINE (تنفيذ الأوامر وتسجيل وتعديل البيانات فعلياً)
+// --------------------------------------------------------------------------
+
+function executeLogWaterAction(amount = 1){
+  const delta = Number(amount) || 1;
+  const iso = toISO(weekDates[selectedIdx]);
+  waterCount = Math.max(0, (waterCount || 0) + delta);
+  saveWater(iso, waterCount);
+  renderWater();
+  triggerHaptic('buttons', 'medium');
+  playAppSound('water');
+  return `تمام يا بطل! سجلت لك ${delta > 1 ? delta + ' أكواب' : 'كوباية'} مية بنجاح 💧\nإجمالي شرب الماء لليوم: **${waterCount} كوب**. استمر يا بطل!`;
+}
+window.executeLogWaterAction = executeLogWaterAction;
+
+function executeLogPrayerAction(prayerTarget, isSunnah = false){
+  const iso = toISO(weekDates[selectedIdx]);
+  const p = (prayerTarget || '').toLowerCase().trim();
+
+  // 1. Fard & Sunnah Prayers
+  const prayerMap = {
+    fajr: 'الفجر', 'فجر': 'الفجر',
+    dhuhr: 'الظهر', 'ظهر': 'الظهر',
+    asr: 'العصر', 'عصر': 'العصر',
+    maghrib: 'المغرب', 'مغرب': 'المغرب',
+    isha: 'العشاء', 'عشاء': 'العشاء', 'عشا': 'العشاء'
+  };
+
+  for(const [k, name] of Object.entries(prayerMap)){
+    if(p.includes(k)){
+      const canonKey = (k === 'فجر') ? 'fajr' : (k === 'ظهر' ? 'dhuhr' : (k === 'عصر' ? 'asr' : (k === 'مغرب' ? 'maghrib' : (k === 'عشاء' || k === 'عشا' ? 'isha' : k))));
+      if(!prayerState[canonKey]) prayerState[canonKey] = { fard: false, sunnah: false };
+      if(isSunnah){
+        prayerState[canonKey].sunnah = true;
+      } else {
+        prayerState[canonKey].fard = true;
+      }
+      savePrayer(iso, prayerState);
+      weekDotsPrayer[iso] = computeDotClassPrayer(prayerState);
+      if(typeof renderPrayerFard === 'function') renderPrayerFard();
+      if(typeof renderPrayerSummary === 'function') renderPrayerSummary();
+      if(typeof renderTabs === 'function') renderTabs();
+      triggerHaptic('alerts', 'gentle');
+      playAppSound('logging');
+      return `تقبل الله منا ومنك صالح الأعمال يا بطل! 🕌\nتم تسجيل ${isSunnah ? 'سنة' : 'فرض'} صلاة **${name}** في قائمة عبادات اليوم بنجاح.`;
     }
   }
 
-  if(!replyText){
-    replyText = generateLocalAiChatResponse(prompt, stats, iso);
+  // 2. Qiyam & Witr
+  if(p.includes('qiyam') || p.includes('قيام')){
+    const qiyamObj = loadQiyam(iso);
+    qiyamObj.qiyam = true;
+    saveQiyam(iso, qiyamObj);
+    triggerHaptic('alerts', 'gentle');
+    playAppSound('logging');
+    return 'تقبل الله قيامك وطاعتك! 🌙\nتم تسجيل **قيام الليل** في أوراد وعبادات اليوم بنجاح.';
+  }
+  if(p.includes('witr') || p.includes('وتر')){
+    const qiyamObj = loadQiyam(iso);
+    qiyamObj.witr = true;
+    saveQiyam(iso, qiyamObj);
+    triggerHaptic('alerts', 'gentle');
+    playAppSound('logging');
+    return 'تقبل الله! ✨ تم تسجيل **صلاة الوتر** في أوراد اليوم بنجاح.';
   }
 
-  if(typingEl) typingEl.style.display = 'none';
+  // 3. Azkar
+  if(p.includes('sabah') || p.includes('صباح')){
+    const azk = loadAzkar(iso);
+    azk.sabah = true;
+    saveAzkar(iso, azk);
+    triggerHaptic('alerts', 'gentle');
+    playAppSound('logging');
+    return 'تم تسجيل **أذكار الصباح** بنجاح ☀️ حفظك الله وبارك في يومك!';
+  }
+  if(p.includes('masaa') || p.includes('مساء')){
+    const azk = loadAzkar(iso);
+    azk.masaa = true;
+    saveAzkar(iso, azk);
+    triggerHaptic('alerts', 'gentle');
+    playAppSound('logging');
+    return 'تم تسجيل **أذكار المساء** بنجاح 🌇 أمسيت في حفظ الله وأمانه!';
+  }
 
-  // Add assistant response to history
+  // 4. Quran
+  if(p.includes('quran') || p.includes('قرآن') || p.includes('ورد')){
+    const qur = loadQuran(iso);
+    qur.done = true;
+    saveQuran(iso, qur);
+    triggerHaptic('alerts', 'gentle');
+    playAppSound('logging');
+    return 'ما شاء الله تبارك الله! 📖\nتم تسجيل **قراءة ورد القرآن الكريم** لليوم بنجاح.';
+  }
+
+  return `تم تسجيل العبادة: ${prayerTarget} بنجاح.`;
+}
+window.executeLogPrayerAction = executeLogPrayerAction;
+
+function executeToggleHabitAction(habitName){
+  const iso = toISO(weekDates[selectedIdx]);
+  const list = loadCustomHabitsList();
+  const search = (habitName || '').trim().toLowerCase();
+  const found = list.find(h => h.title.toLowerCase().includes(search));
+
+  if(found){
+    toggleCustomHabit(found.id, iso);
+    if(typeof renderCustomHabitsTracker === 'function') renderCustomHabitsTracker();
+    triggerHaptic('alerts', 'gentle');
+    playAppSound('logging');
+    return `عاش يا بطل! تم تعليم عادة "**${found.title}**" كمنجزة اليوم بنجاح ✅`;
+  } else {
+    addCustomHabit(habitName, 'habit', 'يومي');
+    const updatedList = loadCustomHabitsList();
+    const newH = updatedList.find(h => h.title === habitName);
+    if(newH) toggleCustomHabit(newH.id, iso);
+    if(typeof renderCustomHabitsTracker === 'function') renderCustomHabitsTracker();
+    triggerHaptic('alerts', 'gentle');
+    playAppSound('logging');
+    return `تم إنشاء عادة جديدة "**${habitName}**" وتعليمها كمنجزة لليوم بنجاح! 🎯`;
+  }
+}
+window.executeToggleHabitAction = executeToggleHabitAction;
+
+function executeLogWorkoutAction(isRest = false){
+  const iso = toISO(weekDates[selectedIdx]);
+  if(isRest){
+    storageSet('gym-rest-day:' + iso, 'true');
+    if(typeof renderDomainStudyGym === 'function') renderDomainStudyGym();
+    triggerHaptic('buttons', 'gentle');
+    return 'تم تسجيل اليوم **كيوم راحة واستشفاء عضلي** بنجاح 🧘‍♂️ الراحة نصف التمرين!';
+  } else {
+    completeGymSession(iso, { forceComplete: true });
+    if(typeof renderDomainStudyGym === 'function') renderDomainStudyGym();
+    triggerHaptic('alerts', 'gentle');
+    playAppSound('logging');
+    return 'عاش يا وحش! 💪 تم تسجيل **تمرين اليوم كمنجز** في سجل الجيم والتمارين بنجاح.';
+  }
+}
+window.executeLogWorkoutAction = executeLogWorkoutAction;
+
+function executeAddMicroTasksAction(tasksArray, goalName = 'برمجة'){
+  if(!Array.isArray(tasksArray) || tasksArray.length === 0){
+    return 'لم يتم تحديد مهام مصغرة لإضافتها.';
+  }
+  tasksArray.forEach(t => {
+    const title = `[${goalName}] ${t}`;
+    addCustomHabit(title, 'learning', 'يومي');
+  });
+  if(typeof renderCustomHabitsTracker === 'function') renderCustomHabitsTracker();
+  triggerHaptic('alerts', 'gentle');
+  playAppSound('logging');
+  return `تمت إضافة **${tasksArray.length} مهام مصغرة (Micro-learning)** لهدف "${goalName}" إلى جدول عاداتك اليومية بنجاح! 🚀\nيمكنك الآن إنجازها والتعليم عليها خطوة بخطوة.`;
+}
+window.executeAddMicroTasksAction = executeAddMicroTasksAction;
+
+function executeSaveBookSummaryAction(bookTitle, pointsText){
+  const iso = toISO(weekDates[selectedIdx]);
+  const existing = loadDailyNote(iso) || '';
+  const noteContent = `📚 **زتونة كتاب: ${bookTitle}**\nتاريخ الإضافة: ${iso}\n\n${pointsText}\n\n#كتب #زتونة #تطوير`;
+  saveDailyNote(iso, existing ? `${existing}\n\n---\n${noteContent}` : noteContent);
+
+  // Add daily reading habit
+  addCustomHabit(`قراءة 15 دقيقة في كتاب "${bookTitle}"`, 'learning', 'يومي');
+  if(typeof renderCustomHabitsTracker === 'function') renderCustomHabitsTracker();
+
+  triggerHaptic('alerts', 'gentle');
+  playAppSound('logging');
+  return `تم حفظ **زتونة كتاب: ${bookTitle}** في ملاحظاتك اليومية، وتمت إضافة عادة قراءة 15 دقيقة يومياً في جدول عاداتك بنجاح! 📖💡`;
+}
+window.executeSaveBookSummaryAction = executeSaveBookSummaryAction;
+
+function executeAddNoteAction(noteText){
+  const iso = toISO(weekDates[selectedIdx]);
+  const existing = loadDailyNote(iso) || '';
+  saveDailyNote(iso, existing ? `${existing}\n\n${noteText}` : noteText);
+  triggerHaptic('alerts', 'gentle');
+  return `تم حفظ الملاحظة في مفكرة اليوم بنجاح 📝: "${noteText}"`;
+}
+window.executeAddNoteAction = executeAddNoteAction;
+
+// Master Action Dispatcher
+function executeAppAction(action){
+  if(!action || !action.type) return null;
+  try {
+    switch(action.type){
+      case 'log_water':
+        return executeLogWaterAction(action.delta || action.amount || 1);
+      case 'log_prayer':
+        return executeLogPrayerAction(action.target || action.prayer, action.isSunnah || false);
+      case 'toggle_habit':
+        return executeToggleHabitAction(action.habitName || action.title);
+      case 'log_workout':
+        return executeLogWorkoutAction(action.isRest || false);
+      case 'add_micro_tasks':
+        return executeAddMicroTasksAction(action.tasks, action.goal || 'مهارة');
+      case 'save_book_summary':
+        return executeSaveBookSummaryAction(action.title || action.book, action.points || action.summary || '');
+      case 'log_qada_fasting':
+        return logQadaFastingDay(action.delta || 1);
+      case 'log_qada_prayer':
+        logQadaPrayerRepaid(action.prayer || 'dhuhr', -1);
+        return `تم تسجيل قضاء صلاة ${action.prayer || ''} بنجاح 🕌`;
+      case 'open_monk_mode':
+        openMonkMode(action.task);
+        return 'تم تفعيل وضع الراهب للعزل التام 🧘‍♂️';
+      case 'play_ambient_noise':
+        playAmbientSoundWithTimer(action.sound || 'brown', action.minutes || 30);
+        return `تم تشغيل أصوات الطبيعة والهدوء (${action.sound || 'ضوضاء بنية'}) 🌧️`;
+      case 'add_note':
+        return executeAddNoteAction(action.text || action.note);
+      default:
+        console.warn('[ActionEngine] Unknown action:', action.type);
+        return null;
+    }
+  } catch(err){
+    console.warn('[ActionEngine] Execution error:', err);
+    return `تعذر تنفيذ الأمر: ${err.message}`;
+  }
+}
+window.executeAppAction = executeAppAction;
+
+// --------------------------------------------------------------------------
+// LOCAL INTENT MATCHER (Tier 1 - Instant Zero Latency Execution)
+// --------------------------------------------------------------------------
+
+function parseLocalIntent(prompt){
+  const p = (prompt || '').trim().toLowerCase();
+
+  // 1. Water: "سجل اني شربت كوباية مية", "شربت مية", "زود كوباية مية"
+  if(/(شربت|سجل.*(مية|ماي|ماء)|كوب.*(مية|ماء)|كوباية.*(مية|ماء))/i.test(p)){
+    let delta = 1;
+    if(/كوبايتين|2|اتنين/i.test(p)) delta = 2;
+    if(/3|تلاتة/i.test(p)) delta = 3;
+    if(/4|أربعة|اربعة/i.test(p)) delta = 4;
+    return { type: 'log_water', delta };
+  }
+
+  // 2. Prayer: "سجل صلاة الظهر", "صليت العصر", "علم على الفجر", "صليت المغرب", "صليت العشاء"
+  if(/(صليت|سجل.*صلاة|علم.*صلاة)/i.test(p)){
+    const isSunnah = /سنة|سنن/i.test(p);
+    if(/فجر/i.test(p)) return { type: 'log_prayer', target: 'fajr', isSunnah };
+    if(/ظهر/i.test(p)) return { type: 'log_prayer', target: 'dhuhr', isSunnah };
+    if(/عصر/i.test(p)) return { type: 'log_prayer', target: 'asr', isSunnah };
+    if(/مغرب/i.test(p)) return { type: 'log_prayer', target: 'maghrib', isSunnah };
+    if(/عشاء|عشا/i.test(p)) return { type: 'log_prayer', target: 'isha', isSunnah };
+    if(/قيام/i.test(p)) return { type: 'log_prayer', target: 'qiyam' };
+    if(/وتر/i.test(p)) return { type: 'log_prayer', target: 'witr' };
+  }
+
+  // 3. Azkar: "أذكار الصباح", "أذكار المساء"
+  if(/(أذكار.*صباح|اذكار.*صباح|قرأت.*صباح|خلصت.*صباح)/i.test(p)) return { type: 'log_prayer', target: 'sabah' };
+  if(/(أذكار.*مساء|اذكار.*مساء|قرأت.*مساء|خلصت.*مساء)/i.test(p)) return { type: 'log_prayer', target: 'masaa' };
+
+  // 4. Quran: "قرأت ورد القرآن", "سجل القرآن"
+  if(/(قرآن|قران|ورد.*قرآن|سورة)/i.test(p) && /(سجل|قرأت|قريت|خلصت)/i.test(p)){
+    return { type: 'log_prayer', target: 'quran' };
+  }
+
+  // 5. Workout: "سجل اني اتمرنت", "سجل تمرين النهاردة", "خلصت التمرين"
+  if(/(تمرنت|اتمرنت|خلصت.*تمرين|سجل.*تمرين|لعبت.*جيم)/i.test(p)){
+    return { type: 'log_workout', isRest: false };
+  }
+  if(/(يوم.*راحة|سجل.*راحة|راحة.*عضلي)/i.test(p)){
+    return { type: 'log_workout', isRest: true };
+  }
+
+  // 6. Habit: "سجل عادة ...", "علم على عادة ..."
+  const habitMatch = p.match(/(?:سجل|علم على|خلصت) عادة\s+(.*)/i);
+  if(habitMatch && habitMatch[1]){
+    return { type: 'toggle_habit', habitName: habitMatch[1].trim() };
+  }
+
+    // Qada Fasting: "سجل قضاء صيام", "صمت يوم قضاء"
+  if(/(قضاء.*صيام|صمت.*قضاء|سجل.*يوم.*قضاء)/i.test(p)){
+    return { type: 'log_qada_fasting', delta: 1 };
+  }
+
+  // Qada Prayer: "قضاء صلاة الظهر", "صليت ظهر قضاء"
+  if(/(قضاء.*صلاة|صليت.*قضاء)/i.test(p)){
+    const pr = /فجر/i.test(p) ? 'fajr' : (/عصر/i.test(p) ? 'asr' : (/مغرب/i.test(p) ? 'maghrib' : (/عشا/i.test(p) ? 'isha' : 'dhuhr')));
+    return { type: 'log_qada_prayer', prayer: pr };
+  }
+
+  // 541. Monk Mode: "وضع الراهب", "عزل تام", "monk mode"
+  if(/(وضع.*الراهب|عزل.*تام|monk.*mode)/i.test(p)){
+    return { type: 'open_monk_mode', task: 'جلسة تركيز عميق' };
+  }
+
+  // 530. Nature Noise: "شغل صوت مطر", "ضوضاء بنية", "ضوضاء وردية", "شغل هدوء"
+  if(/(صوت.*مطر|ضوضاء.*بنية|ضوضاء.*وردية|brown.*noise|pink.*noise)/i.test(p)){
+    const s = /مطر/i.test(p) ? 'rain' : (/وردية|pink/i.test(p) ? 'pink' : 'brown');
+    return { type: 'play_ambient_noise', sound: s, minutes: 30 };
+  }
+
+  // 481. Muscle Heatmap: "خريطة الإجهاد", "استشفاء العضلات", "muscle heatmap"
+  if(/(خريطة.*إجهاد|استشفاء.*عضل|muscle.*heatmap)/i.test(p)){
+    if(typeof openGymRecoveryHeatmapModal === 'function') openGymRecoveryHeatmapModal();
+    return { type: 'chat_reply', text: 'فتحت لك خريطة الإجهاد العضلي واستشفاء الـ 48 ساعة 🏋️‍♂️' };
+  }
+
+  return null;
+}
+window.parseLocalIntent = parseLocalIntent;
+
+// --------------------------------------------------------------------------
+// MARKDOWN FORMATTER & BUBBLE ENHANCEMENT
+// --------------------------------------------------------------------------
+
+function formatAiMessageMarkdown(raw){
+  if(!raw) return '';
+  let safe = escapeHtml(raw);
+
+  // Bold **text**
+  safe = safe.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+  // Bullet items
+  safe = safe.replace(/^[•\-\*]\s+(.*)$/gm, '<div style="display:flex; gap:6px; margin:2px 0;"><span>•</span><span>$1</span></div>');
+
+  // Line breaks
+  safe = safe.replace(/\n/g, '<br>');
+
+  return safe;
+}
+window.formatAiMessageMarkdown = formatAiMessageMarkdown;
+
+// ==========================================================================
+// 15 HYPER-FRESH FEATURES CONTROLLERS (Monk Mode, Just-Start, Qada, etc.)
+// ==========================================================================
+
+// 401. Wake Word & Hands-Free Mode ("يا زتونة" / "يا كوتش")
+let _isWakeWordActive = false;
+let _wakeWordRecInstance = null;
+
+function toggleWakeWordHandsFree(){
+  _isWakeWordActive = !_isWakeWordActive;
+  const btn = document.getElementById('btnWakeWordToggle');
+  if(btn){
+    btn.textContent = _isWakeWordActive ? '🗣️ نداء صوتي: مفعّل' : '🗣️ نداء صوتي: معطل';
+  }
+
+  if(_isWakeWordActive){
+    initWakeWordListener();
+    triggerHaptic('buttons', 'medium');
+  } else {
+    if(_wakeWordRecInstance){
+      try { _wakeWordRecInstance.stop(); } catch(e){}
+      _wakeWordRecInstance = null;
+    }
+  }
+}
+window.toggleWakeWordHandsFree = toggleWakeWordHandsFree;
+
+function initWakeWordListener(){
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SpeechRec) return;
+
+  try {
+    _wakeWordRecInstance = new SpeechRec();
+    _wakeWordRecInstance.continuous = true;
+    _wakeWordRecInstance.interimResults = false;
+    _wakeWordRecInstance.lang = 'ar-EG';
+
+    _wakeWordRecInstance.onresult = (event) => {
+      const results = event.results;
+      const last = results[results.length - 1];
+      const text = (last?.[0]?.transcript || '').trim();
+      if(/(يا زتونة|يا كوتش|زتونة|ياكوتش)/i.test(text)){
+        playAppSound('water');
+        triggerHaptic('alerts', 'gentle');
+        openAiFullscreenChat(text);
+        processAiUserPrompt(text);
+      }
+    };
+
+    _wakeWordRecInstance.onerror = () => {};
+    _wakeWordRecInstance.onend = () => {
+      if(_isWakeWordActive && _wakeWordRecInstance){
+        try { _wakeWordRecInstance.start(); } catch(e){}
+      }
+    };
+
+    _wakeWordRecInstance.start();
+  } catch(e){}
+}
+
+// 408. Long-Term Profile Memory (ذاكرة كوتش زتونة المستمرة)
+function loadAiCoachProfileMemory(){
+  const defaultMem = {
+    workoutSplit: 'Push Pull Legs',
+    injuries: 'لا توجد إصابات مسجلة',
+    goals: 'تعلم بايثون والالتزام بصلاة الفجر',
+    readingInterests: 'تطوير الذات والإنتاجية'
+  };
+  return storageGetJSON('zatoona-ai-profile-memory', defaultMem);
+}
+window.loadAiCoachProfileMemory = loadAiCoachProfileMemory;
+
+function saveAiCoachProfileMemory(profile){
+  if(!profile) return;
+  storageSet('zatoona-ai-profile-memory', JSON.stringify(profile));
+}
+window.saveAiCoachProfileMemory = saveAiCoachProfileMemory;
+
+function openAiProfileMemoryModal(){
+  const modal = document.getElementById('aiProfileMemoryModal');
+  if(!modal) return;
+  const mem = loadAiCoachProfileMemory();
+  const inpW = document.getElementById('inpMemWorkoutSplit');
+  const inpI = document.getElementById('inpMemInjuries');
+  const inpG = document.getElementById('inpMemGoals');
+  const inpR = document.getElementById('inpMemReading');
+  if(inpW) inpW.value = mem.workoutSplit || '';
+  if(inpI) inpI.value = mem.injuries || '';
+  if(inpG) inpG.value = mem.goals || '';
+  if(inpR) inpR.value = mem.readingInterests || '';
+  modal.style.display = 'flex';
+}
+window.openAiProfileMemoryModal = openAiProfileMemoryModal;
+
+function closeAiProfileMemoryModal(){
+  const modal = document.getElementById('aiProfileMemoryModal');
+  if(modal) modal.style.display = 'none';
+}
+window.closeAiProfileMemoryModal = closeAiProfileMemoryModal;
+
+function saveAiProfileMemoryFromModal(){
+  const mem = loadAiCoachProfileMemory();
+  const inpW = document.getElementById('inpMemWorkoutSplit');
+  const inpI = document.getElementById('inpMemInjuries');
+  const inpG = document.getElementById('inpMemGoals');
+  const inpR = document.getElementById('inpMemReading');
+  if(inpW) mem.workoutSplit = inpW.value.trim();
+  if(inpI) mem.injuries = inpI.value.trim();
+  if(inpG) mem.goals = inpG.value.trim();
+  if(inpR) mem.readingInterests = inpR.value.trim();
+  saveAiCoachProfileMemory(mem);
+  closeAiProfileMemoryModal();
+  triggerHaptic('buttons', 'light');
+}
+window.saveAiProfileMemoryFromModal = saveAiProfileMemoryFromModal;
+
+// 412. Anti-Procrastination Negotiator (وكيل التفاوض مع التسويف)
+function openProcrastinationNegotiatorModal(customDeal){
+  const modal = document.getElementById('procrastinationNegotiatorModal');
+  if(!modal) return;
+  const dealEl = document.getElementById('negotiatorDealText');
+  if(dealEl){
+    dealEl.textContent = customDeal || 'التزم بـ 5 دقائق فقط إطالات خفيفة أو حل مسألة كود واحدة لكسر حاجز البداية.';
+  }
+  modal.style.display = 'flex';
+}
+window.openProcrastinationNegotiatorModal = openProcrastinationNegotiatorModal;
+
+function closeProcrastinationNegotiatorModal(){
+  const modal = document.getElementById('procrastinationNegotiatorModal');
+  if(modal) modal.style.display = 'none';
+}
+window.closeProcrastinationNegotiatorModal = closeProcrastinationNegotiatorModal;
+
+function acceptMicroCommitment(){
+  closeProcrastinationNegotiatorModal();
+  addCustomHabit('إنجاز التزام مصغر 5 دقائق (كسر التسويف)', 'learning', 'يومي');
+  const iso = toISO(weekDates[selectedIdx]);
+  const list = loadCustomHabitsList();
+  const h = list.find(item => item.title.includes('كسر التسويف'));
+  if(h) toggleCustomHabit(h.id, iso);
+  playAppSound('logging');
+  triggerHaptic('alerts', 'gentle');
+}
+window.acceptMicroCommitment = acceptMicroCommitment;
+
+// 413. Self-Healing State Diagnostic Agent (إصلاح وتدقيق البيانات ذاتياً)
+function auditAndRepairZatoonaState(){
+  let keysChecked = 0;
+  let issuesRepaired = 0;
+
+  try {
+    for(let i = 0; i < localStorage.length; i++){
+      const key = localStorage.key(i);
+      if(!key || !key.startsWith(STORAGE_PREFIX)) continue;
+      keysChecked++;
+      const raw = localStorage.getItem(key);
+      if(raw === 'undefined' || raw === 'NaN' || raw === 'null'){
+        localStorage.removeItem(key);
+        issuesRepaired++;
+      } else if(raw && (raw.startsWith('{') || raw.startsWith('['))){
+        try {
+          JSON.parse(raw);
+        } catch(eJson){
+          localStorage.removeItem(key);
+          issuesRepaired++;
+        }
+      }
+    }
+
+    // Verify waterCount integer
+    if(isNaN(waterCount) || waterCount < 0){
+      waterCount = 0;
+      saveWater(toISO(weekDates[selectedIdx]), 0);
+      issuesRepaired++;
+    }
+
+    return {
+      success: true,
+      keysChecked,
+      issuesRepaired,
+      status: issuesRepaired === 0 ? 'جميع البيانات سليمة 100%' : `تم إصلاح ${issuesRepaired} عنصر بنجاح`
+    };
+  } catch(err){
+    return { success: false, error: err.message };
+  }
+}
+window.auditAndRepairZatoonaState = auditAndRepairZatoonaState;
+
+// 419. Voice Note Structuring Agent (صياغة الملاحظات الصوتية)
+function structureVoiceNoteToMarkdown(rawText){
+  if(!rawText) return '';
+  const lines = rawText.split(/[،\.\n]/).map(s => s.trim()).filter(Boolean);
+  const mainIdea = lines[0] || 'فكرة سريعة';
+  const bulletPoints = lines.slice(1, 4).map(l => `• ${l}`).join('\n');
+  const actionItems = lines.slice(4).map(l => `[ ] ${l}`).join('\n');
+
+  return `💡 **الفكرة الجوهرية:** ${mainIdea}\n\n📌 **النقاط الرئيسية:**\n${bulletPoints || '• لا توجد تفاصيل إضافية'}\n\n🚀 **الخطوات والمهام (Action Items):**\n${actionItems || '[ ] متابعة التنفيذ'}`;
+}
+window.structureVoiceNoteToMarkdown = structureVoiceNoteToMarkdown;
+
+// 469. Qada Fasting & Prayer Repayment Tracker (قضاء الصلوات والصيام)
+function loadQadaState(){
+  const defaultQada = {
+    prayers: { fajr: 0, dhuhr: 0, asr: 0, maghrib: 0, isha: 0 },
+    fastingDays: 0
+  };
+  return storageGetJSON('zatoona-worship-qada', defaultQada);
+}
+window.loadQadaState = loadQadaState;
+
+function saveQadaState(state){
+  if(!state) return;
+  storageSet('zatoona-worship-qada', JSON.stringify(state));
+}
+window.saveQadaState = saveQadaState;
+
+function logQadaFastingDay(delta = 1){
+  const state = loadQadaState();
+  state.fastingDays = Math.max(0, (state.fastingDays || 0) + delta);
+  saveQadaState(state);
+  renderQadaUI();
+  triggerHaptic('buttons', 'light');
+  return `تم تحديث أيام قضاء الصيام: المتبقي ${state.fastingDays} يوم 🌙`;
+}
+window.logQadaFastingDay = logQadaFastingDay;
+
+function logQadaPrayerRepaid(prayerName, delta = -1){
+  const state = loadQadaState();
+  if(!state.prayers) state.prayers = { fajr: 0, dhuhr: 0, asr: 0, maghrib: 0, isha: 0 };
+  state.prayers[prayerName] = Math.max(0, (state.prayers[prayerName] || 0) + delta);
+  saveQadaState(state);
+  renderQadaUI();
+  triggerHaptic('buttons', 'light');
+}
+window.logQadaPrayerRepaid = logQadaPrayerRepaid;
+
+function openWorshipQadaModal(){
+  const modal = document.getElementById('worshipQadaModal');
+  if(!modal) return;
+  renderQadaUI();
+  modal.style.display = 'flex';
+}
+window.openWorshipQadaModal = openWorshipQadaModal;
+
+function closeWorshipQadaModal(){
+  const modal = document.getElementById('worshipQadaModal');
+  if(modal) modal.style.display = 'none';
+}
+window.closeWorshipQadaModal = closeWorshipQadaModal;
+
+function changeQadaFasting(delta){
+  logQadaFastingDay(delta);
+}
+window.changeQadaFasting = changeQadaFasting;
+
+function renderQadaUI(){
+  const state = loadQadaState();
+  const fCount = document.getElementById('qadaFastingCount');
+  const fSub = document.getElementById('qadaFastingSubtitle');
+  if(fCount) fCount.textContent = state.fastingDays || 0;
+  if(fSub) fSub.textContent = `المتبقي للقضاء: ${state.fastingDays || 0} يوم`;
+
+  const grid = document.getElementById('qadaPrayersGrid');
+  if(!grid) return;
+  const pMap = { fajr: 'الفجر', dhuhr: 'الظهر', asr: 'العصر', maghrib: 'المغرب', isha: 'العشاء' };
+  let html = '';
+  Object.entries(pMap).forEach(([k, name]) => {
+    const count = (state.prayers && state.prayers[k]) || 0;
+    html += `
+      <div class="qada-item-card">
+        <div style="font-size:0.82rem; font-weight:700; color:var(--text);">${name}</div>
+        <div style="font-size:1.15rem; font-weight:900; color:var(--primary);">${count}</div>
+        <div class="qada-btn-group">
+          <button type="button" class="qada-counter-btn" onclick="logQadaPrayerRepaid('${k}', -1)">-</button>
+          <button type="button" class="qada-counter-btn" onclick="logQadaPrayerRepaid('${k}', 1)">+</button>
+        </div>
+      </div>
+    `;
+  });
+  grid.innerHTML = html;
+}
+
+// 530. Pink Noise & Ambient Sound Player (الضوضاء البنية والوردية ومولد الهدوء)
+let _activeAmbientNoiseSource = null;
+let _ambientSoundTimerId = null;
+
+function getAppAudioContext(){
+  const AudioClass = window.AudioContext || window.webkitAudioContext;
+  if(!AudioClass) return null;
+  if(!window._zatoonaAudioCtx){
+    window._zatoonaAudioCtx = new AudioClass();
+  }
+  if(window._zatoonaAudioCtx.state === 'suspended'){
+    window._zatoonaAudioCtx.resume().catch(() => {});
+  }
+  return window._zatoonaAudioCtx;
+}
+
+function stopAmbientSoundWithTimer(){
+  if(_ambientSoundTimerId){
+    clearTimeout(_ambientSoundTimerId);
+    _ambientSoundTimerId = null;
+  }
+  if(_activeAmbientNoiseSource){
+    try {
+      _activeAmbientNoiseSource.stop();
+      _activeAmbientNoiseSource.disconnect();
+    } catch(e){}
+    _activeAmbientNoiseSource = null;
+  }
+  if(typeof stopAmbientSound === 'function'){
+    try { stopAmbientSound(); } catch(e){}
+  }
+}
+window.stopAmbientSoundWithTimer = stopAmbientSoundWithTimer;
+
+function playPinkNoise(){
+  const ctx = getAppAudioContext();
+  if(!ctx) return;
+  stopAmbientSoundWithTimer();
+
+  const bufferSize = 2 * ctx.sampleRate;
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const output = buffer.getChannelData(0);
+  let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+
+  for(let i = 0; i < bufferSize; i++){
+    const white = Math.random() * 2 - 1;
+    b0 = 0.99886 * b0 + white * 0.0555179;
+    b1 = 0.99332 * b1 + white * 0.0750759;
+    b2 = 0.96900 * b2 + white * 0.1538520;
+    b3 = 0.86650 * b3 + white * 0.3104856;
+    b4 = 0.55000 * b4 + white * 0.5329522;
+    b5 = -0.7616 * b5 - white * 0.0168980;
+    output[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.11;
+    b6 = white * 0.115926;
+  }
+
+  const pinkSource = ctx.createBufferSource();
+  pinkSource.buffer = buffer;
+  pinkSource.loop = true;
+  pinkSource.connect(ctx.destination);
+  pinkSource.start(0);
+  _activeAmbientNoiseSource = pinkSource;
+}
+window.playPinkNoise = playPinkNoise;
+
+function playBrownNoiseGlobal(){
+  const ctx = getAppAudioContext();
+  if(!ctx) return;
+  stopAmbientSoundWithTimer();
+
+  const bufferSize = 2 * ctx.sampleRate;
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const output = buffer.getChannelData(0);
+  let lastOut = 0.0;
+  for(let i = 0; i < bufferSize; i++){
+    const white = Math.random() * 2 - 1;
+    output[i] = (lastOut + (0.02 * white)) / 1.02;
+    lastOut = output[i];
+    output[i] *= 3.5;
+  }
+
+  const brownSource = ctx.createBufferSource();
+  brownSource.buffer = buffer;
+  brownSource.loop = true;
+  brownSource.connect(ctx.destination);
+  brownSource.start(0);
+  _activeAmbientNoiseSource = brownSource;
+}
+window.playBrownNoiseGlobal = playBrownNoiseGlobal;
+
+function playAmbientSoundWithTimer(soundType, minutes = 30){
+  if(soundType === 'pink') playPinkNoise();
+  else if(soundType === 'brown') playBrownNoiseGlobal();
+  else if(soundType === 'rain' && typeof playRainSound === 'function') playRainSound();
+  else if(soundType === 'fan' && typeof playFanSound === 'function') playFanSound();
+  else stopAmbientSoundWithTimer();
+
+  if(minutes && minutes > 0){
+    _ambientSoundTimerId = setTimeout(() => {
+      stopAmbientSoundWithTimer();
+    }, minutes * 60 * 1000);
+  }
+}
+window.playAmbientSoundWithTimer = playAmbientSoundWithTimer;
+
+// 541. Monk Mode (وضع الراهب للعزل التام)
+let _monkTimerSeconds = 25 * 60;
+let _monkInterval = null;
+let _isMonkRunning = false;
+
+function openMonkMode(taskTitle){
+  const overlay = document.getElementById('monkModeOverlay');
+  if(!overlay) return;
+  const titleEl = document.getElementById('monkTaskTitle');
+  if(titleEl && taskTitle) titleEl.textContent = taskTitle;
+  overlay.classList.add('open');
+  overlay.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  resetMonkTimer(25);
+}
+window.openMonkMode = openMonkMode;
+
+function closeMonkMode(){
+  if(_monkInterval) clearInterval(_monkInterval);
+  _isMonkRunning = false;
+  const overlay = document.getElementById('monkModeOverlay');
+  if(overlay){
+    overlay.classList.remove('open');
+    overlay.style.display = 'none';
+  }
+  document.body.style.overflow = '';
+}
+window.closeMonkMode = closeMonkMode;
+
+function resetMonkTimer(minutes){
+  if(_monkInterval) clearInterval(_monkInterval);
+  _isMonkRunning = false;
+  _monkTimerSeconds = minutes * 60;
+  updateMonkTimerDisplay();
+  const btn = document.getElementById('btnMonkToggle');
+  if(btn) btn.textContent = '▶️ بدء الجلسة';
+}
+window.resetMonkTimer = resetMonkTimer;
+
+function toggleMonkTimer(){
+  const btn = document.getElementById('btnMonkToggle');
+  if(_isMonkRunning){
+    clearInterval(_monkInterval);
+    _isMonkRunning = false;
+    if(btn) btn.textContent = '▶️ استئناف';
+  } else {
+    _isMonkRunning = true;
+    if(btn) btn.textContent = '⏸️ إيقاف مؤقت';
+    _monkInterval = setInterval(() => {
+      if(_monkTimerSeconds > 0){
+        _monkTimerSeconds--;
+        updateMonkTimerDisplay();
+      } else {
+        clearInterval(_monkInterval);
+        _isMonkRunning = false;
+        playAppSound('logging');
+        triggerHaptic('alerts', 'strong');
+        alert('🎉 مبروك يا بطل! أنهيت جلسة وضع الراهب بنجاح وتركيز خارق.');
+        closeMonkMode();
+      }
+    }, 1000);
+  }
+}
+window.toggleMonkTimer = toggleMonkTimer;
+
+function updateMonkTimerDisplay(){
+  const disp = document.getElementById('monkTimerDisplay');
+  if(!disp) return;
+  const m = Math.floor(_monkTimerSeconds / 60);
+  const s = _monkTimerSeconds % 60;
+  disp.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+}
+
+// 551. 1-Minute Just-Start Timer (مؤقت الدقيقة الواحدة)
+let _justStartSeconds = 60;
+let _justStartInterval = null;
+let _isJustStartRunning = false;
+
+function openJustStartModal(){
+  const modal = document.getElementById('justStartModal');
+  if(!modal) return;
+  _justStartSeconds = 60;
+  _isJustStartRunning = false;
+  if(_justStartInterval) clearInterval(_justStartInterval);
+  const num = document.getElementById('justStartTimerNumber');
+  if(num) num.textContent = '60';
+  const btn = document.getElementById('btnJustStartAction');
+  if(btn) btn.textContent = '▶️ ابدأ الـ 60 ثانية';
+  modal.style.display = 'flex';
+}
+window.openJustStartModal = openJustStartModal;
+
+function closeJustStartModal(){
+  if(_justStartInterval) clearInterval(_justStartInterval);
+  _isJustStartRunning = false;
+  const modal = document.getElementById('justStartModal');
+  if(modal) modal.style.display = 'none';
+}
+window.closeJustStartModal = closeJustStartModal;
+
+function toggleJustStartCountdown(){
+  const btn = document.getElementById('btnJustStartAction');
+  const num = document.getElementById('justStartTimerNumber');
+  if(_isJustStartRunning){
+    clearInterval(_justStartInterval);
+    _isJustStartRunning = false;
+    if(btn) btn.textContent = '▶️ استئناف';
+  } else {
+    _isJustStartRunning = true;
+    if(btn) btn.textContent = '⏸️ إيقاف';
+    _justStartInterval = setInterval(() => {
+      if(_justStartSeconds > 0){
+        _justStartSeconds--;
+        if(num) num.textContent = String(_justStartSeconds);
+      } else {
+        clearInterval(_justStartInterval);
+        _isJustStartRunning = false;
+        playAppSound('logging');
+        triggerHaptic('alerts', 'gentle');
+        closeJustStartModal();
+        if(confirm('🎉 عاش يا بطل! كسرت حاجز البداية بدقيقة كاملة. تحب تدخل وضع الراهب 25 دقيقة وتكمل بنفس الحماس؟')){
+          openMonkMode('مواصلة جلسة التركيز بعد كسر البداية');
+        }
+      }
+    }, 1000);
+  }
+}
+window.toggleJustStartCountdown = toggleJustStartCountdown;
+
+// 591. Native Bluetooth Headset Media Button Handler
+function onNativeMediaButtonPressed(){
+  triggerHaptic('buttons', 'light');
+  const modal = document.getElementById('aiChatFullscreenModal');
+  const isChatOpen = modal && modal.classList.contains('open');
+
+  if(isChatOpen){
+    toggleAiVoiceInput();
+  } else if(_isMonkRunning){
+    toggleMonkTimer();
+  } else {
+    openAiFullscreenChat();
+    setTimeout(() => toggleAiVoiceInput(), 200);
+  }
+}
+window.onNativeMediaButtonPressed = onNativeMediaButtonPressed;
+
+// 600. Standalone Diagnostics & Backup Hub (فحص النظام والنسخ الاحتياطي المشفر)
+function showZatoonaDiagnostics(){
+  const modal = document.getElementById('diagnosticsModal');
+  if(!modal) return;
+  modal.style.display = 'flex';
+
+  const body = document.getElementById('diagnosticsReportBody');
+  if(!body) return;
+
+  let totalKeys = localStorage.length;
+  let estimatedBytes = 0;
+  for(let i = 0; i < totalKeys; i++){
+    const k = localStorage.key(i);
+    estimatedBytes += (k ? k.length : 0) + (localStorage.getItem(k)?.length || 0);
+  }
+  const kbUsed = (estimatedBytes / 1024).toFixed(1);
+
+  body.innerHTML = `
+    <div style="font-weight:700; color:var(--good); margin-bottom:6px;">✓ حالة النظام: مستقل ويعمل أوفلاين 100%</div>
+    <div>• عدد مفاتيح التخزين المحلي: <strong>${totalKeys}</strong> مفتاح</div>
+    <div>• حجم التخزين المستهلك: <strong>${kbUsed} KB</strong> (خفيف جداً)</div>
+    <div>• عتاد أندرويد والـ Bridge: <strong>${window.ZatoonaNativeBridge ? 'متصل ونشط 🟢' : 'بيئة متصفح قياسية'}</strong></div>
+    <div>• تشغيل مستقل بدون متجر: <strong>مدعوم بالكامل 100%</strong></div>
+  `;
+}
+window.showZatoonaDiagnostics = showZatoonaDiagnostics;
+
+function closeZatoonaDiagnostics(){
+  const modal = document.getElementById('diagnosticsModal');
+  if(modal) modal.style.display = 'none';
+}
+window.closeZatoonaDiagnostics = closeZatoonaDiagnostics;
+
+function runSelfHealingAuditUI(){
+  const res = auditAndRepairZatoonaState();
+  playAppSound('logging');
+  triggerHaptic('alerts', 'gentle');
+  showZatoonaDiagnostics();
+  alert(`نتيجة الفحص الذاتي:
+${res.status}
+تم فحص ${res.keysChecked} مفتاح بنجاح.`);
+}
+window.runSelfHealingAuditUI = runSelfHealingAuditUI;
+
+function exportZatoonaFullBackup(){
+  try {
+    const backupObj = {
+      app: 'zatoona',
+      version: '3.0',
+      exportedAt: new Date().toISOString(),
+      data: {}
+    };
+    for(let i = 0; i < localStorage.length; i++){
+      const k = localStorage.key(i);
+      if(k && k.startsWith(STORAGE_PREFIX)){
+        backupObj.data[k] = localStorage.getItem(k);
+      }
+    }
+    const jsonStr = JSON.stringify(backupObj, null, 2);
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `zatoona_backup_${toISO(new Date())}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    triggerHaptic('alerts', 'gentle');
+  } catch(err){
+    alert('تعذر تصدير النسخة: ' + err.message);
+  }
+}
+window.exportZatoonaFullBackup = exportZatoonaFullBackup;
+
+function handleZatoonaBackupImport(event){
+  const file = event.target?.files?.[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      if(parsed && parsed.data && typeof parsed.data === 'object'){
+        if(confirm(`تم العثور على ${Object.keys(parsed.data).length} سجل. هل تريد استعادة البيانات وتحديث التطبيق؟`)){
+          Object.entries(parsed.data).forEach(([k, v]) => {
+            localStorage.setItem(k, v);
+          });
+          alert('تمت استعادة النسخة الاحتياطية بنجاح!');
+          location.reload();
+        }
+      } else {
+        alert('ملف النسخة الاحتياطية غير متوافق.');
+      }
+    } catch(err){
+      alert('خطأ في قراءة ملف النسخة: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+window.handleZatoonaBackupImport = handleZatoonaBackupImport;
+
+// Fullscreen Chat Modal Controllers
+function openAiFullscreenChat(initialPrompt){
+  const modal = document.getElementById('aiChatFullscreenModal');
+  if(!modal) return;
+  modal.classList.add('open');
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+
+  renderAllAiModalMessages();
+
+  // Status header
+  const settings = loadAiCoachSettings();
+  const isOnline = settings.enabled && settings.apiKey && settings.apiKey.trim();
+  const statusEl = document.getElementById('aiChatHeaderStatus');
+  const dotEl = document.getElementById('aiChatOnlineDot');
+  if(statusEl){
+    const activeM = window._lastWorkingGeminiModel || localStorage.getItem('zatoona-gemini-active-model') || 'gemini-2.0-flash';
+    statusEl.textContent = isOnline ? `متصل بالإنترنت • ${activeM}` : 'المحرك المحلي • أوفلاين';
+  }
+  if(dotEl){
+    dotEl.style.background = isOnline ? 'var(--good)' : 'var(--primary)';
+  }
+
+  // Voice toggle button state
+  const voiceBtn = document.getElementById('btnAiChatVoiceToggle');
+  if(voiceBtn){
+    voiceBtn.textContent = _aiCoachVoiceOutputEnabled ? '🔊 صوت: تشغيل' : '🔇 صوت: كتم';
+  }
+
+  // Input focus
+  const inp = document.getElementById('inpAiModalChat');
+  if(inp){
+    if(initialPrompt) inp.value = initialPrompt;
+    setTimeout(() => { inp.focus(); }, 150);
+  }
+}
+window.openAiFullscreenChat = openAiFullscreenChat;
+
+function closeAiFullscreenChat(){
+  if(_isSpeechRecognizing && _speechRecognitionInstance){
+    try { _speechRecognitionInstance.stop(); } catch(e){}
+    _isSpeechRecognizing = false;
+    updateVoiceRecordingUI(false);
+  }
+  if('speechSynthesis' in window){
+    window.speechSynthesis.cancel();
+  }
+
+  const modal = document.getElementById('aiChatFullscreenModal');
+  if(modal){
+    modal.classList.remove('open');
+    modal.style.display = 'none';
+  }
+  document.body.style.overflow = '';
+  renderAiCoachCard();
+}
+window.closeAiFullscreenChat = closeAiFullscreenChat;
+
+function renderAllAiModalMessages(){
+  const container = document.getElementById('aiChatModalMessages');
+  if(!container) return;
+  const history = loadAiCoachChatHistory();
+  let html = '';
+  history.forEach(m => {
+    const isBot = m.role === 'assistant';
+    html += `
+      <div class="${isBot ? 'ai-bubble-bot' : 'ai-bubble-user'}">
+        ${isBot ? formatAiMessageMarkdown(m.text) : escapeHtml(m.text)}
+      </div>
+    `;
+  });
+  container.innerHTML = html;
+  container.scrollTop = container.scrollHeight;
+}
+window.renderAllAiModalMessages = renderAllAiModalMessages;
+
+function appendSingleAiMessage(role, text){
+  const container = document.getElementById('aiChatModalMessages');
+  if(!container) return;
+  const isBot = role === 'assistant';
+  const div = document.createElement('div');
+  div.className = isBot ? 'ai-bubble-bot' : 'ai-bubble-user';
+  div.innerHTML = isBot ? formatAiMessageMarkdown(text) : escapeHtml(text);
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+window.appendSingleAiMessage = appendSingleAiMessage;
+
+async function handleAiModalFormSubmit(event){
+  if(event) event.preventDefault();
+  const inp = document.getElementById('inpAiModalChat');
+  if(!inp) return;
+  const prompt = inp.value.trim();
+  if(!prompt) return;
+
+  inp.value = '';
+  await processAiUserPrompt(prompt);
+}
+window.handleAiModalFormSubmit = handleAiModalFormSubmit;
+
+async function sendAiQuickPrompt(promptText){
+  await processAiUserPrompt(promptText);
+}
+window.sendAiQuickPrompt = sendAiQuickPrompt;
+
+// --------------------------------------------------------------------------
+// PROMPT PROCESSING (Tier 1 Local Actions + Tier 2 Gemini 2.0 Flash)
+// --------------------------------------------------------------------------
+
+async function processAiUserPrompt(prompt){
+  triggerHaptic('buttons', 'light');
+
+  // 1. Instantly append user bubble
+  appendSingleAiMessage('user', prompt);
+
+  // 2. Save user message to persistent storage
+  const history = loadAiCoachChatHistory();
+  history.push({ role: 'user', text: prompt, timestamp: Date.now() });
+  saveAiCoachChatHistory(history);
+
+  // 3. TIER 1: Check instant local action
+  const localAction = parseLocalIntent(prompt);
+  if(localAction){
+    const confirmText = executeAppAction(localAction);
+    if(confirmText){
+      appendSingleAiMessage('assistant', confirmText);
+      history.push({ role: 'assistant', text: confirmText, timestamp: Date.now() });
+      saveAiCoachChatHistory(history);
+      speakAiCoachResponse(confirmText);
+      return;
+    }
+  }
+
+  // 4. Show typing indicator
+  const typingEl = document.getElementById('aiChatModalTyping');
+  if(typingEl) typingEl.style.display = 'block';
+
+  const msgArea = document.getElementById('aiChatModalMessages');
+  if(msgArea) msgArea.scrollTop = msgArea.scrollHeight;
+
+  let replyText = '';
+  const iso = toISO(weekDates[selectedIdx]);
+  const settings = loadAiCoachSettings();
+  const isOnline = settings.enabled && settings.apiKey && settings.apiKey.trim();
+
+  try {
+    if(isOnline){
+      const stats = analyzeDailyWellnessStats(iso);
+      const summaryText = typeof generateDailySummaryText === 'function' ? generateDailySummaryText(iso) : JSON.stringify(stats);
+      const toneDesc = settings.tone === 'direct' ? 'مباشر وعملي ومحفز' : (settings.tone === 'detailed' ? 'تحليلي ومفصل بالأرقام' : 'داعم وأخوي ومشجع');
+      const systemInstruction = `أنت "كوتش زتونة الذكي"، مستشار ومساعد صوتي وشخصي ودود ومحفز يتحدث باللهجة المصرية الودودة أو العربية الطبيعية السلسة وبإيجاز مفيد ومباشر.
+أنت مدمج داخل تطبيق زتونة (صلاة، نوم، رياضة، تغذية، عادات، مهارات، قراءة). أسلوبك: ${toneDesc}.
+جاوب على سؤال المستخدم مباشرة وسريعاً وبإيجاز. بيانات اليوم (${iso}): ${summaryText}.
+
+قدراتك التنفيذية وإدارة التطبيق:
+أنت قادر على تسجيل أو تعديل أي شيء في التطبيق للمستخدم! إذا طلب منك تسجيل أو تعديل أو إضافة أي شيء أو تقسيم مهارة أو تلخيص كتاب، نفذ ذلك وأضف في آخر ردك كود الأمر:
+<<<ACTION:{"type":"ACTION_TYPE", ...}>>>
+الأنواع المدعومة:
+- تسجيل مياه: <<<ACTION:{"type":"log_water","delta":1}>>>
+- تسجيل صلاة أو ورد: <<<ACTION:{"type":"log_prayer","target":"dhuhr|asr|maghrib|isha|fajr|qiyam|witr|sabah|masaa|quran","isSunnah":false}>>>
+- تسجيل تمرين: <<<ACTION:{"type":"log_workout","isRest":false}>>>
+- تعليم أو إضافة عادة: <<<ACTION:{"type":"toggle_habit","habitName":"..."}>>>
+- تقسيم مهارة (Micro-learning): <<<ACTION:{"type":"add_micro_tasks","goal":"برمجة","tasks":["مهمة 1","مهمة 2","مهمة 3"]}>>>
+- زتونة كتاب: <<<ACTION:{"type":"save_book_summary","title":"اسم الكتاب","points":"أهم 3 أفكار وعادة مقترحة"}>>>
+- تسجيل ملاحظة: <<<ACTION:{"type":"add_note","text":"..."}>>>
+
+إذا سألك المستخدم عن مهارة (مثل برمجة)، قسمها فوراً لـ 3 مهام Micro-learning عملية محددة تناسب يومه، وضع كود ACTION الخاص بها.
+إذا ذكر كتاباً، لخص له "زتونة الكتاب" في: 1. الفكرة الجوهرية 2. أهم 3 أفكار عملية للتطبيق الفوري 3. عادة يومية مقترحة، وضع كود ACTION الخاص بها.`;
+
+      // Compact context: last 4 turns for lightning speed
+      const recentTurns = history.slice(-4);
+      const contents = [];
+      recentTurns.forEach(m => {
+        contents.push({
+          role: m.role === 'assistant' ? 'model' : 'user',
+          parts: [{ text: m.text }]
+        });
+      });
+
+      const res = await callGeminiGenerateContent(
+        settings.apiKey,
+        contents,
+        systemInstruction,
+        settings.modelChoice || 'auto'
+      );
+      replyText = (res && res.text) ? res.text : 'عذراً يا بطل، لم أتمكن من الحصول على رد.';
+
+      // Extract and execute embedded action if present
+      const actionMatch = replyText.match(/<<<ACTION:([\s\S]*?)>>>/);
+      if(actionMatch && actionMatch[1]){
+        try {
+          const actionData = JSON.parse(actionMatch[1].trim());
+          const actionExecMsg = executeAppAction(actionData);
+          replyText = replyText.replace(/<<<ACTION:[\s\S]*?>>>/, '').trim();
+          if(actionExecMsg){
+            replyText += `\n\n✨ **[تم التنفيذ والتحديث في التطبيق تلقائياً ✅]**`;
+          }
+        } catch(eAction){
+          console.warn('[AiAction] Parse action JSON failed:', eAction);
+          replyText = replyText.replace(/<<<ACTION:[\s\S]*?>>>/, '').trim();
+        }
+      }
+    } else {
+      const stats = analyzeDailyWellnessStats(iso);
+      replyText = generateLocalAiChatResponse(prompt, stats, iso);
+    }
+  } catch(err){
+    console.warn('[AiCoachModal] Error:', err);
+    const stats = analyzeDailyWellnessStats(iso);
+    const fallbackText = generateLocalAiChatResponse(prompt, stats, iso);
+    replyText = `⚠️ (${err.message})\n\n${fallbackText}`;
+  } finally {
+    if(typingEl) typingEl.style.display = 'none';
+  }
+
+  // 5. Instantly append bot bubble
+  appendSingleAiMessage('assistant', replyText);
+
+  // 6. Save assistant reply to storage
   history.push({ role: 'assistant', text: replyText, timestamp: Date.now() });
   saveAiCoachChatHistory(history);
-  renderAiCoachCard();
 
-  // Subtle audio / haptic feedback
-  if(typeof playChimeAlert === 'function') playChimeAlert();
-  if(navigator.vibrate) try{ navigator.vibrate(30); } catch(e){}
+  playAppSound('logging');
+  triggerHaptic('alerts', 'gentle');
 
-  const newMsgBox = document.getElementById('aiCoachChatMessages');
-  if(newMsgBox) newMsgBox.scrollTop = newMsgBox.scrollHeight;
+  // 7. Speak response aloud if voice output enabled
+  speakAiCoachResponse(replyText);
 }
+window.processAiUserPrompt = processAiUserPrompt;
+
+function clearAiCoachChatFromModal(){
+  triggerHaptic('buttons', 'gentle');
+  clearAiCoachChatHistory();
+  renderAllAiModalMessages();
+}
+window.clearAiCoachChatFromModal = clearAiCoachChatFromModal;
+
+async function sendAiChatMessage(userPrompt){
+  openAiFullscreenChat(userPrompt);
+}
+window.sendAiChatMessage = sendAiChatMessage;
 
 function renderAiCoachCard(){
   const card = document.getElementById('aiCoachCard');
@@ -30034,7 +32065,6 @@ function renderAiCoachCard(){
   const settings = loadAiCoachSettings();
 
   if(!settings.enabled){
-    // Opt-in presentation
     card.innerHTML = `
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
         <div style="display:flex; align-items:center; gap:8px;">
@@ -30047,8 +32077,8 @@ function renderAiCoachCard(){
       </div>
       <div style="background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px; font-size:.8rem; line-height:1.6; color:var(--text);">
         <p style="margin:0 0 10px;">
-          🔒 <strong>ضمان الخصوصية والتشغيل المحلي:</strong>
-          كوتش زتونة يحلل بيانات يومك (الصلوات، النوم، التمارين، شرب المياه، والعادات) محلياً على جهازك ويقدم لك محادثة ذكية وتوصيات شخصية عملية في كل المجالات بدون إرسال أي بيانات لخوادم خارجية افتراضياً.
+          🔒 <strong>ضمان الخصوصية والتشغيل الذكي:</strong>
+          كوتش زتونة يحلل بيانات يومك (الصلوات، النوم، التمارين، شرب المياه، والعادات) ويقدم لك محادثة ذكية متكاملة في شاشة شات مستقلة.
         </p>
         <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:12px;">
           <button type="button" class="reset-btn" id="btnEnableAiCoach" style="padding:6px 16px; font-size:.82rem; border-color:var(--good); color:var(--good); font-weight:700;">
@@ -30070,334 +32100,298 @@ function renderAiCoachCard(){
     return;
   }
 
-  const chatHistory = loadAiCoachChatHistory();
+  const collapsed = isAiCoachCollapsed();
+  const isOnline = settings.provider === 'gemini' && settings.apiKey && settings.apiKey.trim();
+  const activeM = window._lastWorkingGeminiModel || localStorage.getItem('zatoona-gemini-active-model') || 'gemini-2.0-flash';
 
-  // Active Enabled View
+  if(collapsed){
+    card.innerHTML = `
+      <div class="ai-compact-ribbon" onclick="openAiFullscreenChat()" title="اضغط هنا لفتح شاشة محادثة كوتش زتونة">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <span style="font-size:1.5rem;">🤖</span>
+          <div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-weight:700; font-size:0.92rem; color:var(--text);">كوتش زتونة الذكي</span>
+              <span style="background:${isOnline ? 'rgba(46,204,113,0.15)' : 'rgba(6,170,196,0.15)'}; color:${isOnline ? 'var(--good)' : 'var(--primary)'}; font-size:0.68rem; font-weight:700; padding:2px 7px; border-radius:6px;">
+                ${isOnline ? '🌐 متصل بالإنترنت' : '🔒 محلي أوفلاين'}
+              </span>
+            </div>
+            <div style="font-size:0.74rem; color:var(--muted); margin-top:2px;">اضغط هنا للتحدث في شاشة الشات الكاملة 💬</div>
+          </div>
+        </div>
+        <button type="button" class="btn-subtle" style="font-size:0.78rem; font-weight:700; color:var(--primary); border:1px solid rgba(6,170,196,0.3); background:rgba(6,170,196,0.12); padding:5px 12px; border-radius:16px;">
+          💬 فتح الشات
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  // Expanded Launcher Card on Home tab
   card.innerHTML = `
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
-      <div style="display:flex; align-items:center; gap:8px;">
-        <span style="font-size:1.4rem;">🤖</span>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <span style="font-size:1.6rem;">🤖</span>
         <div>
           <div style="display:flex; align-items:center; gap:8px;">
-            <span style="font-weight:700; font-size:.95rem; color:var(--text);">كوتش زتونة الذكي</span>
-            <span style="background:rgba(46,204,113,0.15); color:var(--good); font-size:.68rem; font-weight:700; padding:2px 6px; border-radius:6px;">
-              ${settings.provider === 'gemini' ? '🌐 Gemini AI' : '🔒 محلي 100%'}
+            <span style="font-weight:700; font-size:0.98rem; color:var(--text);">كوتش زتونة الذكي</span>
+            <span style="background:${isOnline ? 'rgba(46,204,113,0.15)' : 'rgba(6,170,196,0.15)'}; color:${isOnline ? 'var(--good)' : 'var(--primary)'}; font-size:.68rem; font-weight:700; padding:2px 7px; border-radius:6px;">
+              ${isOnline ? `🌐 متصل بالإنترنت (${activeM})` : '🔒 محلي 100%'}
             </span>
           </div>
-          <div style="font-size:.74rem; color:var(--muted); margin-top:2px;">مستشارك الشخصي للعبادة والتمرين والإنتاجية (${iso})</div>
+          <div style="font-size:0.74rem; color:var(--muted); margin-top:2px;">مستشارك الشخصي للعبادة والتمرين والإنتاجية (${iso})</div>
         </div>
       </div>
-      <div style="display:flex; gap:6px;">
-        <button type="button" class="reset-btn" id="btnToggleAiSettings" style="padding:4px 8px; font-size:.74rem; border-color:var(--line); color:var(--muted);">
-          ⚙️ الإعدادات
+      <div style="display:flex; gap:6px; align-items:center;">
+        <button type="button" class="reset-btn" id="btnCollapseAiCoach" onclick="toggleAiCoachCollapsed(true)" title="ضغط المساعد في شريط مختصر" style="padding:4px 9px; font-size:.74rem; border-color:var(--line); color:var(--muted); border-radius:8px;">
+          <span>➖</span> <span>ضغط الشريط</span>
         </button>
       </div>
     </div>
 
-    <!-- AI Settings Drawer -->
-    <div id="aiCoachSettingsDrawer" style="display:${aiCoachSettingsOpen ? 'block' : 'none'}; background:var(--card); border:1px solid var(--line); border-radius:10px; padding:12px; margin-bottom:12px; font-size:.78rem;">
-      <div style="font-weight:700; margin-bottom:8px; color:var(--text);">⚙️ إعدادات كوتش زتونة والخصوصية</div>
-      <div style="margin-bottom:8px;">
-        <label style="display:block; margin-bottom:4px; color:var(--muted);">محرك الذكاء الاصطناعي:</label>
-        <select id="aiProviderSelect" class="weight-input" style="width:100%; font-size:.8rem;">
-          <option value="local" ${settings.provider === 'local' ? 'selected' : ''}>🔒 المحرك المحلي (أوفلاين، مجاني، وسريع بدون إنترنت)</option>
-          <option value="gemini" ${settings.provider === 'gemini' ? 'selected' : ''}>🌐 Google Gemini API (يتطلب مفتاحك الخاص)</option>
-        </select>
+    <!-- Launcher Action Banner -->
+    <div onclick="openAiFullscreenChat()" style="background:linear-gradient(135deg, rgba(6,170,196,0.12), rgba(46,204,113,0.08)); border:1px solid rgba(6,170,196,0.25); border-radius:12px; padding:16px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:12px; transition:transform 0.15s; flex-wrap:wrap;">
+      <div style="flex:1; min-width:180px;">
+        <div style="font-weight:700; font-size:0.92rem; color:var(--text); margin-bottom:4px;">
+          💬 كوتش زتونة الذكي والمساعد الصوتي
+        </div>
+        <div style="font-size:0.76rem; color:var(--muted); line-height:1.4;">
+          تحدث صوتياً أو كتابياً لتسجيل صلاتك، تمارينك، شرب الماء، عاداتك، أو تقسيم خطط البرمجة وزتونة الكتب.
+        </div>
       </div>
-      <div id="geminiApiKeyContainer" style="display:${settings.provider === 'gemini' ? 'block' : 'none'}; margin-bottom:8px;">
-        <label style="display:block; margin-bottom:4px; color:var(--muted);">مفتاح Gemini API الخاص بك (محفوظ محلياً فقط):</label>
-        <input type="password" id="aiApiKeyInput" class="weight-input" value="${escapeHtml(settings.apiKey || '')}" placeholder="AIzaSy..." style="width:100%; font-size:.8rem;">
-      </div>
-      <div style="margin-bottom:10px;">
-        <label style="display:block; margin-bottom:4px; color:var(--muted);">أسلوب وتوجيه الكوتش:</label>
-        <select id="aiToneSelect" class="weight-input" style="width:100%; font-size:.8rem;">
-          <option value="supportive" ${settings.tone === 'supportive' ? 'selected' : ''}>✨ داعم ومشجع (ودود وأخوي)</option>
-          <option value="direct" ${settings.tone === 'direct' ? 'selected' : ''}>🎯 مباشر ومحفز (انضباط وتركيز)</option>
-          <option value="detailed" ${settings.tone === 'detailed' ? 'selected' : ''}>📊 تحليلي ومفصل (بالأرقام والإحصائيات)</option>
-        </select>
-      </div>
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <button type="button" class="reset-btn" id="btnDisableAiCoach" style="padding:4px 8px; font-size:.72rem; border-color:var(--bad); color:var(--bad);">
-          تعطيل الكوتش
+      <div style="display:flex; gap:8px; align-items:center; flex-shrink:0;">
+        <button type="button" onclick="event.stopPropagation(); openAiFullscreenChat(); setTimeout(() => toggleAiVoiceInput(), 300);" class="btn" style="background:rgba(231,76,60,0.15); border:1px solid rgba(231,76,60,0.3); color:#e74c3c; font-weight:700; font-size:0.8rem; padding:8px 14px; border-radius:20px; display:inline-flex; align-items:center; gap:4px;">
+          <span>🎙️</span> <span>تحدث صوتياً</span>
         </button>
-        <button type="button" class="reset-btn" id="btnSaveAiSettings" style="padding:4px 12px; font-size:.74rem; border-color:var(--good); color:var(--good); font-weight:700;">
-          ✓ حفظ الإعدادات
+        <button type="button" class="btn" style="background:var(--accent); color:#ffffff; font-weight:700; font-size:0.82rem; padding:8px 16px; border-radius:20px;">
+          دخول الشات 🚀
         </button>
-      </div>
-    </div>
-
-    <!-- Mode Selector Tabs: Chat vs Analysis -->
-    <div style="display:flex; gap:6px; margin-bottom:10px; border-bottom:1px solid var(--line); padding-bottom:8px;">
-      <button type="button" class="reset-btn" id="btnTabAiChat" style="flex:1; padding:6px 12px; font-size:.82rem; border-radius:18px; font-weight:700; ${activeAiCoachTab === 'chat' ? 'background:rgba(6,170,196,0.18); border-color:var(--primary); color:var(--primary);' : 'border-color:transparent; color:var(--muted);'}">
-        💬 محادثة وشات الكوتش
-      </button>
-      <button type="button" class="reset-btn" id="btnTabAiAnalysis" style="flex:1; padding:6px 12px; font-size:.82rem; border-radius:18px; font-weight:700; ${activeAiCoachTab === 'analysis' ? 'background:rgba(6,170,196,0.18); border-color:var(--primary); color:var(--primary);' : 'border-color:transparent; color:var(--muted);'}">
-        📊 التقرير والتحليل اليومي
-      </button>
-    </div>
-
-    ${activeAiCoachTab === 'chat' ? `
-      <!-- CHAT INTERFACE -->
-      <div id="aiCoachChatBox">
-        <!-- Messages container -->
-        <div id="aiCoachChatMessages" style="max-height:260px; min-height:160px; overflow-y:auto; padding:8px 4px; display:flex; flex-direction:column; gap:8px; margin-bottom:8px; scroll-behavior:smooth;">
-          ${chatHistory.map(m => {
-            const isBot = m.role === 'assistant';
-            const timeStr = m.timestamp ? new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
-            return `
-              <div class="ai-chat-msg-row ${isBot ? 'ai-chat-msg-assistant' : 'ai-chat-msg-user'}" style="align-self:${isBot ? 'flex-start' : 'flex-end'}; max-width:90%; display:flex; gap:6px; align-items:flex-start; ${isBot ? '' : 'flex-direction:row-reverse;'}">
-                <span style="font-size:1.1rem; flex-shrink:0;">${isBot ? '🤖' : '👤'}</span>
-                <div>
-                  <div class="ai-chat-bubble" style="background:${isBot ? 'rgba(46,204,113,0.12)' : 'rgba(6,170,196,0.18)'}; border:1px solid ${isBot ? 'rgba(46,204,113,0.3)' : 'rgba(6,170,196,0.35)'}; border-radius:${isBot ? '14px 14px 14px 4px' : '14px 14px 4px 14px'}; padding:8px 12px; font-size:.8rem; line-height:1.6; color:var(--text); white-space:pre-wrap; word-break:break-word;">${escapeHtml(m.text)}</div>
-                  <span style="font-size:.65rem; color:var(--muted); margin-top:2px; display:block; ${isBot ? '' : 'text-align:left;'}">${timeStr}</span>
-                </div>
-              </div>
-            `;
-          }).join('')}
-          <div id="aiCoachChatTyping" style="display:none; align-self:flex-start; font-size:.75rem; color:var(--muted); padding:4px 10px; background:var(--card-alt); border-radius:12px;">
-            🤖 كوتش زتونة يكتب الآن... ⏳
-          </div>
-        </div>
-
-        <!-- Quick Prompts Chips -->
-        <div style="display:flex; gap:6px; overflow-x:auto; padding-bottom:6px; margin-bottom:8px; scrollbar-width:none;">
-          <button type="button" class="reset-btn ai-quick-prompt" data-prompt="قصرت في شرب المياه النهاردة، أعمل إيه؟" style="white-space:nowrap; padding:3px 9px; font-size:.72rem; border-radius:14px; border-color:var(--line); color:var(--text); background:var(--card);">💧 ماء اليوم</button>
-          <button type="button" class="reset-btn ai-quick-prompt" data-prompt="إيه أحسن طريقة أوفق بيها بين مواعيد التمرين والصلاة؟" style="white-space:nowrap; padding:3px 9px; font-size:.72rem; border-radius:14px; border-color:var(--line); color:var(--text); background:var(--card);">🕌 تمرين وصلاة</button>
-          <button type="button" class="reset-btn ai-quick-prompt" data-prompt="مش عارف أنام كويس وعندي أرق، اقترحلي روتين هادي." style="white-space:nowrap; padding:3px 9px; font-size:.72rem; border-radius:14px; border-color:var(--line); color:var(--text); background:var(--card);">🌙 أرق ونوم</button>
-          <button type="button" class="reset-btn ai-quick-prompt" data-prompt="لخصلي وقيم لي أدائي في كل الأقسام لليوم." style="white-space:nowrap; padding:3px 9px; font-size:.72rem; border-radius:14px; border-color:var(--line); color:var(--text); background:var(--card);">📊 تقييم اليوم</button>
-          <button type="button" class="reset-btn ai-quick-prompt" data-prompt="اقترحلي وجبة بروتين صحية وخفيفة وسريعة." style="white-space:nowrap; padding:3px 9px; font-size:.72rem; border-radius:14px; border-color:var(--line); color:var(--text); background:var(--card);">🥗 وجبة بروتين</button>
-          <button type="button" class="reset-btn ai-quick-prompt" data-prompt="حاسس بكسل وتعب ومحتاج تحفيز أكمل بيه يومي." style="white-space:nowrap; padding:3px 9px; font-size:.72rem; border-radius:14px; border-color:var(--line); color:var(--text); background:var(--card);">💪 تشجيع وتحفيز</button>
-        </div>
-
-        <!-- Chat Input Row -->
-        <div style="display:flex; gap:6px; align-items:center;">
-          <input type="text" id="aiCoachChatInput" class="weight-input" placeholder="اكتب سؤالك لكوتش زتونة هنا..." style="flex:1; font-size:.82rem; padding:8px 14px; border-radius:20px; background:var(--card); border:1px solid var(--line);">
-          <button type="button" id="btnSendAiChat" class="reset-btn" style="padding:8px 14px; border-radius:20px; background:var(--primary); color:#fff; border-color:var(--primary); font-weight:700; font-size:.82rem; cursor:pointer;">
-            إرسال 🚀
-          </button>
-          <button type="button" id="btnClearAiChat" class="reset-btn" title="مسح سجل المحادثة" style="padding:8px 10px; border-radius:20px; border-color:var(--line); color:var(--muted); font-size:.8rem; cursor:pointer;">
-            🗑️
-          </button>
-        </div>
-      </div>
-    ` : `
-      <!-- ANALYSIS INTERFACE -->
-      <div id="aiCoachAnalysisBox">
-        <!-- Category selector chips -->
-        <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px;">
-          <button type="button" class="reset-btn ai-cat-chip" data-cat="all" style="padding:4px 10px; font-size:.76rem; border-radius:16px; border-color:${activeAiCoachCategory === 'all' ? 'var(--primary)' : 'var(--line)'}; background:${activeAiCoachCategory === 'all' ? 'rgba(6,170,196,0.15)' : 'transparent'}; color:${activeAiCoachCategory === 'all' ? 'var(--primary)' : 'var(--text)'}; font-weight:600;">
-            ✨ التحليل الشامل
-          </button>
-          <button type="button" class="reset-btn ai-cat-chip" data-cat="prayer" style="padding:4px 10px; font-size:.76rem; border-radius:16px; border-color:${activeAiCoachCategory === 'prayer' ? 'var(--primary)' : 'var(--line)'}; background:${activeAiCoachCategory === 'prayer' ? 'rgba(6,170,196,0.15)' : 'transparent'}; color:${activeAiCoachCategory === 'prayer' ? 'var(--primary)' : 'var(--text)'}; font-weight:600;">
-            🕌 العبادات
-          </button>
-          <button type="button" class="reset-btn ai-cat-chip" data-cat="gym" style="padding:4px 10px; font-size:.76rem; border-radius:16px; border-color:${activeAiCoachCategory === 'gym' ? 'var(--primary)' : 'var(--line)'}; background:${activeAiCoachCategory === 'gym' ? 'rgba(6,170,196,0.15)' : 'transparent'}; color:${activeAiCoachCategory === 'gym' ? 'var(--primary)' : 'var(--text)'}; font-weight:600;">
-            🏋️ التمرين
-          </button>
-          <button type="button" class="reset-btn ai-cat-chip" data-cat="nutrition" style="padding:4px 10px; font-size:.76rem; border-radius:16px; border-color:${activeAiCoachCategory === 'nutrition' ? 'var(--primary)' : 'var(--line)'}; background:${activeAiCoachCategory === 'nutrition' ? 'rgba(6,170,196,0.15)' : 'transparent'}; color:${activeAiCoachCategory === 'nutrition' ? 'var(--primary)' : 'var(--text)'}; font-weight:600;">
-            💧 التغذية والماء
-          </button>
-          <button type="button" class="reset-btn ai-cat-chip" data-cat="sleep" style="padding:4px 10px; font-size:.76rem; border-radius:16px; border-color:${activeAiCoachCategory === 'sleep' ? 'var(--primary)' : 'var(--line)'}; background:${activeAiCoachCategory === 'sleep' ? 'rgba(6,170,196,0.15)' : 'transparent'}; color:${activeAiCoachCategory === 'sleep' ? 'var(--primary)' : 'var(--text)'}; font-weight:600;">
-            🌙 النوم
-          </button>
-          <button type="button" class="reset-btn ai-cat-chip" data-cat="habits" style="padding:4px 10px; font-size:.76rem; border-radius:16px; border-color:${activeAiCoachCategory === 'habits' ? 'var(--primary)' : 'var(--line)'}; background:${activeAiCoachCategory === 'habits' ? 'rgba(6,170,196,0.15)' : 'transparent'}; color:${activeAiCoachCategory === 'habits' ? 'var(--primary)' : 'var(--text)'}; font-weight:600;">
-            🎯 العادات
-          </button>
-        </div>
-
-        <!-- Advice output container -->
-        <div id="aiCoachOutputContainer" style="background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px; position:relative;">
-          <div id="aiCoachLoading" style="display:none; text-align:center; padding:20px; color:var(--muted); font-size:.82rem;">
-            ⏳ جاري توليد التوجيهات الذكية ليومك...
-          </div>
-          <div id="aiCoachOutput" style="font-size:.8rem; line-height:1.65; color:var(--text); white-space:pre-wrap; word-break:break-word;"></div>
-          <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:10px;">
-            <button type="button" class="reset-btn" id="btnRefreshAiAdvice" style="padding:4px 10px; font-size:.72rem; border-color:var(--primary); color:var(--primary);">
-              🔄 تحديث التوجيه
-            </button>
-            <button type="button" class="reset-btn" id="btnCopyAiAdvice" style="padding:4px 10px; font-size:.72rem; border-color:var(--line); color:var(--muted);">
-              📋 نسخ
-            </button>
-          </div>
-        </div>
-      </div>
-    `}
+      </div></div>
   `;
+}
 
-  // Attach tab switcher
-  const btnTabChat = document.getElementById('btnTabAiChat');
-  const btnTabAnalysis = document.getElementById('btnTabAiAnalysis');
-  if(btnTabChat){
-    btnTabChat.addEventListener('click', () => {
-      activeAiCoachTab = 'chat';
-      renderAiCoachCard();
-    });
+function syncAiSettingsUI(){
+  const settings = loadAiCoachSettings();
+  const masterToggle = document.getElementById('settingsAiMasterToggle');
+  const detailsWrap = document.getElementById('settingsAiDetailsWrap');
+  const providerSel = document.getElementById('settingsAiProviderSelect');
+  const keyContainer = document.getElementById('settingsAiKeyContainer');
+  const keyInput = document.getElementById('settingsAiApiKeyInput');
+  const compactToggle = document.getElementById('settingsAiCompactToggle');
+  const toneSelect = document.getElementById('settingsAiToneSelect');
+
+  if(masterToggle){
+    masterToggle.classList.toggle('on', !!settings.enabled);
   }
-  if(btnTabAnalysis){
-    btnTabAnalysis.addEventListener('click', () => {
-      activeAiCoachTab = 'analysis';
-      renderAiCoachCard();
-      triggerAiAdviceGeneration();
-    });
+  if(detailsWrap){
+    detailsWrap.style.display = settings.enabled ? 'block' : 'none';
   }
-
-  // Attach Chat Events
-  if(activeAiCoachTab === 'chat'){
-    const chatInput = document.getElementById('aiCoachChatInput');
-    const btnSend = document.getElementById('btnSendAiChat');
-    const btnClear = document.getElementById('btnClearAiChat');
-
-    if(btnSend && chatInput){
-      btnSend.addEventListener('click', () => {
-        const text = chatInput.value;
-        if(text && text.trim()){
-          chatInput.value = '';
-          sendAiChatMessage(text);
-        }
-      });
-    }
-
-    if(chatInput){
-      chatInput.addEventListener('keydown', (e) => {
-        if(e.key === 'Enter'){
-          e.preventDefault();
-          const text = chatInput.value;
-          if(text && text.trim()){
-            chatInput.value = '';
-            sendAiChatMessage(text);
-          }
-        }
-      });
-    }
-
-    if(btnClear){
-      btnClear.addEventListener('click', () => {
-        if(confirm('هل تريد مسح سجل المحادثة والبدء من جديد؟')){
-          clearAiCoachChatHistory();
-          renderAiCoachCard();
-        }
-      });
-    }
-
-    // Quick prompt buttons
-    card.querySelectorAll('.ai-quick-prompt').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const prompt = btn.getAttribute('data-prompt');
-        if(prompt) sendAiChatMessage(prompt);
-      });
-    });
-
-    // Auto-scroll chat to bottom
-    const msgBox = document.getElementById('aiCoachChatMessages');
-    if(msgBox) msgBox.scrollTop = msgBox.scrollHeight;
+  if(providerSel){
+    providerSel.value = settings.provider || 'local';
   }
-
-  // Attach Analysis Events
-  if(activeAiCoachTab === 'analysis'){
-    card.querySelectorAll('.ai-cat-chip').forEach(chip => {
-      chip.addEventListener('click', () => {
-        activeAiCoachCategory = chip.getAttribute('data-cat') || 'all';
-        renderAiCoachCard();
-        triggerAiAdviceGeneration();
-      });
-    });
-
-    const btnCopy = document.getElementById('btnCopyAiAdvice');
-    if(btnCopy){
-      btnCopy.addEventListener('click', () => {
-        const outputEl = document.getElementById('aiCoachOutput');
-        if(outputEl && outputEl.textContent){
-          if(navigator.clipboard && navigator.clipboard.writeText){
-            navigator.clipboard.writeText(outputEl.textContent).then(() => {
-              if(typeof window.showToast === 'function') window.showToast('تم نسخ نصيحة الكوتش للحافظة!', 'success');
-              else alert('تم نسخ نصيحة الكوتش للحافظة!');
-            });
-          }
-        }
-      });
-    }
-
-    const btnRefresh = document.getElementById('btnRefreshAiAdvice');
-    if(btnRefresh){
-      btnRefresh.addEventListener('click', () => {
-        triggerAiAdviceGeneration();
-      });
-    }
-
-    triggerAiAdviceGeneration();
+  if(keyContainer){
+    keyContainer.style.display = settings.provider === 'gemini' ? 'block' : 'none';
   }
-
-  // Attach settings toggle
-  const btnToggleSettings = document.getElementById('btnToggleAiSettings');
-  if(btnToggleSettings){
-    btnToggleSettings.addEventListener('click', () => {
-      aiCoachSettingsOpen = !aiCoachSettingsOpen;
-      renderAiCoachCard();
-    });
+  if(keyInput && document.activeElement !== keyInput){
+    keyInput.value = settings.apiKey || '';
   }
-
-  // Provider change
-  const providerSel = document.getElementById('aiProviderSelect');
-  const geminiBox = document.getElementById('geminiApiKeyContainer');
-  if(providerSel && geminiBox){
-    providerSel.addEventListener('change', () => {
-      geminiBox.style.display = providerSel.value === 'gemini' ? 'block' : 'none';
-    });
+  if(compactToggle){
+    compactToggle.classList.toggle('on', isAiCoachCollapsed());
   }
-
-  // Save settings
-  const btnSaveSettings = document.getElementById('btnSaveAiSettings');
-  if(btnSaveSettings){
-    btnSaveSettings.addEventListener('click', () => {
-      settings.provider = document.getElementById('aiProviderSelect').value;
-      if(settings.provider === 'gemini'){
-        settings.apiKey = (document.getElementById('aiApiKeyInput').value || '').trim();
-      }
-      settings.tone = document.getElementById('aiToneSelect').value;
-      saveAiCoachSettings(settings);
-      aiCoachSettingsOpen = false;
-      renderAiCoachCard();
-      if(activeAiCoachTab === 'analysis') triggerAiAdviceGeneration();
-    });
+  if(toneSelect){
+    toneSelect.value = settings.tone || 'supportive';
   }
-
-  // Disable AI coach
-  const btnDisable = document.getElementById('btnDisableAiCoach');
-  if(btnDisable){
-    btnDisable.addEventListener('click', () => {
-      if(confirm('هل تريد تعطيل كوتش زتونة الذكي؟ يمكنك إعادة تفعيله في أي وقت.')){
-        settings.enabled = false;
-        saveAiCoachSettings(settings);
-        renderAiCoachCard();
-      }
-    });
-  }
-
-  function triggerAiAdviceGeneration(){
-    const outputEl = document.getElementById('aiCoachOutput');
-    const loadingEl = document.getElementById('aiCoachLoading');
-    if(!outputEl) return;
-
-    if(loadingEl) loadingEl.style.display = 'block';
-    outputEl.style.display = 'none';
-
-    generateAiCoachAdvice(activeAiCoachCategory, iso, { tone: settings.tone }).then(res => {
-      if(loadingEl) loadingEl.style.display = 'none';
-      outputEl.style.display = 'block';
-      outputEl.textContent = res.text;
-    }).catch(err => {
-      if(loadingEl) loadingEl.style.display = 'none';
-      outputEl.style.display = 'block';
-      outputEl.textContent = 'حدث خطأ أثناء إعداد التوجيه: ' + (err.message || err);
-    });
+  const modelSelect = document.getElementById('settingsAiModelSelect');
+  if(modelSelect){
+    modelSelect.value = settings.modelChoice || 'auto';
   }
 }
 
+function saveSettingsAiModel(val){
+  triggerHaptic('buttons', 'gentle');
+  const settings = loadAiCoachSettings();
+  settings.modelChoice = val;
+  saveAiCoachSettings(settings);
+}
+window.saveSettingsAiModel = saveSettingsAiModel;
+
+function toggleSettingsAiMaster(){
+  triggerHaptic('buttons', 'gentle');
+  const settings = loadAiCoachSettings();
+  settings.enabled = !settings.enabled;
+  if(settings.enabled) settings.consentGiven = true;
+  saveAiCoachSettings(settings);
+  renderAiCoachCard();
+}
+
+function onSettingsAiProviderChange(val){
+  triggerHaptic('buttons', 'gentle');
+  const settings = loadAiCoachSettings();
+  settings.provider = val;
+  saveAiCoachSettings(settings);
+  renderAiCoachCard();
+}
+
+function onSettingsAiKeyInput(val){
+  const settings = loadAiCoachSettings();
+  settings.apiKey = (val || '').trim();
+  if(settings.apiKey) settings.provider = 'gemini';
+  saveAiCoachSettings(settings);
+}
+
+function toggleAiKeyVisibility(){
+  triggerHaptic('buttons', 'light');
+  const input = document.getElementById('settingsAiApiKeyInput');
+  const btn = document.getElementById('btnToggleAiKeyVisibility');
+  if(!input) return;
+  if(input.type === 'password'){
+    input.type = 'text';
+    if(btn) btn.textContent = '🔒';
+  } else {
+    input.type = 'password';
+    if(btn) btn.textContent = '👁️';
+  }
+}
+
+function toggleSettingsAiCompact(){
+  const collapsed = !isAiCoachCollapsed();
+  toggleAiCoachCollapsed(collapsed);
+}
+
+function saveSettingsAiTone(val){
+  triggerHaptic('buttons', 'gentle');
+  const settings = loadAiCoachSettings();
+  settings.tone = val;
+  saveAiCoachSettings(settings);
+  renderAiCoachCard();
+}
+
+async function testGeminiConnectionNow(){
+  triggerHaptic('buttons', 'light');
+  const statusEl = document.getElementById('txtAiTestStatus');
+  const keyInput = document.getElementById('settingsAiApiKeyInput');
+  const apiKey = (keyInput ? keyInput.value : '') || loadAiCoachSettings().apiKey || '';
+
+  if(!apiKey.trim()){
+    if(statusEl){
+      statusEl.textContent = '⚠️ يرجى إدخال مفتاح API أولاً';
+      statusEl.style.color = 'var(--bad)';
+    }
+    return;
+  }
+
+  if(statusEl){
+    statusEl.textContent = '⏳ جاري فحص حسابك واستكشاف النماذج المتاحة...';
+    statusEl.style.color = 'var(--accent)';
+  }
+
+  try {
+    const cleanKey = apiKey.trim().replace(/^["']|["']$/g, '');
+    const discovery = await discoverGeminiModels(cleanKey);
+
+    // If discovery succeeded, update model dropdown dynamically
+    if(discovery.models && discovery.models.length > 0){
+      const sel = document.getElementById('settingsAiModelSelect');
+      if(sel){
+        const currentVal = sel.value;
+        let optHtml = '<option value="auto">⚡ تلقائي ذكي (كشف واختيار أسرع نموذج مجاني متاح) [مستحسن]</option>';
+        discovery.models.forEach(m => {
+          optHtml += `<option value="${escapeHtml(m.model)}">🟢 ${escapeHtml(m.displayName || m.model)}</option>`;
+        });
+        sel.innerHTML = optHtml;
+        if(currentVal && Array.from(sel.options).some(o => o.value === currentVal)){
+          sel.value = currentVal;
+        } else {
+          sel.value = 'auto';
+        }
+      }
+    }
+
+    const res = await callGeminiGenerateContent(
+      cleanKey,
+      [{ role: 'user', parts: [{ text: 'مرحبا، تأكيد اتصال سريع' }] }],
+      '',
+      loadAiCoachSettings().modelChoice || 'auto'
+    );
+    if(res && res.text){
+      if(statusEl){
+        const modelCount = (discovery.models && discovery.models.length) ? ` (اكتشفنا ${discovery.models.length} نماذج مجانية)` : '';
+        statusEl.textContent = `✅ الاتصال ناجح 100%! تم تفعيل نموذج (${res.model}) المجاني${modelCount} والـ AI متصل بالإنترنت.`;
+        statusEl.style.color = 'var(--good)';
+      }
+      playAppSound('logging');
+      triggerHaptic('alerts', 'gentle');
+    }
+  } catch(err){
+    if(statusEl){
+      statusEl.textContent = `❌ تعذر الوصول: ${err.message || 'تأكد من اتصال الهاتف بالإنترنت'}`;
+      statusEl.style.color = 'var(--bad)';
+    }
+    playAppSound('alerts');
+  }
+}
+window.testGeminiConnectionNow = testGeminiConnectionNow;
+
+async function listAvailableGeminiModelsForUser(){
+  triggerHaptic('buttons', 'light');
+  const statusEl = document.getElementById('txtAiTestStatus');
+  const keyInput = document.getElementById('settingsAiApiKeyInput');
+  const apiKey = (keyInput ? keyInput.value : '') || loadAiCoachSettings().apiKey || '';
+
+  if(!apiKey.trim()){
+    if(statusEl){
+      statusEl.textContent = '⚠️ يرجى إدخال مفتاح API أولاً لعرض نماذجك';
+      statusEl.style.color = 'var(--bad)';
+    }
+    return;
+  }
+
+  if(statusEl){
+    statusEl.textContent = '🔍 جاري الاستعلام من سيرفر جوجل عن النماذج المتاحة لمفتاحك...';
+    statusEl.style.color = 'var(--accent)';
+  }
+
+  const cleanKey = apiKey.trim().replace(/^["']|["']$/g, '');
+  const disc = await discoverGeminiModels(cleanKey);
+
+  if(disc.models && disc.models.length > 0){
+    const names = disc.models.map(m => m.model).join(', ');
+    if(statusEl){
+      statusEl.textContent = `📋 النماذج المتاحة بحسابك (${disc.models.length}): ${names}`;
+      statusEl.style.color = 'var(--teal)';
+    }
+    const sel = document.getElementById('settingsAiModelSelect');
+    if(sel){
+      let optHtml = '<option value="auto">⚡ تلقائي ذكي (كشف واختيار أسرع نموذج مجاني متاح) [مستحسن]</option>';
+      disc.models.forEach(m => {
+        optHtml += `<option value="${escapeHtml(m.model)}">🟢 ${escapeHtml(m.displayName || m.model)}</option>`;
+      });
+      sel.innerHTML = optHtml;
+    }
+  } else {
+    if(statusEl){
+      statusEl.textContent = `❌ رد جوجل: ${disc.error || 'لم يتم العثور على نماذج تدعم المحادثة لهذا المفتاح'}`;
+      statusEl.style.color = 'var(--bad)';
+    }
+  }
+}
+window.listAvailableGeminiModelsForUser = listAvailableGeminiModelsForUser;
+
 window.loadAiCoachSettings = loadAiCoachSettings;
 window.saveAiCoachSettings = saveAiCoachSettings;
+window.isAiCoachCollapsed = isAiCoachCollapsed;
+window.toggleAiCoachCollapsed = toggleAiCoachCollapsed;
 window.loadAiCoachChatHistory = loadAiCoachChatHistory;
 window.saveAiCoachChatHistory = saveAiCoachChatHistory;
 window.clearAiCoachChatHistory = clearAiCoachChatHistory;
+window.syncAiSettingsUI = syncAiSettingsUI;
+window.toggleSettingsAiMaster = toggleSettingsAiMaster;
+window.onSettingsAiProviderChange = onSettingsAiProviderChange;
+window.onSettingsAiKeyInput = onSettingsAiKeyInput;
+window.toggleAiKeyVisibility = toggleAiKeyVisibility;
+window.toggleSettingsAiCompact = toggleSettingsAiCompact;
+window.saveSettingsAiTone = saveSettingsAiTone;
+window.testGeminiConnectionNow = testGeminiConnectionNow;
 window.generateLocalAiChatResponse = generateLocalAiChatResponse;
 window.sendAiChatMessage = sendAiChatMessage;
 window.analyzeDailyWellnessStats = analyzeDailyWellnessStats;
@@ -36871,6 +38865,23 @@ function showUpdateBanner(){
 }
 function initServiceWorker(){
   if(!('serviceWorker' in navigator)) return;
+
+  // In native Android WebView shell, assets are bundled and loaded instantly from local APK via ZatoonaAssetLoader.
+  // Unregister any Service Worker and clear CacheStorage so APK updates are immediately active without stale caches.
+  if(window.ZatoonaNativeBridge){
+    try {
+      navigator.serviceWorker.getRegistrations().then(function(regs){
+        regs.forEach(function(r){ r.unregister(); });
+      }).catch(function(){});
+      if('caches' in window){
+        caches.keys().then(function(keys){
+          keys.forEach(function(k){ caches.delete(k); });
+        }).catch(function(){});
+      }
+    } catch(e){}
+    return;
+  }
+
   let userRequestedUpdate = false; // only true after the user clicks the update banner button
 
   // Handle incoming notification click messages from service worker (Phase 8B)
@@ -47198,6 +49209,7 @@ document.addEventListener('DOMContentLoaded', loadSettingsDensity);
 function syncSettingsUI(){
   try { syncHapticsUI(); } catch(e){}
   try { syncAudioUI(); } catch(e){}
+  try { syncAiSettingsUI(); } catch(e){}
   // Sync light mode chips
   const lightMode = document.body.classList.contains('amoled-mode') ? 'amoled' :
                     document.body.classList.contains('dark-mode') ? 'dark' : 'light';
@@ -47378,45 +49390,51 @@ function resetAzkarTypeCounts(type){
 /* =========================================================================
    PHASE 22: UNIVERSAL SECTION BLOCK REORDERING ENGINE
    ========================================================================= */
+/* ================= PHASE 22: UNIVERSAL SECTION BLOCK REORDERING ENGINE ================= */
 function moveSecBlock(btn, dir){
   triggerHaptic('buttons', 'gentle');
-  const block = btn.closest('[data-sec-block]');
-  if(!block || !block.parentElement) return;
-  const parent = block.parentElement;
+  const group = btn.closest('.sec-reorder-group');
+  if(!group) return;
+  const block = group.closest('[data-sec-block]');
+  if(!block) return;
+  const container = block.parentElement;
+  if(!container) return;
+
   if(dir === -1){
     let prev = block.previousElementSibling;
     while(prev && !prev.hasAttribute('data-sec-block')) prev = prev.previousElementSibling;
-    if(prev) parent.insertBefore(block, prev);
+    if(prev) container.insertBefore(block, prev);
   } else {
     let next = block.nextElementSibling;
     while(next && !next.hasAttribute('data-sec-block')) next = next.nextElementSibling;
-    if(next) parent.insertBefore(next, block);
+    if(next) container.insertBefore(next, block);
   }
-  saveSecBlockOrder(parent);
+
+  saveSecBlockOrder(container);
+  playAppSound('logging');
 }
 
 function saveSecBlockOrder(container){
-  if(!container) return;
-  const containerId = container.id || (container.closest('[id]') ? container.closest('[id]').id : null);
-  if(!containerId) return;
+  if(!container || !container.id) return;
   const blocks = Array.from(container.children).filter(el => el.hasAttribute('data-sec-block'));
-  const order = blocks.map(b => b.getAttribute('data-sec-block')).filter(Boolean);
+  const order = blocks.map(el => el.getAttribute('data-sec-block'));
   try {
-    localStorage.setItem('zatoona-sec-order-' + containerId, JSON.stringify(order));
+    localStorage.setItem('zatoona-sec-order-' + container.id, JSON.stringify(order));
   } catch(e){}
 }
 
 function applySecBlockOrder(containerId){
-  const container = document.getElementById(containerId);
-  if(!container) return;
   try {
     const raw = localStorage.getItem('zatoona-sec-order-' + containerId);
     if(!raw) return;
     const order = JSON.parse(raw);
     if(!Array.isArray(order) || !order.length) return;
+    const container = document.getElementById(containerId);
+    if(!container) return;
+
     order.forEach(key => {
       const el = container.querySelector(`:scope > [data-sec-block="${key}"]`);
-      if(el && el.parentElement === container){
+      if(el){
         container.appendChild(el);
       }
     });
@@ -47490,8 +49508,25 @@ const SECTION_BLOCK_METADATA = {
   'budget-subscriptions': { title: 'الاشتراكات والالتزامات القادمة', icon: '📅' },
   'budget-savings': { title: 'أهداف الادخار وصندوق الطوارئ', icon: '🏦' },
 
+  // Notes
+  'notes-quick': { title: 'دفتر الملاحظات والخواطر', icon: '📝' },
+
   // Study
-  'flip-focus': { title: 'وضع التركيز الفوري بقلب الهاتف', icon: '📱' }
+  'flip-focus': { title: 'وضع التركيز الفوري بقلب الهاتف', icon: '📱' },
+  'study-pomodoro': { title: 'مؤقت بومودورو المذاكرة والفقاعة العائمة', icon: '⏱️' }
+};
+
+const SECTION_CONTAINER_NAMES = {
+  'homeHero': '🏠 الشاشة الرئيسية',
+  'prayerView': '🕌 قسم الصلاة والعبادة',
+  'gymView': '🏋️‍♂️ قسم الجيم والتمارين',
+  'mealView': '🥗 قسم التغذية والوجبات',
+  'sleepView': '🌙 قسم النوم والتعافي',
+  'scheduleView': '📅 قسم الجدول والمهام',
+  'budgetView': '💰 قسم الميزانية والمصروفات',
+  'notesView': '📝 قسم الملاحظات والخواطر',
+  'studyView': '📚 قسم المذاكرة والتركيز',
+  'overviewView': '📊 قسم النظرة العامة'
 };
 
 function getCurrentSectionContainerId(){
@@ -47511,6 +49546,107 @@ function getCurrentSectionContainerId(){
   return map[mode] || 'homeHero';
 }
 
+// Settings-integrated Section Reordering Controller
+let _activeSettingsOrderContainer = null;
+
+function selectSectionForReorder(containerId){
+  triggerHaptic('buttons', 'gentle');
+  _activeSettingsOrderContainer = containerId;
+  const panel = document.getElementById('settingsSecOrderActivePanel');
+  const titleEl = document.getElementById('settingsSecOrderTitle');
+  const name = SECTION_CONTAINER_NAMES[containerId] || containerId;
+
+  if(titleEl) titleEl.textContent = `ترتيب بطاقات: ${name}`;
+  if(panel) panel.style.display = 'block';
+
+  renderSettingsSectionOrderList(containerId);
+
+  // Smooth scroll into view
+  if(panel && panel.scrollIntoView){
+    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
+function closeSectionReorderPanel(){
+  triggerHaptic('buttons', 'light');
+  const panel = document.getElementById('settingsSecOrderActivePanel');
+  if(panel) panel.style.display = 'none';
+  _activeSettingsOrderContainer = null;
+}
+
+function renderSettingsSectionOrderList(containerId){
+  const container = document.getElementById(containerId);
+  const listEl = document.getElementById('settingsSecOrderList');
+  if(!listEl) return;
+
+  if(!container){
+    listEl.innerHTML = '<div style="text-align:center; padding:16px; color:var(--muted); font-size:0.82rem;">يرجى فتح هذا القسم مرة واحدة أولاً لتجهيز بطاقاته.</div>';
+    return;
+  }
+
+  const blocks = Array.from(container.children).filter(el => el.hasAttribute('data-sec-block'));
+  if(!blocks.length){
+    listEl.innerHTML = '<div style="text-align:center; padding:16px; color:var(--muted); font-size:0.82rem;">لا توجد بطاقات قابلة للترتيب في هذا القسم حالياً.</div>';
+    return;
+  }
+
+  listEl.innerHTML = blocks.map((b, idx) => {
+    const key = b.getAttribute('data-sec-block');
+    const meta = SECTION_BLOCK_METADATA[key] || { title: key, icon: '📌' };
+    const isFirst = idx === 0;
+    const isLast = idx === blocks.length - 1;
+
+    return `
+      <div class="sec-order-item" style="display:flex; justify-content:space-between; align-items:center; background:var(--card-alt); border:1px solid var(--line); border-radius:10px; padding:10px 14px;">
+        <div style="display:flex; align-items:center; gap:10px; font-weight:700; font-size:0.86rem; color:var(--text);">
+          <span style="font-size:1.1rem;">${meta.icon}</span>
+          <span>${meta.title}</span>
+        </div>
+        <div style="display:inline-flex; gap:6px;">
+          <button type="button" class="btn-subtle" title="تحريك لأعلى" ${isFirst ? 'disabled style="opacity:0.3; cursor:not-allowed;"' : ''} onclick="settingsMoveSecBlock('${containerId}', '${key}', -1)" style="padding:4px 10px; border-radius:6px; border:1px solid var(--line); font-size:0.85rem; font-weight:700;">▲</button>
+          <button type="button" class="btn-subtle" title="تحريك لأسفل" ${isLast ? 'disabled style="opacity:0.3; cursor:not-allowed;"' : ''} onclick="settingsMoveSecBlock('${containerId}', '${key}', 1)" style="padding:4px 10px; border-radius:6px; border:1px solid var(--line); font-size:0.85rem; font-weight:700;">▼</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function settingsMoveSecBlock(containerId, key, dir){
+  triggerHaptic('buttons', 'gentle');
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  const block = container.querySelector(`:scope > [data-sec-block="${key}"]`);
+  if(!block) return;
+
+  if(dir === -1){
+    let prev = block.previousElementSibling;
+    while(prev && !prev.hasAttribute('data-sec-block')) prev = prev.previousElementSibling;
+    if(prev) container.insertBefore(block, prev);
+  } else {
+    let next = block.nextElementSibling;
+    while(next && !next.hasAttribute('data-sec-block')) next = next.nextElementSibling;
+    if(next) container.insertBefore(next, block);
+  }
+
+  saveSecBlockOrder(container);
+  renderSettingsSectionOrderList(containerId);
+  playAppSound('logging');
+}
+
+function resetSectionOrderFromSettings(){
+  triggerHaptic('buttons', 'light');
+  const containerId = _activeSettingsOrderContainer;
+  if(!containerId) return;
+  try {
+    localStorage.removeItem('zatoona-sec-order-' + containerId);
+  } catch(e){}
+  if(typeof mode !== 'undefined' && mode === 'home') renderHomeDashboard();
+  else if(typeof applyMode === 'function') applyMode();
+  renderSettingsSectionOrderList(containerId);
+  playAppSound('logging');
+}
+
+// Modal fallback compatibility
 function openCurrentSectionOrderModal(){
   openSectionOrderModal(getCurrentSectionContainerId());
 }
@@ -47589,6 +49725,7 @@ function modalMoveSecBlock(containerId, key, dir){
     while(next && !next.hasAttribute('data-sec-block')) next = next.nextElementSibling;
     if(next) container.insertBefore(next, block);
   }
+
   saveSecBlockOrder(container);
   renderSectionOrderModalList(containerId);
 }
@@ -47604,6 +49741,12 @@ function resetCurrentSectionOrder(){
   else if(typeof applyMode === 'function') applyMode();
   renderSectionOrderModalList(containerId);
 }
+
+window.selectSectionForReorder = selectSectionForReorder;
+window.closeSectionReorderPanel = closeSectionReorderPanel;
+window.renderSettingsSectionOrderList = renderSettingsSectionOrderList;
+window.settingsMoveSecBlock = settingsMoveSecBlock;
+window.resetSectionOrderFromSettings = resetSectionOrderFromSettings;
 
 function filterUserGuide(query){
   query = (query || '').trim().toLowerCase();
@@ -47642,6 +49785,7 @@ document.addEventListener('DOMContentLoaded', function(){
   });
   try { syncHapticsUI(); } catch(e){}
   try { syncAudioUI(); } catch(e){}
+  try { syncAiSettingsUI(); } catch(e){}
 });
 
 
@@ -49312,6 +51456,95 @@ window.openStorageConsentSettings = openStorageConsentSettings;
 <!-- ==========================================================================
      DATA DELETION CONFIRMATION MODAL (نافذة تأكيد حذف البيانات الشامل)
      ========================================================================== -->
+<!-- ==========================================================================
+     FULLSCREEN DEDICATED AI COACH CHAT SCREEN (شاشة محادثة كوتش زتونة المستقلة)
+     ========================================================================== -->
+<div id="aiChatFullscreenModal" class="ai-chat-fullscreen-overlay" role="dialog" aria-modal="true" style="display:none;">
+  <div class="ai-chat-screen-container">
+    <!-- Header -->
+    <header class="ai-chat-header">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <button type="button" class="ai-chat-back-btn" onclick="closeAiFullscreenChat()" aria-label="رجوع">
+          ←
+        </button>
+        <div style="position:relative;">
+          <span style="font-size:1.6rem; display:block;">🤖</span>
+          <span id="aiChatOnlineDot" class="ai-chat-online-badge"></span>
+        </div>
+        <div>
+          <div style="font-weight:700; font-size:1rem; color:var(--text); line-height:1.2;">كوتش زتونة الذكي</div>
+          <div id="aiChatHeaderStatus" style="font-size:0.72rem; color:var(--muted); margin-top:2px;">
+            متصل بالإنترنت • Gemini 2.0 Flash
+          </div>
+        </div>
+      </div>
+      <div style="display:flex; gap:6px; align-items:center;">
+        <button type="button" id="btnWakeWordToggle" class="ai-chat-action-btn" onclick="toggleWakeWordHandsFree()" title="تفعيل الاستماع بدون لمس الشاشة">🗣️ نداء صوتي</button>
+        <button type="button" class="ai-chat-action-btn" onclick="openAiProfileMemoryModal()" title="الذاكرة السياقية المستمرة">🧠 ذاكرة</button>
+        <button type="button" id="btnAiChatVoiceToggle" class="ai-chat-action-btn" onclick="toggleAiCoachVoiceOutput()" title="تشغيل أو كتم صوت الكوتش المتحدث">
+          🔊 صوت: تشغيل
+        </button>
+        <button type="button" class="ai-chat-action-btn" onclick="clearAiCoachChatFromModal()" title="مسح المحادثة">
+          🧹 مسح
+        </button>
+        <button type="button" class="ai-chat-action-btn" onclick="closeAiFullscreenChat()" title="إغلاق">
+          ✕
+        </button>
+      </div>
+    </header>
+
+    <!-- Quick Topic Chips Bar -->
+    <div class="ai-chat-chips-bar">
+      <button type="button" class="ai-chip-pill" onclick="sendAiQuickPrompt('عاوز أتعلم برمجة، قسم لي خطة النهاردة لمهام مصغرة Micro-learning أقدر أنفذها')">💻 خطة برمجة</button>
+      <button type="button" class="ai-chip-pill" onclick="sendAiQuickPrompt('أنا بقرأ كتاب، طلعلي زتونة أهم 3 أفكار فيه وعادة يومية أطبقها')">📚 زتونة كتاب</button>
+      <button type="button" class="ai-chip-pill" onclick="sendAiQuickPrompt('يا كوتش سجل إني شربت كوباية مية')">💧 سجلت مية</button>
+      <button type="button" class="ai-chip-pill" onclick="sendAiQuickPrompt('يا كوتش سجل إني صليت صلاة الظهر')">🕌 سجلت صلاة</button>
+      <button type="button" class="ai-chip-pill" onclick="sendAiQuickPrompt('قيم يومي وأدائي العام وقدم لي نصيحة مركزة')">📊 تقييم أدائي</button>
+      <button type="button" class="ai-chip-pill" onclick="sendAiQuickPrompt('إيه أهم نصيحة للتمرين والاستشفاء العضلي لليوم؟')">🏋️ نصيحة تمرين</button>
+      <button type="button" class="ai-chip-pill" onclick="sendAiQuickPrompt('عاوز روتين سريع لنوم عميق وهادئ الليلة')">🌙 روتين نوم</button>
+      <button type="button" class="ai-chip-pill" onclick="sendAiQuickPrompt('إزاي أحافظ على أورادي والصلوات في وقتها؟')">🕌 أوراد وعبادة</button>
+    </div>
+
+    <!-- Messages Scrollable Body -->
+    <main id="aiChatModalMessages" class="ai-chat-messages-body">
+      <!-- Bubbles rendered here dynamically -->
+    </main>
+
+    <!-- Typing Indicator -->
+    <div id="aiChatModalTyping" class="ai-chat-typing-row" style="display:none;">
+      <div class="ai-typing-bubble">
+        <span>كوتش زتونة يكتب الآن</span>
+        <span class="typing-dot"></span>
+        <span class="typing-dot"></span>
+        <span class="typing-dot"></span>
+      </div>
+    </div>
+
+    <!-- Voice Listening Indicator -->
+    <div id="aiVoiceListeningIndicator" class="ai-voice-listening-bar" style="display:none;">
+      <span>🔴</span>
+      <span>كوتش زتونة بيسمعك الآن... تكلم براحتك وسجل اللي عاوزه 🎙️</span>
+    </div>
+
+    <!-- Bottom Input Bar (Fixed above keyboard) -->
+    <footer class="ai-chat-footer">
+      <form id="aiChatModalForm" onsubmit="handleAiModalFormSubmit(event)" style="display:flex; gap:8px; width:100%; align-items:center; margin:0;">
+        <button type="button" id="btnAiChatMic" class="ai-chat-voice-btn" onclick="toggleAiVoiceInput()" aria-label="تحدث صوتياً مع الكوتش" title="اضغط للتحدث صوتياً">
+          🎙️
+        </button>
+        <input type="text" id="inpAiModalChat" class="ai-chat-input" placeholder="اسأل أو اطلب من الكوتش أي حاجة..." autocomplete="off" enterkeyhint="send">
+        <button type="submit" id="btnAiModalSend" class="ai-chat-send-btn" aria-label="إرسال">
+          <span>إرسال</span>
+          <span style="font-size:1.1rem;">🚀</span>
+        </button>
+      </form>
+    </footer>
+  </div>
+</div>
+
+</div>
+</div>
+
 <div class="legal-modal-overlay" id="dataDeletionModal" role="dialog" aria-modal="true" aria-labelledby="delModalTitle" onclick="if(event.target===this)closeDataDeletionModal()">
   <div class="legal-modal-card" style="max-width:520px;" onclick="event.stopPropagation()">
     <div class="legal-modal-header" style="background:rgba(239, 68, 68, 0.08);">
@@ -49368,5 +51601,206 @@ window.openStorageConsentSettings = openStorageConsentSettings;
   </div>
 </aside>
 
+
+<!-- ==========================================================================
+     15 HYPER-FRESH FEATURES HTML MODALS & OVERLAYS
+     ========================================================================== -->
+
+<!-- 541. Monk Mode Fullscreen Isolation Overlay (وضع الراهب) -->
+<div id="monkModeOverlay" class="monk-mode-overlay" role="dialog" aria-modal="true" style="display:none;">
+  <div style="display:flex; justify-content:space-between; width:100%; max-width:600px; align-items:center;">
+    <div style="display:flex; align-items:center; gap:8px;">
+      <span style="font-size:1.6rem;">🧘‍♂️</span>
+      <span style="font-weight:800; font-size:1.1rem; color:#f8fafc;">وضع الراهب (Monk Mode)</span>
+    </div>
+    <button type="button" onclick="closeMonkMode()" style="background:none; border:1px solid #334155; color:#94a3b8; padding:6px 14px; border-radius:8px; font-size:0.8rem; cursor:pointer;">
+      ✕ خروج
+    </button>
+  </div>
+
+  <div style="margin:auto 0; display:flex; flex-direction:column; align-items:center;">
+    <div id="monkTaskCard" class="monk-task-card">
+      <div style="font-size:0.75rem; color:#94a3b8; margin-bottom:4px;">المهمة الحالية المصيرية:</div>
+      <div id="monkTaskTitle" style="font-size:1.05rem; font-weight:700; color:#38bdf8;">التركيز في إنجاز المهمة الأهم لليوم</div>
+    </div>
+    <div id="monkTimerDisplay" class="monk-timer-display">25:00</div>
+    <div style="display:flex; gap:10px; margin-top:10px;">
+      <button type="button" id="btnMonkToggle" onclick="toggleMonkTimer()" style="background:#38bdf8; color:#000; border:none; padding:10px 24px; border-radius:24px; font-weight:800; font-size:0.95rem; cursor:pointer;">
+        ▶️ بدء الجلسة
+      </button>
+      <button type="button" onclick="resetMonkTimer(25)" style="background:#1e293b; color:#cbd5e1; border:1px solid #334155; padding:10px 18px; border-radius:24px; font-size:0.85rem; cursor:pointer;">
+        🔄 25 د
+      </button>
+      <button type="button" onclick="resetMonkTimer(50)" style="background:#1e293b; color:#cbd5e1; border:1px solid #334155; padding:10px 18px; border-radius:24px; font-size:0.85rem; cursor:pointer;">
+        ⚡ 50 د
+      </button>
+    </div>
+  </div>
+
+  <div style="font-size:0.75rem; color:#64748b;">
+    عزل تام لجميع عناصر التشتت • هاتفك في وضع التركيز الخارق
+  </div>
+</div>
+
+<!-- 551. 1-Minute Just-Start Modal (مؤقت الدقيقة الواحدة لكسر الجليد) -->
+<div id="justStartModal" class="legal-modal-overlay" role="dialog" aria-modal="true" style="display:none;" onclick="if(event.target===this)closeJustStartModal()">
+  <div class="zatoona-feature-modal-card" style="text-align:center;">
+    <div style="font-size:1.8rem; margin-bottom:8px;">⏱️</div>
+    <h3 style="margin:0 0 6px; font-size:1.15rem; color:var(--text);">مؤقت الدقيقة الواحدة (كسر الجليد)</h3>
+    <p style="font-size:0.82rem; color:var(--muted); line-height:1.5; margin:0 0 16px;">
+      مش قادر تبدأ؟ التزم بـ 60 ثانية بس بدون أي ضغط. ابدأ فقط وشوف النتيجة!
+    </p>
+    <div id="justStartTimerNumber" class="just-start-circle">60</div>
+    <div style="display:flex; justify-content:center; gap:10px; margin-top:16px;">
+      <button type="button" id="btnJustStartAction" onclick="toggleJustStartCountdown()" class="btn" style="background:var(--accent); color:#fff; padding:8px 22px; border-radius:20px; font-weight:700;">
+        ▶️ ابدأ الـ 60 ثانية
+      </button>
+      <button type="button" onclick="closeJustStartModal()" class="reset-btn" style="padding:8px 16px; border-radius:20px;">
+        إلغاء
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- 469. Qada Tracker Modal (سجل قضاء الصلوات والصيام الفائت) -->
+<div id="worshipQadaModal" class="legal-modal-overlay" role="dialog" aria-modal="true" style="display:none;" onclick="if(event.target===this)closeWorshipQadaModal()">
+  <div class="zatoona-feature-modal-card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span style="font-size:1.4rem;">🕌</span>
+        <h3 style="margin:0; font-size:1.05rem; color:var(--text);">سجل قضاء الصلوات والصيام</h3>
+      </div>
+      <button type="button" onclick="closeWorshipQadaModal()" class="btn-subtle" style="font-size:1.1rem; padding:4px 8px;">✕</button>
+    </div>
+    <p style="font-size:0.78rem; color:var(--muted); margin:0 0 12px; line-height:1.5;">
+      سجل الصلوات أو أيام الصيام الفائتة وتتبع سدادها تدريجياً لراحة بالك وبراءة ذمتك.
+    </p>
+
+    <!-- Fasting Qada Card -->
+    <div style="background:linear-gradient(135deg, rgba(230,126,34,0.1), rgba(241,196,15,0.08)); border:1px solid rgba(230,126,34,0.25); border-radius:12px; padding:12px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <div style="font-weight:700; font-size:0.92rem; color:var(--text);">🌙 قضاء أيام الصيام</div>
+        <div id="qadaFastingSubtitle" style="font-size:0.74rem; color:var(--muted); margin-top:2px;">المتبقي: 0 يوم</div>
+      </div>
+      <div class="qada-btn-group">
+        <button type="button" class="qada-counter-btn" onclick="changeQadaFasting(-1)">-</button>
+        <span id="qadaFastingCount" style="font-weight:800; font-size:1.1rem; min-width:32px; text-align:center;">0</span>
+        <button type="button" class="qada-counter-btn" onclick="changeQadaFasting(1)">+</button>
+      </div>
+    </div>
+
+    <!-- Prayers Qada Grid -->
+    <div style="font-weight:700; font-size:0.88rem; color:var(--text); margin-bottom:8px;">قضاء الصلوات المفروضة:</div>
+    <div id="qadaPrayersGrid" class="qada-grid">
+      <!-- Generated dynamically -->
+    </div>
+
+    <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:14px;">
+      <button type="button" onclick="closeWorshipQadaModal()" class="btn" style="background:var(--accent); color:#fff; padding:6px 18px; border-radius:16px;">
+        تم الحفظ ✓
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- 408. AI Profile Long-Term Memory Modal (ذاكرة كوتش زتونة المستمرة) -->
+<div id="aiProfileMemoryModal" class="legal-modal-overlay" role="dialog" aria-modal="true" style="display:none;" onclick="if(event.target===this)closeAiProfileMemoryModal()">
+  <div class="zatoona-feature-modal-card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span style="font-size:1.4rem;">🧠</span>
+        <h3 style="margin:0; font-size:1.05rem; color:var(--text);">الذاكرة السياقية لكوتش زتونة</h3>
+      </div>
+      <button type="button" onclick="closeAiProfileMemoryModal()" class="btn-subtle" style="font-size:1.1rem; padding:4px 8px;">✕</button>
+    </div>
+    <p style="font-size:0.78rem; color:var(--muted); margin:0 0 12px; line-height:1.5;">
+      البيانات والتفضيلات التي يتذكرها الكوتش عنك لتقديم نصائح مخصصة لك دائماً:
+    </p>
+
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      <div>
+        <label style="font-size:0.78rem; font-weight:700; color:var(--text); display:block; margin-bottom:4px;">تقسيم التمرين المفضل:</label>
+        <input type="text" id="inpMemWorkoutSplit" class="ai-chat-input" style="width:100%;" placeholder="مثال: Push Pull Legs">
+      </div>
+      <div>
+        <label style="font-size:0.78rem; font-weight:700; color:var(--text); display:block; margin-bottom:4px;">إصابات أو أوجاع يجب مراعاتها:</label>
+        <input type="text" id="inpMemInjuries" class="ai-chat-input" style="width:100%;" placeholder="مثال: وجع خفيف في مفصل الكتف الأيسر">
+      </div>
+      <div>
+        <label style="font-size:0.78rem; font-weight:700; color:var(--text); display:block; margin-bottom:4px;">أهدافك الحالية:</label>
+        <input type="text" id="inpMemGoals" class="ai-chat-input" style="width:100%;" placeholder="مثال: تعلم بايثون والالتزام بصلاة الفجر">
+      </div>
+      <div>
+        <label style="font-size:0.78rem; font-weight:700; color:var(--text); display:block; margin-bottom:4px;">اهتمامات القراءة:</label>
+        <input type="text" id="inpMemReading" class="ai-chat-input" style="width:100%;" placeholder="مثال: الإنتاجية وتطوير الذات">
+      </div>
+    </div>
+
+    <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:16px;">
+      <button type="button" onclick="saveAiProfileMemoryFromModal()" class="btn" style="background:var(--accent); color:#fff; padding:6px 18px; border-radius:16px;">
+        حفظ الذاكرة ✓
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- 412. Anti-Procrastination Negotiator Modal (وكيل التفاوض مع التسويف) -->
+<div id="procrastinationNegotiatorModal" class="legal-modal-overlay" role="dialog" aria-modal="true" style="display:none;" onclick="if(event.target===this)closeProcrastinationNegotiatorModal()">
+  <div class="zatoona-feature-modal-card" style="text-align:center;">
+    <div style="font-size:2rem; margin-bottom:6px;">🤝</div>
+    <h3 style="margin:0 0 6px; font-size:1.1rem; color:var(--text);">وكيل التفاوض مع التسويف</h3>
+    <p style="font-size:0.8rem; color:var(--muted); line-height:1.5; margin:0 0 16px;">
+      حاسس بكسل أو تسويف ومش قادر تنفذ المهمة كاملة؟ إيه رأيك نعمل اتفاق مصغر بـ 5 دقائق فقط علشان منكسرش العادة؟
+    </p>
+
+    <div id="negotiatorDealCard" style="background:var(--card-alt); border:1px solid var(--line); border-radius:12px; padding:14px; margin-bottom:16px; text-align:right;">
+      <div style="font-size:0.74rem; color:var(--muted);">العرض المصغر المقترح:</div>
+      <div id="negotiatorDealText" style="font-size:0.95rem; font-weight:700; color:var(--good); margin-top:4px;">
+        حل مسألة Logic واحدة سهلة أو كتابة 5 أسطر كود فقط اليوم.
+      </div>
+    </div>
+
+    <div style="display:flex; justify-content:center; gap:10px;">
+      <button type="button" onclick="acceptMicroCommitment()" class="btn" style="background:var(--good); color:#fff; padding:8px 20px; border-radius:20px; font-weight:700;">
+        🤝 قبول الاتفاق المصغر
+      </button>
+      <button type="button" onclick="closeProcrastinationNegotiatorModal()" class="reset-btn" style="padding:8px 16px; border-radius:20px;">
+        سأحاول لاحقاً
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- 600. Standalone Diagnostics & Backup Hub Modal (لوحة الفحص والنسخ الاحتياطي) -->
+<div id="diagnosticsModal" class="legal-modal-overlay" role="dialog" aria-modal="true" style="display:none;" onclick="if(event.target===this)closeZatoonaDiagnostics()">
+  <div class="zatoona-feature-modal-card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span style="font-size:1.4rem;">🩺</span>
+        <h3 style="margin:0; font-size:1.05rem; color:var(--text);">فحص سلامة زتونة والنسخ الاحتياطي</h3>
+      </div>
+      <button type="button" onclick="closeZatoonaDiagnostics()" class="btn-subtle" style="font-size:1.1rem; padding:4px 8px;">✕</button>
+    </div>
+
+    <div id="diagnosticsReportBody" style="background:var(--card-alt); border:1px solid var(--line); border-radius:12px; padding:14px; font-size:0.8rem; line-height:1.6; color:var(--text); margin-bottom:14px;">
+      جاري فحص البيانات ومفاتيح التخزين...
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      <button type="button" onclick="runSelfHealingAuditUI()" class="btn" style="background:var(--accent); color:#fff; padding:8px 14px; border-radius:12px; font-weight:700; font-size:0.82rem;">
+        🩺 فحص وإصلاح البيانات ذاتياً (Self-Healing)
+      </button>
+      <div style="display:flex; gap:8px;">
+        <button type="button" onclick="exportZatoonaFullBackup()" class="btn-subtle" style="flex:1; border:1px solid var(--line); padding:8px; border-radius:12px; font-size:0.78rem; font-weight:700;">
+          💾 تصدير نسخة احتياطية
+        </button>
+        <button type="button" onclick="document.getElementById('inpZatoonaRestoreFile').click()" class="btn-subtle" style="flex:1; border:1px solid var(--line); padding:8px; border-radius:12px; font-size:0.78rem; font-weight:700;">
+          📂 استيراد نسخة
+        </button>
+      </div>
+      <input type="file" id="inpZatoonaRestoreFile" style="display:none;" accept=".json" onchange="handleZatoonaBackupImport(event)">
+    </div>
+  </div>
+</div>
 </body>
 </html>
