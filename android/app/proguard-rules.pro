@@ -27,3 +27,12 @@
 -keep class com.zatoona.app.ScheduleWidgetProvider { *; }
 -keep class com.zatoona.app.ScheduleWidgetService { *; }
 -keep class com.zatoona.app.ScheduleRemoteViewsFactory { *; }
+
+# Keep Alarm, Boot & Foreground Services (Phase 22)
+-keep class com.zatoona.app.AlarmService { *; }
+-keep class com.zatoona.app.AlarmReceiver { *; }
+-keep class com.zatoona.app.BootReceiver { *; }
+-keep class com.zatoona.app.AlarmActivity { *; }
+-keep class com.zatoona.app.FloatingStudyBubbleService { *; }
+-keep class com.zatoona.app.ZatoonaAlarmScheduler { *; }
+-keep class com.zatoona.app.ZatoonaNotificationManager { *; }
