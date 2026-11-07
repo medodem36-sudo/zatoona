@@ -1,8 +1,11 @@
 package com.zatoona.app
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Build
+import android.provider.Settings
 import android.webkit.JavascriptInterface
 import org.json.JSONArray
 import org.json.JSONException
@@ -612,6 +615,67 @@ class ZatoonaBridge(private val context: Context) {
     @JavascriptInterface
     fun getScheduleWidgetCache(): String {
         return prefs.getString(KEY_SCHEDULE_CACHE, "{}") ?: "{}"
+    }
+
+    @JavascriptInterface
+    fun hasOverlayPermission(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Settings.canDrawOverlays(context)
+        } else {
+            true
+        }
+    }
+
+    @JavascriptInterface
+    fun requestOverlayPermission(): Boolean {
+        return try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(context)) {
+                val intent = Intent(
+                    Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:${context.packageName}")
+                ).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+                context.startActivity(intent)
+                true
+            } else {
+                false
+            }
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    @JavascriptInterface
+    fun startFloatingStudyTimer(title: String?, durationSeconds: Int): Boolean {
+        return try {
+            val intent = Intent(context, FloatingStudyBubbleService::class.java).apply {
+                action = FloatingStudyBubbleService.ACTION_START
+                putExtra(FloatingStudyBubbleService.EXTRA_TITLE, title ?: "جلسة تركيز")
+                putExtra(FloatingStudyBubbleService.EXTRA_DURATION_SECONDS, durationSeconds.toLong())
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context.startForegroundService(intent)
+            } else {
+                context.startService(intent)
+            }
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    @JavascriptInterface
+    fun stopFloatingStudyTimer(): Boolean {
+        return try {
+            val intent = Intent(context, FloatingStudyBubbleService::class.java).apply {
+                action = FloatingStudyBubbleService.ACTION_STOP
+            }
+            context.startService(intent)
+            true
+        } catch (e: Exception) {
+            false
+        }
     }
 
     private fun errorResponse(code: String, message: String): String {

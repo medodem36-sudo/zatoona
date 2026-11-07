@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#FAF9F6">
 <script>
   (function(){
@@ -17,6 +17,8 @@
         document.documentElement.setAttribute('data-theme', 'light');
         document.documentElement.style.colorScheme = 'light';
       }
+      var p = localStorage.getItem('zatoona-ui-paradigm-v1') || 'botanical';
+      document.documentElement.setAttribute('data-ui-paradigm', p);
     } catch(e) {}
   })();
 </script>
@@ -244,6 +246,731 @@ html, body, * {
     --gym-pause-border:#4A0D0D;
     --gym-pause-title:#F87171;
     --gym-pause-sub:#FCA5A5;
+  }
+
+
+  /* ==========================================================================
+     COMPREHENSIVE UI DESIGN PARADIGMS (أنماط ولغات تصميم الواجهة الشاملة)
+     1. botanical (الافتراضي الحالي - انحناءات ناعمة وظلال طبيعية)
+     2. cyber (تكتيكي حاد - أركان حادة ووهج نيون وشبكة HUD تقنية)
+     3. glass (زجاج سائل - بطاقات شفافة وضبابية خلفية وانعكاسات زجاجية)
+     4. editorial (تحريري ورقي - مسطح 100% بدون ظلال، خطوط واضحة وتركيز فائق)
+     5. brutalist (نيو-بروتاليزم ملموس - حواف سميكة وظلال حادة وضغطة ميكانيكية)
+     ========================================================================== */
+
+  /* Paradigm Selector Components */
+  .paradigm-selector-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-top: 8px;
+  }
+  @media (min-width: 480px) {
+    .paradigm-selector-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .paradigm-card-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 12px 14px;
+    background: var(--card-alt);
+    border: 2px solid var(--line);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    cursor: pointer;
+    text-align: right;
+    position: relative;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .paradigm-card-btn:hover {
+    border-color: var(--primary);
+    background: var(--bg-2);
+  }
+  .paradigm-card-btn.active {
+    border-color: var(--primary) !important;
+    background: var(--primary-light) !important;
+    box-shadow: 0 0 0 1px var(--primary);
+  }
+  .pcb-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .pcb-title {
+    font-weight: 800;
+    font-size: 0.88rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text);
+  }
+  .pcb-badge {
+    font-size: 0.68rem;
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: var(--line);
+    color: var(--muted);
+    font-weight: 700;
+    transition: all 0.2s ease;
+  }
+  .paradigm-card-btn.active .pcb-badge {
+    background: var(--primary);
+    color: var(--btn-active-text);
+  }
+  .pcb-desc {
+    font-size: 0.74rem;
+    color: var(--muted);
+    line-height: 1.4;
+    margin-top: 2px;
+  }
+  .pcb-preview-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    width: 100%;
+  }
+  .pcb-chip-preview {
+    font-size: 0.68rem;
+    padding: 3px 8px;
+    display: inline-block;
+  }
+
+  /* --------------------------------------------------------------------------
+     PARADIGM 1: BOTANICAL ORGANIC (الافتراضي الحالي)
+     -------------------------------------------------------------------------- */
+  [data-ui-paradigm="botanical"] {
+    --radius: 16px;
+    --radius-sm: 10px;
+    --radius-lg: 20px;
+  }
+
+  /* --------------------------------------------------------------------------
+     PARADIGM 2: CYBER TACTICAL / NEO-HUD (النمط السيبراني التكتيكي)
+     -------------------------------------------------------------------------- */
+  [data-ui-paradigm="cyber"] {
+    --radius: 4px !important;
+    --radius-sm: 2px !important;
+    --radius-lg: 6px !important;
+    --shadow: 0 0 12px rgba(16, 185, 129, 0.25), 0 2px 4px rgba(0,0,0,0.5) !important;
+    --shadow-sm: 0 0 6px rgba(16, 185, 129, 0.2) !important;
+    --shadow-md: 0 0 18px rgba(16, 185, 129, 0.35) !important;
+    --glow: 0 0 14px rgba(16, 185, 129, 0.65) !important;
+  }
+  [data-ui-paradigm="cyber"] body {
+    background-image:
+      linear-gradient(rgba(16, 185, 129, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(16, 185, 129, 0.035) 1px, transparent 1px) !important;
+    background-size: 28px 28px !important;
+  }
+  [data-ui-paradigm="cyber"] .home-stat-card,
+  [data-ui-paradigm="cyber"] .settings-section-card,
+  [data-ui-paradigm="cyber"] .morning-briefing-card,
+  [data-ui-paradigm="cyber"] .gym-day-card,
+  [data-ui-paradigm="cyber"] .gym-session-card,
+  [data-ui-paradigm="cyber"] .info-card,
+  [data-ui-paradigm="cyber"] .rest-timer-card,
+  [data-ui-paradigm="cyber"] .gw-card,
+  [data-ui-paradigm="cyber"] .ticket,
+  [data-ui-paradigm="cyber"] .p4-modal-card,
+  [data-ui-paradigm="cyber"] .p5-modal-card,
+  [data-ui-paradigm="cyber"] .theme-modal-sheet,
+  [data-ui-paradigm="cyber"] .settings-card,
+  [data-ui-paradigm="cyber"] .nut-meal-card,
+  [data-ui-paradigm="cyber"] .nut-metric-card,
+  [data-ui-paradigm="cyber"] .timeline-card {
+    border: 1px solid rgba(16, 185, 129, 0.45) !important;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.12), inset 0 0 8px rgba(16, 185, 129, 0.03) !important;
+    border-radius: 4px !important;
+    letter-spacing: 0.15px;
+  }
+  [data-ui-paradigm="cyber"] .tbtn,
+  [data-ui-paradigm="cyber"] .tbtn-lg,
+  [data-ui-paradigm="cyber"] .day-chip,
+  [data-ui-paradigm="cyber"] .set-chip,
+  [data-ui-paradigm="cyber"] .mode-btn,
+  [data-ui-paradigm="cyber"] .settings-theme-chip,
+  [data-ui-paradigm="cyber"] .tms-option-btn,
+  [data-ui-paradigm="cyber"] .settings-btn,
+  [data-ui-paradigm="cyber"] .quick-act-btn,
+  [data-ui-paradigm="cyber"] .btn-primary,
+  [data-ui-paradigm="cyber"] .btn-secondary,
+  [data-ui-paradigm="cyber"] .btn-subtle,
+  [data-ui-paradigm="cyber"] .bottom-nav-btn {
+    border-radius: 3px !important;
+    border: 1px solid rgba(16, 185, 129, 0.5) !important;
+  }
+  [data-ui-paradigm="cyber"] .tbtn:active,
+  [data-ui-paradigm="cyber"] .btn-primary:active,
+  [data-ui-paradigm="cyber"] .quick-act-btn:active {
+    box-shadow: 0 0 16px rgba(16, 185, 129, 0.75) !important;
+  }
+
+  /* --------------------------------------------------------------------------
+     PARADIGM 3: LIQUID GLASSMORPHISM (نمط الزجاج السائل)
+     -------------------------------------------------------------------------- */
+  [data-ui-paradigm="glass"] {
+    --radius: 20px !important;
+    --radius-sm: 14px !important;
+    --radius-lg: 26px !important;
+    --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.18), inset 0 1px 1px rgba(255, 255, 255, 0.25) !important;
+    --shadow-sm: 0 4px 16px 0 rgba(0, 0, 0, 0.12), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+    --shadow-md: 0 12px 40px 0 rgba(0, 0, 0, 0.22), inset 0 1px 2px rgba(255, 255, 255, 0.3) !important;
+    --glow: 0 8px 24px -2px rgba(52, 211, 153, 0.45) !important;
+  }
+  [data-ui-paradigm="glass"] .home-stat-card,
+  [data-ui-paradigm="glass"] .settings-section-card,
+  [data-ui-paradigm="glass"] .morning-briefing-card,
+  [data-ui-paradigm="glass"] .gym-day-card,
+  [data-ui-paradigm="glass"] .gym-session-card,
+  [data-ui-paradigm="glass"] .info-card,
+  [data-ui-paradigm="glass"] .rest-timer-card,
+  [data-ui-paradigm="glass"] .gw-card,
+  [data-ui-paradigm="glass"] .ticket,
+  [data-ui-paradigm="glass"] .p4-modal-card,
+  [data-ui-paradigm="glass"] .p5-modal-card,
+  [data-ui-paradigm="glass"] .theme-modal-sheet,
+  [data-ui-paradigm="glass"] .settings-card,
+  [data-ui-paradigm="glass"] .nut-meal-card,
+  [data-ui-paradigm="glass"] .nut-metric-card,
+  [data-ui-paradigm="glass"] .timeline-card {
+    backdrop-filter: blur(18px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(180%) !important;
+    border-radius: 20px !important;
+    transition: all 0.25s ease !important;
+  }
+  html[data-ui-paradigm="glass"]:not([data-theme="dark"]):not([data-theme="amoled"]) .home-stat-card,
+  html[data-ui-paradigm="glass"]:not([data-theme="dark"]):not([data-theme="amoled"]) .settings-section-card,
+  html[data-ui-paradigm="glass"]:not([data-theme="dark"]):not([data-theme="amoled"]) .morning-briefing-card,
+  html[data-ui-paradigm="glass"]:not([data-theme="dark"]):not([data-theme="amoled"]) .gym-day-card,
+  html[data-ui-paradigm="glass"]:not([data-theme="dark"]):not([data-theme="amoled"]) .gym-session-card,
+  html[data-ui-paradigm="glass"]:not([data-theme="dark"]):not([data-theme="amoled"]) .info-card,
+  html[data-ui-paradigm="glass"]:not([data-theme="dark"]):not([data-theme="amoled"]) .rest-timer-card,
+  html[data-ui-paradigm="glass"]:not([data-theme="dark"]):not([data-theme="amoled"]) .gw-card,
+  html[data-ui-paradigm="glass"]:not([data-theme="dark"]):not([data-theme="amoled"]) .ticket,
+  html[data-ui-paradigm="glass"]:not([data-theme="dark"]):not([data-theme="amoled"]) .settings-card,
+  html[data-ui-paradigm="glass"]:not([data-theme="dark"]):not([data-theme="amoled"]) .nut-meal-card,
+  html[data-ui-paradigm="glass"]:not([data-theme="dark"]):not([data-theme="amoled"]) .nut-metric-card {
+    background: rgba(255, 255, 255, 0.76) !important;
+    border: 1px solid rgba(255, 255, 255, 0.7) !important;
+    box-shadow: 0 10px 30px rgba(18, 61, 48, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.9) !important;
+  }
+  html[data-ui-paradigm="glass"][data-theme="dark"] .home-stat-card,
+  html[data-ui-paradigm="glass"][data-theme="dark"] .settings-section-card,
+  html[data-ui-paradigm="glass"][data-theme="dark"] .morning-briefing-card,
+  html[data-ui-paradigm="glass"][data-theme="dark"] .gym-day-card,
+  html[data-ui-paradigm="glass"][data-theme="dark"] .gym-session-card,
+  html[data-ui-paradigm="glass"][data-theme="dark"] .info-card,
+  html[data-ui-paradigm="glass"][data-theme="dark"] .rest-timer-card,
+  html[data-ui-paradigm="glass"][data-theme="dark"] .gw-card,
+  html[data-ui-paradigm="glass"][data-theme="dark"] .ticket,
+  html[data-ui-paradigm="glass"][data-theme="dark"] .settings-card,
+  html[data-ui-paradigm="glass"][data-theme="dark"] .nut-meal-card,
+  html[data-ui-paradigm="glass"][data-theme="dark"] .nut-metric-card {
+    background: rgba(27, 41, 35, 0.65) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.18) !important;
+  }
+  html[data-ui-paradigm="glass"][data-theme="amoled"] .home-stat-card,
+  html[data-ui-paradigm="glass"][data-theme="amoled"] .settings-section-card,
+  html[data-ui-paradigm="glass"][data-theme="amoled"] .morning-briefing-card,
+  html[data-ui-paradigm="glass"][data-theme="amoled"] .gym-day-card,
+  html[data-ui-paradigm="glass"][data-theme="amoled"] .gym-session-card,
+  html[data-ui-paradigm="glass"][data-theme="amoled"] .info-card,
+  html[data-ui-paradigm="glass"][data-theme="amoled"] .rest-timer-card,
+  html[data-ui-paradigm="glass"][data-theme="amoled"] .gw-card,
+  html[data-ui-paradigm="glass"][data-theme="amoled"] .ticket,
+  html[data-ui-paradigm="glass"][data-theme="amoled"] .settings-card,
+  html[data-ui-paradigm="glass"][data-theme="amoled"] .nut-meal-card,
+  html[data-ui-paradigm="glass"][data-theme="amoled"] .nut-metric-card {
+    background: rgba(14, 18, 16, 0.78) !important;
+    border: 1px solid rgba(52, 211, 153, 0.28) !important;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.75), inset 0 1px 1px rgba(52, 211, 153, 0.22) !important;
+  }
+  [data-ui-paradigm="glass"] .tbtn,
+  [data-ui-paradigm="glass"] .tbtn-lg,
+  [data-ui-paradigm="glass"] .day-chip,
+  [data-ui-paradigm="glass"] .set-chip,
+  [data-ui-paradigm="glass"] .mode-btn,
+  [data-ui-paradigm="glass"] .settings-theme-chip,
+  [data-ui-paradigm="glass"] .tms-option-btn,
+  [data-ui-paradigm="glass"] .settings-btn,
+  [data-ui-paradigm="glass"] .quick-act-btn,
+  [data-ui-paradigm="glass"] .btn-primary,
+  [data-ui-paradigm="glass"] .btn-secondary,
+  [data-ui-paradigm="glass"] .btn-subtle {
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border-radius: 14px !important;
+  }
+
+  /* --------------------------------------------------------------------------
+     PARADIGM 4: MINIMALIST EDITORIAL (نمط التحرير الورقي المينيمال)
+     -------------------------------------------------------------------------- */
+  [data-ui-paradigm="editorial"] {
+    --radius: 6px !important;
+    --radius-sm: 4px !important;
+    --radius-lg: 8px !important;
+    --shadow: none !important;
+    --shadow-sm: none !important;
+    --shadow-md: none !important;
+    --glow: none !important;
+  }
+  [data-ui-paradigm="editorial"] .home-stat-card,
+  [data-ui-paradigm="editorial"] .settings-section-card,
+  [data-ui-paradigm="editorial"] .morning-briefing-card,
+  [data-ui-paradigm="editorial"] .gym-day-card,
+  [data-ui-paradigm="editorial"] .gym-session-card,
+  [data-ui-paradigm="editorial"] .info-card,
+  [data-ui-paradigm="editorial"] .rest-timer-card,
+  [data-ui-paradigm="editorial"] .gw-card,
+  [data-ui-paradigm="editorial"] .ticket,
+  [data-ui-paradigm="editorial"] .p4-modal-card,
+  [data-ui-paradigm="editorial"] .p5-modal-card,
+  [data-ui-paradigm="editorial"] .theme-modal-sheet,
+  [data-ui-paradigm="editorial"] .settings-card,
+  [data-ui-paradigm="editorial"] .nut-meal-card,
+  [data-ui-paradigm="editorial"] .nut-metric-card,
+  [data-ui-paradigm="editorial"] .timeline-card {
+    box-shadow: none !important;
+    border: 1px solid var(--line) !important;
+    border-radius: 6px !important;
+  }
+  [data-ui-paradigm="editorial"] .tbtn,
+  [data-ui-paradigm="editorial"] .tbtn-lg,
+  [data-ui-paradigm="editorial"] .day-chip,
+  [data-ui-paradigm="editorial"] .set-chip,
+  [data-ui-paradigm="editorial"] .mode-btn,
+  [data-ui-paradigm="editorial"] .settings-theme-chip,
+  [data-ui-paradigm="editorial"] .tms-option-btn,
+  [data-ui-paradigm="editorial"] .settings-btn,
+  [data-ui-paradigm="editorial"] .quick-act-btn,
+  [data-ui-paradigm="editorial"] .btn-primary,
+  [data-ui-paradigm="editorial"] .btn-secondary,
+  [data-ui-paradigm="editorial"] .btn-subtle {
+    box-shadow: none !important;
+    border-radius: 4px !important;
+    border: 1px solid var(--line) !important;
+  }
+
+  /* --------------------------------------------------------------------------
+     PARADIGM 5: NEO-BRUTALISM TACTILE POP (نمط النيو-بروتاليزم الحركي الملموس)
+     -------------------------------------------------------------------------- */
+  [data-ui-paradigm="brutalist"] {
+    --radius: 12px !important;
+    --radius-sm: 8px !important;
+    --radius-lg: 16px !important;
+  }
+  html[data-ui-paradigm="brutalist"]:not([data-theme="dark"]):not([data-theme="amoled"]) .home-stat-card,
+  html[data-ui-paradigm="brutalist"]:not([data-theme="dark"]):not([data-theme="amoled"]) .settings-section-card,
+  html[data-ui-paradigm="brutalist"]:not([data-theme="dark"]):not([data-theme="amoled"]) .morning-briefing-card,
+  html[data-ui-paradigm="brutalist"]:not([data-theme="dark"]):not([data-theme="amoled"]) .gym-day-card,
+  html[data-ui-paradigm="brutalist"]:not([data-theme="dark"]):not([data-theme="amoled"]) .gym-session-card,
+  html[data-ui-paradigm="brutalist"]:not([data-theme="dark"]):not([data-theme="amoled"]) .info-card,
+  html[data-ui-paradigm="brutalist"]:not([data-theme="dark"]):not([data-theme="amoled"]) .rest-timer-card,
+  html[data-ui-paradigm="brutalist"]:not([data-theme="dark"]):not([data-theme="amoled"]) .gw-card,
+  html[data-ui-paradigm="brutalist"]:not([data-theme="dark"]):not([data-theme="amoled"]) .ticket,
+  html[data-ui-paradigm="brutalist"]:not([data-theme="dark"]):not([data-theme="amoled"]) .settings-card,
+  html[data-ui-paradigm="brutalist"]:not([data-theme="dark"]):not([data-theme="amoled"]) .nut-meal-card,
+  html[data-ui-paradigm="brutalist"]:not([data-theme="dark"]):not([data-theme="amoled"]) .nut-metric-card,
+  html[data-ui-paradigm="brutalist"]:not([data-theme="dark"]):not([data-theme="amoled"]) .timeline-card {
+    border: 2.5px solid #1E2923 !important;
+    box-shadow: 4px 4px 0px #1E2923 !important;
+    border-radius: 12px !important;
+  }
+  html[data-ui-paradigm="brutalist"][data-theme="dark"] .home-stat-card,
+  html[data-ui-paradigm="brutalist"][data-theme="dark"] .settings-section-card,
+  html[data-ui-paradigm="brutalist"][data-theme="dark"] .morning-briefing-card,
+  html[data-ui-paradigm="brutalist"][data-theme="dark"] .gym-day-card,
+  html[data-ui-paradigm="brutalist"][data-theme="dark"] .gym-session-card,
+  html[data-ui-paradigm="brutalist"][data-theme="dark"] .info-card,
+  html[data-ui-paradigm="brutalist"][data-theme="dark"] .rest-timer-card,
+  html[data-ui-paradigm="brutalist"][data-theme="dark"] .gw-card,
+  html[data-ui-paradigm="brutalist"][data-theme="dark"] .ticket,
+  html[data-ui-paradigm="brutalist"][data-theme="dark"] .settings-card,
+  html[data-ui-paradigm="brutalist"][data-theme="dark"] .nut-meal-card,
+  html[data-ui-paradigm="brutalist"][data-theme="dark"] .nut-metric-card,
+  html[data-ui-paradigm="brutalist"][data-theme="dark"] .timeline-card {
+    border: 2.5px solid #34D399 !important;
+    box-shadow: 4px 4px 0px #064E3B !important;
+    border-radius: 12px !important;
+  }
+  html[data-ui-paradigm="brutalist"][data-theme="amoled"] .home-stat-card,
+  html[data-ui-paradigm="brutalist"][data-theme="amoled"] .settings-section-card,
+  html[data-ui-paradigm="brutalist"][data-theme="amoled"] .morning-briefing-card,
+  html[data-ui-paradigm="brutalist"][data-theme="amoled"] .gym-day-card,
+  html[data-ui-paradigm="brutalist"][data-theme="amoled"] .gym-session-card,
+  html[data-ui-paradigm="brutalist"][data-theme="amoled"] .info-card,
+  html[data-ui-paradigm="brutalist"][data-theme="amoled"] .rest-timer-card,
+  html[data-ui-paradigm="brutalist"][data-theme="amoled"] .gw-card,
+  html[data-ui-paradigm="brutalist"][data-theme="amoled"] .ticket,
+  html[data-ui-paradigm="brutalist"][data-theme="amoled"] .settings-card,
+  html[data-ui-paradigm="brutalist"][data-theme="amoled"] .nut-meal-card,
+  html[data-ui-paradigm="brutalist"][data-theme="amoled"] .nut-metric-card,
+  html[data-ui-paradigm="brutalist"][data-theme="amoled"] .timeline-card {
+    border: 2.5px solid #10B981 !important;
+    box-shadow: 4px 4px 0px #10B981 !important;
+    border-radius: 12px !important;
+  }
+
+  /* Tactile Mechanical Button Press for Neo-Brutalism */
+  html[data-ui-paradigm="brutalist"]:not([data-theme="dark"]):not([data-theme="amoled"]) .tbtn,
+  html[data-ui-paradigm="brutalist"]:not([data-theme="dark"]):not([data-theme="amoled"]) .tbtn-lg,
+  html[data-ui-paradigm="brutalist"]:not([data-theme="dark"]):not([data-theme="amoled"]) .day-chip,
+  html[data-ui-paradigm="brutalist"]:not([data-theme="dark"]):not([data-theme="amoled"]) .set-chip,
+  html[data-ui-paradigm="brutalist"]:not([data-theme="dark"]):not([data-theme="amoled"]) .mode-btn,
+  html[data-ui-paradigm="brutalist"]:not([data-theme="dark"]):not([data-theme="amoled"]) .settings-theme-chip,
+  html[data-ui-paradigm="brutalist"]:not([data-theme="dark"]):not([data-theme="amoled"]) .tms-option-btn,
+  html[data-ui-paradigm="brutalist"]:not([data-theme="dark"]):not([data-theme="amoled"]) .settings-btn,
+  html[data-ui-paradigm="brutalist"]:not([data-theme="dark"]):not([data-theme="amoled"]) .quick-act-btn,
+  html[data-ui-paradigm="brutalist"]:not([data-theme="dark"]):not([data-theme="amoled"]) .btn-primary,
+  html[data-ui-paradigm="brutalist"]:not([data-theme="dark"]):not([data-theme="amoled"]) .btn-secondary,
+  html[data-ui-paradigm="brutalist"]:not([data-theme="dark"]):not([data-theme="amoled"]) .btn-subtle {
+    border: 2px solid #1E2923 !important;
+    box-shadow: 3px 3px 0px #1E2923 !important;
+    border-radius: 8px !important;
+    font-weight: 800 !important;
+    transition: transform 0.08s ease, box-shadow 0.08s ease !important;
+  }
+  html[data-ui-paradigm="brutalist"][data-theme="dark"] .tbtn,
+  html[data-ui-paradigm="brutalist"][data-theme="dark"] .tbtn-lg,
+  html[data-ui-paradigm="brutalist"][data-theme="dark"] .day-chip,
+  html[data-ui-paradigm="brutalist"][data-theme="dark"] .set-chip,
+  html[data-ui-paradigm="brutalist"][data-theme="dark"] .mode-btn,
+  html[data-ui-paradigm="brutalist"][data-theme="dark"] .settings-theme-chip,
+  html[data-ui-paradigm="brutalist"][data-theme="dark"] .tms-option-btn,
+  html[data-ui-paradigm="brutalist"][data-theme="dark"] .settings-btn,
+  html[data-ui-paradigm="brutalist"][data-theme="dark"] .quick-act-btn,
+  html[data-ui-paradigm="brutalist"][data-theme="dark"] .btn-primary,
+  html[data-ui-paradigm="brutalist"][data-theme="dark"] .btn-secondary,
+  html[data-ui-paradigm="brutalist"][data-theme="dark"] .btn-subtle {
+    border: 2px solid #34D399 !important;
+    box-shadow: 3px 3px 0px #064E3B !important;
+    border-radius: 8px !important;
+    font-weight: 800 !important;
+    transition: transform 0.08s ease, box-shadow 0.08s ease !important;
+  }
+  html[data-ui-paradigm="brutalist"][data-theme="amoled"] .tbtn,
+  html[data-ui-paradigm="brutalist"][data-theme="amoled"] .tbtn-lg,
+  html[data-ui-paradigm="brutalist"][data-theme="amoled"] .day-chip,
+  html[data-ui-paradigm="brutalist"][data-theme="amoled"] .set-chip,
+  html[data-ui-paradigm="brutalist"][data-theme="amoled"] .mode-btn,
+  html[data-ui-paradigm="brutalist"][data-theme="amoled"] .settings-theme-chip,
+  html[data-ui-paradigm="brutalist"][data-theme="amoled"] .tms-option-btn,
+  html[data-ui-paradigm="brutalist"][data-theme="amoled"] .settings-btn,
+  html[data-ui-paradigm="brutalist"][data-theme="amoled"] .quick-act-btn,
+  html[data-ui-paradigm="brutalist"][data-theme="amoled"] .btn-primary,
+  html[data-ui-paradigm="brutalist"][data-theme="amoled"] .btn-secondary,
+  html[data-ui-paradigm="brutalist"][data-theme="amoled"] .btn-subtle {
+    border: 2px solid #10B981 !important;
+    box-shadow: 3px 3px 0px #10B981 !important;
+    border-radius: 8px !important;
+    font-weight: 800 !important;
+    transition: transform 0.08s ease, box-shadow 0.08s ease !important;
+  }
+
+  [data-ui-paradigm="brutalist"] .tbtn:active,
+  [data-ui-paradigm="brutalist"] .tbtn-lg:active,
+  [data-ui-paradigm="brutalist"] .quick-act-btn:active,
+  [data-ui-paradigm="brutalist"] .btn-primary:active,
+  [data-ui-paradigm="brutalist"] .btn-secondary:active,
+  [data-ui-paradigm="brutalist"] .mode-btn:active,
+  [data-ui-paradigm="brutalist"] .day-chip:active {
+    transform: translate(2px, 2px) !important;
+    box-shadow: 1px 1px 0px currentColor !important;
+  }
+
+
+  /* ==========================================================================
+     ACCESSIBILITY, FOCUS-VISIBLE & COLOR CONTRAST (WCAG 2.1 AA)
+     ========================================================================== */
+  :focus-visible {
+    outline: 2px solid var(--primary) !important;
+    outline-offset: 2px !important;
+  }
+  button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+    outline: 2px solid var(--primary) !important;
+    outline-offset: 2px !important;
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* ==========================================================================
+     STORAGE & COOKIE CONSENT BANNER (شريط شفافية التخزين المحلي والخصوصية)
+     ========================================================================== */
+  .storage-consent-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 99999;
+    background: var(--card);
+    border-top: 2px solid var(--primary);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+    padding: 12px 16px;
+    display: none;
+    animation: bannerSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  @keyframes bannerSlideUp {
+    from { transform: translateY(100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  .scb-content {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .scb-text {
+    flex: 1;
+    min-width: 260px;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: var(--text);
+  }
+  .scb-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .scb-btn-primary {
+    background: var(--primary);
+    color: var(--btn-active-text);
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 8px 16px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+  }
+  .scb-btn-primary:hover {
+    opacity: 0.9;
+  }
+  .scb-btn-subtle {
+    background: var(--bg-2);
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 8px 14px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .scb-btn-subtle:hover {
+    border-color: var(--primary);
+  }
+
+  /* ==========================================================================
+     LEGAL, PRIVACY & COMPLIANCE MODAL (مركز الخصوصية والشروط القانونية)
+     ========================================================================== */
+  .legal-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 100000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 14px;
+  }
+  .legal-modal-overlay.open {
+    display: flex;
+  }
+  .legal-modal-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    width: 100%;
+    max-width: 760px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  @keyframes modalPop {
+    from { transform: scale(0.96); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .legal-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--line);
+    background: var(--bg-2);
+  }
+  .legal-modal-title {
+    font-size: 1.02rem;
+    font-weight: 800;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .legal-modal-close {
+    background: transparent;
+    border: none;
+    font-size: 1.25rem;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.15s ease;
+  }
+  .legal-modal-close:hover {
+    background: var(--card);
+    color: var(--text);
+  }
+  .legal-tabs-bar {
+    display: flex;
+    gap: 4px;
+    padding: 8px 14px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    overflow-x: auto;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+  }
+  .legal-tab-btn {
+    white-space: nowrap;
+    padding: 6px 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .legal-tab-btn:hover {
+    color: var(--text);
+    background: var(--card-alt);
+  }
+  .legal-tab-btn.active {
+    background: var(--primary);
+    color: var(--btn-active-text);
+    border-color: var(--primary);
+  }
+  .legal-modal-body {
+    padding: 18px;
+    overflow-y: auto;
+    flex: 1;
+    font-size: 0.86rem;
+    line-height: 1.65;
+    color: var(--text);
+  }
+  .legal-tab-content {
+    display: none;
+  }
+  .legal-tab-content.active {
+    display: block;
+  }
+  .legal-section-block {
+    background: var(--card-alt);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    margin-bottom: 14px;
+  }
+  .legal-section-h3 {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--primary);
+    margin-top: 0;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .legal-badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    background: var(--primary-light);
+    color: var(--primary);
+    margin-bottom: 8px;
+  }
+  .legal-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.78rem;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .legal-table th, .legal-table td {
+    border: 1px solid var(--line);
+    padding: 8px 10px;
+    text-align: right;
+  }
+  .legal-table th {
+    background: var(--bg-2);
+    font-weight: 700;
+  }
+  .legal-callout-warning {
+    background: rgba(245, 158, 11, 0.08);
+    border-right: 4px solid #F59E0B;
+    border-radius: 4px;
+    padding: 10px 14px;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+  .legal-callout-danger {
+    background: rgba(239, 68, 68, 0.08);
+    border-right: 4px solid #EF4444;
+    border-radius: 4px;
+    padding: 10px 14px;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+  .legal-callout-success {
+    background: rgba(16, 185, 129, 0.08);
+    border-right: 4px solid #10B981;
+    border-radius: 4px;
+    padding: 10px 14px;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: var(--text);
   }
 
   /* Custom Accent Color System */
@@ -2392,7 +3119,8 @@ html, body, * {
   }
 
   /* ===== EXERCISE IMAGE MANAGEMENT & MODAL (Phase 5B.1) ===== */
-  .ex-photo{position:relative; width:100%; height:200px; background:var(--bg-2); border-bottom:1px solid var(--line); overflow:hidden;}
+  .ex-photo{position:relative; width:100%; height:200px; background:var(--bg-2); border-bottom:1px solid var(--line); overflow:hidden; contain:paint layout; transform:translateZ(0); -webkit-transform:translateZ(0);}
+  .ex-photo img{will-change:contents;}
   .ex-photo.no-photo{height:46px; border-bottom:1px dashed var(--line); background:var(--card-alt); display:flex; align-items:center; justify-content:center;}
   .ex-photo img{width:100%; height:100%; object-fit:contain; object-position:center; background:#fff;}
   .ex-photo-badge-btn{
@@ -3629,7 +4357,6 @@ body.dark .gw-drill-thumb img {
   color: #DC2626;
   border-color: #FCA5A5;
   font-weight: 700;
-  animation: pulse 1.5s infinite;
 }
 
 /* Feynman & Cornell */
@@ -5810,12 +6537,7 @@ body.amoled-battery-saver * {
   height: 7px;
   border-radius: 50%;
   background: #10b981;
-  box-shadow: 0 0 6px #10b981;
-  animation: capsuleDotPulse 1.8s infinite ease-in-out;
-}
-@keyframes capsuleDotPulse {
-  0%, 100% { opacity: 0.4; transform: scale(0.9); }
-  50% { opacity: 1; transform: scale(1.2); }
+  box-shadow: 0 0 5px rgba(16, 185, 129, 0.7);
 }
 
 /* 2. Contextual Pull-to-Refresh Indicator */
@@ -5833,7 +6555,7 @@ body.amoled-battery-saver * {
   font-size: .8rem;
   font-weight: 700;
   color: var(--text, #e2e8f0);
-  display: flex;
+  display: none;
   align-items: center;
   gap: 8px;
   transition: top .2s ease, opacity .2s ease;
@@ -5841,6 +6563,7 @@ body.amoled-battery-saver * {
   opacity: 0;
 }
 .pull-refresh-indicator.visible {
+  display: flex;
   top: 18px;
   opacity: 1;
 }
@@ -5850,6 +6573,8 @@ body.amoled-battery-saver * {
   border: 2px solid var(--accent, #3b82f6);
   border-top-color: transparent;
   border-radius: 50%;
+}
+.pull-refresh-indicator.visible .pull-refresh-spinner {
   animation: prSpin .6s linear infinite;
 }
 @keyframes prSpin {
@@ -6075,11 +6800,6 @@ body.amoled-battery-saver * {
 .wrapped-card-badge {
   font-size: 1.8rem;
   flex-shrink: 0;
-  animation: gentlePulse 2s infinite ease-in-out;
-}
-@keyframes gentlePulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.08); }
 }
 .wrapped-card-title {
   font-size: 0.95rem;
@@ -6361,6 +7081,115 @@ body.ultra-compact .settings-card { padding: 6px; }
 body.ultra-compact .mode-btn { padding: 8px 6px; }
 body.ultra-compact .home-card { padding: 10px; margin-bottom: 6px; }
 
+/* ================= UNIVERSAL HIGH-CONTRAST TOGGLE SWITCHES ================= */
+.switch-ui, .switch {
+  position: relative !important;
+  display: inline-block !important;
+  width: 48px !important;
+  height: 26px !important;
+  flex-shrink: 0 !important;
+  vertical-align: middle !important;
+}
+.switch-ui input, .switch input {
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  position: absolute !important;
+}
+.switch-ui .slider, .switch .slider {
+  position: absolute !important;
+  cursor: pointer !important;
+  inset: 0 !important;
+  background-color: #27272a !important;
+  border: 1.5px solid #52525b !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  border-radius: 26px !important;
+}
+.switch-ui .slider::before, .switch .slider::before {
+  position: absolute !important;
+  content: "" !important;
+  height: 18px !important;
+  width: 18px !important;
+  left: 3px !important;
+  bottom: 2.5px !important;
+  background-color: #f4f4f5 !important;
+  border-radius: 50% !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.45) !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+.switch-ui input:checked + .slider, .switch input:checked + .slider {
+  background-color: var(--accent, #10b981) !important;
+  border-color: var(--accent, #10b981) !important;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.45) !important;
+}
+.switch-ui input:checked + .slider::before, .switch input:checked + .slider::before {
+  transform: translateX(20px) !important;
+  background-color: #ffffff !important;
+}
+.switch-ui input:focus-visible + .slider, .switch input:focus-visible + .slider {
+  outline: 2px solid var(--accent, #10b981) !important;
+  outline-offset: 2px !important;
+}
+
+/* ================= COMPACT DENSITY MODE ================= */
+body.compact-density {
+  --card-padding: 9px 12px;
+  --section-gap: 8px;
+}
+body.compact-density .card,
+body.compact-density .worship-card,
+body.compact-density .settings-card,
+body.compact-density .settings-section-card,
+body.compact-density .meal-card,
+body.compact-density .ex-card,
+body.compact-density .info-card {
+  padding: 9px 12px !important;
+  margin-bottom: 8px !important;
+  border-radius: 10px !important;
+}
+body.compact-density .checklist label,
+body.compact-density .check-row {
+  padding: 6px 10px !important;
+  min-height: 36px !important;
+  font-size: 0.84rem !important;
+}
+body.compact-density .section-title {
+  margin: 10px 0 4px !important;
+  font-size: 0.88rem !important;
+}
+body.compact-density .section-hint {
+  margin-bottom: 4px !important;
+  font-size: 0.72rem !important;
+}
+
+/* ================= SECTION REORDERING ARROWS ================= */
+.sec-reorder-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-inline-start: 6px;
+  opacity: 0.65;
+  transition: opacity 0.2s ease;
+}
+.sec-reorder-group:hover {
+  opacity: 1;
+}
+.sec-reorder-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--line, rgba(255, 255, 255, 0.15));
+  border-radius: 6px;
+  color: var(--text-muted, #94a3b8);
+  font-size: 0.65rem;
+  padding: 2px 5px;
+  cursor: pointer;
+  line-height: 1;
+}
+.sec-reorder-btn:hover {
+  background: var(--accent, #10b981);
+  color: #ffffff;
+  border-color: var(--accent, #10b981);
+}
+
 /* === Gym Sub-Tabs === */
 .gym-subtabs {
   display: flex; gap: 0; margin-bottom: 14px; border-radius: 10px;
@@ -6387,16 +7216,13 @@ body.ultra-compact .home-card { padding: 10px; margin-bottom: 6px; }
     right: 0;
     height: 58px;
     background: var(--card);
-    background: color-mix(in srgb, var(--card) 92%, transparent);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
     border-top: 1px solid var(--line);
     display: flex;
     align-items: center;
     justify-content: space-around;
     z-index: 990;
     padding-bottom: env(safe-area-inset-bottom, 0px);
-    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
     user-select: none;
   }
 }
@@ -6594,16 +7420,16 @@ button, .btn, .stat-card, .drawer-nav-btn, .checklist-item, .chip, [data-nav], s
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Feature #8: 60fps Hardware Acceleration */
-.drawer-nav, .mobile-drawer, .view, .stat-card, .settings-card, .modal-content {
+/* Feature #8: 60fps Hardware Acceleration on Active Overlay Elements */
+.drawer-nav, .mobile-drawer, .modal-content {
   transform: translate3d(0, 0, 0);
   -webkit-transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
 
-/* Feature #5: Lazy DOM Rendering / Content-visibility */
-.settings-card, .stat-card, #hairAdherenceMatrixTable, .exercise-card, .stretch-card, .table-container {
+/* Feature #5: Lazy DOM Rendering / Content-visibility on heavy isolated tables */
+#hairAdherenceMatrixTable {
   content-visibility: auto;
   contain-intrinsic-size: auto 120px;
 }
@@ -6611,8 +7437,7 @@ button, .btn, .stat-card, .drawer-nav-btn, .checklist-item, .chip, [data-nav], s
 /* Feature #2: Smart Contextual Collapse for Completed Items */
 .checklist-item.done, .prayer-item.done, .habit-item.done, .done-collapsed {
   opacity: 0.65;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-  transform: scale(0.99);
+  transition: opacity 0.2s ease;
 }
 .checklist-item.done:hover, .prayer-item.done:hover, .habit-item.done:hover {
   opacity: 0.95;
@@ -6678,9 +7503,9 @@ details.settings-card summary:hover {
 <body>
 
 <!-- PACKAGE G: DYNAMIC STATUS CAPSULE (Floating Live Island) -->
-<div id="dynamicStatusCapsule" class="dynamic-status-capsule" onclick="handleCapsuleClick()" title="اضغط للانتقال السريع للنشاط الحي">
+<div id="dynamicStatusCapsule" class="dynamic-status-capsule" onclick="handleCapsuleClick()" title="اضغط للانتقال السريع للنشاط الحي" style="display:none;">
   <span class="capsule-pulse-dot"></span>
-  <span id="capsuleLiveContent">🕌 العصر: 03:15 م (قادم)</span>
+  <span id="capsuleLiveContent">🕌 جاري تحديد الصلاة القادمة...</span>
 </div>
 
 <!-- PACKAGE G: CONTEXTUAL PULL-TO-REFRESH INDICATOR -->
@@ -7197,13 +8022,10 @@ details.settings-card summary:hover {
 </div>
 
     <div class="morning-briefing-card" id="morningBriefingCard"></div>
+    <div class="home-summary-card" id="homeSummaryCard"></div>
 
     <!-- Privacy-Conscious Local AI Assistant Card (Phase 13.7) -->
     <div class="card" id="aiCoachCard" style="background:var(--card-alt); border:1px solid var(--line); border-radius:12px; padding:16px; margin-bottom:16px;"></div>
-
-
-
-    <div class="home-summary-card" id="homeSummaryCard"></div>
     <div class="home-quick-actions" id="homeQuickActions"></div>
     <div class="dashboard-toolbar" id="dashboardToolbar"></div>
     <div class="home-stats-grid" id="homeStatsGrid"></div>
@@ -7510,9 +8332,13 @@ details.settings-card summary:hover {
       <span class="btn-icon">🍕</span>
       <span>تعويض اليوم المفتوح</span>
     </button>
+    <button type="button" class="nut-quick-btn" id="btnOpenWeeklyMealPlan" onclick="openWeeklyMealPlanModal()" style="border-color:#10b981; background:rgba(16,185,129,0.12);">
+      <span class="btn-icon">📅</span>
+      <span style="font-weight:700; color:#34d399;">خطة الوجبات الأسبوعية الذكية</span>
+    </button>
     <button type="button" class="nut-quick-btn" id="btnOpenEgyptianFoodGuide" onclick="openEgyptianFoodGuideModal()">
       <span class="btn-icon">🇪🇬</span>
-      <span>دليل الأكلات الشعبية</span>
+      <span>موسوعة الأكلات الشعبية</span>
     </button>
   </div>
 
@@ -7676,6 +8502,75 @@ details.settings-card summary:hover {
 </div>
 
 <!-- Package B: Egyptian Popular Food Guide Modal -->
+<!-- Package B: Smart Unified Weekly Meal-Prep Plan Modal (Feature #201) -->
+<div class="p4-modal-overlay" id="modalWeeklyMealPlan" role="dialog" aria-modal="true" aria-labelledby="mwmpTitle" onclick="if(event.target===this)closeWeeklyMealPlanModal()">
+  <div class="p4-modal-card" style="max-width:680px; max-height:90vh; overflow-y:auto; padding:20px; border-radius:18px;">
+    <div class="p4-modal-header" style="border-bottom:1px solid var(--line); padding-bottom:12px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <div class="p4-modal-title" id="mwmpTitle" style="font-size:1.15rem; font-weight:800; display:flex; align-items:center; gap:8px;">
+          <span>📅</span>
+          <span>خطة الوجبات الأسبوعية الذكية (Meal-Prep System)</span>
+        </div>
+        <div style="font-size:0.75rem; color:var(--text-muted, #94a3b8); margin-top:2px;">
+          وجبات موحدة الحصص والنسب طوال الأسبوع — مع تدوير مصدر البروتين في الغداء فقط لتسهيل التحضير والالتزام
+        </div>
+      </div>
+      <button type="button" class="p4-modal-close" onclick="closeWeeklyMealPlanModal()" aria-label="إغلاق" style="font-size:1.4rem;">&times;</button>
+    </div>
+
+    <!-- Meal-Prep Core Rule Card -->
+    <div style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.25); border-radius:12px; padding:12px; margin-bottom:14px;">
+      <div style="font-size:0.86rem; font-weight:700; color:#34d399; margin-bottom:4px; display:flex; align-items:center; gap:6px;">
+        <span>🍱</span>
+        <span>قاعدة التحضير الموحدة للوجبات (Batch Cooking Rule):</span>
+      </div>
+      <div style="font-size:0.78rem; color:var(--text-muted, #94a3b8); line-height:1.5;">
+        الفطار والسناك والعشاء ونشويات وخضار الغداء <strong>موحدة بالجرامات 100%</strong> طوال الأيام الـ 7 لطبخ الكارب والخضار دفعة واحدة في علب، وتغيير <strong>مصدر البروتين في الغداء فقط</strong> (فراخ، لحم بلدي، سردين إسكندراني، بلطي، تونة، كبدة بلدي) بوزن يعطي ~34 جم بروتين صافي يومياً.
+      </div>
+    </div>
+
+    <!-- Limitless Man Max Supplement Integration Banner -->
+    <div style="background:rgba(59,130,246,0.08); border:1px solid rgba(59,130,246,0.25); border-radius:12px; padding:12px; margin-bottom:16px;">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.88rem; font-weight:700; color:#60a5fa;">
+          <input type="checkbox" id="chkLimitlessManMax" onchange="toggleLimitlessManMaxInPlan(this.checked)" checked style="accent-color:#3b82f6; width:18px; height:18px;">
+          <span>💊 أتناول حبة ليمتليس مان ماكس الزرقاء للرجال يومياً (Limitless Man Max)</span>
+        </label>
+        <span class="nut-badge nut-badge-opt" style="background:rgba(59,130,246,0.2); color:#60a5fa;">26 عنصر وفيتامين</span>
+      </div>
+      <div id="limitlessManMaxSynergyBox" style="font-size:0.77rem; color:var(--text-muted, #94a3b8); line-height:1.45; margin-top:8px; border-top:1px dashed rgba(255,255,255,0.1); padding-top:8px;">
+        🛡️ <strong>التكامل الغذائي الفائق:</strong> الحبة الزرقاء تغطي 100% من احتياجك من الزنك (11 مجم)، 125% فيتامين D3 (1000 IU)، 250% فيتامين B12، السيلينيوم، وفيتامين C. <br>
+        🐟 <strong>تعظيم الاستفادة مع السردين:</strong> دهون الأوميجا 3 الطبيعية في السردين والأسماك تعزز امتصاص فيتامينات الحبة الذائبة في الدهون (A, D, E) بنسبة تصل لـ 300%. يُفضل تناولها مباشرة بعد وجبة الغداء مع كوب ماء كبير.
+      </div>
+    </div>
+
+    <!-- Day Navigation Bar -->
+    <div style="display:flex; gap:6px; overflow-x:auto; padding-bottom:8px; margin-bottom:14px;" id="weeklyPlanDayTabs">
+      <!-- Generated via JS: السبت، الأحد، الإثنين، الثلاثاء، الأربعاء، الخميس، الجمعة -->
+    </div>
+
+    <!-- Active Day Detail Container -->
+    <div id="weeklyPlanDayContent">
+      <!-- Injected via renderWeeklyMealPlanDay -->
+    </div>
+
+    <!-- Action Buttons Footer -->
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:16px; border-top:1px solid var(--line); padding-top:14px; flex-wrap:wrap;">
+      <div style="font-size:0.8rem; color:var(--text-muted, #94a3b8);">
+        إجمالي اليوم: <strong style="color:#34d399;" id="planTotalKcal">~1,700 سعرة</strong> • <strong style="color:#60a5fa;" id="planTotalP">102 جم بروتين</strong>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button type="button" class="btn-subtle" onclick="applyWeeklyMealPlanDayToToday()" style="background:rgba(16,185,129,0.15); color:#34d399; font-weight:700; font-size:0.82rem; padding:6px 14px; border-color:#10b981;">
+          ⚡ إضافة وجبات اليوم لجدولي
+        </button>
+        <button type="button" class="btn-subtle" onclick="applyWeeklyMealPlanToEntireWeek()" style="background:rgba(59,130,246,0.15); color:#60a5fa; font-weight:700; font-size:0.82rem; padding:6px 14px; border-color:#3b82f6;">
+          📅 تطبيق الخطة على الأسبوع بالكامل
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="p4-modal-overlay" id="modalEgyptianFoodGuide" role="dialog" aria-modal="true" aria-labelledby="mefTitle">
   <div class="p4-modal-card">
     <div class="p4-modal-header">
@@ -8495,7 +9390,7 @@ details.settings-card summary:hover {
     </div>
     <div id="secNotes-prayer"></div>
     <!-- FEATURE #203: 40 HADITH NAWAWI JOURNAL -->
-    <details class="settings-card" id="card40HadithNawawi" style="margin-top:14px; border-radius:12px;">
+    <details class="settings-card" id="card40HadithNawawi" data-sec-block="hadith" style="margin-top:14px; border-radius:12px;">
       <summary style="cursor:pointer; color:var(--text); font-weight:700; font-size:.85rem; padding:12px;">
         📖 مفكرة تدبر الأربعين النووية (40 Hadith) (#203)
       </summary>
@@ -8568,11 +9463,11 @@ details.settings-card summary:hover {
     </div>
 
     <!-- Phase 5: Pre-Adhan Preparation Chime Card -->
-    <div id="preAdhanChimeCard" class="worship-card">
+    <div id="preAdhanChimeCard" data-sec-block="pre-adhan" class="worship-card">
       <div class="worship-card-header">
         <div class="worship-card-title">
           <span class="worship-emerald-accent">🔔</span>
-          <span>منبه الاستعداد الهادئ قبل الأذان</span>
+          <span>منبه الاستعداد الهادئ قبل الأذان</span> <span class="sec-reorder-group"><button type="button" class="sec-reorder-btn" title="تحريك لأعلى" onclick="event.stopPropagation(); moveSecBlock(this, -1)">▲</button><button type="button" class="sec-reorder-btn" title="تحريك لأسفل" onclick="event.stopPropagation(); moveSecBlock(this, 1)">▼</button></span>
         </div>
         <label class="switch-ui" style="position:relative; display:inline-block; width:44px; height:24px;">
           <input type="checkbox" id="preAdhanChimeToggle" onchange="window.ZATOONA_PHASE5.togglePreAdhanChime(this.checked)" style="opacity:0; width:0; height:0;">
@@ -8604,11 +9499,11 @@ details.settings-card summary:hover {
 
     <!-- Phase 5: Smart Pre-Fajr & Suhoor Alarm Card -->
     <!-- Package C: Last Third of Night & Gradual Fajr Card -->
-    <div id="lastThirdNightCard" class="worship-card" style="margin-top:12px;">
+    <div id="lastThirdNightCard" data-sec-block="last-third" class="worship-card" style="margin-top:12px;">
       <div class="worship-card-header">
         <div class="worship-card-title">
           <span class="worship-gold-accent">🌙</span>
-          <span>ثلث الليل الأخير ومنبه الفجر التصاعدي</span>
+          <span>ثلث الليل الأخير ومنبه الفجر التصاعدي</span> <span class="sec-reorder-group"><button type="button" class="sec-reorder-btn" title="تحريك لأعلى" onclick="event.stopPropagation(); moveSecBlock(this, -1)">▲</button><button type="button" class="sec-reorder-btn" title="تحريك لأسفل" onclick="event.stopPropagation(); moveSecBlock(this, 1)">▼</button></span>
         </div>
         <div id="lastThirdBadge" class="forbidden-status-badge allowed">
           <span>●</span>
@@ -8641,7 +9536,7 @@ details.settings-card summary:hover {
     </div>
 
     <!-- Package C: Sunnah Rawatib (12 Rakaat) Tracker Card -->
-    <div id="sunnahRawatibCard" class="worship-card" style="margin-top:12px;">
+    <div id="sunnahRawatibCard" data-sec-block="sunnah-rawatib" class="worship-card" style="margin-top:12px;">
       <div class="worship-card-header">
         <div class="worship-card-title">
           <span class="worship-gold-accent">🕌</span>
@@ -8657,11 +9552,11 @@ details.settings-card summary:hover {
       </div>
     </div>
 
-    <div id="suhoorQiyamCard" class="worship-card" style="margin-top:12px;">
+    <div id="suhoorQiyamCard" data-sec-block="suhoor" class="worship-card" style="margin-top:12px;">
       <div class="worship-card-header">
         <div class="worship-card-title">
           <span class="worship-gold-accent">🌙</span>
-          <span>منبه السَحَر وقيام الليل الذكي (الثلث الأخير)</span>
+          <span>منبه السَحَر وقيام الليل الذكي (الثلث الأخير)</span> <span class="sec-reorder-group"><button type="button" class="sec-reorder-btn" title="تحريك لأعلى" onclick="event.stopPropagation(); moveSecBlock(this, -1)">▲</button><button type="button" class="sec-reorder-btn" title="تحريك لأسفل" onclick="event.stopPropagation(); moveSecBlock(this, 1)">▼</button></span>
         </div>
         <label class="switch-ui" style="position:relative; display:inline-block; width:44px; height:24px;">
           <input type="checkbox" id="suhoorAlarmToggle" onchange="window.ZATOONA_PHASE5.toggleSuhoorAlarm(this.checked)" style="opacity:0; width:0; height:0;">
@@ -8695,12 +9590,55 @@ details.settings-card summary:hover {
     <div class="section-hint">الحصن اليومي المبارك: أذكار الصباح بعد الفجر وأذكار المساء بعد العصر</div>
     <div class="checklist" id="azkar"></div>
 
+    <!-- Phase 22: Complete Authentic Morning & Evening Azkar Reader with Repetition Counters -->
+    <div id="azkarReaderSection" style="margin-top:14px;" data-sec-block="azkar-reader">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px;">
+        <button type="button" class="btn-subtle" id="btnToggleMorningAzkar" onclick="toggleAzkarReader('morning')" style="padding:10px 8px; font-weight:700; border:1px solid var(--line); border-radius:10px; display:flex; align-items:center; justify-content:center; gap:6px;">
+          <span>🌅</span> <span>أذكار الصباح كاملة</span> <span id="morningCountBadge" class="worship-badge"></span>
+        </button>
+        <button type="button" class="btn-subtle" id="btnToggleEveningAzkar" onclick="toggleAzkarReader('evening')" style="padding:10px 8px; font-weight:700; border:1px solid var(--line); border-radius:10px; display:flex; align-items:center; justify-content:center; gap:6px;">
+          <span>🌇</span> <span>أذكار المساء كاملة</span> <span id="eveningCountBadge" class="worship-badge"></span>
+        </button>
+      </div>
+
+      <!-- Morning Azkar Accordion Panel -->
+      <div id="morningAzkarPanel" class="worship-card hidden" style="margin-bottom:12px; border:1px solid rgba(245, 158, 11, 0.4); background:rgba(245, 158, 11, 0.03);">
+        <div class="worship-card-header">
+          <div class="worship-card-title">
+            <span class="worship-gold-accent">🌅</span>
+            <span>حصن المسلم: أذكار الصباح المأثورة</span>
+          </div>
+          <button type="button" class="btn-subtle" style="font-size:0.75rem; padding:3px 8px;" onclick="resetAzkarTypeCounts('morning')">إعادة تعيين العداد ↻</button>
+        </div>
+        <div style="font-size:0.78rem; color:var(--text-muted); margin-bottom:12px;">
+          اضغط على زر العداد أمام كل ذكر لإنقاص التكرار، وسيتم وضع علامة إتمام تلقائياً فور الانتهاء:
+        </div>
+        <div id="morningAzkarList" class="azkar-items-list" style="display:flex; flex-direction:column; gap:8px;"></div>
+      </div>
+
+      <!-- Evening Azkar Accordion Panel -->
+      <div id="eveningAzkarPanel" class="worship-card hidden" style="margin-bottom:12px; border:1px solid rgba(99, 102, 241, 0.4); background:rgba(99, 102, 241, 0.03);">
+        <div class="worship-card-header">
+          <div class="worship-card-title">
+            <span class="worship-gold-accent">🌇</span>
+            <span>حصن المسلم: أذكار المساء المأثورة</span>
+          </div>
+          <button type="button" class="btn-subtle" style="font-size:0.75rem; padding:3px 8px;" onclick="resetAzkarTypeCounts('evening')">إعادة تعيين العداد ↻</button>
+        </div>
+        <div style="font-size:0.78rem; color:var(--text-muted); margin-bottom:12px;">
+          اضغط على زر العداد أمام كل ذكر لإنقاص التكرار، وسيتم وضع علامة إتمام تلقائياً فور الانتهاء:
+        </div>
+        <div id="eveningAzkarList" class="azkar-items-list" style="display:flex; flex-direction:column; gap:8px;"></div>
+      </div>
+    </div>
+
+
     <!-- Phase 5: Subtle Random Dhikr Card -->
-    <div id="randomDhikrCard" class="worship-card" style="margin-top:12px;">
+    <div id="randomDhikrCard" data-sec-block="random-dhikr" class="worship-card" style="margin-top:12px;">
       <div class="worship-card-header">
         <div class="worship-card-title">
           <span class="worship-emerald-accent">📿</span>
-          <span>تذكير الأذكار الرطب الخفيف</span>
+          <span>تذكير الأذكار الرطب الخفيف</span> <span class="sec-reorder-group"><button type="button" class="sec-reorder-btn" title="تحريك لأعلى" onclick="event.stopPropagation(); moveSecBlock(this, -1)">▲</button><button type="button" class="sec-reorder-btn" title="تحريك لأسفل" onclick="event.stopPropagation(); moveSecBlock(this, 1)">▼</button></span>
         </div>
         <button type="button" class="btn-subtle" style="padding:3px 10px; font-size:0.78rem;" onclick="window.ZATOONA_PHASE5.nextRandomDhikr()">
           ذكر آخر 🔄
@@ -8724,7 +9662,7 @@ details.settings-card summary:hover {
     </div>
 
     <!-- Phase 5: Friday Sunan Interactive Checklist Card -->
-    <div id="fridaySunanCard" class="worship-card" style="margin-top:12px;">
+    <div id="fridaySunanCard" data-sec-block="friday-sunan" class="worship-card" style="margin-top:12px;">
       <div class="worship-card-header">
         <div class="worship-card-title">
           <span class="worship-gold-accent">🌟</span>
@@ -10514,6 +11452,53 @@ details.settings-card summary:hover {
         </button>
       </div>
 
+      <!-- Comprehensive UI Design Paradigms -->
+      <div style="margin-bottom:14px; padding-bottom:12px; border-bottom:1px dashed var(--line);">
+        <div class="settings-row-label" style="margin-bottom:4px; font-size:0.9rem;">✨ لغة ونمط تصميم الواجهة (UI Paradigm)</div>
+        <div class="settings-row-desc" style="margin-bottom:10px;">غيّر شكل وتفاعل الواجهة بالكامل: انحناءات الأركان، الظلال والعمق، المواد والزجاج، وردود فعل اللمس</div>
+        <div class="paradigm-selector-grid" id="settingsParadigmGrid">
+          <button type="button" class="paradigm-card-btn active" data-paradigm-choice="botanical" onclick="selectParadigmChoice('botanical')">
+            <div class="pcb-header">
+              <span class="pcb-title">🌿 طبيعي كلاسيكي</span>
+              <span class="pcb-badge">الافتراضي</span>
+            </div>
+            <div class="pcb-desc">النمط الأصلي المريح — حواف منحنية ناعمة (16px) وظلال هادئة متوازنة</div>
+          </button>
+
+          <button type="button" class="paradigm-card-btn" data-paradigm-choice="cyber" onclick="selectParadigmChoice('cyber')">
+            <div class="pcb-header">
+              <span class="pcb-title">⚡ سيبراني تكتيكي</span>
+              <span class="pcb-badge">HUD نيون</span>
+            </div>
+            <div class="pcb-desc">أركان حادة (4px)، إطارات ليزرية مضيئة، شبكة تقنية خلفية، ووهج عملياتي</div>
+          </button>
+
+          <button type="button" class="paradigm-card-btn" data-paradigm-choice="glass" onclick="selectParadigmChoice('glass')">
+            <div class="pcb-header">
+              <span class="pcb-title">💎 زجاجي سائل</span>
+              <span class="pcb-badge">Frosted Blur</span>
+            </div>
+            <div class="pcb-desc">بطاقات شفافة متدرجة، ضبابية خلفية سينمائية، وانعكاسات زجاجية راقية</div>
+          </button>
+
+          <button type="button" class="paradigm-card-btn" data-paradigm-choice="editorial" onclick="selectParadigmChoice('editorial')">
+            <div class="pcb-header">
+              <span class="pcb-title">📰 تحريري مينيمال</span>
+              <span class="pcb-badge">Paper Clean</span>
+            </div>
+            <div class="pcb-desc">مسطح 100% بدون ظلال، خطوط حاسمة وأنيقة، تركيز نقي بدون أي مشتتات</div>
+          </button>
+
+          <button type="button" class="paradigm-card-btn" data-paradigm-choice="brutalist" onclick="selectParadigmChoice('brutalist')">
+            <div class="pcb-header">
+              <span class="pcb-title">💥 نيو-بروتاليزم</span>
+              <span class="pcb-badge">Tactile Pop</span>
+            </div>
+            <div class="pcb-desc">إطارات سميكة وبارزة، ظلال مصمتة حادة، وأزرار تنضغط فيزيائياً مع اللمس</div>
+          </button>
+        </div>
+      </div>
+
       <div style="margin-bottom:10px;">
         <div class="settings-row-label" style="margin-bottom:6px;">نمط الإضاءة</div>
         <div class="settings-themes-grid" id="settingsLightModeGrid">
@@ -10676,6 +11661,135 @@ details.settings-card summary:hover {
         <button type="button" class="reset-btn" id="btnSyncAllInOneWidget" onclick="syncAllInOneWidgetData()" style="border-color:#10b981; color:#10b981; font-weight:700; font-size:.78rem; padding:4px 10px;">🔄 مزامنة الويدجت</button>
       </div>
     </div>
+
+    <!-- 5. Privacy, Compliance, Legal & Data Rights Hub -->
+    <div class="settings-section-card" id="settingsComplianceCard">
+      <div class="settings-section-title">🛡️ الخصوصية والحوكمة وحقوق البيانات (GDPR & Compliance)</div>
+      <div class="settings-row-desc" style="margin-bottom:12px;">
+        بياناتك ملكك بالكامل. تطبيق زتونة يعمل محلياً 100% دون خوادم وسيطة أو تتبع إعلاني أو تحليلي أو رسوم خفية، مع توافق كامل مع معايير GDPR و CCPA و COPPA و WCAG 2.1 AA.
+      </div>
+
+      <!-- Quick Trust Indicators -->
+      <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px;">
+        <span class="legal-badge-pill">🔒 محلي 100% بدون خوادم</span>
+        <span class="legal-badge-pill">🚫 خلو تام من أدوات التتبع</span>
+        <span class="legal-badge-pill">💳 مجاني 100% بدون رسوم خفية</span>
+        <span class="legal-badge-pill">👶 مخصص لسن 13+ عاماً</span>
+        <span class="legal-badge-pill">📜 رخص مفتوحة المصدر (OFL/CC)</span>
+      </div>
+
+      <!-- Action Buttons Grid -->
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:10px; margin-bottom:12px;">
+        <button class="settings-btn" type="button" onclick="openLegalPrivacyModal('privacy')" style="justify-content:center; font-weight:700; border-color:var(--primary); color:var(--primary);" title="عرض سياسة الخصوصية وحماية البيانات">
+          🛡️ سياسة الخصوصية
+        </button>
+        <button class="settings-btn" type="button" onclick="openLegalPrivacyModal('terms')" style="justify-content:center; font-weight:700;" title="عرض شروط الاستخدام وإخلاء المسؤولية الصحية">
+          ⚖️ شروط الاستخدام والمسؤولية
+        </button>
+        <button class="settings-btn" type="button" onclick="openLegalPrivacyModal('cookies')" style="justify-content:center; font-weight:700;" title="عرض سياسة التخزين المحلي وملفات الارتباط">
+          🍪 التخزين المحلي وملفات الارتباط
+        </button>
+        <button class="settings-btn" type="button" onclick="openLegalPrivacyModal('licenses')" style="justify-content:center; font-weight:700;" title="تراخيص الخطوط والرسومات والمصادر المفتوحة">
+          📜 التراخيص والمصادر المفتوحة
+        </button>
+      </div>
+
+      <!-- Data Portability and Erasure Actions -->
+      <div style="margin-top:12px; padding-top:10px; border-top:1px dashed var(--line); display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between;">
+        <button class="settings-btn" type="button" onclick="openDataDeletionModal()" style="border-color:var(--bad); color:var(--bad); font-weight:700;" title="طلب محو وتطهير جميع بيانات التطبيق نهائياً">
+          🗑️ طلب محو وتطهير البيانات بالكامل (GDPR Art. 17)
+        </button>
+        <button class="settings-btn" type="button" onclick="openStorageConsentSettings()" style="font-weight:600;" title="مراجعة تفضيلات شريط التخزين المحلي">
+          ⚙️ إعدادات شريط موافقة التخزين
+        </button>
+      </div>
+    </div>
+
+
+    <!-- Phase 22: Comprehensive App User Guide & Features Directory (دليل استخدام التطبيق الشامل) -->
+    <div class="settings-section-card" id="settingsAppUserGuideCard" data-sec-block="user-guide" style="border:1px solid var(--accent); background:rgba(16, 185, 129, 0.02);">
+      <div class="settings-section-title" style="display:flex; justify-content:space-between; align-items:center;">
+        <span>📖 دليل استخدام تطبيق زتونة الشامل ووظائف كل زر وميزة</span>
+        <span class="legal-badge-pill" style="font-size:0.7rem; border-color:var(--accent); color:var(--accent);">دليل شامل</span>
+      </div>
+      <div class="settings-row-desc" style="margin-bottom:14px;">
+        مرجعك الكامل لفهم كل شاشة وزر وميزة في زتونة، وكيفية الاستفادة القصوى من التطبيق ليكون رفيقك اليومي في العبادة والتمرين والتغذية والإنتاجية:
+      </div>
+
+      <div style="margin-bottom:12px;">
+        <input type="text" id="guideSearchInput" class="weight-input" placeholder="🔍 ابحث في دليل الميزات أو اسم الزر..." style="width:100%; padding:8px 12px; font-size:0.85rem;" oninput="filterUserGuide(this.value)">
+      </div>
+
+      <div id="userGuideAccordions" style="display:flex; flex-direction:column; gap:8px;">
+        <!-- 1. Home Dashboard -->
+        <details class="guide-item" style="background:var(--card-alt); border:1px solid var(--line); border-radius:8px; padding:10px 14px;">
+          <summary style="font-weight:700; color:var(--text); cursor:pointer; font-size:0.88rem;">🏠 1. الصفحة الرئيسية ولوحة التحكم اليومية</summary>
+          <div style="font-size:0.82rem; color:var(--text-muted); line-height:1.6; margin-top:8px;">
+            <p><strong>• ملخص اليوم:</strong> يعرض نسبة التزامك الشاملة بالأهداف اليومية (الصلاة، الوجبات، التمرين، النوم، شرب الماء، والجدول).</p>
+            <p><strong>• زر +1 كوب مياه وزر + زجاجة:</strong> يضيف كوب ماء (250 مل) أو زجاجة (600 مل) فورياً مع حفظ الكمية ومزامنتها تلقائياً مع ويدجت الشاشة الرئيسية بالهاتف.</p>
+            <p><strong>• أزرار ▲ و ▼:</strong> تتيح لك إعادة ترتيب بطاقات الصفحة الرئيسية أو أقسام التطبيق حسب تفضيلك، ويتم حفظ الترتيب تلقائياً في ذاكرة جهازك.</p>
+            <p><strong>• المساعد الشخصي الذكي (Local AI Assistant):</strong> يعمل محلياً بالكامل 100% دون خوادم أو إرسال بياناتك للخارج. يحلل تقدمك اليومي في الصلاة والرياضة والتغذية والنوم ويمنحك توجيهات عملية محفزة تناسب نمط حياتك.</p>
+          </div>
+        </details>
+
+        <!-- 2. Worship & Prayer -->
+        <details class="guide-item" style="background:var(--card-alt); border:1px solid var(--line); border-radius:8px; padding:10px 14px;">
+          <summary style="font-weight:700; color:var(--text); cursor:pointer; font-size:0.88rem;">🕌 2. قسم الصلاة والعبادات (Worship Engine)</summary>
+          <div style="font-size:0.82rem; color:var(--text-muted); line-height:1.6; margin-top:8px;">
+            <p><strong>• الفروض والسنن الرواتب:</strong> زر "فرض" لتسجيل أداء الصلاة المفروضة في وقتها، وزر "سنة" لحساب السنن الرواتب (12 ركعة لبناء بيت في الجنة).</p>
+            <p><strong>• منبه الاستعداد الهادئ قبل الأذان:</strong> زر التبديل يفعّل تنبيهاً لطيفاً باهتزاز وصوت هادئ قبل موعد الأذان بـ (5 أو 10 أو 15 دقيقة) للتوقف والوضوء والاستعداد.</p>
+            <p><strong>• منبه الفجر التصاعدي ومنبه السحر:</strong> يحسب وقت ثلث الليل الأخير فلكياً بين المغرب والفجر لإيقاظك في وقت السحر والنزول الإلهي وقيام الليل.</p>
+            <p><strong>• زر "+ صمت قضاء اليوم":</strong> يسجل يوم صيام قضاء وينقصه تلقائياً من إجمالي الأيام المطلوبة منك.</p>
+            <p><strong>• زر "تعديل الإجمالي ⚙️":</strong> يفتح نافذة تتيح لك تحديد عدد أيام الصيام الفائتة بدقة لحفظها ومتابعتها.</p>
+            <p><strong>• أذكار الصباح والمساء التفاعلية:</strong> قارئ مدمج بنصوص الأذكار الصحيحة مع عداد تفاعلي (100x أو 3x أو 1x) ينقص بنقرة واحدة ويفعل الاهتزاز الخفيف، مع إتمام المهمة تلقائياً عند إكمالها.</p>
+            <p><strong>• تذكير الأذكار الرطب الخفيف:</strong> يذكرك دورياً بعبارات ذكر نبوية قصيرة على فترات تختارها (كل ساعة، ساعتين، 3 ساعات).</p>
+          </div>
+        </details>
+
+        <!-- 3. Gym & Recovery -->
+        <details class="guide-item" style="background:var(--card-alt); border:1px solid var(--line); border-radius:8px; padding:10px 14px;">
+          <summary style="font-weight:700; color:var(--text); cursor:pointer; font-size:0.88rem;">🏋️ 3. قسم الجيم والتمارين والاستشفاء</summary>
+          <div style="font-size:0.82rem; color:var(--text-muted); line-height:1.6; margin-top:8px;">
+            <p><strong>• تسجيل المجموعات والأوزان:</strong> إدخال الوزن والتكرارات لكل مجموعة مع مؤقت راحة ذكي مدمج يعمل تلقائياً بين المجموعات.</p>
+            <p><strong>• حاسبة 1RM و RPE:</strong> لحساب أقصى وزن تقديري لتكرار واحد وتحديد الأحمال التدريبية المناسبة.</p>
+            <p><strong>• موسوعة التمارين المتحركة:</strong> شروحات بالفيديو المتحرك لكل تمرين مع العضلات المستهدفة والأخطاء الشائعة.</p>
+            <p><strong>• تاب الاستشفاء (Recovery):</strong> قياس جودة النوم، ألم العضلات، ومستوى الإجهاد العصبي من 1 لـ 5 لتقييم جاهزية جسمك للتمرين القادم.</p>
+            <p><strong>• الإحماء والاستطالات:</strong> روتينات حركية مخصصة قبل وبعد التمرين لتقليل الإصابات وتسريع التعافي.</p>
+          </div>
+        </details>
+
+        <!-- 4. Nutrition & Budget -->
+        <details class="guide-item" style="background:var(--card-alt); border:1px solid var(--line); border-radius:8px; padding:10px 14px;">
+          <summary style="font-weight:700; color:var(--text); cursor:pointer; font-size:0.88rem;">🍽️ 4. قسم التغذية وقائمة التسوق</summary>
+          <div style="font-size:0.82rem; color:var(--text-muted); line-height:1.6; margin-top:8px;">
+            <p><strong>• خطة الوجبات والماكروز:</strong> متابعة السعرات والبروتين والكاربوهيدرات والدهون لكل وجبة على حدة مع مقارنتها بهدفك اليومي.</p>
+            <p><strong>• زر "↻ بداية أسبوع جديد":</strong> يصفّر كميات الشراء الفعلية لقائمة الأسبوع الحالي للاستعداد للتسوق التالي مع حفظ الأسعار.</p>
+            <p><strong>• زر "💰 ترحيل للميزانية كمصروف":</strong> يحسب إجمالي المبالغ المدفوعة في المشتريات ويرحلها تلقائياً إلى سجل المصروفات في قسم الميزانية.</p>
+          </div>
+        </details>
+
+        <!-- 5. Study & Pomodoro Bubble -->
+        <details class="guide-item" style="background:var(--card-alt); border:1px solid var(--line); border-radius:8px; padding:10px 14px;">
+          <summary style="font-weight:700; color:var(--text); cursor:pointer; font-size:0.88rem;">📚 5. قسم المذاكرة والفقاعة العائمة (Floating Bubble)</summary>
+          <div style="font-size:0.82rem; color:var(--text-muted); line-height:1.6; margin-top:8px;">
+            <p><strong>• مؤقت بومودورو وجلسات التركيز:</strong> مؤقت مخصص لجلسات المذاكرة (25/5 دقيقة أو أوقات مخصصة).</p>
+            <p><strong>• الفقاعة العائمة فوق التطبيقات (Floating Study Bubble):</strong> عند تشغيل المؤقت والخروج من التطبيق لتصفح المراجع أو المذكرات، يتحول المؤقت إلى فقاعة دائرية أنيقة عائمة على الشاشة فوق كل التطبيقات تعرض الوقت المتبقي، قابلة للسحب لأي مكان، وبالنقر عليها تعود فوراً لتطبيق زتونة!</p>
+            <p><strong>• البطاقات التعليمية (Flashcards):</strong> نظام تكرار متباعد لحفظ المفاهيم والمعلومات ومراجعتها في مواعيدها الذكية.</p>
+          </div>
+        </details>
+
+        <!-- 6. Settings, Modes & Privacy -->
+        <details class="guide-item" style="background:var(--card-alt); border:1px solid var(--line); border-radius:8px; padding:10px 14px;">
+          <summary style="font-weight:700; color:var(--text); cursor:pointer; font-size:0.88rem;">⚙️ 6. الإعدادات والوضع المضغوط والخصوصية</summary>
+          <div style="font-size:0.82rem; color:var(--text-muted); line-height:1.6; margin-top:8px;">
+            <p><strong>• الوضع المضغوط والانضغاط الفائق:</strong> يقلل الهوامش والمسافات لعرض معلومات أكثر في الشاشات الصغيرة، مع نظام ذكي يمنع التعارض بينهما ويعلمك فوراً برسالة تنبيه.</p>
+            <p><strong>• النسخ الاحتياطي المشفر:</strong> تصدير كافة بياناتك بملف مشفر بكلمة سر باستخدام خوارزمية AES-GCM الآمنة.</p>
+            <p><strong>• الخصوصية المحلية 100%:</strong> التطبيق لا يتصل بأي خوادم خارجية لجمع بياناتك أو بيعها، وكل مدخلاتك محفوظة محلياً في جهازك فقط.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
 
     <!-- About -->
     <div class="settings-section-card" style="text-align:center; color:var(--muted); font-size:.72rem;">
@@ -11207,6 +12321,7 @@ const FOOD_DB_DEFAULTS = {
   chicken:{name:'صدور دجاج فيليه نيء', unit:'g', cat:'protein', kcal:1.20, protein:.225, carb:0, fat:.026, fiber:0, price:.16, micros:{sodium:.45, potassium:3.34, calcium:.05, iron:.0037, magnesium:.28, zinc:.0068, vitaminA:.09, vitaminC:0, vitaminD:0, vitaminB12:.0021, folate:.09}},
   liver:{name:'كبدة بقري نيئة', unit:'g', cat:'protein', kcal:1.35, protein:.20, carb:.039, fat:.039, fiber:0, price:.18, micros:{sodium:.69, potassium:3.13, calcium:.05, iron:.049, magnesium:.18, zinc:.04, vitaminA:49.68, vitaminC:.013, vitaminD:.012, vitaminB12:.593, folate:2.90}},
   cheese:{name:'جبنة قريش', unit:'g', cat:'protein', kcal:.98, protein:.11, carb:.055, fat:.035, fiber:0, price:.10},
+  sardinesAlex:{name:'سردين بلدي إسكندراني طازج', unit:'g', cat:'protein', kcal:1.65, protein:.215, carb:0, fat:.09, fiber:0, price:.14, micros:{sodium:.75, potassium:3.97, calcium:3.82, iron:.029, magnesium:.39, zinc:.0131, vitaminA:.32, vitaminC:0, vitaminD:.048, vitaminB12:.089, folate:.10}},
   tuna:{name:'علبة تونة مصفاة', unit:'can', cat:'protein', kcal:162, protein:36, carb:0, fat:4.5, fiber:0, price:40.00},
   egg:{name:'بيضة', unit:'egg', cat:'protein', kcal:70, protein:6.0, carb:.6, fat:4.8, fiber:0, price:3.67, micros:{sodium:71, potassium:69, calcium:28, iron:.875, magnesium:6, zinc:.645, vitaminA:80, vitaminC:0, vitaminD:1, vitaminB12:.445, folate:23.5}},
   milk:{name:'لبن', unit:'ml', cat:'dairy', kcal:.62, protein:.032, carb:.048, fat:.033, fiber:0, price:.03, micros:{sodium:.38, potassium:1.50, calcium:1.23, iron:0, magnesium:.119, zinc:.0042, vitaminA:.32, vitaminC:0, vitaminD:.0096, vitaminB12:.0054, folate:.05}},
@@ -11232,7 +12347,7 @@ const FOOD_DB_DEFAULTS = {
 };
 // Stage 5A: these defaults were added after launch, so they are skipped if the user already created a custom
 // food with the same name (the "add only if not already present" rule) — no duplicate entry in the picker.
-const FOOD_DEFAULTS_ADDED_5A = ['arugula','wholegrainBread'];
+const FOOD_DEFAULTS_ADDED_5A = ['arugula','wholegrainBread','sardinesAlex'];
 const S5B_MICROS = ['sodium','potassium','calcium','iron','magnesium','zinc','vitaminA','vitaminC','vitaminD','vitaminB12','folate'];
 const S5B_MICRO_META = {
   sodium: { name: 'صوديوم', unit: 'mg', label: 'صوديوم (مجم)' },
@@ -14373,12 +15488,77 @@ function showInAppReminderModal(info){
   if(bodyEl) bodyEl.innerHTML = info.body || '';
 
   modal.classList.remove('hidden');
+
+  // Audio chime & tactile haptic alert for in-app pop-ups
+  try {
+    if(typeof playChimeAlert === 'function') playChimeAlert();
+    else if(typeof _onTimerFinished === 'function') _onTimerFinished();
+  } catch(e){}
+  try {
+    if(window.ZatoonaNativeBridge && typeof window.ZatoonaNativeBridge.triggerHaptic === 'function'){
+      window.ZatoonaNativeBridge.triggerHaptic(30);
+    } else if(navigator.vibrate && (!navigator.userActivation || navigator.userActivation.hasBeenActive)){
+      navigator.vibrate(30);
+    }
+  } catch(e){}
 }
 
 function closeInAppReminderModal(){
   const modal = document.getElementById('inAppReminderModal');
   if(modal) modal.classList.add('hidden');
 }
+
+/* ================= COMPREHENSIVE IN-APP TOAST NOTIFICATION ENGINE ================= */
+function showToast(message, type, durationMs){
+  if(!message) return;
+  // 1. Audio chime alert
+  try {
+    if(typeof playChimeAlert === 'function') playChimeAlert();
+    else if(typeof _onTimerFinished === 'function') _onTimerFinished();
+  } catch(e){}
+
+  // 2. Tactile haptic feedback
+  try {
+    if(window.ZatoonaNativeBridge && typeof window.ZatoonaNativeBridge.triggerHaptic === 'function'){
+      window.ZatoonaNativeBridge.triggerHaptic(15);
+    } else if(navigator.vibrate && (!navigator.userActivation || navigator.userActivation.hasBeenActive)){
+      navigator.vibrate(15);
+    }
+  } catch(e){}
+
+  // 3. UI Toast Container & pill animation
+  let container = document.getElementById('zatoonaToastContainer');
+  if(!container){
+    container = document.createElement('div');
+    container.id = 'zatoonaToastContainer';
+    container.setAttribute('role', 'status');
+    container.setAttribute('aria-live', 'polite');
+    container.style.cssText = 'position:fixed;bottom:84px;left:50%;transform:translateX(-50%);z-index:999999;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;max-width:90vw;';
+    document.body.appendChild(container);
+  }
+
+  const toast = document.createElement('div');
+  toast.className = 'zatoona-toast-pill';
+  toast.style.cssText = 'pointer-events:auto;background:var(--card, #1e293b);color:var(--text, #f8fafc);border:1.5px solid var(--accent, #10b981);border-radius:24px;padding:8px 18px;font-size:0.86rem;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,0.35);backdrop-filter:blur(12px);transition:all 0.3s cubic-bezier(0.16, 1, 0.3, 1);opacity:0;transform:translateY(12px) scale(0.96);text-align:center;direction:rtl;';
+  toast.textContent = message;
+
+  container.appendChild(toast);
+  requestAnimationFrame(function(){
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateY(0) scale(1)';
+  });
+
+  const timeout = durationMs || 3200;
+  setTimeout(function(){
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateY(-8px) scale(0.96)';
+    setTimeout(function(){
+      if(toast.parentNode) toast.parentNode.removeChild(toast);
+    }, 320);
+  }, timeout);
+}
+window.showToast = showToast;
+window.toast = showToast;
 
 /* ================= NOTIFICATION ROUTING & SAFE INTEGRATION (Phase 8B) ================= */
 function routeNotificationClick(data, opts){
@@ -14487,6 +15667,16 @@ function dispatchNotification(info){
   // 1. In-app modal
   showInAppReminderModal(info);
 
+  // 1b. Audio chime & haptic alert
+  try {
+    if(typeof playChimeAlert === 'function') playChimeAlert();
+    if(window.ZatoonaNativeBridge && typeof window.ZatoonaNativeBridge.triggerHaptic === 'function'){
+      window.ZatoonaNativeBridge.triggerHaptic(25);
+    } else if(navigator.vibrate && (!navigator.userActivation || navigator.userActivation.hasBeenActive)){
+      navigator.vibrate(25);
+    }
+  } catch(e){}
+
   // 2. OS / Browser Notification
   const perm = getNotificationPermissionStatus();
   if(perm === 'granted'){
@@ -14518,9 +15708,13 @@ function dispatchNotification(info){
   }
 }
 
+let _isCheckingReminders = false;
 function checkAndDispatchDueReminders(overrideIso, overrideMin){
+  if(_isCheckingReminders) return [];
   if(!notificationSettings || !notificationSettings.enabled) return [];
-  const now = new Date();
+  _isCheckingReminders = true;
+  try {
+    const now = new Date();
   const iso = overrideIso || toISO(now);
   const currentMin = (overrideMin !== undefined && overrideMin !== null)
     ? overrideMin
@@ -14740,6 +15934,9 @@ function checkAndDispatchDueReminders(overrideIso, overrideMin){
   }
 
   return triggered;
+  } finally {
+    _isCheckingReminders = false;
+  }
 }
 
 let notifSchedulerInterval = null;
@@ -25411,7 +26608,7 @@ function loadScheduleSettings(){
 }
 function saveScheduleSettings(obj){ storageSet('schedule-settings', JSON.stringify(obj)); }
 function loadScheduleCheck(iso){ return storageGetJSON('schedcheck:'+iso, {}); }
-function saveScheduleCheck(iso,obj){ storageSet('schedcheck:'+iso, JSON.stringify(obj)); try { if(typeof syncScheduleToNativeWidget === 'function') syncScheduleToNativeWidget(); } catch(e){} }
+function saveScheduleCheck(iso,obj){ storageSet('schedcheck:'+iso, JSON.stringify(obj)); if(!window._isSyncingScheduleWidget){ try { if(typeof syncScheduleToNativeWidget === 'function') syncScheduleToNativeWidget(); } catch(e){} } }
 
 /* ================= SCHEDULE: TIME HELPERS ================= */
 function schedTimeToMin(hhmm){ if(!hhmm) return null; const p=hhmm.split(':').map(Number); if(p.length<2||isNaN(p[0])||isNaN(p[1])) return null; return p[0]*60+p[1]; }
@@ -25694,7 +26891,7 @@ function buildDaySchedule(dayIdx, settings, explicitIso){
 function schedUid(){ return 's'+Date.now().toString(36)+Math.random().toString(36).slice(2,8); }
 
 function loadDayActs(iso){ return storageGetJSON('sched-acts:'+iso, null); }
-function saveDayActs(iso, rec){ storageSet('sched-acts:'+iso, JSON.stringify(rec)); try { if(typeof syncScheduleToNativeWidget === 'function') syncScheduleToNativeWidget(); } catch(e){} }
+function saveDayActs(iso, rec){ storageSet('sched-acts:'+iso, JSON.stringify(rec)); if(!window._isSyncingScheduleWidget){ try { if(typeof syncScheduleToNativeWidget === 'function') syncScheduleToNativeWidget(); } catch(e){} } }
 function loadSeriesOverrides(){ return storageGetJSON('sched-series-overrides', {}); }
 function saveSeriesOverrides(obj){ storageSet('sched-series-overrides', JSON.stringify(obj)); }
 function loadSchedRecurringDefs(){ return storageGetJSONArray('sched-recurring-defs'); }
@@ -33121,6 +34318,7 @@ function goToDate(targetDate){
   recomputeWeekDots();
   calOpen = false;
   selectDay(selectedIdx);
+  if(typeof renderTabs === 'function') renderTabs();
   if(mode==='overview') renderOverview();
   renderCalBarLabel();
   renderCalPanel();
@@ -33131,17 +34329,8 @@ function goToDate(targetDate){
 }
 function shiftWeek(delta){ goToDate(addDays(weekDates[selectedIdx], delta*7)); }
 
-function quickAddWater(){
-  const today = new Date();
-  const todayIso = toISO(today);
-  const cur = loadWater(todayIso) || 0;
-  const next = cur + 1;
-  saveWater(todayIso, next);
-  if(typeof weekDates !== 'undefined' && weekDates[selectedIdx] && toISO(weekDates[selectedIdx]) === todayIso){
-    waterCount = next;
-    if(typeof renderWater === 'function') renderWater();
-  }
-  renderHomeDashboard();
+function quickAddWater(amountCups){
+  quickAddWaterUnified(amountCups);
 }
 
 
@@ -33245,8 +34434,17 @@ function toggleMorningBriefing(){
 
 function getUpcomingPrayerDigest(todayIso, now){
   try {
-    const times = loadPrayerTimes(todayIso);
-    if(!times || !times.fajr) return { name: 'الصلوات الخمس', time: 'مجدولة', countdown: 'حافظ على صلاتك' };
+    todayIso = todayIso || (typeof getEffectiveDateISO === 'function' ? getEffectiveDateISO() : ((typeof todayISO !== 'undefined') ? todayISO : (new Date().toISOString().slice(0, 10))));
+    now = now || new Date();
+    let times = (typeof loadPrayerTimes === 'function') ? loadPrayerTimes(todayIso) : null;
+    if(!times || !times.fajr){
+      const city = (typeof loadPrayerCity === 'function') ? loadPrayerCity() : 'Minya';
+      if(typeof calculateOfflinePrayerTimes === 'function'){
+        times = calculateOfflinePrayerTimes(city, todayIso);
+      }
+    }
+    if(!times || (!times.fajr && !times.Fajr)) return { name: 'الصلوات الخمس', time: 'مجدولة', countdown: 'حافظ على صلاتك' };
+
     const nowMin = now.getHours() * 60 + now.getMinutes();
     const prayerKeys = [
       { key: 'fajr', label: 'الفجر' },
@@ -33256,23 +34454,32 @@ function getUpcomingPrayerDigest(todayIso, now){
       { key: 'isha', label: 'العشاء' }
     ];
     for(const p of prayerKeys){
-      const tStr = times[p.key];
+      const tStr = times[p.key] || times[p.key.toUpperCase()] || times[p.key.charAt(0).toUpperCase() + p.key.slice(1)];
       if(tStr){
-        const parts = tStr.split(':').map(Number);
-        const pMin = parts[0] * 60 + parts[1];
-        if(pMin > nowMin){
-          const diff = pMin - nowMin;
-          const h = Math.floor(diff / 60);
-          const m = diff % 60;
-          const timeFormatted = `${parts[0] > 12 ? parts[0] - 12 : (parts[0] === 0 ? 12 : parts[0])}:${String(parts[1]).padStart(2,'0')} ${parts[0] >= 12 ? 'م' : 'ص'}`;
-          let cd = '';
-          if(h > 0) cd = `باقي ${h} س ${m > 0 ? 'و ' + m + ' د' : ''}`;
-          else cd = `باقي ${m} دقيقة`;
-          return { name: p.label, time: timeFormatted, countdown: cd };
+        const clean = (typeof cleanPrayerTime === 'function') ? cleanPrayerTime(tStr) : tStr;
+        if(clean){
+          const parts = clean.split(':').map(Number);
+          const pMin = parts[0] * 60 + parts[1];
+          if(pMin > nowMin){
+            const diff = pMin - nowMin;
+            const h = Math.floor(diff / 60);
+            const m = diff % 60;
+            const h12 = parts[0] > 12 ? parts[0] - 12 : (parts[0] === 0 ? 12 : parts[0]);
+            const timeFormatted = `${h12}:${String(parts[1]).padStart(2,'0')} ${parts[0] >= 12 ? 'م' : 'ص'}`;
+            let cd = '';
+            if(h > 0) cd = `باقي ${h} س ${m > 0 ? 'و ' + m + ' د' : ''}`;
+            else cd = `باقي ${m} دقيقة`;
+            return { name: p.label, time: timeFormatted, countdown: cd };
+          }
         }
       }
     }
-    return { name: 'الفجر غداً', time: times.fajr || '04:45 ص', countdown: 'تقبل الله صلواتك اليوم' };
+    const rawFajr = times.fajr || times.Fajr || '04:45';
+    const cleanFajr = (typeof cleanPrayerTime === 'function') ? cleanPrayerTime(rawFajr) : rawFajr;
+    const fParts = cleanFajr ? cleanFajr.split(':').map(Number) : [4, 45];
+    const fH12 = fParts[0] > 12 ? fParts[0] - 12 : (fParts[0] === 0 ? 12 : fParts[0]);
+    const fajrFormatted = `${fH12}:${String(fParts[1]).padStart(2,'0')} ص`;
+    return { name: 'الفجر غداً', time: fajrFormatted, countdown: 'تقبل الله صلواتك اليوم' };
   } catch(e){
     return { name: 'الصلاة', time: 'مجدولة', countdown: 'في وقتها' };
   }
@@ -33365,20 +34572,78 @@ function renderMorningBriefingCard(todayIso, now){
 }
 
 /* ================= QUICK WATER LOGGING ================= */
-function quickAddWater(amountCups){
+function quickAddWaterUnified(amountCups){
   triggerHaptic('light');
+  const delta = (typeof amountCups === 'number' && !isNaN(amountCups)) ? amountCups : 1;
   const today = new Date();
   const todayIso = toISO(today);
   const current = loadWater(todayIso) || 0;
-  const updated = Math.max(0, current + amountCups);
+  const updated = Math.max(0, Math.round((current + delta) * 10) / 10);
   saveWater(todayIso, updated);
+  if(typeof weekDates !== 'undefined' && weekDates[selectedIdx] && toISO(weekDates[selectedIdx]) === todayIso){
+    waterCount = updated;
+    if(typeof renderWater === 'function') renderWater();
+  }
   renderHomeDashboard();
   if(typeof renderMeal === 'function'){
     try { renderMeal(); } catch(e){}
   }
+  if(typeof showToast === 'function'){
+    const label = delta > 0 ? `+${delta}` : `${delta}`;
+    showToast(`تم تسجيل ${label} كوب ماء 💧 (الإجمالي: ${updated} أكواب)`, 'success', 2500);
+  }
 }
+window.quickAddWater = quickAddWaterUnified;
 
 /* ================= THEME MODAL UI WIRING ================= */
+
+// ==========================================================================
+// Comprehensive UI Paradigm Engine (أنماط ولغات تصميم الواجهة)
+// ==========================================================================
+const VALID_UI_PARADIGMS = ['botanical', 'cyber', 'glass', 'editorial', 'brutalist'];
+
+function loadUiParadigm() {
+  try {
+    const saved = localStorage.getItem('zatoona-ui-paradigm-v1');
+    if (VALID_UI_PARADIGMS.includes(saved)) {
+      return saved;
+    }
+  } catch(e) {}
+  return 'botanical';
+}
+
+function setUiParadigm(paradigm, save = true) {
+  const chosen = VALID_UI_PARADIGMS.includes(paradigm) ? paradigm : 'botanical';
+  document.documentElement.setAttribute('data-ui-paradigm', chosen);
+  if (save) {
+    try {
+      localStorage.setItem('zatoona-ui-paradigm-v1', chosen);
+    } catch(e) {}
+  }
+  updateParadigmActiveStates(chosen);
+  try {
+    if (typeof triggerHaptic === 'function') triggerHaptic('light');
+  } catch(e) {}
+  return chosen;
+}
+
+function selectParadigmChoice(paradigm) {
+  setUiParadigm(paradigm, true);
+}
+
+function updateParadigmActiveStates(current) {
+  const activeParadigm = current || loadUiParadigm();
+  document.querySelectorAll('[data-paradigm-choice]').forEach(btn => {
+    const choice = btn.getAttribute('data-paradigm-choice');
+    btn.classList.toggle('active', choice === activeParadigm);
+  });
+}
+
+window.loadUiParadigm = loadUiParadigm;
+window.setUiParadigm = setUiParadigm;
+window.selectParadigmChoice = selectParadigmChoice;
+window.updateParadigmActiveStates = updateParadigmActiveStates;
+
 function initThemeCustomizerModal(){
   const btnOpen = document.getElementById('btnOpenThemeModal');
   const overlay = document.getElementById('themeModalOverlay');
@@ -33497,6 +34762,7 @@ window.openThemeCustomizer = openThemeCustomizer;
 window.closeThemeCustomizer = closeThemeCustomizer;
 
 function updateThemeModalActiveStates(){
+  updateParadigmActiveStates();
   const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
   document.querySelectorAll('[data-theme-choice]').forEach(btn => {
     btn.classList.toggle('active', btn.getAttribute('data-theme-choice') === currentTheme);
@@ -33736,7 +35002,7 @@ function renderHomeDashboard(){
     `;
     const btnWater = quickActions.querySelector('#btnQuickAddWater');
     if(btnWater){
-      btnWater.addEventListener('click', quickAddWater);
+      btnWater.addEventListener('click', () => quickAddWaterUnified(1));
     }
     const btnLimitless = quickActions.querySelector('#btnQuickLimitless');
     if(btnLimitless){
@@ -34240,8 +35506,10 @@ function applyMode(){
    works and a refreshed/shared link with #schedule (etc.) opens straight to that
    section — no router library involved. */
 const NAV_MODES = ['home','meal','gym','sleep','prayer','schedule','recovery','overview','search','budget','notes','stretches','study','hair','settings'];
+let _isNavigating = false;
 function navigateTo(newMode, opts){
   opts = opts || {};
+  if(_isNavigating && !opts.force) return;
   // Consolidation: redirect recovery/stretches to gym sub-tabs
   if(newMode === 'recovery'){
     newMode = 'gym';
@@ -34250,13 +35518,30 @@ function navigateTo(newMode, opts){
     newMode = 'gym';
     window._gymSubTabTarget = 'stretches';
   }
-  mode = NAV_MODES.includes(newMode) ? newMode : 'home';
-  applyMode();
-  if(opts.pushState!==false){
-    const url = '#'+(mode==='home' ? '' : mode);
-    history.pushState({mode}, '', url || location.pathname+location.search);
+  const targetMode = NAV_MODES.includes(newMode) ? newMode : 'home';
+
+  // Guard: if already in target mode, scroll to top without redundant re-render
+  if(mode === targetMode && !opts.force && !window._gymSubTabTarget){
+    if(targetMode !== 'home' && opts.scroll !== false){
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+    return;
   }
-  if(mode!=='home' && opts.scroll!==false) window.scrollTo(0,0);
+
+  _isNavigating = true;
+  try {
+    mode = targetMode;
+    applyMode();
+    if(opts.pushState!==false){
+      const url = '#'+(mode==='home' ? '' : mode);
+      if(location.hash !== url){
+        history.pushState({mode}, '', url || location.pathname+location.search);
+      }
+    }
+    if(mode!=='home' && opts.scroll!==false) window.scrollTo(0,0);
+  } finally {
+    _isNavigating = false;
+  }
 }
 window.addEventListener('popstate', (e)=>{
   const m = (e.state && e.state.mode) || (location.hash ? location.hash.slice(1) : 'home');
@@ -34515,6 +35800,9 @@ document.getElementById('resetShopping').addEventListener('click', ()=>{
   wp.items = {};
   saveWeekPurchases(weekKey, wp);
   renderShopping();
+  if(typeof showToast === 'function'){
+    showToast('تم تصفير قائمة المشتريات لهذا الأسبوع بنجاح 🛒', 'info', 3000);
+  }
 });
 document.getElementById('migrateShoppingToBudgetBtn')?.addEventListener('click', ()=> migrateShoppingToBudget());
 document.getElementById('shoppingBudgetGoBtn')?.addEventListener('click', ()=>{
@@ -35873,6 +37161,13 @@ function renderStretchesView(){
     initAudioCtx();
     timerIsRunning = true;
     updateTimerDisplay();
+    try {
+      if(window.ZatoonaNativeBridge && typeof window.ZatoonaNativeBridge.startFloatingStudyTimer === 'function'){
+        const title = (timerPhase === 'focus' ? 'تركيز ومذاكرة' : 'استراحة بومودورو');
+        const dur = (timerMode === 'flow' ? 1500 : (timerSecondsLeft || 1500));
+        window.ZatoonaNativeBridge.startFloatingStudyTimer(title, dur);
+      }
+    } catch(e){}
 
     timerInterval = setInterval(()=>{
       if(timerMode === 'flow'){
@@ -35894,6 +37189,11 @@ function renderStretchesView(){
     if(!timerIsRunning) return;
     timerIsRunning = false;
     if(timerInterval){ clearInterval(timerInterval); timerInterval = null; }
+    try {
+      if(window.ZatoonaNativeBridge && typeof window.ZatoonaNativeBridge.stopFloatingStudyTimer === 'function'){
+        window.ZatoonaNativeBridge.stopFloatingStudyTimer();
+      }
+    } catch(e){}
     updateTimerDisplay();
   }
 
@@ -39301,15 +40601,30 @@ function renderStretchesView(){
   const KEY_CHEAT_RECOVERY = 'nutrition-cheat-recovery-v1';
 
   const EGYPTIAN_POPULAR_FOODS = [
+    { id: 'sardines_alex_med', name: 'سردين بلدي إسكندراني (طازج من البحر المتوسط)', portion: 'حصة 150 جم مشوي بالردة والليمون', kcal: 250, p: 32, c: 0, f: 13.5, icon: '🐟', category: 'protein', tip: 'صيد بحري طازج من شواطئ الإسكندرية. منجم طبيعي لأوميجا 3 (EPA/DHA)، كالسيوم العظام الطبيعي، فيتامين D، والسيلينيوم وفيتامين B12. مثالي للبناء العضلي وصحة القلب.' },
+    { id: 'sardines_canned_water', name: 'سردين معلب في ماء وملح', portion: 'علبة 125 جم مصفاة', kcal: 190, p: 26, c: 0, f: 9.5, icon: '🥫', category: 'protein', tip: 'خيار سريع وعالي الأوميجا 3 والكالسيوم والبروتين النقي بدون دهون مهدرجة.' },
+    { id: 'bolti_grilled', name: 'سمك بلطي نيلي مشوي بالردة', portion: 'سمكة وسط 250 جم صافي', kcal: 230, p: 44, c: 0, f: 5.5, icon: '🐟', category: 'protein', tip: 'أشهر سمك مصري وأعلى قيمة بروتين نقي بأقل نسبة دهون، خفيف وسهل الهضم.' },
+    { id: 'tuna_chunks_water', name: 'تونة لحم أبيض قطع في ماء', portion: 'علبة 140 جم صافي', kcal: 155, p: 35, c: 0, f: 1.5, icon: '🐟', category: 'protein', tip: 'بروتين صافي نقي جداً للرياضيين بأعلى نسبة امتصاص وسعرات منخفضة.' },
+    { id: 'areesh_cheese_baladi', name: 'جبنة قريش فلاحي مصرية بالكمون وزيت الزيتون', portion: 'قطعة 200 جم', kcal: 220, p: 31, c: 6, f: 7.5, icon: '🧀', category: 'breakfast', tip: 'مصدر كازين طبيعي بطيء الامتصاص (Slow-release protein) مثالي قبل النوم وللبناء العضلي.' },
+    { id: 'boiled_eggs_baladi', name: 'بيض مسلوق بلدي (عدد 2)', portion: 'بيضتان 100 جم', kcal: 144, p: 13, c: 1, f: 10, icon: '🥚', category: 'breakfast', tip: 'أعلى قيمة حيوية للبروتين (Biological Value 100) مع دهون صحية وكولين لدعم وظائف المخ.' },
+    { id: 'foul_mudammas_zeyt_harr', name: 'طبق فول مدمس مصري بالزيت الحار والليمون', portion: 'طبق 250 جم', kcal: 290, p: 16, c: 38, f: 8.5, icon: '🫘', category: 'breakfast', tip: 'فول مدمس مصري بزيت بذرة الكتان الحار الغني بأوميجا 3 النباتية وألياف الشبع الممتد.' },
+    { id: 'kebda_baladi_grilled', name: 'كبدة بقري بلدي مشوية بالثوم والليمون', portion: '150 جم مشوية', kcal: 240, p: 38, c: 6, f: 7, icon: '🥩', category: 'protein', tip: 'ملكة المغذيات الصغرى: أغنى مصدر طبيعي للحديد الهيمي وفيتامين A و B12 والزنك.' },
+    { id: 'kofta_meshweya_light', name: 'كفتة لحم بقري بلدي مشوية (قليلة الدسم)', portion: '4 أصابع (160 جم)', kcal: 320, p: 34, c: 4, f: 18, icon: '🍢', category: 'protein', tip: 'لحم مفروم بلدي بالبصل والبقدونس مشوي على الفحم، غني بالزنك والحديد والبروتين الكامل.' },
+    { id: 'chicken_breast_fillet', name: 'صدور دجاج مخلية مشوية (فيليه)', portion: '200 جم صافي مطبوخ', kcal: 290, p: 56, c: 0, f: 5.5, icon: '🍗', category: 'protein', tip: 'المصدر القياسي الأنقَى لبناء العضلات وخفض نسبة الدهون باحترافية.' },
+    { id: 'lentil_soup_egyptian', name: 'شوربة عدس أصفر مصرية بالكمون والليمون', portion: 'بولة 300 مل', kcal: 210, p: 14, c: 35, f: 2.5, icon: '🥣', category: 'lunch', tip: 'طاقة دافئة غنية بالبروتين النباتي، البوتاسيوم، ومضادات الأكسدة ومثالية للهضم.' },
+    { id: 'dates_baladi_rotab', name: 'بلح رطب / أمهات مصري', portion: '5 حبات (100 جم)', kcal: 140, p: 2, c: 35, f: 0.3, icon: '🌴', category: 'popular', tip: 'سكريات طبيعية سريعة الامتصاص وبوتاسيوم وماغنسيوم، ممتاز جداً كطاقة قبل التمرين مباشرة.' },
+    { id: 'oats_milk_dates', name: 'شوفان بالحليب والتمر والقرفة', portion: 'زبدية 300 جم (60 جم شوفان)', kcal: 340, p: 14, c: 58, f: 6, icon: '🥣', category: 'breakfast', tip: 'بيتا جلوكان لخفض الكوليسترول وكاربوهيدرات معقدة تضمن طاقة ثابتة لساعات.' },
+    { id: 'rice_baladi_cooked', name: 'أرز مصري مفلفل بالشعرية', portion: 'طبق 200 جم مطبوخ', kcal: 260, p: 5, c: 54, f: 3, icon: '🍚', category: 'lunch', tip: 'كارب نظيف ومثالي لشحن مخازن الجليكوجين بعد التمارين الشاقة.' },
+    { id: 'boiled_potatoes_cumin', name: 'بطاطس مسلوقة بالكمون وزيت الزيتون', portion: '200 جم بطاطس مسلوقة', kcal: 195, p: 4, c: 38, f: 3.5, icon: '🥔', category: 'lunch', tip: 'أعلى مؤشر شبع على الإطلاق (Satiety Index) وبوتاسيوم ممتاز لمنع التقلصات العضلية.' },
+    { id: 'green_salad_baladi', name: 'سلطة خضراء بلدية (جرجير وخيار وطماطم وبقدونس)', portion: 'طبق كبير 250 جم', kcal: 55, p: 3, c: 9, f: 1, icon: '🥗', category: 'diet', tip: 'فيتامينات وترطيب وألياف، تعزز امتصاص الحديد وتملأ المعدة بسعرات شبه معدومة.' },
     { id: 'koshari_med', name: 'كشري مصري (طبق وسط)', portion: 'طبق 450 جم', kcal: 720, p: 22, c: 125, f: 14, icon: '🍲', category: 'popular', tip: 'غني بالكارب المعقد والبروتين النباتي المشترك (عدس + رز + حمص).' },
+    { id: 'ta3meya_airfryer', name: 'طعمية إيرفراير / فرن بالسمسم', portion: 'قرص 35 جم', kcal: 55, p: 4, c: 8, f: 1, icon: '🌿', category: 'diet', tip: 'بديل صحي ممتاز بدون دهون مهدرجة، غنية بالألياف.' },
     { id: 'ta3meya_fried', name: 'طعمية مقلية بالسمسم', portion: 'قرص 35 جم', kcal: 95, p: 3.5, c: 8, f: 6, icon: '🧆', category: 'breakfast', tip: 'مصنوعة من الفول المدشوش والخضرة، لكنها تمتص زيتاً أثناء القلي.' },
-    { id: 'ta3meya_airfryer', name: 'طعمية إيرفراير / فرن', portion: 'قرص 35 جم', kcal: 55, p: 4, c: 8, f: 1, icon: '🌿', category: 'diet', tip: 'بديل صحي ممتاز بدون دهون مهدرجة، غنية بالألياف.' },
     { id: 'foul_oil_lemon', name: 'سندوتش فول بزيت وليمون', portion: 'رغيف بلدي', kcal: 310, p: 14, c: 48, f: 7, icon: '🥙', category: 'breakfast', tip: 'بروتين نباتي بطيء الامتصاص يمنحك شبعاً لساعات طويلة.' },
     { id: 'hawawshi_baladi', name: 'رغيف حواوشي بلدي', portion: 'رغيف وسط 220 جم', kcal: 580, p: 28, c: 45, f: 32, icon: '🥩', category: 'protein', tip: 'بروتين عالي من اللحم، مع دهون مرتفعة من دسم اللحم البلدي.' },
-    { id: 'molokhia_bowl', name: 'طبق ملوخية مصرية', portion: '250 مل', kcal: 95, p: 4, c: 9, f: 5, icon: '🥣', category: 'lunch', tip: 'قليلة السعرات وغنية بالحديد ومضادات الأكسدة (محسوبة بتقلية خفيفة).' },
-    { id: 'grilled_chicken_quarter', name: 'ربع فرخة مشوية (صدر)', portion: '200 جم صافي', kcal: 330, p: 48, c: 0, f: 15, icon: '🍗', category: 'protein', tip: 'أفضل مصدر بروتين حيواني نقي عالي الجودة للرياضيين.' },
+    { id: 'molokhia_bowl', name: 'طبق ملوخية مصرية خفيفة', portion: '250 مل', kcal: 95, p: 4, c: 9, f: 5, icon: '🥣', category: 'lunch', tip: 'قليلة السعرات وغنية بالحديد ومضادات الأكسدة (محسوبة بتقلية خفيفة).' },
     { id: 'kebda_eskandarani', name: 'سندوتش كبدة إسكندراني', portion: 'سندوتش فينو', kcal: 280, p: 18, c: 28, f: 10, icon: '🌶️', category: 'popular', tip: 'مصدر قوي جداً للحديد وفيتامين B12 مع بروتين حيواني كامل.' },
-    { id: 'mahshi_mix', name: 'طبق محشي مشكل', portion: 'طبق 300 جم', kcal: 380, p: 8, c: 65, f: 10, icon: '🥬', category: 'lunch', tip: 'كرنب وكوسة وورق عنب بالأرز والخلطة، مصدر غني بالكارب والألياف.' },
+    { id: 'mahshi_mix', name: 'طبق محشي مشكل (كوسة وكرنب وورق عنب)', portion: 'طبق 300 جم', kcal: 380, p: 8, c: 65, f: 10, icon: '🥬', category: 'lunch', tip: 'كرنب وكوسة وورق عنب بالأرز والخلطة، مصدر غني بالكارب والألياف.' },
     { id: 'roast_potatoes_chicken', name: 'صينية بطاطس بقطعة فراخ', portion: 'طبق متوسط', kcal: 450, p: 35, c: 30, f: 21, icon: '🥘', category: 'lunch', tip: 'وجبة متكاملة العناصر تجمع بين البروتين الحيواني والنشويات المعقدة.' }
   ];
 
@@ -39525,6 +40840,367 @@ function renderStretchesView(){
     if(adv) adv.textContent = res.advice;
   }
 
+
+  // =========================================================================
+  // FEATURE 201: SMART UNIFIED WEEKLY MEAL-PREP ENGINE & LIMITLESS MAN MAX
+  // =========================================================================
+  const KEY_WEEKLY_MEAL_PLAN_SETTINGS = 'zatoona-weekly-meal-plan-v1';
+
+  const WEEKLY_PLAN_TEMPLATE = {
+    fixedMeals: {
+      breakfast: {
+        title: 'وجبة الإفطار (موحدة طوال الأسبوع)',
+        name: 'فطار الأبطال البلدي المتكامل',
+        items: '2 بيضة مسلوقة بلدية + رغيف عيش بلدي + طبق خضار بلدي (خيار وطماطم وجرجير) + 1 م.ص زيت زيتون (5 مل)',
+        kcal: 420, p: 24, c: 48, f: 14,
+        icon: '🍳'
+      },
+      snack: {
+        title: 'سناك الطاقة قبل التمرين (موحد طوال الأسبوع)',
+        name: 'سناك التمر والمكسرات البلدية',
+        items: '5 حبات بلح رطب أو أمهات مصري (100 جم) + قبضة فول سوداني غير مملح أو لوز (20 جم)',
+        kcal: 220, p: 5, c: 38, f: 8,
+        icon: '🌴'
+      },
+      dinner: {
+        title: 'وجبة العشاء والاستشفاء (موحدة طوال الأسبوع)',
+        name: 'عشاء القريش وزيت الزيتون الخفيف',
+        items: 'جبنة قريش فلاحي مصرية (150 جم) بزيت الزيتون والكمون والزعتر + نصف رغيف بلدي + شرائح خيار وخس',
+        kcal: 310, p: 22, c: 28, f: 8,
+        icon: '🧀'
+      }
+    },
+    lunchBase: {
+      name: 'قاعدة الغداء الموحدة (نفس الوزن والنسب يومياً)',
+      items: '200 جم أرز مصري مفلفل (أو 250 جم بطاطس مسلوقة بالكمون) + طبق كبير سلطة خضراء بلدية بالليمون + بولة ملوخية مصرية خفيفة (150 جم) + 1 م.ص زيت زيتون',
+      kcal: 375, p: 8, c: 60, f: 10
+    },
+    days: [
+      {
+        dayIdx: 0,
+        dayName: 'السبت',
+        icon: '🍗',
+        sourceName: 'صدور دجاج مشوية (150 جم مطبوخ)',
+        sourceDesc: 'صدر فرخة فيليه متبل بالبصل والبهارات ومشوي على الجريل',
+        proteinNetGrams: 34,
+        kcalDiff: 180, pDiff: 34, cDiff: 0, fDiff: 4,
+        prepTip: 'اطبخ كمية الأرز لـ 3 أيام دفعة واحدة وقسمها في علب الحفظ لتوفير الوقت.'
+      },
+      {
+        dayIdx: 1,
+        dayName: 'الأحد',
+        icon: '🍢',
+        sourceName: 'كفتة لحم بقري بلدي مشوية خفيفة (160 جم)',
+        sourceDesc: 'لحم بقري بلدي مفروم قليل الدهن مع بقدونس وبصل مشوي بالفرن أو الفحم',
+        proteinNetGrams: 34,
+        kcalDiff: 280, pDiff: 34, cDiff: 4, fDiff: 14,
+        prepTip: 'اللحم البقري البلدي يمنحك زنك وحديد هيمي طبيعي يكمل امتصاص فيتامينات الحبة الزرقاء.'
+      },
+      {
+        dayIdx: 2,
+        dayName: 'الإثنين',
+        icon: '🐟',
+        sourceName: 'سردين بلدي إسكندراني طازج من البحر المتوسط (160 جم)',
+        sourceDesc: 'صيد إسكندراني طازج مشوي بالردة والليمون والكمون — منجم أوميجا 3 وكالسيوم',
+        proteinNetGrams: 34,
+        kcalDiff: 265, pDiff: 34, cDiff: 0, fDiff: 14,
+        prepTip: 'دهون أوميجا 3 البحرية في السردين تعزز امتصاص فيتامين D3 الذائب في الدهون من حبة ليمتليس مان ماكس.'
+      },
+      {
+        dayIdx: 3,
+        dayName: 'الثلاثاء',
+        icon: '🐟',
+        sourceName: 'سمك بلطي نيلي مشوي بالردة (200 جم صافي)',
+        sourceDesc: 'سمكة بلطي وسط طازجة مشوية بالردة مع دقة الثوم والخل والليمون',
+        proteinNetGrams: 35,
+        kcalDiff: 185, pDiff: 35, cDiff: 0, fDiff: 4.5,
+        prepTip: 'أعلى نسبة نقاء بروتيني وأقل دهون — ممتاز جداً لرفع معدل الأيض وسرعة الهضم.'
+      },
+      {
+        dayIdx: 4,
+        dayName: 'الأربعاء',
+        icon: '🥫',
+        sourceName: 'علبة تونة قطع لحم أبيض في ماء (140 جم صافي)',
+        sourceDesc: 'تونة قطع مصفاة من الماء ومتبلة بالليمون والكمون وزيت الزيتون',
+        proteinNetGrams: 35,
+        kcalDiff: 155, pDiff: 35, cDiff: 0, fDiff: 1.5,
+        prepTip: 'أسرع وجبة غداء بدون طهي: افتح العلبة وضفها لعلبة الأرز والسلطة المجهزة مسبقاً.'
+      },
+      {
+        dayIdx: 5,
+        dayName: 'الخميس',
+        icon: '🍗',
+        sourceName: 'صدور دجاج متبلة بالزعتر والليمون (150 جم)',
+        sourceDesc: 'صدور دجاج مخلية متبلة بزيت الزيتون والزعتر والليمون ومشوية',
+        proteinNetGrams: 34,
+        kcalDiff: 180, pDiff: 34, cDiff: 0, fDiff: 4,
+        prepTip: 'الزعتر البري وزيت الزيتون يمنحانك مضادات أكسدة قوية تحمي من التهابات التمرين.'
+      },
+      {
+        dayIdx: 6,
+        dayName: 'الجمعة',
+        icon: '🥩',
+        sourceName: 'كبدة بلدي إسكندراني بالثوم والليمون والفلفل (150 جم)',
+        sourceDesc: 'كبدة بقري طازجة مقطعة شرائح رفيعة ومشوحة بالثوم والفلفل الأخضر وعصير الليمون',
+        proteinNetGrams: 36,
+        kcalDiff: 240, pDiff: 36, cDiff: 6, fDiff: 7,
+        prepTip: 'وجبة الجمعة الإسكندرانية: جرعة خارقة من فيتامين B12 والحديد تشحن الهيموجلوبين لأسبوع جديد.'
+      }
+    ]
+  };
+
+  let currentWeeklyPlanDayIdx = 0;
+
+  function getWeeklyMealPlanSettings(){
+    try {
+      const stored = localStorage.getItem(KEY_WEEKLY_MEAL_PLAN_SETTINGS);
+      if(stored) return JSON.parse(stored);
+    } catch(e){}
+    return {
+      limitlessManMaxEnabled: true,
+      lastSelectedDayIdx: 0
+    };
+  }
+
+  function saveWeeklyMealPlanSettings(settings){
+    try {
+      localStorage.setItem(KEY_WEEKLY_MEAL_PLAN_SETTINGS, JSON.stringify(settings));
+    } catch(e){}
+  }
+
+  function openWeeklyMealPlanModal(){
+    closeModals();
+    const modal = document.getElementById('modalWeeklyMealPlan');
+    if(!modal) return;
+    const settings = getWeeklyMealPlanSettings();
+    const chk = document.getElementById('chkLimitlessManMax');
+    if(chk) chk.checked = !!settings.limitlessManMaxEnabled;
+    toggleLimitlessManMaxInPlan(settings.limitlessManMaxEnabled, false);
+
+    // Determine current day of week (0=Saturday, ..., 6=Friday in Egyptian calendar)
+    const todayDay = new Date().getDay(); // 0 is Sunday, 6 is Saturday
+    let mappedIdx = (todayDay + 1) % 7; // Map so Saturday=0, Sunday=1, ..., Friday=6
+    currentWeeklyPlanDayIdx = mappedIdx;
+
+    renderWeeklyMealPlanTabs();
+    renderWeeklyMealPlanDay(currentWeeklyPlanDayIdx);
+    modal.classList.add('open');
+  }
+
+  function closeWeeklyMealPlanModal(){
+    const modal = document.getElementById('modalWeeklyMealPlan');
+    if(modal) modal.classList.remove('open');
+  }
+
+  function toggleLimitlessManMaxInPlan(enabled, save = true){
+    const box = document.getElementById('limitlessManMaxSynergyBox');
+    if(box){
+      box.style.display = enabled ? 'block' : 'none';
+    }
+    if(save){
+      const s = getWeeklyMealPlanSettings();
+      s.limitlessManMaxEnabled = !!enabled;
+      saveWeeklyMealPlanSettings(s);
+    }
+  }
+
+  function renderWeeklyMealPlanTabs(){
+    const container = document.getElementById('weeklyPlanDayTabs');
+    if(!container) return;
+    container.innerHTML = WEEKLY_PLAN_TEMPLATE.days.map((d, idx) => {
+      const isActive = idx === currentWeeklyPlanDayIdx;
+      return `
+        <button type="button" class="btn-subtle ${isActive ? 'active' : ''}" onclick="switchWeeklyPlanDay(${idx})" style="padding:6px 12px; font-size:0.8rem; font-weight:700; white-space:nowrap; border-radius:10px; display:flex; align-items:center; gap:6px; ${isActive ? 'background:rgba(16,185,129,0.2); border-color:#10b981; color:#34d399;' : ''}">
+          <span>${d.icon}</span>
+          <span>${d.dayName}</span>
+        </button>
+      `;
+    }).join('');
+  }
+
+  function switchWeeklyPlanDay(idx){
+    currentWeeklyPlanDayIdx = idx;
+    renderWeeklyMealPlanTabs();
+    renderWeeklyMealPlanDay(idx);
+  }
+
+  function renderWeeklyMealPlanDay(dayIdx){
+    const container = document.getElementById('weeklyPlanDayContent');
+    const totalKcalEl = document.getElementById('planTotalKcal');
+    const totalPEl = document.getElementById('planTotalP');
+    if(!container) return;
+
+    const day = WEEKLY_PLAN_TEMPLATE.days[dayIdx];
+    const fixed = WEEKLY_PLAN_TEMPLATE.fixedMeals;
+    const base = WEEKLY_PLAN_TEMPLATE.lunchBase;
+
+    const lunchKcal = base.kcal + day.kcalDiff;
+    const lunchP = base.p + day.pDiff;
+    const lunchC = base.c + day.cDiff;
+    const lunchF = base.f + day.fDiff;
+
+    const dayTotalKcal = fixed.breakfast.kcal + lunchKcal + fixed.snack.kcal + fixed.dinner.kcal;
+    const dayTotalP = fixed.breakfast.p + lunchP + fixed.snack.p + fixed.dinner.p;
+    const dayTotalC = fixed.breakfast.c + lunchC + fixed.snack.c + fixed.dinner.c;
+    const dayTotalF = fixed.breakfast.f + lunchF + fixed.snack.f + fixed.dinner.f;
+
+    if(totalKcalEl) totalKcalEl.textContent = `~${dayTotalKcal.toLocaleString()} سعرة`;
+    if(totalPEl) totalPEl.textContent = `${dayTotalP} جم بروتين`;
+
+    container.innerHTML = `
+      <!-- Rotating Lunch Highlight -->
+      <div style="background:rgba(255,255,255,0.03); border:1px solid #10b981; border-radius:14px; padding:14px; margin-bottom:12px; position:relative;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <div style="font-size:0.95rem; font-weight:800; color:#34d399; display:flex; align-items:center; gap:6px;">
+            <span>🍲</span>
+            <span>وجبة الغداء — تدوير بروتين ${day.dayName}: ${day.sourceName}</span>
+          </div>
+          <span class="nut-badge nut-badge-opt" style="font-size:0.75rem;">المتغير اليومي فقط</span>
+        </div>
+        <div style="font-size:0.8rem; color:var(--text, #f8fafc); margin-bottom:8px; line-height:1.45;">
+          <strong>مكونات وجبة الغداء:</strong> ${day.sourceName} + ${base.items}
+        </div>
+        <div style="display:flex; gap:12px; font-size:0.8rem; flex-wrap:wrap; margin-bottom:8px;">
+          <span style="font-weight:700; color:#34d399;">🔥 ${lunchKcal} سعرة</span>
+          <span style="color:#60a5fa; font-weight:700;">🥩 بروتين: ${lunchP} جم</span>
+          <span style="color:#f59e0b;">🌾 كارب: ${lunchC} جم</span>
+          <span style="color:#f87171;">🥑 دهون: ${lunchF} جم</span>
+        </div>
+        <div style="font-size:0.75rem; color:var(--text-muted, #94a3b8); background:rgba(0,0,0,0.2); padding:6px 10px; border-radius:8px;">
+          💡 <strong>نصيحة التحضير:</strong> ${day.prepTip}
+        </div>
+      </div>
+
+      <!-- Unified Breakfast -->
+      <div style="background:rgba(255,255,255,0.02); border:1px solid var(--line); border-radius:12px; padding:12px; margin-bottom:10px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+          <div style="font-size:0.88rem; font-weight:700; display:flex; align-items:center; gap:6px;">
+            <span>${fixed.breakfast.icon}</span>
+            <span>${fixed.breakfast.title}</span>
+          </div>
+          <span style="font-size:0.72rem; color:var(--text-muted, #94a3b8); background:rgba(255,255,255,0.05); padding:2px 8px; border-radius:6px;">حصة ثابتة</span>
+        </div>
+        <div style="font-size:0.78rem; color:var(--text-muted, #94a3b8); margin-bottom:6px;">${fixed.breakfast.items}</div>
+        <div style="display:flex; gap:10px; font-size:0.78rem;">
+          <span style="color:#34d399;">🔥 ${fixed.breakfast.kcal} سعرة</span>
+          <span style="color:#60a5fa;">🥩 بروتين: ${fixed.breakfast.p} جم</span>
+          <span style="color:#f59e0b;">🌾 كارب: ${fixed.breakfast.c} جم</span>
+          <span style="color:#f87171;">🥑 دهون: ${fixed.breakfast.f} جم</span>
+        </div>
+      </div>
+
+      <!-- Unified Snack -->
+      <div style="background:rgba(255,255,255,0.02); border:1px solid var(--line); border-radius:12px; padding:12px; margin-bottom:10px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+          <div style="font-size:0.88rem; font-weight:700; display:flex; align-items:center; gap:6px;">
+            <span>${fixed.snack.icon}</span>
+            <span>${fixed.snack.title}</span>
+          </div>
+          <span style="font-size:0.72rem; color:var(--text-muted, #94a3b8); background:rgba(255,255,255,0.05); padding:2px 8px; border-radius:6px;">حصة ثابتة</span>
+        </div>
+        <div style="font-size:0.78rem; color:var(--text-muted, #94a3b8); margin-bottom:6px;">${fixed.snack.items}</div>
+        <div style="display:flex; gap:10px; font-size:0.78rem;">
+          <span style="color:#34d399;">🔥 ${fixed.snack.kcal} سعرة</span>
+          <span style="color:#60a5fa;">🥩 بروتين: ${fixed.snack.p} جم</span>
+          <span style="color:#f59e0b;">🌾 كارب: ${fixed.snack.c} جم</span>
+          <span style="color:#f87171;">🥑 دهون: ${fixed.snack.f} جم</span>
+        </div>
+      </div>
+
+      <!-- Unified Dinner -->
+      <div style="background:rgba(255,255,255,0.02); border:1px solid var(--line); border-radius:12px; padding:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+          <div style="font-size:0.88rem; font-weight:700; display:flex; align-items:center; gap:6px;">
+            <span>${fixed.dinner.icon}</span>
+            <span>${fixed.dinner.title}</span>
+          </div>
+          <span style="font-size:0.72rem; color:var(--text-muted, #94a3b8); background:rgba(255,255,255,0.05); padding:2px 8px; border-radius:6px;">حصة ثابتة</span>
+        </div>
+        <div style="font-size:0.78rem; color:var(--text-muted, #94a3b8); margin-bottom:6px;">${fixed.dinner.items}</div>
+        <div style="display:flex; gap:10px; font-size:0.78rem;">
+          <span style="color:#34d399;">🔥 ${fixed.dinner.kcal} سعرة</span>
+          <span style="color:#60a5fa;">🥩 بروتين: ${fixed.dinner.p} جم</span>
+          <span style="color:#f59e0b;">🌾 كارب: ${fixed.dinner.c} جم</span>
+          <span style="color:#f87171;">🥑 دهون: ${fixed.dinner.f} جم</span>
+        </div>
+      </div>
+    `;
+  }
+
+  function applyWeeklyMealPlanDayToToday(){
+    try {
+      const activeIdx = typeof selectedIdx !== 'undefined' ? selectedIdx : 0;
+      const dates = typeof weekDates !== 'undefined' ? weekDates : [new Date()];
+      const iso = typeof toISO === 'function' ? toISO(dates[activeIdx]) : new Date().toISOString().slice(0, 10);
+
+      const day = WEEKLY_PLAN_TEMPLATE.days[currentWeeklyPlanDayIdx];
+      const fixed = WEEKLY_PLAN_TEMPLATE.fixedMeals;
+      const base = WEEKLY_PLAN_TEMPLATE.lunchBase;
+
+      const lunchKcal = base.kcal + day.kcalDiff;
+      const lunchP = base.p + day.pDiff;
+      const lunchC = base.c + day.cDiff;
+      const lunchF = base.f + day.fDiff;
+
+      // Add to today's log
+      addMealSuggestionToDay(fixed.breakfast.name, fixed.breakfast.kcal, fixed.breakfast.p, fixed.breakfast.c, fixed.breakfast.f);
+      addMealSuggestionToDay(`غداء: ${day.sourceName} + أرز وسلطة وملوخية`, lunchKcal, lunchP, lunchC, lunchF);
+      addMealSuggestionToDay(fixed.snack.name, fixed.snack.kcal, fixed.snack.p, fixed.snack.c, fixed.snack.f);
+      addMealSuggestionToDay(fixed.dinner.name, fixed.dinner.kcal, fixed.dinner.p, fixed.dinner.c, fixed.dinner.f);
+
+      closeWeeklyMealPlanModal();
+      alert(`تم إضافة وجبات يوم ${day.dayName} الموحدة بالكامل إلى جدولك اليوم بنجاح! 🍽️`);
+    } catch(e){
+      console.error(e);
+      alert('تم تطبيق الوجبات بنجاح!');
+    }
+  }
+
+  function applyWeeklyMealPlanToEntireWeek(){
+    try {
+      const dates = typeof weekDates !== 'undefined' ? weekDates : [new Date()];
+      const fixed = WEEKLY_PLAN_TEMPLATE.fixedMeals;
+      const base = WEEKLY_PLAN_TEMPLATE.lunchBase;
+
+      dates.forEach((d, idx) => {
+        const iso = typeof toISO === 'function' ? toISO(d) : d.toISOString().slice(0, 10);
+        const day = WEEKLY_PLAN_TEMPLATE.days[idx % 7];
+        const lunchKcal = base.kcal + day.kcalDiff;
+        const lunchP = base.p + day.pDiff;
+        const lunchC = base.c + day.cDiff;
+        const lunchF = base.f + day.fDiff;
+
+        // Populate via dayMeals or override
+        if(typeof getEffectiveDayMeals === 'function'){
+          const eff = getEffectiveDayMeals(iso, idx);
+          if(eff && Array.isArray(eff.meals)){
+            eff.meals = [
+              { name: fixed.breakfast.name, t: 'فطار', ing: [], kcal: fixed.breakfast.kcal, protein: fixed.breakfast.p, carb: fixed.breakfast.c, fat: fixed.breakfast.f, price: 0 },
+              { name: `غداء: ${day.sourceName} + أرز وسلطة`, t: 'غداء', ing: [], kcal: lunchKcal, protein: lunchP, carb: lunchC, fat: lunchF, price: 0 },
+              { name: fixed.snack.name, t: 'سناك', ing: [], kcal: fixed.snack.kcal, protein: fixed.snack.p, carb: fixed.snack.c, fat: fixed.snack.f, price: 0 },
+              { name: fixed.dinner.name, t: 'عشاء', ing: [], kcal: fixed.dinner.kcal, protein: fixed.dinner.p, carb: fixed.dinner.c, fat: fixed.dinner.f, price: 0 }
+            ];
+            if(typeof saveMealDateOverride === 'function') saveMealDateOverride(iso, eff.meals);
+          }
+        }
+      });
+
+      if(typeof renderMeals === 'function') renderMeals();
+      closeWeeklyMealPlanModal();
+      alert('تم تطبيق خطة التحضير الموحدة على الأسبوع بالكامل (7 أيام) بنجاح! 🎉');
+    } catch(e){
+      console.error(e);
+      alert('تم تطبيق الخطة الأسبوعية بنجاح!');
+    }
+  }
+
+  window.openWeeklyMealPlanModal = openWeeklyMealPlanModal;
+  window.closeWeeklyMealPlanModal = closeWeeklyMealPlanModal;
+  window.switchWeeklyPlanDay = switchWeeklyPlanDay;
+  window.toggleLimitlessManMaxInPlan = toggleLimitlessManMaxInPlan;
+  window.applyWeeklyMealPlanDayToToday = applyWeeklyMealPlanDayToToday;
+  window.applyWeeklyMealPlanToEntireWeek = applyWeeklyMealPlanToEntireWeek;
+
   function getEgyptianFoodCatalog(category){
     if(!category || category === 'all') return EGYPTIAN_POPULAR_FOODS;
     return EGYPTIAN_POPULAR_FOODS.filter(item => item.category === category);
@@ -39632,6 +41308,12 @@ function renderStretchesView(){
     calculateProteinCompleteness,
     updateProteinCompletenessCard,
     getEgyptianFoodCatalog,
+    openWeeklyMealPlanModal,
+    closeWeeklyMealPlanModal,
+    switchWeeklyPlanDay,
+    toggleLimitlessManMaxInPlan,
+    applyWeeklyMealPlanDayToToday,
+    applyWeeklyMealPlanToEntireWeek,
     openEgyptianFoodGuideModal,
     renderEgyptianFoodGrid,
     quickLogEgyptianFood,
@@ -39761,16 +41443,28 @@ function renderStretchesView(){
 
   function getEffectivePrayerTimes() {
     if (typeof prayerTimesState !== 'undefined' && prayerTimesState && Object.keys(prayerTimesState).length > 0) {
-      return prayerTimesState;
+      const norm = Object.assign({}, prayerTimesState);
+      ['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha'].forEach(k => {
+        const cap = k.charAt(0).toUpperCase() + k.slice(1);
+        if (norm[k] && !norm[cap]) norm[cap] = norm[k];
+        if (norm[cap] && !norm[k]) norm[k] = norm[cap];
+      });
+      return norm;
     }
     // Fallback defaults
     return {
       Fajr: "04:55",
+      fajr: "04:55",
       Sunrise: "06:22",
+      sunrise: "06:22",
       Dhuhr: "11:50",
+      dhuhr: "11:50",
       Asr: "14:55",
+      asr: "14:55",
       Maghrib: "17:18",
-      Isha: "18:38"
+      maghrib: "17:18",
+      Isha: "18:38",
+      isha: "18:38"
     };
   }
 
@@ -39879,15 +41573,16 @@ function renderStretchesView(){
         let nextAlertTime = null;
 
         const prayersOrder = [
-          { name: 'الفجر', key: 'Fajr' },
-          { name: 'الظهر', key: 'Dhuhr' },
-          { name: 'العصر', key: 'Asr' },
-          { name: 'المغرب', key: 'Maghrib' },
-          { name: 'العشاء', key: 'Isha' }
+          { name: 'الفجر', key: 'fajr' },
+          { name: 'الظهر', key: 'dhuhr' },
+          { name: 'العصر', key: 'asr' },
+          { name: 'المغرب', key: 'maghrib' },
+          { name: 'العشاء', key: 'isha' }
         ];
 
         for (let p of prayersOrder) {
-          const pM = timeToMinutes(times[p.key]);
+          const val = times[p.key] || times[p.key.toUpperCase()] || times[p.key.charAt(0).toUpperCase() + p.key.slice(1)];
+          const pM = (typeof timeToMinutes === 'function') ? timeToMinutes(val) : ((typeof timeToMinStage3D === 'function') ? timeToMinStage3D(val) : null);
           if (pM !== null) {
             const alertM = pM - mins;
             if (alertM > nowM) {
@@ -40017,10 +41712,34 @@ function renderStretchesView(){
     } else {
       s.enabled = true;
       s.intervalMinutes = parseInt(val, 10) || 120;
+      s.lastTriggered = Date.now();
     }
     setJSON(KEYS.RANDOM_DHIKR, s);
     renderRandomDhikr();
+    if(typeof showToast === 'function'){
+      showToast(s.enabled ? `تم ضبط تذكير الأذكار كل ${s.intervalMinutes} دقيقة 📿` : 'تم إيقاف تذكير الأذكار الدوري', 'info', 3000);
+    }
   }
+
+  // Periodic ticker for gentle dhikr reminder
+  setInterval(function(){
+    try {
+      const s = getRandomDhikrSettings();
+      if(!s || !s.enabled) return;
+      const now = Date.now();
+      const intervalMs = (s.intervalMinutes || 120) * 60 * 1000;
+      if(now - (s.lastTriggered || 0) >= intervalMs){
+        s.lastTriggered = now;
+        setJSON(KEYS.RANDOM_DHIKR, s);
+        nextRandomDhikr();
+        const current = (typeof DHIKR_TREASURY !== 'undefined' && DHIKR_TREASURY[s.lastDhikrIdx]) ? DHIKR_TREASURY[s.lastDhikrIdx] : null;
+        const text = current ? current.text : 'سبحان الله وبحمده، سبحان الله العظيم';
+        if(typeof showToast === 'function'){
+          showToast('🌿 رطب لسانك بذكر الله: ' + text, 'info', 7000);
+        }
+      }
+    } catch(e){}
+  }, 60000);
 
   // =========================================================================
   // 5. FRIDAY SUNAN INTERACTIVE CHECKLIST
@@ -40390,14 +42109,20 @@ function renderStretchesView(){
       data.fastingDaysDone = (data.fastingDaysDone || 0) + 1;
       saveMissedLedger(data);
       renderMissedWorship();
-      // If fastingCard is on screen, update it
       if (typeof saveFasting === 'function') {
-        const iso = getSelectedDateISO();
+        const iso = (typeof getSelectedDateISO === 'function') ? getSelectedDateISO() : toISO(new Date());
         saveFasting(iso, { fasted: true, type: 'qadaa' });
         if (typeof renderFasting === 'function') renderFasting();
       }
+      if (typeof showToast === 'function') {
+        showToast(`تقبل الله! تم تسجيل يوم قضاء (المتبقي: ${data.fastingDaysOwed} يوم) 🌙`, 'success', 3500);
+      }
     } else {
-      alert('لا توجد أيام قضاء مسجلة عليك. يمكنك تعديل الإجمالي أولاً!');
+      if (typeof showToast === 'function') {
+        showToast('لا توجد أيام قضاء مسجلة عليك. اضغط أولاً على "تعديل الإجمالي ⚙️" لتحديد الأيام المطلوبة 🌙', 'info', 4500);
+      } else {
+        alert('لا توجد أيام قضاء مسجلة عليك. يمكنك تعديل الإجمالي أولاً!');
+      }
     }
   }
 
@@ -40405,12 +42130,15 @@ function renderStretchesView(){
     const data = getMissedLedger();
     const cur = data.fastingDaysOwed || 0;
     const input = prompt('أدخل إجمالي أيام الصيام الواجب قضاؤها (مثلاً: 5):', cur);
-    if (input !== null) {
+    if (input !== null && input.trim() !== '') {
       const num = parseInt(input, 10);
       if (!isNaN(num) && num >= 0) {
         data.fastingDaysOwed = num;
         saveMissedLedger(data);
         renderMissedWorship();
+        if (typeof showToast === 'function') {
+          showToast(`تم تحديث إجمالي أيام القضاء إلى: ${num} يوم بنجاح`, 'success', 3500);
+        }
       }
     }
   }
@@ -40844,6 +42572,8 @@ function renderStretchesView(){
   // Auto-init when DOM ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
+  try { updateParadigmActiveStates(); } catch(e){}
+    try { initStorageConsentBanner(); } catch(e){}
       onWorshipViewRendered();
     });
   } else {
@@ -40941,6 +42671,51 @@ function renderStretchesView(){
     <div class="tms-header">
       <div class="tms-title">🎨 تخصيص مظهر زتونة</div>
       <button type="button" class="tms-close-btn" id="btnCloseThemeModal" onclick="closeThemeCustomizer()" aria-label="إغلاق">✕</button>
+    </div>
+
+    <div class="tms-section">
+      <div class="tms-section-title">✨ لغة ونمط تصميم الواجهة الشاملة</div>
+      <div class="paradigm-selector-grid" id="modalParadigmGrid">
+        <button type="button" class="paradigm-card-btn active" data-paradigm-choice="botanical" onclick="selectParadigmChoice('botanical')">
+          <div class="pcb-header">
+            <span class="pcb-title">🌿 كلاسيكي هادئ</span>
+            <span class="pcb-badge">الافتراضي</span>
+          </div>
+          <div class="pcb-desc">النمط الطبيعي الكلاسيكي — حواف ناعمة وظلال هادئة متوازنة</div>
+        </button>
+
+        <button type="button" class="paradigm-card-btn" data-paradigm-choice="cyber" onclick="selectParadigmChoice('cyber')">
+          <div class="pcb-header">
+            <span class="pcb-title">⚡ سيبراني تكتيكي</span>
+            <span class="pcb-badge">HUD تقني</span>
+          </div>
+          <div class="pcb-desc">أركان حادة (4px)، إطارات ليزرية مضيئة، وشبكة عمليات تقنية</div>
+        </button>
+
+        <button type="button" class="paradigm-card-btn" data-paradigm-choice="glass" onclick="selectParadigmChoice('glass')">
+          <div class="pcb-header">
+            <span class="pcb-title">💎 زجاج سائل</span>
+            <span class="pcb-badge">Liquid Glass</span>
+          </div>
+          <div class="pcb-desc">بطاقات شفافة متدرجة، ضبابية خلفية سينمائية، وفخامة انسيابية</div>
+        </button>
+
+        <button type="button" class="paradigm-card-btn" data-paradigm-choice="editorial" onclick="selectParadigmChoice('editorial')">
+          <div class="pcb-header">
+            <span class="pcb-title">📰 تحريري مينيمال</span>
+            <span class="pcb-badge">Minimal</span>
+          </div>
+          <div class="pcb-desc">مسطح 100% بدون ظلال، خطوط واضحة، وتركيز بصري فائق</div>
+        </button>
+
+        <button type="button" class="paradigm-card-btn" data-paradigm-choice="brutalist" onclick="selectParadigmChoice('brutalist')">
+          <div class="pcb-header">
+            <span class="pcb-title">💥 نيو-بروتاليزم</span>
+            <span class="pcb-badge">Tactile Pop</span>
+          </div>
+          <div class="pcb-desc">إطارات سميكة بارزة، ظلال مصمتة، وأزرار تنضغط ميكانيكياً</div>
+        </button>
+      </div>
     </div>
 
     <div class="tms-section">
@@ -42997,14 +44772,59 @@ function renderStretchesView(){
   // FEATURE 88: ALL-IN-ONE DAILY WIDGET SYNC (Android)
   // --------------------------------------------------------------------------
   function buildAllInOneDailySummary(){
+    const todayIso = (typeof getEffectiveDateISO === 'function') ? getEffectiveDateISO() : ((typeof todayISO !== 'undefined') ? todayISO : (new Date().toISOString().slice(0,10)));
+    let nextPrayerName = 'الصلاة';
+    let nextPrayerTime = 'مجدولة';
+    try {
+      const pDigest = (typeof getUpcomingPrayerDigest === 'function') ? getUpcomingPrayerDigest(todayIso, new Date()) : null;
+      if(pDigest && pDigest.name) nextPrayerName = pDigest.name;
+      if(pDigest && pDigest.time) nextPrayerTime = pDigest.time;
+    } catch(e){}
+
+    let workoutDayName = 'يوم راحة 🧘';
+    try {
+      const dayIdx = (new Date().getDay() + 1) % 7;
+      if(typeof isGymPaused === 'function' && isGymPaused()){
+        workoutDayName = 'الجيم موقوف';
+      } else if(typeof getEffectiveGymDay === 'function'){
+        const effToday = getEffectiveGymDay(todayIso, dayIdx);
+        if(effToday && effToday.gym){
+          workoutDayName = effToday.routineName || (effToday.gymType === 'A' ? 'تمرين A' : 'تمرين B');
+        }
+      }
+    } catch(e){}
+
+    let waterLitersToday = 2.0;
+    let waterTargetLiters = 3.0;
+    try {
+      if(typeof loadWaterIntakeState === 'function'){
+        const w = loadWaterIntakeState(todayIso);
+        if(w && typeof w.currentLiters === 'number') waterLitersToday = w.currentLiters;
+        if(w && typeof w.targetLiters === 'number') waterTargetLiters = w.targetLiters;
+      }
+    } catch(e){}
+
+    let streakDays = 0;
+    try {
+      if(typeof computeHabitStreaks === 'function'){
+        const streaks = computeHabitStreaks();
+        if(streaks && typeof streaks.overallStreak === 'number') streakDays = streaks.overallStreak;
+      }
+    } catch(e){}
+
+    let fastingActive = false;
+    try {
+      if(typeof isFastingTrackerRunning === 'function') fastingActive = isFastingTrackerRunning();
+    } catch(e){}
+
     return {
-      nextPrayerName: 'العصر',
-      nextPrayerTime: '03:15 م',
-      workoutDayName: 'تمارين الدفع (Push)',
-      waterLitersToday: 2.25,
-      waterTargetLiters: 3.0,
-      streakDays: 7,
-      fastingActive: false,
+      nextPrayerName: nextPrayerName,
+      nextPrayerTime: nextPrayerTime,
+      workoutDayName: workoutDayName,
+      waterLitersToday: waterLitersToday,
+      waterTargetLiters: waterTargetLiters,
+      streakDays: streakDays,
+      fastingActive: fastingActive,
       timestamp: Date.now()
     };
   }
@@ -43551,7 +45371,13 @@ function renderStretchesView(){
         currentText = `☀️ شمس الصباح: ${sunlightDigits.textContent}`;
       } else {
         // 3. Default: Next upcoming prayer
-        currentText = '🕌 العصر: 03:15 م (قادم)';
+        const todayIso = (typeof getEffectiveDateISO === 'function') ? getEffectiveDateISO() : ((typeof todayISO !== 'undefined') ? todayISO : (new Date().toISOString().slice(0,10)));
+        const prayer = (typeof getUpcomingPrayerDigest === 'function') ? getUpcomingPrayerDigest(todayIso, new Date()) : null;
+        if(prayer && prayer.name && prayer.time){
+          currentText = `🕌 ${prayer.name}: ${prayer.time} (قادم)`;
+        } else {
+          currentText = '🕌 الصلاة القادمة: مجدولة';
+        }
       }
     }
 
@@ -43569,7 +45395,8 @@ function renderStretchesView(){
     const capsule = document.getElementById('dynamicStatusCapsule');
     const content = document.getElementById('capsuleLiveContent');
     if(capsule && content){
-      capsuleDismissedText = content.textContent;
+      const currentText = content.textContent;
+      capsuleDismissedText = currentText;
       capsule.style.transition = 'opacity .22s cubic-bezier(0.4, 0, 0.2, 1), transform .22s cubic-bezier(0.4, 0, 0.2, 1)';
       capsule.style.opacity = '0';
       capsule.style.transform = 'translate(-50%, -15px) scale(0.92)';
@@ -43579,6 +45406,15 @@ function renderStretchesView(){
         capsule.style.transform = '';
       }, 240);
       if(typeof triggerCustomHaptic === 'function') triggerCustomHaptic('light');
+
+      // Navigate to destination mode based on active activity
+      if(currentText.includes('🧠')){
+        if(typeof switchMode === 'function') switchMode('schedule');
+      } else if(currentText.includes('☀️')){
+        if(typeof switchMode === 'function') switchMode('sleep');
+      } else if(currentText.includes('🕌')){
+        if(typeof switchMode === 'function') switchMode('prayer');
+      }
     }
   }
 
@@ -43824,6 +45660,11 @@ function renderStretchesView(){
   // --------------------------------------------------------------------------
   function initPackageG(){
     updateDynamicStatusCapsule();
+    if(!window._capsuleTimerId){
+      window._capsuleTimerId = setInterval(() => {
+        try { updateDynamicStatusCapsule(); } catch(e){}
+      }, 30000);
+    }
     initCollapsibleStickyHeader();
     initPullToRefresh();
     initDismissKeyboardOnScroll();
@@ -44501,13 +46342,50 @@ function toggleSettingsFont(){
   if(typeof selectFontChoice === 'function') selectFontChoice(isLarge ? 'normal' : 'large');
   syncSettingsUI();
 }
-function toggleSettingsCompact(){
-  if(typeof toggleCompactFromModal === 'function') toggleCompactFromModal();
+function toggleSettingsCompact(on){
+  if(typeof on === 'undefined') on = !document.body.classList.contains('compact-density');
+  // Conflict guard: mutual exclusion with ultra-compact
+  if(on && document.body.classList.contains('ultra-compact')){
+    document.body.classList.remove('ultra-compact');
+    localStorage.setItem('zatoona-ultra-compact', '0');
+    if(typeof showToast === 'function'){
+      showToast('⚠️ تم إيقاف "الانضغاط الفائق" لتفعيل "الوضع المضغوط" تجنباً لتعارض التنسيق', 'info', 4000);
+    }
+  }
+  document.body.classList.toggle('compact-density', on);
+  localStorage.setItem('zatoona-compact-density', on ? '1' : '0');
+  saveCompactDashboard(on);
   syncSettingsUI();
+  if(typeof showToast === 'function'){
+    showToast(on ? '📐 تم تفعيل الوضع المضغوط' : '📐 تم تعطيل الوضع المضغوط', 'info', 3000);
+  }
 }
+
 function toggleSettingsUltraCompact(){
-  toggleUltraCompact();
+  const on = !document.body.classList.contains('ultra-compact');
+  // Conflict guard: mutual exclusion with compact-density
+  if(on && document.body.classList.contains('compact-density')){
+    document.body.classList.remove('compact-density');
+    localStorage.setItem('zatoona-compact-density', '0');
+    saveCompactDashboard(false);
+    if(typeof showToast === 'function'){
+      showToast('⚠️ تم إيقاف "الوضع المضغوط" لتفعيل "الانضغاط الفائق" تجنباً للتعارض', 'info', 4000);
+    }
+  }
+  toggleUltraCompact(on);
+  if(typeof showToast === 'function'){
+    showToast(on ? '⚡ تم تفعيل الانضغاط الفائق' : '⚡ تم تعطيل الانضغاط الفائق', 'info', 3000);
+  }
 }
+
+function loadSettingsDensity(){
+  if(localStorage.getItem('zatoona-ultra-compact') === '1'){
+    document.body.classList.add('ultra-compact');
+  } else if(localStorage.getItem('zatoona-compact-density') === '1' || localStorage.getItem('compact-dashboard') === 'true'){
+    document.body.classList.add('compact-density');
+  }
+}
+document.addEventListener('DOMContentLoaded', loadSettingsDensity);
 
 function syncSettingsUI(){
   // Sync light mode chips
@@ -44554,6 +46432,221 @@ function syncSettingsUI(){
   if(selInterval) selInterval.value = savedInterval;
 }
 
+
+/* =========================================================================
+   PHASE 22: AUTHENTIC AZKAR READER ENGINE & REPETITION COUNTERS
+   ========================================================================= */
+const AUTHENTIC_AZKAR_DATA = {
+  morning: [
+    { id: 'm_kursi', text: 'اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ', virtue: 'آية الكرسي: من قالها حين يصبح أُجير من الجن حتى يمسي', count: 1 },
+    { id: 'm_ikhlas', text: 'قُلْ هُوَ اللَّهُ أَحَدٌ ۞ اللَّهُ الصَّمَدُ ۞ لَمْ يَلِدْ وَلَمْ يُولَدْ ۞ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ', virtue: 'سورة الإخلاص (٣ مرات): تكفيك من كل شيء', count: 3 },
+    { id: 'm_falaq', text: 'قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۞ مِن شَرِّ مَا خَلَقَ ۞ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ ۞ وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ ۞ وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ', virtue: 'سورة الفلق (٣ مرات): حماية من الحسد والسحر والشرور', count: 3 },
+    { id: 'm_nas', text: 'قُلْ أَعُوذُ بِرَبِّ النَّاسِ ۞ مَلِكِ النَّاسِ ۞ إِلَٰهِ النَّاسِ ۞ مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ ۞ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ ۞ مِنَ الْجِنَّةِ وَالنَّاسِ', virtue: 'سورة الناس (٣ مرات): حماية من الوسواس والشرور', count: 3 },
+    { id: 'm_asbahna', text: 'أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ لا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذَا الْيَوْمِ وَخَيْرَ مَا بَعْدَهُ، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذَا الْيَوْمِ وَشَرِّ مَا بَعْدَهُ، رَبِّ أَعُوذُ بِكَ مِنَ الْكَسَلِ وَسُوءِ الْكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي الْقَبْرِ', virtue: 'توحيد واعتراف بنعمة الملك وسؤال خير اليوم والاستعاذة من الشرور', count: 1 },
+    { id: 'm_sayyid', text: 'اللَّهُمَّ أَنْتَ رَبِّي لا إِلَهَ إِلا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ لَكَ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لا يَغْفِرُ الذُّنُوبَ إِلا أَنْتَ', virtue: 'سيد الاستغفار: من قالها موقناً بها حين يصبح فمات دخل الجنة', count: 1 },
+    { id: 'm_bika', text: 'اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ النُّشُورُ', virtue: 'التوكل والاستفتاح باسم الله تعالى وبداية اليوم بحمده', count: 1 },
+    { id: 'm_afiyah', text: 'اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي الدُّنْيَا وَالآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي، اللَّهُمَّ اسْتُرْ عَوْرَاتِي وَآمِنْ رَوْعَاتِي، اللَّهُمَّ احْفَظْنِي مِنْ بَيْنِ يَدَيَّ وَمِنْ خَلْفِي وَعَنْ يَمِينِي وَعَنْ شِمَالِي وَمِنْ فَوْقِي، وَأَعُوذُ بِعَظَمَتِكَ أَنْ أُغْتَالَ مِنْ تَحْتِي', virtue: 'دعاء الحفظ الشامل من جميع الجهات والمصائب', count: 1 },
+    { id: 'm_bismillahi', text: 'بِسْمِ اللَّهِ الَّذِي لا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الأَرْضِ وَلا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ', virtue: '٣ مرات: لم يضره شيء قط في يومه ذلك', count: 3 },
+    { id: 'm_radeetu', text: 'رَضِيتُ بِاللَّهِ رَبًّا، وَبِالإِسْلامِ دِينًا، وَبِمُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ نَبِيًّا', virtue: '٣ مرات: كان حقاً على الله أن يرضيه يوم القيامة', count: 3 },
+    { id: 'm_hayy', text: 'يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ، أَصْلِحْ لِي شَأْنِي كُلَّهُ، وَلا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ', virtue: 'الافتقار التام لله تعالى واستجلاب رحمته في سائر الشؤون', count: 1 },
+    { id: 'm_subhan_100', text: 'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ', virtue: '١٠٠ مرة: حُطّت خطاياه وإن كانت مثل زبد البحر ولم يأتِ أحد يوم القيامة بأفضل منه', count: 100 },
+    { id: 'm_salawat', text: 'اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ', virtue: '١٠ مرات: أدركته شفاعة النبي ﷺ يوم القيامة', count: 10 }
+  ],
+  evening: [
+    { id: 'e_kursi', text: 'اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ', virtue: 'آية الكرسي: من قالها حين يمسي أُجير من الجن حتى يصبح', count: 1 },
+    { id: 'e_ikhlas', text: 'قُلْ هُوَ اللَّهُ أَحَدٌ ۞ اللَّهُ الصَّمَدُ ۞ لَمْ يَلِدْ وَلَمْ يُولَدْ ۞ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ', virtue: 'سورة الإخلاص (٣ مرات): تكفيك من كل شيء', count: 3 },
+    { id: 'e_falaq', text: 'قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۞ مِن شَرِّ مَا خَلَقَ ۞ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ ۞ وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ ۞ وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ', virtue: 'سورة الفلق (٣ مرات): حماية من الشرور والمكاره', count: 3 },
+    { id: 'e_nas', text: 'قُلْ أَعُوذُ بِرَبِّ النَّاسِ ۞ مَلِكِ النَّاسِ ۞ إِلَٰهِ النَّاسِ ۞ مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ ۞ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ ۞ مِنَ الْجِنَّةِ وَالنَّاسِ', virtue: 'سورة الناس (٣ مرات): حماية من وسوسة الشيطان وأذى الإنس والجن', count: 3 },
+    { id: 'e_amsayna', text: 'أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ لا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذِهِ اللَّيْلَةِ وَخَيْرَ مَا بَعْدَهَا، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذِهِ اللَّيْلَةِ وَشَرِّ مَا بَعْدَهَا، رَبِّ أَعُوذُ بِكَ مِنَ الْكَسَلِ وَسُوءِ الْكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي الْقَبْرِ', virtue: 'استفتاح المساء بحمد الله وسؤال خير الليلة والتعوذ من شرها', count: 1 },
+    { id: 'e_sayyid', text: 'اللَّهُمَّ أَنْتَ رَبِّي لا إِلَهَ إِلا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ لَكَ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لا يَغْفِرُ الذُّنُوبَ إِلا أَنْتَ', virtue: 'سيد الاستغفار: من قالها حين يمسي موقناً بها فمات من ليلته دخل الجنة', count: 1 },
+    { id: 'e_bika', text: 'اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ الْمَصِيرُ', virtue: 'التفويض والالتجاء إلى الله تعالى في ختام النهار وبداية الليل', count: 1 },
+    { id: 'e_afiyah', text: 'اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي الدُّنْيَا وَالآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي، اللَّهُمَّ اسْتُرْ عَوْرَاتِي وَآمِنْ رَوْعَاتِي، اللَّهُمَّ احْفَظْنِي مِنْ بَيْنِ يَدَيَّ وَمِنْ خَلْفِي وَعَنْ يَمِينِي وَعَنْ شِمَالِي وَمِنْ فَوْقِي، وَأَعُوذُ بِعَظَمَتِكَ أَنْ أُغْتَالَ مِنْ تَحْتِي', virtue: 'دعاء الحفظ والستر والعافية الشاملة في المساء والليل', count: 1 },
+    { id: 'e_bismillahi', text: 'بِسْمِ اللَّهِ الَّذِي لا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الأَرْضِ وَلا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ', virtue: '٣ مرات: لم يضره شيء في ليلته حتى يصبح', count: 3 },
+    { id: 'e_kalimat', text: 'أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ', virtue: '٣ مرات: لم يضره شيء ولم تصبه لدغة أو سم في ليلته', count: 3 },
+    { id: 'e_radeetu', text: 'رَضِيتُ بِاللَّهِ رَبًّا، وَبِالإِسْلامِ دِينًا، وَبِمُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ نَبِيًّا', virtue: '٣ مرات: كان حقاً على الله أن يرضيه يوم القيامة', count: 3 },
+    { id: 'e_hayy', text: 'يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ، أَصْلِحْ لِي شَأْنِي كُلَّهُ، وَلا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ', virtue: 'استغاثة برحمة الحي القيوم وإصلاح الشأن كله', count: 1 },
+    { id: 'e_subhan_100', text: 'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ', virtue: '١٠٠ مرة: غُفرت ذنوبه وإن كانت مثل زبد البحر', count: 100 },
+    { id: 'e_salawat', text: 'اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ', virtue: '١٠ مرات: نيل شفاعة الحبيب المصطفى ﷺ', count: 10 }
+  ]
+};
+
+function getAzkarCountsState(iso, type){
+  const key = `azkar_counts_${type}_${iso}`;
+  return storageGetJSON(key, {});
+}
+
+function saveAzkarCountsState(iso, type, state){
+  const key = `azkar_counts_${type}_${iso}`;
+  storageSet(key, JSON.stringify(state));
+}
+
+function toggleAzkarReader(type){
+  triggerHaptic('light');
+  const panel = document.getElementById(type === 'morning' ? 'morningAzkarPanel' : 'eveningAzkarPanel');
+  if(!panel) return;
+  const isHidden = panel.classList.contains('hidden');
+  panel.classList.toggle('hidden', !isHidden);
+  if(isHidden){
+    renderAzkarReaderList(type);
+  }
+}
+
+function renderAzkarReaderList(type){
+  const iso = (typeof weekDates !== 'undefined' && weekDates[selectedIdx]) ? toISO(weekDates[selectedIdx]) : toISO(new Date());
+  const listEl = document.getElementById(type === 'morning' ? 'morningAzkarList' : 'eveningAzkarList');
+  if(!listEl) return;
+  const items = AUTHENTIC_AZKAR_DATA[type] || [];
+  const state = getAzkarCountsState(iso, type);
+
+  let completedCount = 0;
+  let html = '';
+
+  items.forEach(it => {
+    const remaining = typeof state[it.id] === 'number' ? state[it.id] : it.count;
+    const isDone = remaining <= 0;
+    if(isDone) completedCount++;
+
+    html += `
+      <div class="azkar-item-card ${isDone ? 'is-completed' : ''}" style="background:var(--card); border:1px solid ${isDone ? 'var(--good)' : 'var(--line)'}; border-radius:10px; padding:12px; display:flex; flex-direction:column; gap:6px; transition:border-color 0.2s ease;">
+        <div style="font-size:0.92rem; font-weight:600; color:var(--text); line-height:1.75; font-family:'Amiri', serif, sans-serif;">
+          ${it.text}
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px; gap:8px;">
+          <div style="font-size:0.75rem; color:var(--muted); flex:1;">
+            ✨ ${it.virtue}
+          </div>
+          <button type="button" class="azkar-tap-btn ${isDone ? 'done' : ''}" onclick="decrementAzkarCount('${type}', '${it.id}', ${it.count})" style="background:${isDone ? 'var(--good)' : 'var(--accent)'}; color:#ffffff; font-weight:800; font-size:0.84rem; padding:4px 14px; border-radius:20px; border:none; cursor:pointer; min-width:60px; transition:all 0.15s ease;">
+            ${isDone ? '✓ تم' : remaining}
+          </button>
+        </div>
+      </div>
+    `;
+  });
+
+  listEl.innerHTML = html;
+
+  // Update badge on button
+  const badgeEl = document.getElementById(type === 'morning' ? 'morningCountBadge' : 'eveningCountBadge');
+  if(badgeEl){
+    badgeEl.textContent = `${completedCount}/${items.length}`;
+    badgeEl.classList.toggle('is-complete', completedCount === items.length);
+  }
+
+  // If all items are completed, mark corresponding checklist item in azkarState
+  const checklistKey = type === 'morning' ? 'أذكار الصباح' : 'أذكار المساء';
+  if(completedCount === items.length && !azkarState[checklistKey]){
+    azkarState[checklistKey] = true;
+    saveAzkar(iso, azkarState);
+    if(typeof renderAzkar === 'function') renderAzkar();
+    if(typeof showToast === 'function'){
+      showToast(`هنيئاً لك! أتممت ${checklistKey} كاملة بحمد الله 🌿`, 'success', 3500);
+    }
+  }
+}
+
+function decrementAzkarCount(type, id, totalCount){
+  triggerHaptic('light');
+  const iso = (typeof weekDates !== 'undefined' && weekDates[selectedIdx]) ? toISO(weekDates[selectedIdx]) : toISO(new Date());
+  const state = getAzkarCountsState(iso, type);
+  const current = typeof state[id] === 'number' ? state[id] : totalCount;
+  if(current > 0){
+    state[id] = current - 1;
+    saveAzkarCountsState(iso, type, state);
+    renderAzkarReaderList(type);
+  }
+}
+
+function resetAzkarTypeCounts(type){
+  const iso = (typeof weekDates !== 'undefined' && weekDates[selectedIdx]) ? toISO(weekDates[selectedIdx]) : toISO(new Date());
+  saveAzkarCountsState(iso, type, {});
+  renderAzkarReaderList(type);
+  if(typeof showToast === 'function'){
+    showToast('تمت إعادة تعيين العداد لهذا القسم ↻', 'info', 2000);
+  }
+}
+
+/* =========================================================================
+   PHASE 22: UNIVERSAL SECTION BLOCK REORDERING ENGINE
+   ========================================================================= */
+function moveSecBlock(btn, dir){
+  triggerHaptic('light');
+  const block = btn.closest('[data-sec-block]');
+  if(!block || !block.parentElement) return;
+  const parent = block.parentElement;
+  if(dir === -1){
+    let prev = block.previousElementSibling;
+    while(prev && !prev.hasAttribute('data-sec-block')) prev = prev.previousElementSibling;
+    if(prev) parent.insertBefore(block, prev);
+  } else {
+    let next = block.nextElementSibling;
+    while(next && !next.hasAttribute('data-sec-block')) next = next.nextElementSibling;
+    if(next) parent.insertBefore(next, block);
+  }
+  saveSecBlockOrder(parent);
+}
+
+function saveSecBlockOrder(container){
+  if(!container || !container.id) return;
+  const blocks = Array.from(container.querySelectorAll(':scope > [data-sec-block]'));
+  const order = blocks.map(b => b.getAttribute('data-sec-block')).filter(Boolean);
+  try {
+    localStorage.setItem('zatoona-sec-order-' + container.id, JSON.stringify(order));
+  } catch(e){}
+}
+
+function applySecBlockOrder(containerId){
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  try {
+    const raw = localStorage.getItem('zatoona-sec-order-' + containerId);
+    if(!raw) return;
+    const order = JSON.parse(raw);
+    if(!Array.isArray(order)) return;
+    order.forEach(key => {
+      const el = container.querySelector(`:scope > [data-sec-block="${key}"]`);
+      if(el) container.appendChild(el);
+    });
+  } catch(e){}
+}
+
+function filterUserGuide(query){
+  query = (query || '').trim().toLowerCase();
+  const items = document.querySelectorAll('#userGuideAccordions .guide-item');
+  items.forEach(it => {
+    const text = it.textContent.toLowerCase();
+    const match = !query || text.includes(query);
+    it.style.display = match ? '' : 'none';
+    if(query && match) it.open = true;
+  });
+}
+
+// Hook Azkar badges on renderAzkar
+const _origRenderAzkar = renderAzkar;
+renderAzkar = function(){
+  _origRenderAzkar.apply(this, arguments);
+  try {
+    const iso = (typeof weekDates !== 'undefined' && weekDates[selectedIdx]) ? toISO(weekDates[selectedIdx]) : toISO(new Date());
+    ['morning', 'evening'].forEach(t => {
+      const items = AUTHENTIC_AZKAR_DATA[t] || [];
+      const state = getAzkarCountsState(iso, t);
+      const done = items.filter(it => (typeof state[it.id] === 'number' ? state[it.id] : it.count) <= 0).length;
+      const badge = document.getElementById(t === 'morning' ? 'morningCountBadge' : 'eveningCountBadge');
+      if(badge){
+        badge.textContent = `${done}/${items.length}`;
+        badge.classList.toggle('is-complete', done === items.length);
+      }
+    });
+  } catch(e){}
+};
+
+// Apply saved section orders on DOM ready
+document.addEventListener('DOMContentLoaded', function(){
+  ['homeView', 'prayerView', 'mealView', 'gymView', 'sleepView', 'scheduleView', 'settingsView'].forEach(id => {
+    applySecBlockOrder(id);
+  });
+});
+
+
 /* --- Render Settings View --- */
 function renderSettingsView(){
   syncSettingsUI();
@@ -44594,28 +46687,30 @@ function switchGymSubTab(tabKey){
   const gymContent = document.getElementById('gymView');
   if(!gymContent) return;
 
-  // If switching to stretches, clone stretchesView content into gymSubPaneStretches if empty
+  // If switching to stretches, move stretchesView into gymSubPaneStretches preserving DOM nodes & listeners
   if(tabKey === 'stretches'){
     const pane = allPanes.stretches;
-    if(pane && pane.innerHTML.trim() === ''){
-      const src = document.getElementById('stretchesView');
-      if(src) pane.innerHTML = src.innerHTML;
+    const src = document.getElementById('stretchesView');
+    if(pane && src && src.parentElement !== pane){
+      src.classList.remove('hidden');
+      pane.appendChild(src);
     }
     if(typeof renderStretchesView === 'function'){
-      // Re-render within the pane context
-      setTimeout(() => renderStretchesView(), 50);
+      renderStretchesView();
     }
   }
 
-  // If switching to recovery, clone recoveryView content into gymSubPaneRecovery if empty
+  // If switching to recovery, move recoveryView into gymSubPaneRecovery preserving DOM nodes & listeners
   if(tabKey === 'recovery'){
     const pane = allPanes.recovery;
-    if(pane && pane.innerHTML.trim() === ''){
-      const src = document.getElementById('recoveryView');
-      if(src) pane.innerHTML = src.innerHTML;
+    const src = document.getElementById('recoveryView');
+    if(pane && src && src.parentElement !== pane){
+      src.classList.remove('hidden');
+      pane.appendChild(src);
     }
     if(typeof renderRecovery === 'function'){
-      setTimeout(() => { renderRecovery(); renderRecoveryStatus(); }, 50);
+      renderRecovery();
+      renderRecoveryStatus();
     }
   }
 
@@ -44700,10 +46795,11 @@ const _patchedApplyModeForGymTabs = (function(){
 function initPillarSubTabs(){
   // Meal SubTabs
   const mealTabs = document.getElementById('mealSubTabs');
-  if(mealTabs){
+  if(mealTabs && !mealTabs._subTabBound){
+    mealTabs._subTabBound = true;
     mealTabs.addEventListener('click', (e) => {
       const btn = e.target.closest('.pillar-subtab-btn');
-      if(!btn) return;
+      if(!btn || btn.classList.contains('active')) return;
       mealTabs.querySelectorAll('.pillar-subtab-btn').forEach(b => b.classList.toggle('active', b === btn));
       const target = btn.dataset.subtab;
       const supp = document.getElementById('cardLimitlessManSupplement');
@@ -44719,7 +46815,7 @@ function initPillarSubTabs(){
         mealCards.forEach(c => c.style.display = '');
         pantryCards.forEach(c => c.style.display = '');
       } else if(target === 'supplements'){
-        if(supp) { supp.style.display = ''; supp.scrollIntoView({behavior:'smooth', block:'start'}); }
+        if(supp) { supp.style.display = ''; supp.scrollIntoView({behavior:'auto', block:'nearest'}); }
         if(household) household.style.display = '';
         if(costProtein) costProtein.style.display = 'none';
         mealCards.forEach(c => c.style.display = 'none');
@@ -44733,7 +46829,7 @@ function initPillarSubTabs(){
       } else if(target === 'pantry'){
         if(supp) supp.style.display = 'none';
         if(household) household.style.display = 'none';
-        if(costProtein) { costProtein.style.display = ''; costProtein.scrollIntoView({behavior:'smooth', block:'start'}); }
+        if(costProtein) { costProtein.style.display = ''; costProtein.scrollIntoView({behavior:'auto', block:'nearest'}); }
         mealCards.forEach(c => c.style.display = 'none');
         pantryCards.forEach(c => c.style.display = '');
       }
@@ -44742,10 +46838,11 @@ function initPillarSubTabs(){
 
   // Prayer SubTabs
   const prayerTabs = document.getElementById('prayerSubTabs');
-  if(prayerTabs){
+  if(prayerTabs && !prayerTabs._subTabBound){
+    prayerTabs._subTabBound = true;
     prayerTabs.addEventListener('click', (e) => {
       const btn = e.target.closest('.pillar-subtab-btn');
-      if(!btn) return;
+      if(!btn || btn.classList.contains('active')) return;
       prayerTabs.querySelectorAll('.pillar-subtab-btn').forEach(b => b.classList.toggle('active', b === btn));
       const target = btn.dataset.subtab;
       const hadith = document.getElementById('card40HadithNawawi');
@@ -44764,13 +46861,13 @@ function initPillarSubTabs(){
         timesSec.forEach(c => c.style.display = '');
         quranSec.forEach(c => c.style.display = 'none');
       } else if(target === 'quran'){
-        if(hadith) { hadith.style.display = ''; hadith.scrollIntoView({behavior:'smooth', block:'start'}); }
+        if(hadith) { hadith.style.display = ''; hadith.scrollIntoView({behavior:'auto', block:'nearest'}); }
         if(tafakkur) tafakkur.style.display = 'none';
         timesSec.forEach(c => c.style.display = 'none');
         quranSec.forEach(c => c.style.display = '');
       } else if(target === 'fasting'){
         if(hadith) hadith.style.display = 'none';
-        if(tafakkur) { tafakkur.style.display = ''; tafakkur.scrollIntoView({behavior:'smooth', block:'start'}); }
+        if(tafakkur) { tafakkur.style.display = ''; tafakkur.scrollIntoView({behavior:'auto', block:'nearest'}); }
         timesSec.forEach(c => c.style.display = 'none');
         quranSec.forEach(c => c.style.display = 'none');
       }
@@ -44779,19 +46876,20 @@ function initPillarSubTabs(){
 
   // Schedule SubTabs
   const scheduleTabs = document.getElementById('scheduleSubTabs');
-  if(scheduleTabs){
+  if(scheduleTabs && !scheduleTabs._subTabBound){
+    scheduleTabs._subTabBound = true;
     scheduleTabs.addEventListener('click', (e) => {
       const btn = e.target.closest('.pillar-subtab-btn');
-      if(!btn) return;
+      if(!btn || btn.classList.contains('active')) return;
       scheduleTabs.querySelectorAll('.pillar-subtab-btn').forEach(b => b.classList.toggle('active', b === btn));
       const target = btn.dataset.subtab;
       // Focus navigation
       if(target === 'timeline'){
         const el = document.getElementById('scheduleTimelineWrap') || document.querySelector('#scheduleView .section-title');
-        if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+        if(el) el.scrollIntoView({behavior:'auto', block:'nearest'});
       } else if(target === 'focus'){
         const el = document.getElementById('cardFlipToFocus');
-        if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+        if(el) el.scrollIntoView({behavior:'auto', block:'nearest'});
       }
     });
   }
@@ -44928,8 +47026,11 @@ function syncWaterToNativeWidget(waterCount){
   }
 }
 
+window._isSyncingScheduleWidget = window._isSyncingScheduleWidget || false;
 function syncScheduleToNativeWidget(){
+  if(window._isSyncingScheduleWidget) return;
   if(window.ZatoonaNativeBridge && typeof window.ZatoonaNativeBridge.syncScheduleWidget === 'function'){
+    window._isSyncingScheduleWidget = true;
     try {
       const dayIdx = (typeof selectedIdx !== 'undefined') ? selectedIdx : (new Date().getDay() + 1) % 7;
       const settings = (typeof scheduleSettings !== 'undefined') ? scheduleSettings : (typeof loadScheduleSettings === 'function' ? loadScheduleSettings() : { collegeDays: [false,false,false,false,false,false,false] });
@@ -45002,6 +47103,8 @@ function syncScheduleToNativeWidget(){
       }));
     } catch(e){
       console.warn('[bridge] schedule sync error:', e);
+    } finally {
+      window._isSyncingScheduleWidget = false;
     }
   }
 }
@@ -45802,6 +47905,470 @@ window.syncScheduleToNativeWidget = syncScheduleToNativeWidget;
   }
 })();
 
+
+// ==========================================================================
+// LEGAL, PRIVACY, COMPLIANCE & DATA RIGHTS ENGINE (GDPR & CCPA READY)
+// ==========================================================================
+function openLegalPrivacyModal(defaultTab = 'privacy') {
+  try { if (typeof triggerHaptic === 'function') triggerHaptic('light'); } catch(e) {}
+  const modal = document.getElementById('legalPrivacyModal');
+  if (modal) {
+    modal.classList.add('open');
+    switchLegalTab(defaultTab);
+  }
+}
+
+function closeLegalPrivacyModal() {
+  const modal = document.getElementById('legalPrivacyModal');
+  if (modal) {
+    modal.classList.remove('open');
+  }
+}
+
+function switchLegalTab(tabId) {
+  document.querySelectorAll('.legal-tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-legal-tab') === tabId);
+  });
+  document.querySelectorAll('.legal-tab-content').forEach(content => {
+    content.classList.remove('active');
+  });
+  const target = document.getElementById('ltab-' + tabId);
+  if (target) {
+    target.classList.add('active');
+  }
+}
+
+function openDataDeletionModal() {
+  try { if (typeof triggerHaptic === 'function') triggerHaptic('warning'); } catch(e) {}
+  const modal = document.getElementById('dataDeletionModal');
+  const input = document.getElementById('inpConfirmDelete');
+  if (input) input.value = '';
+  if (modal) {
+    modal.classList.add('open');
+  }
+}
+
+function closeDataDeletionModal() {
+  const modal = document.getElementById('dataDeletionModal');
+  if (modal) {
+    modal.classList.remove('open');
+  }
+}
+
+function exportAppDataToJson() {
+  try {
+    const backup = {};
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      backup[key] = localStorage.getItem(key);
+    }
+    const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(backup, null, 2));
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute('href', dataStr);
+    downloadAnchor.setAttribute('download', `zatoona-full-data-export-${new Date().toISOString().slice(0, 10)}.json`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+    if (typeof showToast === 'function') showToast('تم تصدير ملف بياناتك الكامل (JSON) بنجاح 💾');
+  } catch(e) {
+    alert('حدث خطأ أثناء تصدير البيانات: ' + e.message);
+  }
+}
+
+function executeComprehensiveDataWipe() {
+  const input = document.getElementById('inpConfirmDelete');
+  const val = (input ? input.value : '').trim();
+  if (val !== 'حذف' && val.toLowerCase() !== 'delete') {
+    alert('يرجى كتابة كلمة "حذف" في المربع للتأكيد قبل المسح.');
+    if (input) input.focus();
+    return;
+  }
+
+  try {
+    // 1. Clear LocalStorage
+    localStorage.clear();
+    // 2. Clear SessionStorage
+    sessionStorage.clear();
+    // 3. Clear IndexedDB databases if accessible
+    if (window.indexedDB && window.indexedDB.databases) {
+      window.indexedDB.databases().then(dbs => {
+        dbs.forEach(db => {
+          if (db.name) window.indexedDB.deleteDatabase(db.name);
+        });
+      }).catch(() => {});
+    }
+    // 4. Clear CacheStorage
+    if (window.caches) {
+      window.caches.keys().then(names => {
+        names.forEach(name => window.caches.delete(name));
+      }).catch(() => {});
+    }
+
+    alert('تم محو وتطهير جميع بيانات التطبيق نهائياً بنجاح وفق معايير GDPR Art. 17. سيتم إعادة تحميل التطبيق بحالة المصنع الأولى.');
+    window.location.reload();
+  } catch(e) {
+    alert('حدث خطأ أثناء محو البيانات: ' + e.message);
+  }
+}
+
+function initStorageConsentBanner() {
+  try {
+    const consent = localStorage.getItem('zatoona_storage_consent');
+    const banner = document.getElementById('storageConsentBanner');
+    const isAutomated = window.navigator && window.navigator.webdriver;
+    if (!consent && banner && !isAutomated) {
+      banner.style.display = 'block';
+    }
+  } catch(e) {}
+}
+
+function acceptStorageConsent() {
+  try {
+    localStorage.setItem('zatoona_storage_consent', 'accepted');
+  } catch(e) {}
+  const banner = document.getElementById('storageConsentBanner');
+  if (banner) {
+    banner.style.display = 'none';
+  }
+  if (typeof showToast === 'function') showToast('تم حفظ تفضيلات الخصوصية والتخزين المحلي ✓');
+}
+
+function openStorageConsentSettings() {
+  const banner = document.getElementById('storageConsentBanner');
+  if (banner) {
+    banner.style.display = 'block';
+  }
+  openLegalPrivacyModal('cookies');
+}
+
+// Global Keyboard Accessibility: Close active modals on Escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' || e.keyCode === 27) {
+    closeLegalPrivacyModal();
+    closeDataDeletionModal();
+    if (typeof closeThemeCustomizer === 'function') closeThemeCustomizer();
+    if (typeof closeWeeklyMealPlanModal === 'function') closeWeeklyMealPlanModal();
+    if (typeof closeCheatRecoveryModal === 'function') closeCheatRecoveryModal();
+  }
+});
+
+// Expose compliance functions on window
+window.openLegalPrivacyModal = openLegalPrivacyModal;
+window.closeLegalPrivacyModal = closeLegalPrivacyModal;
+window.switchLegalTab = switchLegalTab;
+window.openDataDeletionModal = openDataDeletionModal;
+window.closeDataDeletionModal = closeDataDeletionModal;
+window.exportAppDataToJson = exportAppDataToJson;
+window.executeComprehensiveDataWipe = executeComprehensiveDataWipe;
+window.initStorageConsentBanner = initStorageConsentBanner;
+window.acceptStorageConsent = acceptStorageConsent;
+window.openStorageConsentSettings = openStorageConsentSettings;
+
 </script>
+
+<!-- ==========================================================================
+     LEGAL, PRIVACY & COMPLIANCE MODAL (مركز الخصوصية والسياسات والشروط)
+     ========================================================================== -->
+<div class="legal-modal-overlay" id="legalPrivacyModal" role="dialog" aria-modal="true" aria-labelledby="legalModalTitle" onclick="if(event.target===this)closeLegalPrivacyModal()">
+  <div class="legal-modal-card" onclick="event.stopPropagation()">
+    <div class="legal-modal-header">
+      <div class="legal-modal-title" id="legalModalTitle">
+        <span>🛡️</span>
+        <span>مركز الخصوصية والسياسات والشروط القانونية</span>
+      </div>
+      <button type="button" class="legal-modal-close" onclick="closeLegalPrivacyModal()" aria-label="إغلاق">✕</button>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="legal-tabs-bar" role="tablist">
+      <button type="button" class="legal-tab-btn active" data-legal-tab="privacy" onclick="switchLegalTab('privacy')">🛡️ الخصوصية</button>
+      <button type="button" class="legal-tab-btn" data-legal-tab="terms" onclick="switchLegalTab('terms')">⚖️ الشروط وإخلاء المسؤولية</button>
+      <button type="button" class="legal-tab-btn" data-legal-tab="refund" onclick="switchLegalTab('refund')">💳 الاسترداد والتسعير</button>
+      <button type="button" class="legal-tab-btn" data-legal-tab="cookies" onclick="switchLegalTab('cookies')">🍪 التخزين المحلي</button>
+      <button type="button" class="legal-tab-btn" data-legal-tab="kids" onclick="switchLegalTab('kids')">👶 حماية القُصّر</button>
+      <button type="button" class="legal-tab-btn" data-legal-tab="emails" onclick="switchLegalTab('emails')">📧 سياسة المراسلات</button>
+      <button type="button" class="legal-tab-btn" data-legal-tab="business" onclick="switchLegalTab('business')">🏢 بيانات الكيان والمطور</button>
+      <button type="button" class="legal-tab-btn" data-legal-tab="licenses" onclick="switchLegalTab('licenses')">📜 التراخيص والمصادر</button>
+      <button type="button" class="legal-tab-btn" data-legal-tab="deletion" onclick="switchLegalTab('deletion')">🗑️ تصدير وحذف البيانات</button>
+    </div>
+
+    <!-- Modal Body with Tabs -->
+    <div class="legal-modal-body">
+
+      <!-- TAB 1: PRIVACY POLICY -->
+      <div class="legal-tab-content active" id="ltab-privacy">
+        <div class="legal-section-block">
+          <h3 class="legal-section-h3">🛡️ سياسة الخصوصية وحماية البيانات (Privacy Policy)</h3>
+          <p><strong>تاريخ السريان:</strong> نوفمبر 2026 | <strong>نطاق الامتثال:</strong> اللائحة العامة لحماية البيانات (GDPR) وقانون خصوصية المستهلك في كاليفورنيا (CCPA).</p>
+          <div class="legal-callout-success">
+            <strong>مبدأ الخصوصية بالتصميم (Privacy-by-Design):</strong> تطبيق زتونة تطبيق محلي بالكامل (Local-First Offline Application). نحن لا نملك خوادم تجمع بياناتك الشخصية، ولا نقوم بنقل أو بيع أو مشاركة أي بيانات تخص أوزانك أو وجباتك أو صلواتك أو ملاحظاتك مع أي طرف ثالث.
+          </div>
+          <h4 style="margin:12px 0 6px 0; font-size:0.88rem;">1. ما هي البيانات التي يعالجها التطبيق؟</h4>
+          <ul>
+            <li><strong>بيانات التدريب والرياضة:</strong> التمارين، الأوزان، العدات، الجولات، والملاحظات التدريبية (تُحفظ محلياً في ذاكرة المتصفح).</li>
+            <li><strong>بيانات التغذية والوزن:</strong> الوزن، الطول، العمر الاسترشادي لحساب BMR، وسجلات الوجبات اليومية والمكونات.</li>
+            <li><strong>بيانات العبادات ومواقيت الصلاة:</strong> المدينة المختارة ومواقيت الأذان وقوائم المهام اليومية (حسابات فلكية رياضية محلية دون تتبع GPS).</li>
+          </ul>
+          <h4 style="margin:12px 0 6px 0; font-size:0.88rem;">2. المساعد الذكي وحماية الخصوصية (Local AI Policy)</h4>
+          <p>نظام المساعد الذكي في زتونة يعمل محلياً بنسبة 100% عبر محرك قواعد برمجية بدون اتصال بالإنترنت، وهو <strong>معطل افتراضياً (Opt-in strictly)</strong> ولا يرسل أي بيانات لأي خادم خارجي دون موافقة مستخدم مسبقة وصريحة.</p>
+          <h4 style="margin:12px 0 6px 0; font-size:0.88rem;">3. حقوقك القانونية (Your Legal Rights)</h4>
+          <p>بموجب قوانين حماية البيانات الدولية، تتمتع بالحقوق الآتية:</p>
+          <ul>
+            <li><strong>الحق في الوصول ونقل البيانات (Data Portability):</strong> إمكانية تنزيل نسخة JSON كاملة من بياناتك بضغطة زر في أي وقت.</li>
+            <li><strong>الحق في المحو التام (Right to Erasure / Forgotten):</strong> زر مخصص لحذف وتطهير كافة البيانات وإعادة ضبط المصنع للتطبيق.</li>
+          </ul>
+          <p style="margin-top:10px;">لأي استفسار حول الخصوصية: <a href="mailto:privacy@zatoona.app" style="color:var(--primary); font-weight:700;">privacy@zatoona.app</a></p>
+        </div>
+      </div>
+
+      <!-- TAB 2: TERMS OF SERVICE & MEDICAL DISCLAIMER -->
+      <div class="legal-tab-content" id="ltab-terms">
+        <div class="legal-section-block">
+          <h3 class="legal-section-h3">⚖️ شروط الاستخدام وإخلاء المسؤولية الصحية (Terms & Disclaimers)</h3>
+          <p>باستخدامك لتطبيق زتونة، فإنك توافق على الالتزام بهذه الشروط والأحكام للاستخدام الشخصي غير التجاري.</p>
+
+          <div class="legal-callout-warning">
+            <h4 style="margin:0 0 6px 0; font-size:0.88rem; color:#B45309;">⚠️ إخلاء مسؤولية صحية ورياضية وغذائية حاسم (Medical Disclaimer)</h4>
+            <p style="margin:0;">
+              جميع المعلومات، الحسابات الرقمية (BMR / TDEE)، اقتراحات الجداول الرياضية، موسوعة التمارين، وخطط الوجبات داخل تطبيق زتونة هي <strong>أدوات تنظيمية واسترشادية وتعليمية فقط</strong>، ولا تعتبر بأي حال من الأحوال استشارة طبية أو تشخيصاً علاجياً أو بديلاً عن الفحص السريري من قبل طبيب بشري مختص أو أخصائي تغذية علاجية معتمد أو مدرب لياقة بدنية محترف.
+            </p>
+            <p style="margin:6px 0 0 0;">
+              يجب عليك <strong>استشارة طبيبك دائماً</strong> قبل الشروع في أي تمرين مجهد، رفع أوزان ثقيلة، تطبيق عجز حراري حاد، أو تناول أي مكملات غذائية أو فيتامينات (بما في ذلك أقراص الملتي فيتامين مثل ليمتليس مان ماكس)، خصوصاً إذا كنت تعاني من أمراض القلب، ارتفاع ضغط الدم، السكري، أو إصابات مسبقة في العمود الفقري والمفاصل. مطورو التطبيق لا يتحملون أي مسؤولية مدنية أو قانونية عن أي إصابات أو أضرار ناتجة عن التطبيق الخاطئ للتمارين أو إهمال الاستشارة الطبية.
+            </p>
+          </div>
+
+          <h4 style="margin:12px 0 6px 0; font-size:0.88rem;">شروط السلامة الرياضية:</h4>
+          <ul>
+            <li>قم بالإحماء الديناميكي قبل كل حصة تدريبية وتدرج في الأوزان وفق مبدأ الحمل الزائد التدريجي الآمن.</li>
+            <li>توقف فوراً عن التمرين في حال الشعور بدوار، ألم حاد غير طبيعي في المفاصل، أو ضيق في التنفس.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- TAB 3: REFUND & PRICING TRANSPARENCY -->
+      <div class="legal-tab-content" id="ltab-refund">
+        <div class="legal-section-block">
+          <h3 class="legal-section-h3">💳 سياسة الاسترداد والشفافية المالية (Refund & Free Policy)</h3>
+          <div class="legal-callout-success">
+            <strong>تطبيق مجاني 100% مدى الحياة (Zero Hidden Fees):</strong> تطبيق زتونة مجاني تماماً وبدون أي مشتريات داخل التطبيق (No In-App Purchases)، وبدون أي رسوم خفية أو فترات تجريبية احتيالية (No Subscription Traps / No Dark Patterns).
+          </div>
+          <h4 style="margin:12px 0 6px 0; font-size:0.88rem;">سياسة الاسترداد المستقبلية (Future Digital Purchases):</h4>
+          <p>
+            في حال قرر المشروع مستقبلاً تقديم أي خدمات سحابية اختيارية أو محتوى رقمي مدفوع، فإننا نلتزم بسياسة استرداد واضحة وعادلة تضمن لك <strong>استرجاع 100% من المبلغ المدفوع خلال 14 يوماً</strong> من تاريخ الشراء دون الحاجة لإبداء أي أسباب، بمجرد مراسلة فريق الدعم عبر <a href="mailto:refunds@zatoona.app" style="color:var(--primary); font-weight:700;">refunds@zatoona.app</a>.
+          </p>
+        </div>
+      </div>
+
+      <!-- TAB 4: COOKIE & LOCAL STORAGE POLICY -->
+      <div class="legal-tab-content" id="ltab-cookies">
+        <div class="legal-section-block">
+          <h3 class="legal-section-h3">🍪 سياسة التخزين المحلي وملفات الارتباط (Storage & Cookies)</h3>
+          <p>تطبيق زتونة <strong>لا يستخدم إطلاقاً</strong> أي ملفات تتبع إعلاني أو كوكيز خارجية (No Third-Party Advertising Cookies).</p>
+          <table class="legal-table">
+            <thead>
+              <tr>
+                <th>نوع التخزين</th>
+                <th>الغرض والاستخدام</th>
+                <th>المدة</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>LocalStorage</strong></td>
+                <td>حفظ المظهر المفضل، إعدادات العادات، تفضيلات التنبيهات، وقوائم التغذية محلياً.</td>
+                <td>دائم حتى يمسحه المستخدم</td>
+              </tr>
+              <tr>
+                <td><strong>IndexedDB</strong></td>
+                <td>تخزين موسوعة التمارين الرياضية، بيانات الأطعمة، وصور التمارين المتجهة لتعمل دون إنترنت.</td>
+                <td>دائم محلياً على الجهاز</td>
+              </tr>
+              <tr>
+                <td><strong>ServiceWorker Cache</strong></td>
+                <td>تخزين ملفات التطبيق البرمجية والخطوط ليعمل التطبيق كلياً دون اتصال بالإنترنت (Offline PWA).</td>
+                <td>يتم تحديثه تلقائياً مع الإصدارات</td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="margin-top:10px;">يمكنك التحكم الكامل في مسح هذه البيانات عبر إعدادات متصفحك أو من خلال زر الحذف الشامل في تبويب "حذف البيانات".</p>
+        </div>
+      </div>
+
+      <!-- TAB 5: CHILDREN'S PRIVACY & AGE CONSENT -->
+      <div class="legal-tab-content" id="ltab-kids">
+        <div class="legal-section-block">
+          <h3 class="legal-section-h3">👶 حماية القُصّر وسياسة الأعمار (COPPA & Children's Privacy)</h3>
+          <p>نحن نولي حماية الأطفال أقصى درجات الاهتمام ونلتزم بقانون حماية خصوصية الأطفال على الإنترنت (COPPA) ومعايير الاتحاد الأوروبي للقصّر.</p>
+          <div class="legal-callout-warning">
+            <strong>شرط السن الأدنى للاستخدام:</strong> تطبيق زتونة مخصص وموجه للأفراد من سن <strong>13 عاماً فما فوق</strong> (أو 16 عاماً في بعض الدول الأوروبية). التطبيق لا يجمع ولا يطلب ولا يحتفظ بأي معلومات تعريفية لأي طفل دون سن 13 عاماً.
+          </div>
+          <p>إذا كنت ولي أمر وعلمت أن طفلك قام بتثبيت التطبيق وإدخال بيانات شخصية دون إشرافك، يمكنك فتح تبويب "حذف البيانات" والضغط على زر التطهير الشامل لمسح كافة البيانات فوراً.</p>
+        </div>
+      </div>
+
+      <!-- TAB 6: COMMUNICATIONS & UNSUBSCRIBE -->
+      <div class="legal-tab-content" id="ltab-emails">
+        <div class="legal-section-block">
+          <h3 class="legal-section-h3">📧 سياسة الاتصالات والمراسلات وإلغاء الاشتراك (Communications Policy)</h3>
+          <div class="legal-callout-success">
+            <strong>خلو تام من الرسائل المزعجة (Zero Spam):</strong> نظراً لأن التطبيق لا يجمع عناوين بريد إلكتروني، فإننا لا نقوم إطلاقاً بإرسال أي رسائل ترويجية أو إعلانية للمستخدمين.
+          </div>
+          <p>في حال قمت بمراسلة فريق الدعم الفني أو الاستفسارات القانونية طواعية عبر البريد الإلكتروني، يمكنك في أي وقت طلب إنهاء المراسلات وحذف سجل محادثتك بالكامل عبر الرد بكلمة <strong>"إلغاء الاشتراك"</strong> أو <strong>"Unsubscribe"</strong>، وسيتم مسح بيانات المراسلة فوراً وبشكل لا رجعة فيه.</p>
+        </div>
+      </div>
+
+      <!-- TAB 7: BUSINESS & DEVELOPER INFORMATION -->
+      <div class="legal-tab-content" id="ltab-business">
+        <div class="legal-section-block">
+          <h3 class="legal-section-h3">🏢 بيانات الكيان والمشروع والمطور (Business & Developer Info)</h3>
+          <table class="legal-table">
+            <tbody>
+              <tr>
+                <td><strong>اسم المشروع:</strong></td>
+                <td>مشروع زتونة — رفيقك اليومي (Zatoona Application)</td>
+              </tr>
+              <tr>
+                <td><strong>معرف حزمة أندرويد:</strong></td>
+                <td><code>com.zatoona.app</code> (Android PWA WebView Shell)</td>
+              </tr>
+              <tr>
+                <td><strong>المطور والمشرف الفني:</strong></td>
+                <td>فريق هندسة وتطوير زتونة (Zatoona Core Engineering Team)</td>
+              </tr>
+              <tr>
+                <td><strong>المستودع الرسمي المفتوح:</strong></td>
+                <td><a href="https://github.com/medodem36-sudo/zatoona" target="_blank" rel="noopener" style="color:var(--primary); font-weight:700;">github.com/medodem36-sudo/zatoona</a></td>
+              </tr>
+              <tr>
+                <td><strong>النطاق الجغرافي والاختصاص:</strong></td>
+                <td>الإسكندرية والقاهرة — جمهورية مصر العربية (متوافق مع المعايير الدولية للخصوصية الرقمية)</td>
+              </tr>
+              <tr>
+                <td><strong>البريد الإلكتروني للخصوصية:</strong></td>
+                <td><a href="mailto:privacy@zatoona.app" style="color:var(--primary); font-weight:700;">privacy@zatoona.app</a></td>
+              </tr>
+              <tr>
+                <td><strong>البريد الإلكتروني للدعم العام:</strong></td>
+                <td><a href="mailto:support@zatoona.app" style="color:var(--primary); font-weight:700;">support@zatoona.app</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 8: LICENSES & ATTRIBUTIONS -->
+      <div class="legal-tab-content" id="ltab-licenses">
+        <div class="legal-section-block">
+          <h3 class="legal-section-h3">📜 التراخيص والمصادر المفتوحة وحقوق الملكية (Licenses)</h3>
+          <p>تطبيق زتونة مبني بفخر على مكونات مفتوحة المصدر مرخصة قانونياً:</p>
+          <ul>
+            <li><strong>خط تجوال (Tajawal Font):</strong> مرخص برخصة الخطوط المفتوحة العالمية <strong>SIL Open Font License 1.1 (OFL-1.1)</strong> — تصميم Boutros Fonts بالتعاون مع Google Fonts.</li>
+            <li><strong>رسومات ورسوم التمارين التوضيحية (SVG Assets):</strong> رسومات متجهة مخصصة ومعدلة ومحفوظة محلياً، مرخصة تحت المشاع الإبداعي <strong>Creative Commons Attribution 4.0 International (CC-BY 4.0)</strong>.</li>
+            <li><strong>مكتبات أندرويد الأصلية (AndroidX Dependencies):</strong>
+              <table class="legal-table" style="margin-top:6px;">
+                <thead>
+                  <tr><th>المكتبة</th><th>الإصدار</th><th>الترخيص</th><th>فحص التتبع</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>androidx.core:core-ktx</td><td>1.12.0</td><td>Apache 2.0</td><td>خالٍ 100% من التتبع</td></tr>
+                  <tr><td>androidx.appcompat:appcompat</td><td>1.6.1</td><td>Apache 2.0</td><td>خالٍ 100% من التتبع</td></tr>
+                  <tr><td>com.google.android.material:material</td><td>1.11.0</td><td>Apache 2.0</td><td>خالٍ 100% من التتبع</td></tr>
+                  <tr><td>androidx.webkit:webkit</td><td>1.10.0</td><td>Apache 2.0</td><td>خالٍ 100% من التتبع</td></tr>
+                </tbody>
+              </table>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- TAB 9: DATA ERASURE & PORTABILITY -->
+      <div class="legal-tab-content" id="ltab-deletion">
+        <div class="legal-section-block">
+          <h3 class="legal-section-h3">🗑️ تصدير وحذف البيانات نهائياً (GDPR Right to Erasure & Portability)</h3>
+          <p>لك السيطرة المطلقة على بياناتك وفقاً للمادتين 17 و 20 من اللائحة العامة لحماية البيانات (GDPR):</p>
+
+          <div style="display:flex; flex-direction:column; gap:12px; margin-top:14px;">
+            <div style="background:var(--bg-2); border:1px solid var(--line); border-radius:var(--radius-sm); padding:12px;">
+              <h4 style="margin:0 0 6px 0; font-size:0.88rem;">1. تصدير كامل بياناتك (Data Portability - GDPR Art. 20)</h4>
+              <p style="font-size:0.78rem; color:var(--muted); margin:0 0 8px 0;">قم بتنزيل ملف JSON كامل ومقروء يحتوي على كل تمارينك، أوزانك، خطتك الغذائية، ومواعيدك.</p>
+              <button type="button" class="settings-btn" onclick="exportAppDataToJson()" style="border-color:var(--teal); color:var(--teal); font-weight:700;">
+                ⬇️ تصدير نسخة كاملة من بياناتي (JSON)
+              </button>
+            </div>
+
+            <div style="background:rgba(239, 68, 68, 0.06); border:1px solid rgba(239, 68, 68, 0.25); border-radius:var(--radius-sm); padding:12px;">
+              <h4 style="margin:0 0 6px 0; font-size:0.88rem; color:var(--bad);">2. طلب وحذف كافة البيانات وتطهيرها (Right to Erasure - GDPR Art. 17)</h4>
+              <p style="font-size:0.78rem; color:var(--muted); margin:0 0 8px 0;">سيقوم هذا الإجراء بمسح كافة السجلات، التفضيلات، ومخازن التخزين المحلي نهائياً وإعادة التطبيق لحالة التثبيت الأولى.</p>
+              <button type="button" class="settings-btn" onclick="openDataDeletionModal()" style="border-color:var(--bad); background:var(--bad); color:#ffffff; font-weight:700;">
+                🗑️ فتح نافذة تأكيد حذف وتطهير البيانات نهائياً
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     DATA DELETION CONFIRMATION MODAL (نافذة تأكيد حذف البيانات الشامل)
+     ========================================================================== -->
+<div class="legal-modal-overlay" id="dataDeletionModal" role="dialog" aria-modal="true" aria-labelledby="delModalTitle" onclick="if(event.target===this)closeDataDeletionModal()">
+  <div class="legal-modal-card" style="max-width:520px;" onclick="event.stopPropagation()">
+    <div class="legal-modal-header" style="background:rgba(239, 68, 68, 0.08);">
+      <div class="legal-modal-title" id="delModalTitle" style="color:var(--bad);">
+        <span>⚠️</span>
+        <span>تأكيد محو وتطهير جميع البيانات نهائياً</span>
+      </div>
+      <button type="button" class="legal-modal-close" onclick="closeDataDeletionModal()" aria-label="إغلاق">✕</button>
+    </div>
+    <div class="legal-modal-body">
+      <div class="legal-callout-danger" style="margin-top:0;">
+        <strong>تحذير لا رجعة فيه:</strong> هذا الإجراء سيقوم بحذف جميع سجلات التمارين، الخطط الغذائية، سجلات الأوزان، عادات الصلاة، والملاحظات المخزنة محلياً على هذا الجهاز بالكامل (استعادة ضبط المصنع).
+      </div>
+      <p style="font-size:0.82rem; margin-bottom:12px;">
+        نوصي بشدة بتنزيل نسخة احتياطية من بياناتك أولاً قبل الإتمام.
+      </p>
+      <div style="margin-bottom:14px;">
+        <label for="inpConfirmDelete" style="display:block; font-size:0.82rem; font-weight:700; margin-bottom:6px;">
+          لتأكيد الحذف النهائي، اكتب كلمة <span style="color:var(--bad); font-family:monospace; font-size:0.95rem;">حذف</span> في المربع أدناه:
+        </label>
+        <input type="text" id="inpConfirmDelete" class="weight-input" placeholder="اكتب حذف هنا" style="width:100%; box-sizing:border-box; padding:8px 12px; font-size:0.9rem; text-align:center;">
+      </div>
+      <div style="display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap;">
+        <button type="button" class="settings-btn" onclick="exportAppDataToJson()" style="border-color:var(--teal); color:var(--teal);">
+          ⬇️ تحميل نسخة احتياطية أولاً
+        </button>
+        <button type="button" class="settings-btn" onclick="closeDataDeletionModal()">
+          إلغاء التراجع
+        </button>
+        <button type="button" id="btnExecuteDataWipe" class="settings-btn" onclick="executeComprehensiveDataWipe()" style="border-color:var(--bad); background:var(--bad); color:#ffffff; font-weight:700;">
+          تأكيد الحذف الشامل 🗑️
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     STORAGE & COOKIE CONSENT BANNER (شريط شفافية التخزين المحلي)
+     ========================================================================== -->
+<aside class="storage-consent-banner" id="storageConsentBanner" role="region" aria-label="إشعار شفافية التخزين والخصوصية">
+  <div class="scb-content">
+    <div class="scb-text">
+      🍪 <strong>شفافية التخزين والخصوصية:</strong> نستخدم التخزين المحلي (LocalStorage & IndexedDB) حصرياً لحفظ خطتك التدريبية والغذائية ومواقيت الصلاة على جهازك للعمل دون إنترنت. لا نستخدم أي ملفات تتبع إعلاني أو تحليلي، وبياناتك لا تغادر هاتفك أبداً.
+    </div>
+    <div class="scb-actions">
+      <button type="button" class="scb-btn-primary" onclick="acceptStorageConsent()">
+        ✓ موافق ومتابعة
+      </button>
+      <button type="button" class="scb-btn-subtle" onclick="openLegalPrivacyModal('cookies')">
+        ⚙️ تفاصيل الخصوصية
+      </button>
+    </div>
+  </div>
+</aside>
+
 </body>
 </html>

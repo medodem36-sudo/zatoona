@@ -85,6 +85,7 @@ try:
     file_url = "file:///" + INDEX_PATH.replace("\\", "/")
     driver.get(file_url)
     time.sleep(1.0)
+    driver.execute_script("if(typeof acceptStorageConsent==='function') acceptStorageConsent();")
 
     # 2.1 Verify zero console errors
     logs = driver.get_log("browser")

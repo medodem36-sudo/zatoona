@@ -176,7 +176,26 @@ class ZatoonaAlarmScheduler(private val context: Context) {
             return
         }
 
-        // Start native AlarmService (Foreground Service with looping audio + swipe UI + notification)
+        // 1. Direct launch attempt for AlarmActivity (turns on screen, shows over lock screen & over other apps)
+        val activityIntent = Intent(context, AlarmActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+                    Intent.FLAG_ACTIVITY_NO_USER_ACTION or
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP
+            putExtra(AlarmService.EXTRA_SCHEDULE_ID, schedule.id)
+            putExtra(AlarmService.EXTRA_TRIGGER_MS, firedEpochMs)
+            putExtra(AlarmService.EXTRA_TITLE, schedule.title)
+            putExtra(AlarmService.EXTRA_BODY, schedule.body)
+            putExtra(AlarmService.EXTRA_MODE, schedule.mode)
+            putExtra(AlarmService.EXTRA_TYPE, schedule.type)
+        }
+        try {
+            context.startActivity(activityIntent)
+            Log.i(TAG, "Direct launch of AlarmActivity initiated for ${schedule.id}")
+        } catch (e: Exception) {
+            Log.w(TAG, "Direct start of AlarmActivity from receiver bypassed: ${e.message}")
+        }
+
+        // 2. Start native AlarmService (Foreground Service with looping audio + swipe UI + notification)
         val serviceIntent = Intent(context, AlarmService::class.java).apply {
             action = AlarmService.ACTION_START_ALARM
             putExtra(AlarmService.EXTRA_SCHEDULE_ID, schedule.id)
@@ -189,8 +208,8 @@ class ZatoonaAlarmScheduler(private val context: Context) {
         try {
             ContextCompat.startForegroundService(context, serviceIntent)
         } catch (e: Exception) {
-            Log.e(TAG, "Failed to start AlarmService, falling back to notification: ${e.message}")
-            notificationManager.showNotification(schedule)
+            Log.e(TAG, "Failed to start AlarmService, falling back to full-screen alarm notification: ${e.message}")
+            notificationManager.showAlarmNotification(schedule, firedEpochMs)
         }
 
         // Local Recurrence Calculation (sustainable without WebView or internet)

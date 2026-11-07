@@ -45,36 +45,40 @@ class AllInOneDailyWidgetProvider : AppWidgetProvider() {
         fun loadDailySummary(context: Context): DailySummaryData {
             val prefs = context.getSharedPreferences(ZatoonaBridge.PREFS_NAME, Context.MODE_PRIVATE)
             val raw = prefs.getString(ZatoonaBridge.KEY_ALL_IN_ONE_CACHE, null)
+            val nextPrayer = NextPrayerWidgetProvider.findNextPrayer(context)
+            val fallbackName = if (nextPrayer.hasData) nextPrayer.prayerName else "الصلاة القادمة"
+            val fallbackTime = if (nextPrayer.hasData) nextPrayer.timeLabel else "—:—"
+
             if (raw.isNullOrBlank()) {
                 return DailySummaryData(
-                    nextPrayerName = "العصر",
-                    nextPrayerTime = "03:15 م",
+                    nextPrayerName = fallbackName,
+                    nextPrayerTime = fallbackTime,
                     workoutDayName = "تمارين اليوم",
-                    waterLiters = 2.0,
+                    waterLiters = 0.0,
                     waterTarget = 3.0,
-                    streakDays = 5,
-                    hasData = false
+                    streakDays = 0,
+                    hasData = nextPrayer.hasData
                 )
             }
             return try {
                 val json = JSONObject(raw)
                 DailySummaryData(
-                    nextPrayerName = json.optString("nextPrayerName", "العصر"),
-                    nextPrayerTime = json.optString("nextPrayerTime", "03:15 م"),
+                    nextPrayerName = json.optString("nextPrayerName", fallbackName),
+                    nextPrayerTime = json.optString("nextPrayerTime", fallbackTime),
                     workoutDayName = json.optString("workoutDayName", "تمارين اليوم"),
-                    waterLiters = json.optDouble("waterLitersToday", 2.0),
+                    waterLiters = json.optDouble("waterLitersToday", 0.0),
                     waterTarget = json.optDouble("waterTargetLiters", 3.0),
-                    streakDays = json.optInt("streakDays", 5),
+                    streakDays = json.optInt("streakDays", 0),
                     hasData = true
                 )
             } catch (e: Exception) {
                 DailySummaryData(
-                    nextPrayerName = "العصر",
-                    nextPrayerTime = "03:15 م",
+                    nextPrayerName = fallbackName,
+                    nextPrayerTime = fallbackTime,
                     workoutDayName = "تمارين اليوم",
-                    waterLiters = 2.0,
+                    waterLiters = 0.0,
                     waterTarget = 3.0,
-                    streakDays = 5,
+                    streakDays = 0,
                     hasData = false
                 )
             }

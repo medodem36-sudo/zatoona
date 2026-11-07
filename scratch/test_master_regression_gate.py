@@ -467,6 +467,15 @@ REGISTERED_SUITES = [
         "active": True,
         "description": "Verifies 5-Hub Persistent Floating Bottom Nav, One-Tap Quick Action pills (Water, Limitless Man, Minoxidil), Pillar Segmented Sub-Tabs (Meal, Prayer, Schedule), and daily Life Balance status."
     },
+    {
+        "id": "phase17_perf_responsiveness",
+        "name": "Phase 17 Zero-Freeze Performance, Mobile Responsiveness & Motion Loop Optimization",
+        "category": "Performance & Responsiveness",
+        "rel_path": "scratch/test_phase17_perf_responsiveness_suite.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies Viewport double-tap zoom prevention, rapid navigation debounce guards, solid bottom nav, GPU layer cleanup, and 185 exercise SVGs hardware-accelerated will-change motion looping."
+    },
     # Superseded / Obsolete historical gates (excluded by default, enabled via --include-superseded)
     {
         "id": "phase9b1_1_gate",

@@ -3,11 +3,15 @@ package com.zatoona.app
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.media.AudioAttributes
+import android.media.MediaPlayer
+import android.media.RingtoneManager
 import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
@@ -29,9 +33,16 @@ import java.util.Locale
  */
 class AlarmActivity : AppCompatActivity() {
 
+    companion object {
+        private const val TAG = "ZatoonaAlarmActivity"
+    }
+
     private var scheduleId: String = ""
     private var triggerMs: Long = 0L
     private var isDismissed = false
+
+    private var localMediaPlayer: MediaPlayer? = null
+    private var localVibrator: Vibrator? = null
 
     private lateinit var swipeTrack: FrameLayout
     private lateinit var swipeHandle: FrameLayout
@@ -52,12 +63,14 @@ class AlarmActivity : AppCompatActivity() {
         unpackIntent(intent)
         setupSwipeToDismiss()
         setupListeners()
+        startLocalAudioAndVibration()
     }
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         setIntent(intent)
         intent?.let { unpackIntent(it) }
+        startLocalAudioAndVibration()
     }
 
     private fun configureLockScreenFlags() {
@@ -71,7 +84,10 @@ class AlarmActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
             )
         }
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        window.addFlags(
+            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
+            WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON
+        )
     }
 
     private fun initViews() {
@@ -165,7 +181,79 @@ class AlarmActivity : AppCompatActivity() {
         }
     }
 
+    private fun startLocalAudioAndVibration() {
+        if (AlarmService.isAlarmActive) {
+            Log.d(TAG, "AlarmService is already actively handling alarm sound.")
+            return
+        }
+
+        try {
+            if (localMediaPlayer?.isPlaying == true) return
+            localMediaPlayer?.release()
+
+            val alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+                ?: RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+                ?: RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+
+            localMediaPlayer = MediaPlayer().apply {
+                setDataSource(applicationContext, alarmUri)
+                setAudioAttributes(
+                    AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_ALARM)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .build()
+                )
+                isLooping = true
+                prepare()
+                start()
+            }
+            Log.i(TAG, "Started local looping alarm audio fallback in AlarmActivity")
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to start local audio fallback: ${e.message}")
+        }
+
+        try {
+            val pattern = longArrayOf(0, 600, 600, 600)
+            localVibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                val vm = getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as? VibratorManager
+                vm?.defaultVibrator
+            } else {
+                @Suppress("DEPRECATION")
+                getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                localVibrator?.vibrate(VibrationEffect.createWaveform(pattern, 0))
+            } else {
+                @Suppress("DEPRECATION")
+                localVibrator?.vibrate(pattern, 0)
+            }
+            Log.i(TAG, "Started local looping vibration fallback in AlarmActivity")
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to start local vibration fallback: ${e.message}")
+        }
+    }
+
+    private fun stopLocalAudioAndVibration() {
+        try {
+            if (localMediaPlayer?.isPlaying == true) {
+                localMediaPlayer?.stop()
+            }
+            localMediaPlayer?.release()
+            localMediaPlayer = null
+        } catch (e: Exception) {
+            Log.w(TAG, "Error stopping local MediaPlayer: ${e.message}")
+        }
+
+        try {
+            localVibrator?.cancel()
+            localVibrator = null
+        } catch (e: Exception) {
+            Log.w(TAG, "Error cancelling local vibrator: ${e.message}")
+        }
+    }
+
     private fun triggerDismiss() {
+        stopLocalAudioAndVibration()
         performHapticClick()
 
         // Send dismiss command to AlarmService
@@ -202,6 +290,7 @@ class AlarmActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
+        stopLocalAudioAndVibration()
         AlarmService.onAlarmDismissed = null
         super.onDestroy()
     }

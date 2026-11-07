@@ -62,7 +62,7 @@
                 android:id="@+id/txt_aio_prayer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="العصر 03:15 م"
+                android:text="الصلاة القادمة —:—"
                 android:textColor="#10B981"
                 android:textSize="11sp"
                 android:textStyle="bold" />

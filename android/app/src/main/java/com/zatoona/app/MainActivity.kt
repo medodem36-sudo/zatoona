@@ -7,13 +7,18 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.webkit.JsPromptResult
+import android.webkit.JsResult
+import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.EditText
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 
@@ -43,6 +48,7 @@ class MainActivity : AppCompatActivity() {
 
         configureWebSettings(webView.settings)
         configureWebViewClient()
+        configureWebChromeClient()
         attachBridge()
         handleBackNavigation()
         requestNotificationPermissionIfNeeded()
@@ -143,6 +149,79 @@ class MainActivity : AppCompatActivity() {
                 } catch (e: Exception) {
                     // Gracefully ignore unresolvable intents
                 }
+                return true
+            }
+        }
+    }
+
+    private fun configureWebChromeClient() {
+        webView.webChromeClient = object : WebChromeClient() {
+            override fun onJsAlert(
+                view: WebView?,
+                url: String?,
+                message: String?,
+                result: JsResult?
+            ): Boolean {
+                if (isFinishing || isDestroyed) {
+                    result?.cancel()
+                    return true
+                }
+                AlertDialog.Builder(this@MainActivity)
+                    .setTitle(R.string.app_name)
+                    .setMessage(message ?: "")
+                    .setPositiveButton(android.R.string.ok) { _, _ -> result?.confirm() }
+                    .setOnCancelListener { result?.cancel() }
+                    .show()
+                return true
+            }
+
+            override fun onJsConfirm(
+                view: WebView?,
+                url: String?,
+                message: String?,
+                result: JsResult?
+            ): Boolean {
+                if (isFinishing || isDestroyed) {
+                    result?.cancel()
+                    return true
+                }
+                AlertDialog.Builder(this@MainActivity)
+                    .setTitle(R.string.app_name)
+                    .setMessage(message ?: "")
+                    .setPositiveButton("نعم") { _, _ -> result?.confirm() }
+                    .setNegativeButton("إلغاء") { _, _ -> result?.cancel() }
+                    .setOnCancelListener { result?.cancel() }
+                    .show()
+                return true
+            }
+
+            override fun onJsPrompt(
+                view: WebView?,
+                url: String?,
+                message: String?,
+                defaultValue: String?,
+                result: JsPromptResult?
+            ): Boolean {
+                if (isFinishing || isDestroyed) {
+                    result?.cancel()
+                    return true
+                }
+                val input = EditText(this@MainActivity).apply {
+                    setText(defaultValue ?: "")
+                    setSelection(text.length)
+                }
+                AlertDialog.Builder(this@MainActivity)
+                    .setTitle(R.string.app_name)
+                    .setMessage(message ?: "")
+                    .setView(input)
+                    .setPositiveButton(android.R.string.ok) { _, _ ->
+                        result?.confirm(input.text.toString())
+                    }
+                    .setNegativeButton(android.R.string.cancel) { _, _ ->
+                        result?.cancel()
+                    }
+                    .setOnCancelListener { result?.cancel() }
+                    .show()
                 return true
             }
         }

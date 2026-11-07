@@ -6,7 +6,7 @@
         48%, 85% { opacity: 0; }
         98%, 100% { opacity: 1; }
       }
-      .rep-start { animation: repMotion 2.4s ease-in-out infinite; }
+      .rep-start { animation: repMotion 2.4s ease-in-out infinite; will-change: opacity; }
     </style>
     <clipPath id="c"><rect width="300" height="200" rx="8"/></clipPath>
   </defs>

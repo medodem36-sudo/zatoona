@@ -48,6 +48,7 @@ class ZatoonaNotificationManager(private val context: Context) {
             ).apply {
                 description = "إشعارات المهام والأنشطة اليومية المجدولة"
                 enableVibration(true)
+                lockscreenVisibility = android.app.Notification.VISIBILITY_PUBLIC
             }
 
             val prayerChannel = NotificationChannel(
@@ -57,6 +58,8 @@ class ZatoonaNotificationManager(private val context: Context) {
             ).apply {
                 description = "تنبيهات مواقيت الأذان والصلوات المفروضة"
                 enableVibration(true)
+                setBypassDnd(true)
+                lockscreenVisibility = android.app.Notification.VISIBILITY_PUBLIC
             }
 
             val sleepChannel = NotificationChannel(
@@ -66,6 +69,7 @@ class ZatoonaNotificationManager(private val context: Context) {
             ).apply {
                 description = "تنبيهات الاستعداد للنوم ومواعيد الروتين المسائي"
                 enableVibration(true)
+                lockscreenVisibility = android.app.Notification.VISIBILITY_PUBLIC
             }
 
             val alarmsChannel = NotificationChannel(
@@ -123,6 +127,7 @@ class ZatoonaNotificationManager(private val context: Context) {
             .setContentText(schedule.body)
             .setStyle(NotificationCompat.BigTextStyle().bigText(schedule.body))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .setDefaults(NotificationCompat.DEFAULT_ALL)
@@ -147,12 +152,76 @@ class ZatoonaNotificationManager(private val context: Context) {
             .setContentTitle("تذكيرات زتونة")
             .setContentText("تنبيهات مجدولة نشطة")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setGroup(GROUP_ZATOONA_REMINDERS)
             .setGroupSummary(true)
             .setContentIntent(summaryPendingIntent)
             .setAutoCancel(true)
 
         notificationManager.notify(NOTIFICATION_ID_GROUP_SUMMARY, summaryBuilder.build())
+        return true
+    }
+
+    fun showAlarmNotification(schedule: ZatoonaSchedule, triggerEpochMs: Long): Boolean {
+        if (!areNotificationsEnabled()) {
+            return false
+        }
+
+        val channelId = CHANNEL_ALARMS
+
+        val fullScreenIntent = Intent(context, AlarmActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+                    Intent.FLAG_ACTIVITY_NO_USER_ACTION or
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP
+            putExtra(AlarmService.EXTRA_SCHEDULE_ID, schedule.id)
+            putExtra(AlarmService.EXTRA_TRIGGER_MS, triggerEpochMs)
+            putExtra(AlarmService.EXTRA_TITLE, schedule.title)
+            putExtra(AlarmService.EXTRA_BODY, schedule.body)
+            putExtra(AlarmService.EXTRA_MODE, schedule.mode)
+            putExtra(AlarmService.EXTRA_TYPE, schedule.type)
+        }
+
+        val requestCode = abs(schedule.id.hashCode())
+        val fullScreenPendingIntent = PendingIntent.getActivity(
+            context,
+            requestCode,
+            fullScreenIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val dismissIntent = Intent(context, AlarmService::class.java).apply {
+            action = AlarmService.ACTION_DISMISS_ALARM
+            putExtra(AlarmService.EXTRA_SCHEDULE_ID, schedule.id)
+        }
+        val dismissPendingIntent = PendingIntent.getService(
+            context,
+            requestCode + 5000,
+            dismissIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val builder = NotificationCompat.Builder(context, channelId)
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setContentTitle(schedule.title)
+            .setContentText(schedule.body.ifBlank { "منبه نشط — اسحب أو اضغط للإيقاف" })
+            .setStyle(NotificationCompat.BigTextStyle().bigText(schedule.body.ifBlank { "منبه نشط — اسحب أو اضغط للإيقاف" }))
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setCategory(NotificationCompat.CATEGORY_ALARM)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setOngoing(true)
+            .setAutoCancel(false)
+            .setDefaults(NotificationCompat.DEFAULT_ALL)
+            .setContentIntent(fullScreenPendingIntent)
+            .addAction(
+                android.R.drawable.ic_menu_close_clear_cancel,
+                "إيقاف",
+                dismissPendingIntent
+            )
+
+        builder.setFullScreenIntent(fullScreenPendingIntent, true)
+
+        val notifId = abs(schedule.id.hashCode())
+        notificationManager.notify(notifId, builder.build())
         return true
     }
 

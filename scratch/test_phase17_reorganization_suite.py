@@ -150,13 +150,11 @@ class TestPhase17Reorganization(unittest.TestCase):
         self.assertTrue(card_supp.is_displayed(), "Supplement card should be displayed under 'all'")
 
         btn_supp = tabs.find_element(By.CSS_SELECTOR, "[data-subtab='supplements']")
-        self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", btn_supp)
-        time.sleep(0.2)
-        btn_supp.click()
+        self.driver.execute_script("arguments[0].click();", btn_supp)
         time.sleep(0.2)
         self.assertTrue(card_supp.is_displayed(), "Supplement card should remain displayed under 'supplements'")
 
-        btn_all.click()
+        self.driver.execute_script("arguments[0].click();", btn_all)
         time.sleep(0.2)
         self.assertTrue(card_supp.is_displayed(), "Restoring 'all' should keep card displayed")
 

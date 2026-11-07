@@ -178,11 +178,11 @@ The repository contains concrete, deterministic test suites verifying the alarm 
 Conduct physical handset verification on an actual Android device (or hardware-accelerated emulator) using the built Debug APK (`android/app/build/outputs/apk/debug/app-debug.apk`).
 
 ### Acceptance Criteria for Phase 13.4B3:
-1. **Installation:** Install `app-debug.apk` via `adb install -r android/app/build/outputs/apk/debug/app-debug.apk`.
-2. **Notification Permission:** Confirm the Android 13+ permission prompt displays and grants permission.
-3. **Live Trigger Verification:** Schedule a test reminder 2 minutes in the future; swipe the app away from Recents; confirm the notification appears at the exact minute with sound/vibration.
-4. **Reboot Verification:** Power cycle / reboot the device; confirm `BootReceiver` executes in `adb logcat -s ZatoonaBootReceiver` and reschedules active alarms.
-5. **City Switch Verification:** Switch prayer city from Cairo to Alexandria; confirm `adb logcat -s ZatoonaBridge` shows old city alarms purged and new city alarms registered.
+1. **Installation:** Install `app-debug.apk` via `adb install -r android/app/build/outputs/apk/debug/app-debug.apk`. [VERIFIED: Installed on Samsung Galaxy A04e R8YWA13G7WM]
+2. **Notification Permission:** Confirm the Android 13+ permission prompt displays and grants permission. [VERIFIED: POST_NOTIFICATIONS granted]
+3. **Live Trigger Verification:** Schedule a test reminder 2 minutes in the future; swipe the app away from Recents; confirm the notification appears at the exact minute with sound/vibration. [VERIFIED: AlarmActivity woke up locked device over com.android.settings with looping audio & vibration]
+4. **Reboot Verification:** Power cycle / reboot the device; confirm `BootReceiver` executes in `adb logcat -s ZatoonaBootReceiver` and reschedules active alarms. [VERIFIED: Device rebooted via `adb reboot`, `ZatoonaBootReceiver` received `BOOT_COMPLETED` and rescheduled 6 alarms into `AlarmManager`, confirmed via `dumpsys alarm`]
+5. **City Switch Verification:** Switch prayer city from Cairo to Alexandria; confirm `adb logcat -s ZatoonaBridge` shows old city alarms purged and new city alarms registered. [VERIFIED: City switch bridge hook syncs correctly]
 
 ---
 

@@ -163,6 +163,24 @@ class AlarmService : Service() {
         startLoopingAudio()
         startVibration()
 
+        // Launch AlarmActivity over lock screen and other apps
+        val activityIntent = Intent(this, AlarmActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+                    Intent.FLAG_ACTIVITY_NO_USER_ACTION or
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP
+            putExtra(EXTRA_SCHEDULE_ID, scheduleId)
+            putExtra(EXTRA_TRIGGER_MS, triggerMs)
+            putExtra(EXTRA_TITLE, title)
+            putExtra(EXTRA_BODY, body)
+            putExtra(EXTRA_MODE, mode)
+            putExtra(EXTRA_TYPE, type)
+        }
+        try {
+            startActivity(activityIntent)
+        } catch (e: Exception) {
+            Log.d(TAG, "Direct launch from AlarmService bypassed: ${e.message}")
+        }
+
         Log.i(TAG, "Alarm started for $scheduleId ($title) at $triggerMs")
     }
 

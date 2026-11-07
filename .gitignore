@@ -19,8 +19,17 @@ signing.properties
 
 # Scratch backups, bytecode & test outputs
 /scratch/backups/
+/scratch/backup_*/
 /scratch/__pycache__/
 /scratch/test-results/
+/scratch/*.txt
+/scratch/patch_*.py
+/scratch/insert_*.py
+/scratch/count_*.py
+/scratch/analyze_*.py
+/scratch/add_*.py
+/scratch/pre_*.py
+/scratch/preview_*.py
 
 # Developer scratch one-off scripts & tools (preserves tests and reports)
 /scratch/apply_*.py
