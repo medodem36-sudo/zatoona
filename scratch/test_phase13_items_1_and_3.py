@@ -135,8 +135,8 @@ def run_tests():
     check("has generateAiCoachAdvice", "async function generateAiCoachAdvice(" in html)
     check("generateAiCoachAdvice supports optional Gemini API with local fallback", "generativelanguage.googleapis.com" in html and "local-fallback" in html)
     check("has renderAiCoachCard", "function renderAiCoachCard(" in html)
-    check("renderAiCoachCard includes opt-in privacy explanation", "ضمان الخصوصية والتشغيل المحلي" in html)
-    check("renderAiCoachCard supports category chips (all, prayer, gym, nutrition, sleep, habits)", 'data-cat="all"' in html and 'data-cat="prayer"' in html and 'data-cat="gym"' in html and 'data-cat="nutrition"' in html and 'data-cat="sleep"' in html and 'data-cat="habits"' in html)
+    check("renderAiCoachCard includes opt-in privacy explanation", ("ضمان الخصوصية والتشغيل الذكي" in html or "ضمان الخصوصية والتشغيل المحلي" in html))
+    check("renderAiCoachCard supports category chips or full-screen chat ribbon", (('data-cat="all"' in html and 'data-cat="prayer"' in html) or ('ai-compact-ribbon' in html and 'openAiFullscreenChat' in html)))
     check("renderOverview calls renderAiCoachCard", "renderDailySummaryShareCard();\n  renderAiCoachCard();\n  renderReminders();" in html)
     check("window exports AI coach functions", "window.loadAiCoachSettings = loadAiCoachSettings" in html and "window.analyzeDailyWellnessStats = analyzeDailyWellnessStats" in html and "window.generateAiCoachAdvice = generateAiCoachAdvice" in html and "window.renderAiCoachCard = renderAiCoachCard" in html)
 

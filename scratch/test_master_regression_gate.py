@@ -476,6 +476,51 @@ REGISTERED_SUITES = [
         "active": True,
         "description": "Verifies Viewport double-tap zoom prevention, rapid navigation debounce guards, solid bottom nav, GPU layer cleanup, and 185 exercise SVGs hardware-accelerated will-change motion looping."
     },
+    {
+        "id": "ai_voice_and_roadmap",
+        "name": "AI Voice Assistant, Action Dispatcher and Roadmaps Suite",
+        "category": "AI Coach and Voice Engine",
+        "rel_path": "scratch/test_ai_voice_and_roadmap_suite.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies AI Voice Mic, Text-to-Speech audio, in-app Action Execution, programming roadmaps, and book zatoona summaries."
+    },
+    {
+        "id": "fullscreen_chat",
+        "name": "AI Fullscreen Dedicated Chat and Keyboard Ergonomics Suite",
+        "category": "AI Coach and Voice Engine",
+        "rel_path": "scratch/test_fullscreen_chat_suite.py",
+        "timeout_sec": 90,
+        "active": True,
+        "description": "Verifies standalone 100dvh modal, adjustResize soft keyboard pinning, non-jumping instant scroll, and back button navigation."
+    },
+    {
+        "id": "ai_and_settings_reorder",
+        "name": "AI Compact Ribbon and Settings Interactive Section Reorder",
+        "category": "UI and Settings",
+        "rel_path": "scratch/test_ai_and_settings_reorder.py",
+        "timeout_sec": 90,
+        "active": True,
+        "description": "Verifies removal of outer header buttons, settings tab AI master card, and reorder grid."
+    },
+    {
+        "id": "fifteen_fresh_features",
+        "name": "15 Hyper-Fresh Features Full Acceptance Suite",
+        "category": "Life OS and Cutting-Edge Features",
+        "rel_path": "scratch/test_15_features_acceptance.py",
+        "timeout_sec": 120,
+        "active": True,
+        "description": "Verifies Wake Word, Long-Term Profile Memory, Monk Mode, Just-Start Timer, Qada Fasting/Prayer, Bluetooth Media buttons, Flip-to-Snooze, Self-Healing, and Standalone Diagnostics."
+    },
+    {
+        "id": "phase13_4b1_scaffold",
+        "name": "Native Android Shell and Bridge Scaffold Suite",
+        "category": "Android Architecture and Bridge",
+        "rel_path": "scratch/test_phase13_4b1_scaffold.py",
+        "timeout_sec": 90,
+        "active": True,
+        "description": "Verifies Android native shell, Gradle files, Manifest permissions, WebKit AssetLoader, and ZatoonaNativeBridge contract."
+    },
     # Superseded / Obsolete historical gates (excluded by default, enabled via --include-superseded)
     {
         "id": "phase9b1_1_gate",

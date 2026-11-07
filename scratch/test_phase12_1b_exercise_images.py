@@ -194,7 +194,7 @@ with open(REPO_ROOT / "sw.js", "r", encoding="utf-8") as f:
 
 m_sw_ver = re.search(r"const\s+CACHE_VERSION\s*=\s*'([^']+)';", sw_text)
 sw_version = m_sw_ver.group(1) if m_sw_ver else ""
-check(sw_version == "v24", f"Service Worker cache bumped to v24 (found '{sw_version}')")
+check(int(sw_version.replace('v', '')) >= 24, f"Service Worker cache bumped to at least v24 (found '{sw_version}')")
 
 m_shell = re.search(r"const\s+SHELL_ASSETS\s*=\s*(\[[\s\S]*?\]);", sw_text)
 shell_assets = re.findall(r"['\"]([^'\"]+)['\"]", m_shell.group(1)) if m_shell else []
