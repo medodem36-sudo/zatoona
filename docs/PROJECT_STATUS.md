@@ -1,12 +1,12 @@
 # Zatoona Project Status & Development Baseline
 
 **Document Path:** `docs/PROJECT_STATUS.md`
-**Last Updated:** 2026-11-07 19:15:00 +02:00<br>
+**Last Updated:** 2026-11-08 19:22:00 +02:00<br>
 **Repository:** `C:\Users\Lenovo\Documents\GitHub\zatoona`<br>
 **Remote Origin:** `https://github.com/medodem36-sudo/zatoona.git`<br>
 **Active Branch:** `main`<br>
-**Current HEAD:** `53f0b38`<br>
-**Head Commit Message:** `ف`<br>
+**Current HEAD:** `439312c`<br>
+**Head Commit Message:** `فركش`<br>
 **Working Tree Status:** 100% Complete Real-Athlete Animated Motion Loop Engine achieved! All 119 gym catalog exercises (`exercise-catalog.js`), 34 mobility stretches (`stretch-catalog.js`), 6 pre-workout warm-ups, 6 post-workout cool-downs, and 12 routine compound exercises are fully converted to continuous animated motion loops demonstrating full repetitions (start position <-> peak contraction) performed by authentic adult male athletes in modest sportswear. All assets packaged into self-contained offline animated SVGs with Base64 data URIs (zero runtime external HTTP/HTTPS requests). 3-Way HTML byte-for-byte parity confirmed across `index.html`, `zatoona.html`, and `android/app/src/main/assets/index.html` at SHA-256 `BCCAA901880D15E6DA7609D08831C208AD5B308C41FA4BF1E11031F817C0CDDC`. All 6 Image Compliance Suites passed (385 / 385 checks passed, 100% green). Android debug APK successfully compiled (10,975,598 bytes).
 
 ---
@@ -14,6 +14,15 @@
 ## 1. Executive Summary & Active Phase
 
 Zatoona is an offline-first Personal Wellness & Productivity Progressive Web Application (PWA) with an integrated native Android WebView shell (`com.zatoona.app`). All 7 core phases of the Grand Blueprint, Packages A through G, the comprehensive Physical-Device User Refinements Pack, and the 100% Real-Athlete Animated Motion Loop Engine are fully implemented and verified.
+
+### Completed Milestone: Autonomous Continuous Wake-Word Voice AI Engine (Completed & Verified)
+1. **Dedicated Native Wake-Word Service (`WakeWordService`):** Implemented Android Foreground Service declaring `android:foregroundServiceType="microphone"` and `FOREGROUND_SERVICE_MICROPHONE`, keeping microphone access unmuted even when the app is in the background or the screen is off.
+2. **Infinite Resilient Speech Loop:** Catching `ERROR_SPEECH_TIMEOUT`, `ERROR_NO_MATCH`, and `ERROR_CLIENT` with automatic debounced restart, preventing the recognizer from dropping or freezing after the first detection.
+3. **Screen-Off Wakeup & Instant Spoken Feedback:** On wake word detection ("يا كوتش" / "يا زتونة"): triggers haptic vibration pulse, turns on device screen (`PowerManager.ACQUIRE_CAUSES_WAKEUP`), speaks immediate spoken acknowledgment via native Arabic Text-to-Speech, and displays `MainActivity` on top of the lock screen (`setShowWhenLocked` & `setTurnScreenOn`).
+4. **Boot Recovery & State Persistence:** User's wake-word preference is persisted to `localStorage` and `SharedPreferences`, automatically restoring the service upon device boot (`BootReceiver`).
+5. **Full-App Unified Context Engine (`getUnifiedZatoonaAppContext`):** Aggregates live schedules, 5 prayers/worship checklists, gym routine, calories/macros/water, expenses/budget, habits, notes, and profile memory directly into Coach Zaitouna with cross-module command execution.
+6. **3-Way HTML Parity:** 100% byte-for-byte SHA-256 equality verified across `index.html`, `zatoona.html`, and `android/app/src/main/assets/index.html` at SHA-256 `E517DAB67CB430157B0E1EEC1F09C3A3DD5CC193271F296062FB0619B6C1FC8F`.
+7. **Physical Device Installation:** Release APK (6,585,906 bytes) built via Gradle 8.5 and verified running live on Samsung Galaxy A04e (`R8YWA13G7WM`).
 
 ### Completed Milestone: Phase 22 — Universal Ergonomics, Floating Study Bubble & Deep System Polish (Completed & Verified)
 1. **Floating Study & Pomodoro Bubble Service (`FloatingStudyBubbleService`):** Implemented Android foreground service using `WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY` with draggable touch listener, countdown chronometer, play/pause controls, and 1-tap re-entry to `MainActivity` when study timer is active and app is exited.

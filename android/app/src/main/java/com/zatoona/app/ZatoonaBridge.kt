@@ -13,6 +13,7 @@ import android.net.Uri
 import android.os.Build
 
 import android.provider.Settings
+import android.util.Log
 
 import android.webkit.JavascriptInterface
 
@@ -1295,45 +1296,43 @@ class ZatoonaBridge(private val context: Context) {
 
 
     @JavascriptInterface
-
     fun startFloatingStudyTimer(title: String?, durationSeconds: Int): Boolean {
-
         return try {
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(context)) {
-
-                return false
-
+                val intent = Intent(
+                    Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:${context.packageName}")
+                ).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+                context.startActivity(intent)
             }
 
             val intent = Intent(context, FloatingStudyBubbleService::class.java).apply {
-
                 action = FloatingStudyBubbleService.ACTION_START
-
                 putExtra(FloatingStudyBubbleService.EXTRA_TITLE, title ?: "جلسة تركيز")
-
                 putExtra(FloatingStudyBubbleService.EXTRA_DURATION_SECONDS, durationSeconds.toLong())
-
             }
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-
                 context.startForegroundService(intent)
-
             } else {
-
                 context.startService(intent)
-
             }
-
             true
-
         } catch (e: Exception) {
-
+            Log.e("ZatoonaBridge", "startFloatingStudyTimer error: ${e.message}")
             false
-
         }
+    }
 
+    @JavascriptInterface
+    fun isFloatingStudyTimerRunning(): Boolean {
+        return FloatingStudyBubbleService.isRunning
+    }
+
+    @JavascriptInterface
+    fun getFloatingStudyRemainingSeconds(): Long {
+        return FloatingStudyBubbleService.currentRemainingSeconds
     }
 
 
@@ -1515,21 +1514,32 @@ class ZatoonaBridge(private val context: Context) {
 
 
     @JavascriptInterface
-
     fun setWakeWordListening(enabled: Boolean): Boolean {
-
         return try {
-
-            (context as? MainActivity)?.setContinuousWakeWord(enabled)
-
+            val intent = Intent(context, WakeWordService::class.java).apply {
+                action = if (enabled) WakeWordService.ACTION_START else WakeWordService.ACTION_STOP
+            }
+            if (enabled) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    context.startForegroundService(intent)
+                } else {
+                    context.startService(intent)
+                }
+            } else {
+                context.startService(intent)
+            }
+            val prefs = context.getSharedPreferences("zatoona_settings", Context.MODE_PRIVATE)
+            prefs.edit().putBoolean("wake_word_continuous_enabled", enabled).apply()
             true
-
         } catch (e: Exception) {
-
+            Log.e("ZatoonaBridge", "setWakeWordListening error: ${e.message}")
             false
-
         }
+    }
 
+    @JavascriptInterface
+    fun isWakeWordListening(): Boolean {
+        return WakeWordService.isRunning
     }
 
 

@@ -42,6 +42,24 @@ class BootReceiver : BroadcastReceiver() {
             val scheduler = ZatoonaAlarmScheduler(context)
             val count = scheduler.rescheduleAll()
             Log.i(TAG, "Rescheduled $count alarms following broadcast: $action")
+
+            val prefs = context.getSharedPreferences("zatoona_settings", Context.MODE_PRIVATE)
+            val wakeWordEnabled = prefs.getBoolean("wake_word_continuous_enabled", false)
+            if (wakeWordEnabled) {
+                val wakeIntent = Intent(context, WakeWordService::class.java).apply {
+                    this.action = WakeWordService.ACTION_START
+                }
+                try {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        context.startForegroundService(wakeIntent)
+                    } else {
+                        context.startService(wakeIntent)
+                    }
+                    Log.i(TAG, "Restarted WakeWordService following broadcast: $action")
+                } catch (e: Exception) {
+                    Log.e(TAG, "Failed to restart WakeWordService: ${e.message}")
+                }
+            }
         }
     }
 }

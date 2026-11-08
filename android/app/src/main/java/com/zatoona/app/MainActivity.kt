@@ -48,6 +48,7 @@ import android.net.Uri
 
 import android.view.KeyEvent
 
+import android.app.KeyguardManager
 import android.os.Build
 
 import android.os.Bundle
@@ -87,9 +88,17 @@ import androidx.core.content.ContextCompat
 class MainActivity : AppCompatActivity() {
 
     companion object {
-
         const val EXTRA_AUTO_LISTEN = "com.zatoona.app.EXTRA_AUTO_LISTEN"
+        const val EXTRA_WAKE_TRIGGER = "com.zatoona.app.EXTRA_WAKE_TRIGGER"
+        const val EXTRA_WAKE_COMMAND = "com.zatoona.app.EXTRA_WAKE_COMMAND"
 
+        @Volatile
+        var instance: MainActivity? = null
+            private set
+
+        @Volatile
+        var isForeground: Boolean = false
+            private set
     }
 
 
@@ -161,6 +170,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
+        instance = this
 
 
 
@@ -241,23 +251,48 @@ class MainActivity : AppCompatActivity() {
         if (intent == null) return
 
         val autoListen = intent.getBooleanExtra(EXTRA_AUTO_LISTEN, false)
+        val wakeTrigger = intent.getBooleanExtra(EXTRA_WAKE_TRIGGER, false)
+        val wakeCommand = intent.getStringExtra(EXTRA_WAKE_COMMAND)
 
-        if (autoListen) {
-
+        if (autoListen || wakeTrigger) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-
                 setShowWhenLocked(true)
-
                 setTurnScreenOn(true)
-
             }
+            window.addFlags(
+                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
+                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON or
+                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+            )
+            val km = getSystemService(Context.KEYGUARD_SERVICE) as? KeyguardManager
+            km?.requestDismissKeyguard(this, null)
 
             mainHandler.postDelayed({
-
-                webView.evaluateJavascript("(function(){ if(typeof openAiFullscreenChat === 'function') openAiFullscreenChat(); if(typeof toggleAiVoiceInput === 'function') setTimeout(toggleAiVoiceInput, 300); })()", null)
-
+                if (!wakeCommand.isNullOrBlank()) {
+                    val jsonCmd = org.json.JSONObject.quote(wakeCommand)
+                    webView.evaluateJavascript("""
+                        (function(){
+                            if(typeof openAiFullscreenChat === 'function') openAiFullscreenChat();
+                            if(typeof window.onNativeWakeWordTriggered === 'function') {
+                                window.onNativeWakeWordTriggered($jsonCmd);
+                            } else if(typeof processAiUserPrompt === 'function') {
+                                processAiUserPrompt($jsonCmd);
+                            }
+                        })()
+                    """.trimIndent(), null)
+                } else {
+                    webView.evaluateJavascript("""
+                        (function(){
+                            if(typeof openAiFullscreenChat === 'function') openAiFullscreenChat();
+                            if(typeof window.onNativeWakeWordTriggered === 'function') {
+                                window.onNativeWakeWordTriggered('');
+                            } else if(typeof toggleAiVoiceInput === 'function') {
+                                setTimeout(toggleAiVoiceInput, 300);
+                            }
+                        })()
+                    """.trimIndent(), null)
+                }
             }, 350)
-
         }
 
         val mode = intent.getStringExtra(ZatoonaNotificationManager.EXTRA_MODE)
@@ -274,6 +309,47 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+    }
+
+    fun handleWakeWordFromService(cleanCommand: String) {
+        runOnUiThread {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+                setShowWhenLocked(true)
+                setTurnScreenOn(true)
+            }
+            window.addFlags(
+                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
+                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON or
+                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+            )
+            val km = getSystemService(Context.KEYGUARD_SERVICE) as? KeyguardManager
+            km?.requestDismissKeyguard(this, null)
+
+            if (cleanCommand.isNotBlank()) {
+                val jsonCmd = org.json.JSONObject.quote(cleanCommand)
+                webView.evaluateJavascript("""
+                    (function(){
+                        if(typeof openAiFullscreenChat === 'function') openAiFullscreenChat();
+                        if(typeof window.onNativeWakeWordTriggered === 'function') {
+                            window.onNativeWakeWordTriggered($jsonCmd);
+                        } else if(typeof processAiUserPrompt === 'function') {
+                            processAiUserPrompt($jsonCmd);
+                        }
+                    })()
+                """.trimIndent(), null)
+            } else {
+                webView.evaluateJavascript("""
+                    (function(){
+                        if(typeof openAiFullscreenChat === 'function') openAiFullscreenChat();
+                        if(typeof window.onNativeWakeWordTriggered === 'function') {
+                            window.onNativeWakeWordTriggered('');
+                        } else if(typeof toggleAiVoiceInput === 'function') {
+                            setTimeout(toggleAiVoiceInput, 300);
+                        }
+                    })()
+                """.trimIndent(), null)
+            }
+        }
     }
 
 
@@ -803,8 +879,17 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onResume() {
-
         super.onResume()
+        isForeground = true
+
+        try {
+            if (FloatingStudyBubbleService.isRunning && FloatingStudyBubbleService.isBubbleVisibleOnScreen) {
+                val hideIntent = Intent(this, FloatingStudyBubbleService::class.java).apply {
+                    action = FloatingStudyBubbleService.ACTION_HIDE_BUBBLE
+                }
+                startService(hideIntent)
+            }
+        } catch (e: Exception) {}
 
         try {
 
@@ -825,8 +910,17 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onPause() {
-
+        isForeground = false
         super.onPause()
+
+        try {
+            if (FloatingStudyBubbleService.isRunning && !FloatingStudyBubbleService.wasDismissedToBackground) {
+                val bubbleIntent = Intent(this, FloatingStudyBubbleService::class.java).apply {
+                    action = FloatingStudyBubbleService.ACTION_SHOW_BUBBLE
+                }
+                startService(bubbleIntent)
+            }
+        } catch (e: Exception) {}
 
         try {
 
@@ -966,7 +1060,8 @@ class MainActivity : AppCompatActivity() {
 
                 } catch (e: Exception) {}
 
-                webView.evaluateJavascript("window.onNativeSpeechStateChange && window.onNativeSpeechStateChange('idle');", null)
+                WakeWordService.resumeListening()
+                                    webView.evaluateJavascript("window.onNativeSpeechStateChange && window.onNativeSpeechStateChange('idle');", null)
 
             }
 
@@ -1050,6 +1145,7 @@ class MainActivity : AppCompatActivity() {
 
                             } else {
 
+                                WakeWordService.resumeListening()
                                 webView.evaluateJavascript("window.onNativeSpeechStateChange && window.onNativeSpeechStateChange('error');", null)
 
                             }
@@ -1142,6 +1238,7 @@ class MainActivity : AppCompatActivity() {
 
                 }
 
+                WakeWordService.pauseListening()
                 speechRecognizer?.startListening(intent)
 
             } catch (e: Exception) {
@@ -1180,6 +1277,8 @@ class MainActivity : AppCompatActivity() {
 
         webView.destroy()
 
+        if (instance === this) instance = null
+        isForeground = false
         super.onDestroy()
 
     }

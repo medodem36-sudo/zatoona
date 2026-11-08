@@ -31200,7 +31200,7 @@ window.onNativeWakeWordTriggered = function(rawTranscript){
   playAppSound('water');
   openAiFullscreenChat();
   const text = (rawTranscript || '').trim();
-  const cleanCommand = text.replace(/^(يا\s*كوتش|كوتش|يا\s*زتونة|يا\s*زتونه|زتونة|زتونه)\s*/i, '').trim();
+  const cleanCommand = text.replace(/^(يا\s*كوتش|كوتش|يا\s*زتون[هة]|زتون[هة]|يا\s*زيتون[هة]|زيتون[هة]|ياكوتش|يازتون[هة]|يازيتون[هة])\s*/i, '').trim();
   if(cleanCommand){
     const inp = document.getElementById('inpAiModalChat');
     if(inp) inp.value = cleanCommand;
@@ -31208,13 +31208,12 @@ window.onNativeWakeWordTriggered = function(rawTranscript){
   } else {
     const greeting = 'أيوه يا وحش! أنا معاك وسامعك، اؤمرني يا بطل تحب نسجل أو نعمل إيه؟';
     appendSingleAiMessage('assistant', greeting);
-    speakAiCoachResponse(greeting);
-    // Automatic Siri-like conversational loop: open microphone to listen for command after prompt
+    // Automatic hands-free conversational loop: open microphone to listen for command after prompt
     setTimeout(function(){
       if(window.ZatoonaNativeBridge && typeof window.ZatoonaNativeBridge.startVoiceRecognition === 'function'){
         window.ZatoonaNativeBridge.startVoiceRecognition();
       }
-    }, 2800);
+    }, 1200);
   }
 };
 
@@ -31609,10 +31608,10 @@ let _wakeWordRecInstance = null;
 
 function toggleWakeWordHandsFree(){
   _isWakeWordActive = !_isWakeWordActive;
-  const btn = document.getElementById('btnWakeWordToggle');
-  if(btn){
-    btn.textContent = _isWakeWordActive ? '🗣️ نداء صوتي: مفعّل' : '🗣️ نداء صوتي: معطل';
-  }
+  try {
+    localStorage.setItem('zatoona_wake_word_active', _isWakeWordActive ? '1' : '0');
+  } catch(e){}
+  updateWakeWordUIState(_isWakeWordActive);
 
   if(_isWakeWordActive){
     if(window.ZatoonaNativeBridge && typeof window.ZatoonaNativeBridge.setWakeWordListening === 'function'){
@@ -31623,6 +31622,7 @@ function toggleWakeWordHandsFree(){
       initWakeWordListener();
     }
     triggerHaptic('buttons', 'medium');
+    showToast('🎙️ تم تفعيل الاستماع الدائم.. الكوتش جاهز لندائك حتى لو قفلت الموبايل والشاشة مطفية!', 4000);
   } else {
     if(window.ZatoonaNativeBridge && typeof window.ZatoonaNativeBridge.setWakeWordListening === 'function'){
       try { window.ZatoonaNativeBridge.setWakeWordListening(false); } catch(e){}
@@ -31631,9 +31631,48 @@ function toggleWakeWordHandsFree(){
       try { _wakeWordRecInstance.stop(); } catch(e){}
       _wakeWordRecInstance = null;
     }
+    triggerHaptic('buttons', 'light');
+    showToast('⏹️ تم إيقاف الاستماع الدائم لكوتش زتونة', 2500);
   }
 }
 window.toggleWakeWordHandsFree = toggleWakeWordHandsFree;
+
+function updateWakeWordUIState(active){
+  const btn = document.getElementById('btnWakeWordToggle');
+  if(btn){
+    btn.textContent = active ? '🗣️ نداء صوتي: مفعّل' : '🗣️ نداء صوتي: معطل';
+    btn.style.borderColor = active ? 'var(--emerald-500, #10b981)' : '';
+    btn.style.color = active ? 'var(--emerald-400, #34d399)' : '';
+  }
+}
+window.updateWakeWordUIState = updateWakeWordUIState;
+
+function initWakeWordHandsFreeState(){
+  try {
+    const saved = localStorage.getItem('zatoona_wake_word_active');
+    const isBridgeListening = (window.ZatoonaNativeBridge && typeof window.ZatoonaNativeBridge.isWakeWordListening === 'function')
+      ? window.ZatoonaNativeBridge.isWakeWordListening() : false;
+    if(saved === '1' || isBridgeListening){
+      _isWakeWordActive = true;
+      updateWakeWordUIState(true);
+      if(window.ZatoonaNativeBridge && typeof window.ZatoonaNativeBridge.setWakeWordListening === 'function'){
+        window.ZatoonaNativeBridge.setWakeWordListening(true);
+      }
+    } else {
+      _isWakeWordActive = false;
+      updateWakeWordUIState(false);
+    }
+  } catch(e){}
+}
+window.initWakeWordHandsFreeState = initWakeWordHandsFreeState;
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    initWakeWordHandsFreeState();
+  });
+} else {
+  initWakeWordHandsFreeState();
+}
 
 function initWakeWordListener(){
   const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -40465,6 +40504,29 @@ function renderStretchesView(){
   }
 
   function resetTimer(){
+    // Capture and credit any focused study minutes elapsed before resetting
+    if(timerPhase === 'focus'){
+      let elapsedSecs = 0;
+      if(timerMode === 'flow'){
+        elapsedSecs = timerElapsedFlow;
+      } else {
+        elapsedSecs = Math.max(0, timerTotalPhaseSeconds - timerSecondsLeft);
+      }
+
+      if(elapsedSecs >= 60){
+        logStudySession(elapsedSecs);
+        const mins = Math.floor(elapsedSecs / 60);
+        const minsWord = mins === 1 ? 'دقيقة واحدة' : (mins === 2 ? 'دقيقتين' : `${mins} دقائق`);
+        if(typeof showToast === 'function'){
+          showToast(`عاش يا بطل! تم احتساب ${minsWord} في رصيد مذاكرتك 📚✨`, 3500);
+        }
+        if(typeof triggerHaptic === 'function') triggerHaptic('buttons', 'medium');
+        renderStudyStats();
+        render100HourChallenge();
+        if(typeof syncStudyWidgetIfBridge === 'function') syncStudyWidgetIfBridge();
+      }
+    }
+
     pauseTimer();
     if(timerMode === 'flow'){
       timerElapsedFlow = 0;
@@ -41277,6 +41339,29 @@ function renderStretchesView(){
 
     const resetBtn = document.getElementById('btnStudyTimerReset');
     if(resetBtn) resetBtn.addEventListener('click', resetTimer);
+
+    // Two-way background visibility synchronization for Floating Study Bubble
+    document.addEventListener('visibilitychange', () => {
+      if(document.hidden && timerIsRunning){
+        try {
+          if(window.ZatoonaNativeBridge && typeof window.ZatoonaNativeBridge.startFloatingStudyTimer === 'function'){
+            const title = (timerPhase === 'focus' ? 'جلسة تركيز' : 'استراحة بومودورو');
+            const dur = (timerMode === 'flow' ? timerElapsedFlow : (timerSecondsLeft || 1500));
+            window.ZatoonaNativeBridge.startFloatingStudyTimer(title, dur);
+          }
+        } catch(e){}
+      } else if(!document.hidden && timerIsRunning){
+        try {
+          if(window.ZatoonaNativeBridge && typeof window.ZatoonaNativeBridge.getFloatingStudyRemainingSeconds === 'function'){
+            const nativeRem = window.ZatoonaNativeBridge.getFloatingStudyRemainingSeconds();
+            if(nativeRem > 0 && timerMode !== 'flow'){
+              timerSecondsLeft = nativeRem;
+              updateTimerDisplay();
+            }
+          }
+        } catch(e){}
+      }
+    });
 
     // Subject Selector
     const activeSubSelect = document.getElementById('studyActiveSubjectSelect');

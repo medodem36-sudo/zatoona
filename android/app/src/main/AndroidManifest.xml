@@ -16,6 +16,7 @@
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
 
     <application
         android:allowBackup="true"
@@ -213,7 +214,12 @@
         <!-- Floating Study & Pomodoro Bubble Service -->
         <service
             android:name=".FloatingStudyBubbleService"
-            android:exported="false" />
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Floating Pomodoro and Study countdown timer overlay bubble and background session tracking" />
+        </service>
 
         <!-- Floating AI Assistant Coach Bubble Service -->
         <service
@@ -224,6 +230,12 @@
                 android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
                 android:value="Floating AI Coach assistant bubble and background voice interaction" />
         </service>
+
+        <!-- Continuous Wake-Word ("يا كوتش" / "يا زتونة") Foreground Listening Service -->
+        <service
+            android:name=".WakeWordService"
+            android:exported="false"
+            android:foregroundServiceType="microphone" />
 
     </application>
 
