@@ -215,6 +215,16 @@
             android:name=".FloatingStudyBubbleService"
             android:exported="false" />
 
+        <!-- Floating AI Assistant Coach Bubble Service -->
+        <service
+            android:name=".FloatingCoachBubbleService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Floating AI Coach assistant bubble and background voice interaction" />
+        </service>
+
     </application>
 
 </manifest>

@@ -59,7 +59,7 @@ class AlarmActivity : AppCompatActivity() {
             if (event?.sensor?.type == Sensor.TYPE_ACCELEROMETER) {
                 val z = event.values[2]
                 // When phone is placed face-down, Z acceleration is near -9.8 m/s^2
-                if (z < -8.0) {
+                if (z < -6.5) {
                     val now = System.currentTimeMillis()
                     if (!isFaceDown && (now - lastFlipTime > 1500)) {
                         isFaceDown = true

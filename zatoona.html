@@ -12335,6 +12335,27 @@ details.settings-card summary:hover {
           </div>
         </div>
 
+        <!-- ElevenLabs Studio Voice Section -->
+        <div id="settingsAiElevenLabsContainer" style="margin-top:14px; padding:12px; border-radius:12px; background:rgba(16,185,129,0.06); border:1px solid rgba(16,185,129,0.2);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <label style="font-weight:700; font-size:0.85rem; color:var(--text); display:flex; align-items:center; gap:6px;">🎙️ صوت ElevenLabs البشري الفائق (اختياري):</label>
+            <a href="https://elevenlabs.io" target="_blank" rel="noopener" style="font-size:0.75rem; color:var(--accent); text-decoration:underline;">مفتاح مجاني من elevenlabs.io ↗</a>
+          </div>
+          <div style="font-size:0.75rem; color:var(--muted); margin-bottom:8px; line-height:1.4;">
+            لو عاوز صوت مصري بشري واقعي 100% زي الفويساوفر الحقيقي، حط مفتاحك هنا. لو سبته فاضي، هيشتغل تلقائياً بمحرك جوجل الذكي المجاني المدمج في الموبايل.
+          </div>
+          <div style="display:flex; gap:6px; margin-bottom:8px;">
+            <input type="password" id="settingsAiElevenKeyInput" class="weight-input" placeholder="مفتاح ElevenLabs (sk_...)" style="flex:1; font-size:0.85rem;" oninput="onSettingsElevenKeyInput(this.value)">
+          </div>
+          <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+            <input type="text" id="settingsAiElevenVoiceInput" class="weight-input" placeholder="معرّف الصوت (onwK4e9ZLuTAKqWW03F9)" style="flex:1; min-width:180px; font-size:0.82rem;" oninput="onSettingsElevenVoiceInput(this.value)">
+            <button type="button" class="btn" onclick="testElevenLabsConnectionNow()" style="background:var(--accent); color:#fff; font-weight:700; font-size:0.78rem; padding:6px 12px; border-radius:8px;">
+              🧪 تجربة الصوت
+            </button>
+          </div>
+          <div id="txtElevenTestStatus" style="font-size:0.75rem; color:var(--muted); margin-top:6px;"></div>
+        </div>
+
         <!-- Compact ribbon preference -->
         <div class="settings-row" style="padding:8px 0; border-top:1px dashed var(--line); margin-top:10px;">
           <div>
@@ -16685,20 +16706,31 @@ function tryDispatchWindowNotification(title, options){
 }
 
 function dispatchNotification(info){
-  // 1. In-app modal
+  // 1. In-app modal (when app is in foreground)
   showInAppReminderModal(info);
 
+  const isNative = (typeof isNativeBridgeAvailable === 'function' && isNativeBridgeAvailable());
+
   // 1b. Audio chime & haptic alert
-  try {
-    if(typeof playChimeAlert === 'function') playChimeAlert();
-    if(window.ZatoonaNativeBridge && typeof window.ZatoonaNativeBridge.triggerHaptic === 'function'){
-      window.ZatoonaNativeBridge.triggerHaptic(25);
-    } else if(navigator.vibrate && (!navigator.userActivation || navigator.userActivation.hasBeenActive)){
-      navigator.vibrate(25);
-    }
-  } catch(e){}
+  if(!isNative){
+    try {
+      if(typeof playChimeAlert === 'function') playChimeAlert();
+      if(navigator.vibrate && (!navigator.userActivation || navigator.userActivation.hasBeenActive)){
+        navigator.vibrate(25);
+      }
+    } catch(e){}
+  } else {
+    try {
+      if(window.ZatoonaNativeBridge && typeof window.ZatoonaNativeBridge.triggerHaptic === 'function'){
+        window.ZatoonaNativeBridge.triggerHaptic(25);
+      }
+    } catch(e){}
+  }
 
   // 2. OS / Browser Notification
+  // CRITICAL DEDUPLICATION: In Android Native Shell, Android AlarmManager & ZatoonaNotificationManager
+  // already deliver the system status-bar notification. Suppress web Service Worker / new Notification to prevent duplicates!
+  if(isNative) return;
   const perm = getNotificationPermissionStatus();
   if(perm === 'granted'){
     const title = info.title || 'زتونة — تنبيه';
@@ -30117,7 +30149,9 @@ const AI_COACH_SETTINGS_DEFAULT = {
   apiKey: '',
   tone: 'supportive', // 'supportive' | 'direct' | 'detailed'
   collapsed: false,
-  modelChoice: 'auto' // 'auto' | 'gemini-2.5-flash' | 'gemini-2.0-flash' | 'gemini-1.5-flash-latest' | 'gemini-1.5-flash'
+  modelChoice: 'auto', // 'auto' | 'gemini-2.5-flash' | 'gemini-2.0-flash' | 'gemini-1.5-flash-latest' | 'gemini-1.5-flash'
+  elevenLabsApiKey: '',
+  elevenLabsVoiceId: 'onwK4e9ZLuTAKqWW03F9' // Natural warm Arabic voice
 };
 
 function loadAiCoachSettings(){
@@ -30461,10 +30495,13 @@ async function callGeminiGenerateContent(apiKey, contents, systemInstruction = '
       const payload = {
         contents,
         generationConfig: {
-          maxOutputTokens: 800,
+          maxOutputTokens: 250,
           temperature: 0.7
         }
       };
+      if(c.model && c.model.includes('thinking')){
+        payload.generationConfig.thinkingConfig = { thinkingBudget: 0 };
+      }
       if(systemInstruction){
         payload.systemInstruction = {
           parts: [{ text: systemInstruction }]
@@ -30487,11 +30524,29 @@ async function callGeminiGenerateContent(apiKey, contents, systemInstruction = '
 
       if(response.ok){
         const data = await response.json();
-        const generated = data.candidates?.[0]?.content?.parts?.[0]?.text;
-        if(generated && generated.trim()){
+        const candidate = data.candidates?.[0];
+        let generated = '';
+        if(candidate?.content?.parts){
+          const textParts = candidate.content.parts.filter(p => !p.thought && p.text);
+          if(textParts.length > 0){
+            generated = textParts.map(p => p.text).join('\n').trim();
+          } else {
+            generated = candidate.content.parts.map(p => p.text || '').join('\n').trim();
+          }
+        }
+
+        generated = generated
+          .replace(/<thought>[\s\S]*?<\/thought>/gi, '')
+          .replace(/```thought[\s\S]*?```/gi, '')
+          .replace(/^\s*\*Option \d+[\s\S]*?\*Closing:?[^\n]*/gim, '')
+          .replace(/^\s*\*The user is engaging[\s\S]*?\*Call to action:?[^\n]*/gim, '')
+          .replace(/\(What's up, Coach\?[\s\S]*?\.\.\.\.\./gi, '')
+          .trim();
+
+        if(generated){
           window._lastWorkingGeminiModel = c.model;
           try { localStorage.setItem('zatoona-gemini-active-model', c.model); } catch(e){}
-          return { text: generated.trim(), model: c.model, version: c.version };
+          return { text: generated, model: c.model, version: c.version };
         }
       }
 
@@ -30600,15 +30655,84 @@ let activeAiCoachCategory = 'all';
 let aiCoachSettingsOpen = false;
 let activeAiCoachTab = 'chat'; // 'chat' | 'analysis'
 
+function sanitizeAiCoachResponse(text, userPrompt){
+  if(!text || typeof text !== 'string') return '';
+  let str = text.trim();
+
+  // If text contains leaked thought options or deliberation blocks from Gemini
+  if(/(\*?\*?Option\s*\d+|Intent:|User:\s*\"|Personality:|Language:|Constraint:)/i.test(str)){
+    const lines = str.split('\n');
+    const cleanedLines = [];
+    const metaPatterns = [
+      /^\s*•?\s*User:\s*/i,
+      /^\s*\*?\s*(Intent|Context|Name|Personality|Language|Constraint|Data context|Opening|Closing|The\s*"Coach"\s*vibe|The\s*"Checking"\s*part|Specific prompts|Check-in|Call to action|Option\s*\d+)\b/i,
+      /^\s*\*?\*?Option\s*\d+/i,
+      /^\s*\(Discarded\b/i,
+      /^\s*•?\s*$/
+    ];
+
+    // Check for chosen/non-discarded option candidates
+    const optMatches = str.match(/\*?\*?Option\s*\d+[^:]*:\*?\*?\s*([^\n\(\)]+?)(?:\s*\([^\)]*discarded[^\)]*\)|$)/gi);
+    let chosenCandidate = '';
+    if(optMatches && optMatches.length > 0){
+      const valid = optMatches.map(m => m.replace(/\*?\*?Option\s*\d+[^:]*:\*?\*?\s*/i, '').trim())
+                              .filter(m => !/discarded|violates|formal|robotic/i.test(m) && /[\u0600-\u06FF]/.test(m));
+      if(valid.length > 0) chosenCandidate = valid[valid.length - 1].replace(/^[\"\'\s*]+|[\"\'\s*]+$/g, '');
+    }
+
+    for(let i = 0; i < lines.length; i++){
+      const l = lines[i].trim();
+      if(!l) continue;
+      if(userPrompt && l === userPrompt.trim()) continue;
+      const isMeta = metaPatterns.some(p => p.test(l));
+      if(!isMeta && !/^\*\s*\[?Option/i.test(l)){
+        cleanedLines.push(l);
+      }
+    }
+
+    let res = cleanedLines.join('\n').trim();
+    if(res.length < 8 || /Intent:|Option\s*\d+/i.test(res)){
+      if(chosenCandidate){
+        res = chosenCandidate;
+      } else {
+        const arabicQuotes = str.match(/"([^"]*[\u0600-\u06FF]{3,}[^"]*)"/g);
+        if(arabicQuotes && arabicQuotes.length > 0){
+          res = arabicQuotes.map(q => q.replace(/^"|"$/g, '').trim()).join(' ');
+        }
+      }
+    }
+    if(res && res.length >= 4) str = res;
+  }
+
+  // Strip leading asterisks or Option labels
+  str = str.replace(/^\*+\s*Option\s*\d+[^:]*:\*+\s*/i, '').trim();
+  return str;
+}
+window.sanitizeAiCoachResponse = sanitizeAiCoachResponse;
+
 function loadAiCoachChatHistory(){
   const raw = storageGetJSON('ai-coach-chat-history', null);
   if(Array.isArray(raw) && raw.length > 0){
-    return raw;
+    let modified = false;
+    const sanitized = raw.map(m => {
+      if(m && m.role === 'assistant' && typeof m.text === 'string'){
+        const cleaned = sanitizeAiCoachResponse(m.text);
+        if(cleaned !== m.text){
+          modified = true;
+          return Object.assign({}, m, { text: cleaned });
+        }
+      }
+      return m;
+    });
+    if(modified){
+      try { storageSet('ai-coach-chat-history', JSON.stringify(sanitized.slice(-50))); } catch(e){}
+    }
+    return sanitized;
   }
   return [
     {
       role: 'assistant',
-      text: 'أهلاً بك يا بطل! 👋 أنا كوتش زتونة، مستشارك الشخصي للعبادة والتمرين والنوم والتغذية والمذاكرة. اسألني أي سؤال عن يومك أو أي استفسار عام وأنا معاك لحظة بلحظة!',
+      text: 'أهلاً بك يا بطل! 👋 أنا كوتش زتونة، مدربك الشخصي للعبادة والتمرين والنوم والتغذية والعادات. اسألني أي سؤال عن يومك وأنا معاك لحظة بلحظة!',
       timestamp: Date.now()
     }
   ];
@@ -30632,6 +30756,64 @@ function clearAiCoachChatHistory(){
 
 function generateLocalAiChatResponse(prompt, stats, iso){
   const p = (prompt || '').trim().toLowerCase();
+  const fullCtx = typeof getUnifiedZatoonaAppContext === 'function' ? getUnifiedZatoonaAppContext(iso) : '';
+
+  // Questions about schedule / dynamic timeline
+  if(/(جدول|نشاط|ورايا إيه|الخطوة الجاية|النشاط اللي بعده|الساعة كام)/i.test(p)){
+    const schedRec = typeof getDaySchedRecord === 'function' && typeof scheduleSettings !== 'undefined' ? getDaySchedRecord(iso, typeof isoDayIdx === 'function' ? isoDayIdx(iso) : selectedIdx, scheduleSettings) : null;
+    const schedChecks = typeof loadScheduleCheck === 'function' ? loadScheduleCheck(iso) : {};
+    if(schedRec && Array.isArray(schedRec.acts) && schedRec.acts.length > 0){
+      const done = schedRec.acts.filter(a => schedChecks[a.id]).length;
+      const total = schedRec.acts.length;
+      const pending = schedRec.acts.filter(a => !schedChecks[a.id]);
+      const nextOne = pending[0] ? `"${pending[0].name || pending[0].type}" الساعة ${typeof formatActTime === 'function' ? formatActTime(pending[0].start) : pending[0].start}` : 'مفيش أنشطة باقية، خلصت جدولك النهاردة!';
+      return `يا بطل، أنجزت ${done} من أصل ${total} نشاط في جدول النهاردة. النشاط القادم عندك: ${nextOne}. شد حيلك وكسر الدنيا! 💪`;
+    }
+    return 'جدولك فاضي النهاردة يا صاحبي، تقدر تضيف أي نشاط تحبه من قسم الجدول! ⏰';
+  }
+
+  // Questions about budget / expenses
+  if(/(ميزانية|مصاريف|صرفت|فلوس|باقي معايا كام|المتبقي كام)/i.test(p)){
+    const now = new Date();
+    const mb = typeof computeMonthBudget === 'function' ? computeMonthBudget(now.getFullYear(), now.getMonth()) : null;
+    if(mb){
+      const spent = Math.round(mb.totalSpent || 0);
+      const overall = mb.overallBudget || 0;
+      const rem = Math.round(mb.remaining || 0);
+      if(overall > 0){
+        return `إجمالي اللي صرفته الشهر ده ${spent} ج.م من أصل ميزانية ${overall} ج.م، باقي معاك بالظبط ${rem} ج.م (استهلكت ${mb.usedPct || 0}%). خليك محافظ على القرش يا غالي! 💰`;
+      }
+      return `إجمالي مصاريفك المسجلة للشهر ده ${spent} ج.م. لو حابب تظبط سقف محدد، ضيفه من صفحة الميزانية! 💸`;
+    }
+  }
+
+  // Questions about workout / gym
+  if(/(تمرين|جيم|النهاردة إيه في التمرين|عندي تمرين|أتدرب إيه)/i.test(p)){
+    const effGym = typeof getEffectiveGymDay === 'function' ? getEffectiveGymDay(iso) : null;
+    if(effGym){
+      if(effGym.isRestDay || effGym.gymType === 'rest'){
+        return 'النهاردة يوم راحة واستشفاء رسمي 🛋️! ريح عضلاتك، اشرب مية كويس، ونام بدري عشان ترجع بكره بطاقة حديد.';
+      }
+      const rName = effGym.routineTitle || effGym.routineId || effGym.gymType || 'تمرينك اليومي';
+      const prog = typeof getGymSessionProgress === 'function' ? getGymSessionProgress(iso) : null;
+      if(prog && prog.totalExercises > 0){
+        return `النهاردة عندك تمرين (${rName}) 🏋️‍♂️! أنجزت منه ${prog.doneExercises} من ${prog.totalExercises} تمارين. عاش يا بطل، كمل للآخر!`;
+      }
+      return `النهاردة تمرينتك (${rName}) 🏋️‍♂️! جهز شيكر المية وسخن عضلاتك كويس ويلا بينا نكسر أرقام جديدة!`;
+    }
+  }
+
+  // Questions about food / nutrition
+  if(/(أكل|كالوري|سعرات|بروتين|وجبات|أكلت إيه)/i.test(p)){
+    const effMeals = typeof getEffectiveDayMeals === 'function' ? getEffectiveDayMeals(iso) : null;
+    const dayTgt = typeof dayTargets === 'function' ? dayTargets(typeof isoDayIdx === 'function' ? isoDayIdx(iso) : selectedIdx, iso) : null;
+    const daySt = typeof loadDayStatus === 'function' ? loadDayStatus(iso) : {};
+    if(effMeals && Array.isArray(effMeals.meals) && effMeals.meals.length > 0){
+      const eaten = effMeals.meals.filter((m, i) => daySt[i] && (daySt[i].state === 'planned' || daySt[i].state === 'modified')).length;
+      const tgtKcal = dayTgt ? Math.round(dayTgt.kcal) : 2000;
+      return `خطتك فيها ${effMeals.meals.length} وجبات النهاردة، سجلت أكل ${eaten} منهم بهدف ${tgtKcal} كالوري. حافظ على وجباتك النظيفة ترطيبك في السليم! 🥗`;
+    }
+  }
 
   // 1. Overall Day Evaluation & Summary
   if(/(ملخص|تقييم|قيم|درجتي|أدائي|ادائي|تقييمي)/i.test(p)){
@@ -30703,7 +30885,7 @@ function generateLocalAiChatResponse(prompt, stats, iso){
   }
 
   // 9. Default Helpful Assistant Response
-  return `🤖 **أهلاً بك يا بطل!**\nأنا كوتش زتونة ومتابع معاك كل تفاصيل يومك (${iso}).\n\nتقدر تسألني عن أي حاجة في التمرين، التغذية، العبادة، النوم، أو تنظيم وقتك، وسأجاوبك فوراً! ✨`;
+  return `🤖 **منور يا بطل!**\nأنا كوتش زتونة ومتابع معاك كل تفاصيل يومك (${iso}) خطوة بخطوة.. تقدر تقولي أسجلك مية أو صلاة أو تمرين، أو تسألني في أي حاجة في يومك وهفيدك في الزتونة على طول! ✨`;
 }
 
 // ==========================================================================
@@ -30725,39 +30907,141 @@ function toggleAiCoachVoiceOutput(){
     btn.textContent = _aiCoachVoiceOutputEnabled ? '🔊 صوت: تشغيل' : '🔇 صوت: كتم';
   }
   triggerHaptic('buttons', 'light');
-  if(!_aiCoachVoiceOutputEnabled && 'speechSynthesis' in window){
-    window.speechSynthesis.cancel();
+  if(!_aiCoachVoiceOutputEnabled){
+    if(window.ZatoonaNativeBridge && typeof window.ZatoonaNativeBridge.stopSpeaking === 'function'){
+      try { window.ZatoonaNativeBridge.stopSpeaking(); } catch(e){}
+    }
+    if('speechSynthesis' in window){
+      window.speechSynthesis.cancel();
+    }
   }
 }
 window.toggleAiCoachVoiceOutput = toggleAiCoachVoiceOutput;
 
+function cleanTextForSpeechSynthesis(rawText){
+  if(!rawText) return '';
+  return rawText
+    // 1. Strip ACTION codes and system execution status banners
+    .replace(/<<<ACTION:[\s\S]*?>>>/g, '')
+    .replace(/\[تم التنفيذ[\s\S]*?\]/g, '')
+    .replace(/\[\s*ملاحظة[\s\S]*?\]/g, '')
+    .replace(/\[[\s\S]*?\]/g, '')
+    // 2. Strip Markdown formatting tags (*, _, ~, `, #, >, bullet points)
+    .replace(/\*\*(.*?)\*\*/g, '$1')
+    .replace(/[*_~`#>•\-–—]/g, ' ')
+    // 3. Strip ALL Emojis, Symbols, and Pictographs across unicode planes
+    .replace(/[\u{10000}-\u{10FFFF}\u{2600}-\u{27BF}\u{FE00}-\u{FE0F}\u{200D}\u{2300}-\u{23FF}\u{2B50}\u{20E3}\u{25A0}-\u{25FF}\u{2190}-\u{21FF}\u{2900}-\u{297F}\p{Extended_Pictographic}\p{Emoji_Presentation}]/gu, '')
+    // 4. Clean extra spaces and punctuation duplicates
+    .replace(/[\r\n]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+window.cleanTextForSpeechSynthesis = cleanTextForSpeechSynthesis;
+
+let _activeAudioInstance = null;
+async function playElevenLabsTTS(text, apiKey, voiceId){
+  try {
+    if(_activeAudioInstance){
+      try { _activeAudioInstance.pause(); } catch(e){}
+      _activeAudioInstance = null;
+    }
+    const cleanKey = (apiKey || '').trim();
+    const vId = (voiceId || '').trim() || 'onwK4e9ZLuTAKqWW03F9';
+    const resp = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${vId}`, {
+      method: 'POST',
+      headers: {
+        'xi-api-key': cleanKey,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        text: text,
+        model_id: 'eleven_multilingual_v2',
+        voice_settings: {
+          stability: 0.52,
+          similarity_boost: 0.82
+        }
+      })
+    });
+    if(!resp.ok) throw new Error('ElevenLabs API returned ' + resp.status);
+    const blob = await resp.blob();
+    const audioUrl = URL.createObjectURL(blob);
+    _activeAudioInstance = new Audio(audioUrl);
+    _activeAudioInstance.play();
+    return true;
+  } catch(e){
+    console.warn('[ElevenLabs] Fallback to native engine:', e);
+    return false;
+  }
+}
+window.playElevenLabsTTS = playElevenLabsTTS;
+
+function softenEgyptianPhonetics(text){
+  if(!text || typeof text !== 'string') return '';
+  return text
+    .replace(/كوب\s*ماء/g, 'كوباية مية')
+    .replace(/أكواب\s*ماء/g, 'كوبايات مية')
+    .replace(/\bجيد\s*جداً\b/g, 'زي الفل')
+    .replace(/\bحسناً\b/g, 'تمام يا بطل')
+    .replace(/\bشكراً\s*لك\b/g, 'تسلم يا غالي')
+    .replace(/\bبإمكانك\b/g, 'تقدر')
+    .replace(/\bسأقوم\s*بـ?/g, 'هعملك')
+    .replace(/\bلقد\s*تم\b/g, 'تمام عملتلك')
+    .replace(/\bالآن\b/g, 'دلوقتي')
+    .replace(/\bمرحباً\b/g, 'أهلاً يا وحش');
+}
+window.softenEgyptianPhonetics = softenEgyptianPhonetics;
+function fallbackSpeakNativeOrWeb(naturalClean, clean){
+  // 1. Android Native TTS Bridge (uses Google Neural Voice configured in phone settings)
+  if(window.ZatoonaNativeBridge && typeof window.ZatoonaNativeBridge.speakText === 'function'){
+    try {
+      const ok = window.ZatoonaNativeBridge.speakText(naturalClean);
+      if(ok) return;
+    } catch(eBridge){
+      console.warn('[AiVoiceOutput] Native bridge speak error:', eBridge);
+    }
+  }
+
+  // 2. Web SpeechSynthesis API fallback
+  if('speechSynthesis' in window){
+    try {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(clean);
+      utterance.lang = 'ar-EG';
+      utterance.rate = 1.0; // Natural conversational tempo
+      utterance.pitch = 1.0;
+
+      const voices = window.speechSynthesis.getVoices();
+      const arEgVoice = voices.find(v => v.lang === 'ar-EG' || v.lang === 'ar_EG');
+      const arVoice = arEgVoice || voices.find(v => v.lang && v.lang.startsWith('ar'));
+      if(arVoice) utterance.voice = arVoice;
+
+      window.speechSynthesis.speak(utterance);
+    } catch(e){
+      console.warn('[AiVoiceOutput] Speech synthesis error:', e);
+    }
+  }
+}
+window.fallbackSpeakNativeOrWeb = fallbackSpeakNativeOrWeb;
+
 function speakAiCoachResponse(rawText){
   if(!_aiCoachVoiceOutputEnabled) return;
-  if(!('speechSynthesis' in window)) return;
-  try {
-    window.speechSynthesis.cancel();
-    // Strip markdown tags, emojis, and action tags for clean, clear speech
-    const clean = rawText
-      .replace(/<<<ACTION:[\s\S]*?>>>/g, '')
-      .replace(/\*\*(.*?)\*\*/g, '$1')
-      .replace(/[#\*_`•\-\n]/g, ' ')
-      .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '')
-      .trim();
-    if(!clean) return;
+  const clean = cleanTextForSpeechSynthesis(rawText);
+  if(!clean) return;
 
-    const utterance = new SpeechSynthesisUtterance(clean);
-    utterance.lang = 'ar-EG';
-    utterance.rate = 1.05;
-    utterance.pitch = 1.0;
+  const naturalClean = softenEgyptianPhonetics(clean);
 
-    const voices = window.speechSynthesis.getVoices();
-    const arVoice = voices.find(v => v.lang.startsWith('ar'));
-    if(arVoice) utterance.voice = arVoice;
-
-    window.speechSynthesis.speak(utterance);
-  } catch(e){
-    console.warn('[AiVoiceOutput] Speech synthesis error:', e);
+  // 0. ElevenLabs Studio Ultra-Realistic Human Voice (if API key provided)
+  const settings = (typeof loadAiCoachSettings === 'function') ? loadAiCoachSettings() : {};
+  if(settings.elevenLabsApiKey && settings.elevenLabsApiKey.trim()){
+    playElevenLabsTTS(naturalClean, settings.elevenLabsApiKey, settings.elevenLabsVoiceId).then(played => {
+      if(played) return;
+      // Fallback if ElevenLabs fails
+      fallbackSpeakNativeOrWeb(naturalClean, clean);
+    });
+    return;
   }
+
+  fallbackSpeakNativeOrWeb(naturalClean, clean);
 }
 window.speakAiCoachResponse = speakAiCoachResponse;
 
@@ -30828,12 +31112,28 @@ function updateVoiceRecordingUI(isRecording){
 }
 
 function toggleAiVoiceInput(){
+  triggerHaptic('buttons', 'light');
+
+  // 1. Android Native Bridge Speech Recognizer
+  if(window.ZatoonaNativeBridge && typeof window.ZatoonaNativeBridge.startVoiceRecognition === 'function'){
+    try {
+      const started = window.ZatoonaNativeBridge.startVoiceRecognition();
+      if(started){
+        updateVoiceRecordingUI(true);
+        return;
+      }
+    } catch(eBridge){
+      console.warn('[NativeVoice] Bridge error:', eBridge);
+    }
+  }
+
+  // 2. Web Speech API Fallback
   if(!_speechRecognitionInstance){
     _speechRecognitionInstance = initVoiceRecognition();
   }
 
   if(!_speechRecognitionInstance){
-    alert('ميزة التعرف الصوتي المباشر تعتمد على متصفح جهازك. يمكنك أيضاً استخدام زر المايك 🎙️ في كيبورد هاتفك للكتابة صوتياً بكل سهولة!');
+    showToast('جارِ تشغيل التعرف الصوتي، أو اضغط مايك الكيبورد 🎙️', 2500);
     return;
   }
 
@@ -30846,13 +31146,93 @@ function toggleAiVoiceInput(){
       _speechRecognitionInstance.start();
     } catch(err){
       console.warn('[SpeechRec] Start error:', err);
-      // Re-init and retry
       _speechRecognitionInstance = initVoiceRecognition();
       try { _speechRecognitionInstance.start(); } catch(e2){}
     }
   }
 }
 window.toggleAiVoiceInput = toggleAiVoiceInput;
+
+// Android Native Speech Callbacks
+window.onNativeSpeechResult = function(transcript){
+  updateVoiceRecordingUI(false);
+  if(transcript && transcript.trim()){
+    openAiFullscreenChat();
+    const inp = document.getElementById('inpAiModalChat');
+    if(inp) inp.value = transcript.trim();
+    processAiUserPrompt(transcript.trim());
+  }
+};
+
+function toggleFloatingCoachBubble(){
+  triggerHaptic('buttons', 'medium');
+  if(window.ZatoonaNativeBridge && typeof window.ZatoonaNativeBridge.startFloatingCoachBubble === 'function'){
+    const isActive = (typeof window.ZatoonaNativeBridge.isFloatingCoachBubbleActive === 'function') &&
+                     window.ZatoonaNativeBridge.isFloatingCoachBubbleActive();
+    if(isActive){
+      window.ZatoonaNativeBridge.stopFloatingCoachBubble();
+      showToast('تم إخفاء ويدجت الكوتش العائم 📴', 2500);
+      updateFloatingBubbleBtn(false);
+    } else {
+      const started = window.ZatoonaNativeBridge.startFloatingCoachBubble();
+      if(started){
+        showToast('تم تفعيل ويدجت الكوتش العائم على شاشة الموبايل 📌🌱', 3000);
+        updateFloatingBubbleBtn(true);
+      } else {
+        showToast('يرجى منح إذن "الظهور فوق التطبيقات" لتفعيل الويدجت العائم ⚙️', 3500);
+      }
+    }
+  } else {
+    showToast('الويدجت العائم متاح على تطبيق أندرويد فقط 📱', 2500);
+  }
+}
+window.toggleFloatingCoachBubble = toggleFloatingCoachBubble;
+
+function updateFloatingBubbleBtn(active){
+  const btn = document.getElementById('btnToggleFloatingCoach');
+  if(btn){
+    btn.textContent = active ? '📌 الويدجت: مفعّل' : '📌 الويدجت: معطل';
+  }
+}
+window.updateFloatingBubbleBtn = updateFloatingBubbleBtn;
+window.onNativeWakeWordTriggered = function(rawTranscript){
+  triggerHaptic('alerts', 'medium');
+  playAppSound('water');
+  openAiFullscreenChat();
+  const text = (rawTranscript || '').trim();
+  const cleanCommand = text.replace(/^(يا\s*كوتش|كوتش|يا\s*زتونة|يا\s*زتونه|زتونة|زتونه)\s*/i, '').trim();
+  if(cleanCommand){
+    const inp = document.getElementById('inpAiModalChat');
+    if(inp) inp.value = cleanCommand;
+    processAiUserPrompt(cleanCommand);
+  } else {
+    const greeting = 'أيوه يا وحش! أنا معاك وسامعك، اؤمرني يا بطل تحب نسجل أو نعمل إيه؟';
+    appendSingleAiMessage('assistant', greeting);
+    speakAiCoachResponse(greeting);
+    // Automatic Siri-like conversational loop: open microphone to listen for command after prompt
+    setTimeout(function(){
+      if(window.ZatoonaNativeBridge && typeof window.ZatoonaNativeBridge.startVoiceRecognition === 'function'){
+        window.ZatoonaNativeBridge.startVoiceRecognition();
+      }
+    }, 2800);
+  }
+};
+
+window.onNativeSpeechStateChange = function(state){
+  if(state === 'listening'){
+    updateVoiceRecordingUI(true);
+  } else {
+    updateVoiceRecordingUI(false);
+  }
+};
+
+window.onNativeFlipGesture = function(){
+  try {
+    if('speechSynthesis' in window) window.speechSynthesis.cancel();
+    if(typeof stopAmbientSoundWithTimer === 'function') stopAmbientSoundWithTimer();
+    showToast('تم كتم الصوت بحركة قلب الموبايل 📴', 2000);
+  } catch(e){}
+};
 
 // --------------------------------------------------------------------------
 // IN-APP ACTION EXECUTION ENGINE (تنفيذ الأوامر وتسجيل وتعديل البيانات فعلياً)
@@ -30866,7 +31246,8 @@ function executeLogWaterAction(amount = 1){
   renderWater();
   triggerHaptic('buttons', 'medium');
   playAppSound('water');
-  return `تمام يا بطل! سجلت لك ${delta > 1 ? delta + ' أكواب' : 'كوباية'} مية بنجاح 💧\nإجمالي شرب الماء لليوم: **${waterCount} كوب**. استمر يا بطل!`;
+  const cupsWord = delta === 1 ? 'كوباية مية' : (delta === 2 ? 'كوبايتين مية' : `${delta} كوبايات مية`);
+  return `عاش يا وحش! سجلتلك ${cupsWord} دلوقتي 💧\nكدة بقوا **${waterCount} كوبايات** النهاردة.. كمل يا بطل ترطيب جسمك في الجون!`;
 }
 window.executeLogWaterAction = executeLogWaterAction;
 
@@ -30899,7 +31280,7 @@ function executeLogPrayerAction(prayerTarget, isSunnah = false){
       if(typeof renderTabs === 'function') renderTabs();
       triggerHaptic('alerts', 'gentle');
       playAppSound('logging');
-      return `تقبل الله منا ومنك صالح الأعمال يا بطل! 🕌\nتم تسجيل ${isSunnah ? 'سنة' : 'فرض'} صلاة **${name}** في قائمة عبادات اليوم بنجاح.`;
+      return `تقبل الله منك يا صاحبي! 🕌\nسجلتلك ${isSunnah ? 'سنة' : 'فرض'} صلاة **${name}** في عبادات النهاردة، ربنا يتقبل دايماً ويجعله في ميزان حسناتك!`;
     }
   }
 
@@ -30910,7 +31291,7 @@ function executeLogPrayerAction(prayerTarget, isSunnah = false){
     saveQiyam(iso, qiyamObj);
     triggerHaptic('alerts', 'gentle');
     playAppSound('logging');
-    return 'تقبل الله قيامك وطاعتك! 🌙\nتم تسجيل **قيام الليل** في أوراد وعبادات اليوم بنجاح.';
+    return 'تقبل الله قيامك يا بطل! 🌙\nسجلتلك **قيام الليل** في أوراد النهاردة، ربنا يثبتك ويعلي مقامك!';
   }
   if(p.includes('witr') || p.includes('وتر')){
     const qiyamObj = loadQiyam(iso);
@@ -30918,7 +31299,7 @@ function executeLogPrayerAction(prayerTarget, isSunnah = false){
     saveQiyam(iso, qiyamObj);
     triggerHaptic('alerts', 'gentle');
     playAppSound('logging');
-    return 'تقبل الله! ✨ تم تسجيل **صلاة الوتر** في أوراد اليوم بنجاح.';
+    return 'تقبل الله صلاتك ودعاءك! ✨\nسجلتلك **صلاة الوتر** للنهاردة، نوم هادي ومبارك يا غالي.';
   }
 
   // 3. Azkar
@@ -30928,7 +31309,7 @@ function executeLogPrayerAction(prayerTarget, isSunnah = false){
     saveAzkar(iso, azk);
     triggerHaptic('alerts', 'gentle');
     playAppSound('logging');
-    return 'تم تسجيل **أذكار الصباح** بنجاح ☀️ حفظك الله وبارك في يومك!';
+    return 'صباح الفل والبركة يا غالي! ☀️\nسجلتلك **أذكار الصباح**، يومك كله خير وتوفيق بإذن الله.';
   }
   if(p.includes('masaa') || p.includes('مساء')){
     const azk = loadAzkar(iso);
@@ -30936,7 +31317,7 @@ function executeLogPrayerAction(prayerTarget, isSunnah = false){
     saveAzkar(iso, azk);
     triggerHaptic('alerts', 'gentle');
     playAppSound('logging');
-    return 'تم تسجيل **أذكار المساء** بنجاح 🌇 أمسيت في حفظ الله وأمانه!';
+    return 'مساء الخير والسكينة! 🌇\nسجلتلك **أذكار المساء**، أمسيت في حفظ الله ورعايته.';
   }
 
   // 4. Quran
@@ -30946,7 +31327,7 @@ function executeLogPrayerAction(prayerTarget, isSunnah = false){
     saveQuran(iso, qur);
     triggerHaptic('alerts', 'gentle');
     playAppSound('logging');
-    return 'ما شاء الله تبارك الله! 📖\nتم تسجيل **قراءة ورد القرآن الكريم** لليوم بنجاح.';
+    return 'ما شاء الله ربنا يبارك فيك! 📖\nسجلتلك **ورد القرآن الكريم** للنهاردة، دايماً مع القرآن وفي أمان الله.';
   }
 
   return `تم تسجيل العبادة: ${prayerTarget} بنجاح.`;
@@ -30964,7 +31345,7 @@ function executeToggleHabitAction(habitName){
     if(typeof renderCustomHabitsTracker === 'function') renderCustomHabitsTracker();
     triggerHaptic('alerts', 'gentle');
     playAppSound('logging');
-    return `عاش يا بطل! تم تعليم عادة "**${found.title}**" كمنجزة اليوم بنجاح ✅`;
+    return `تسلم إيدك يا بطل! علمتلك على عادة "**${found.title}**" كمنجزة النهاردة، عاش الاستمرار! ✅`;
   } else {
     addCustomHabit(habitName, 'habit', 'يومي');
     const updatedList = loadCustomHabitsList();
@@ -30973,7 +31354,7 @@ function executeToggleHabitAction(habitName){
     if(typeof renderCustomHabitsTracker === 'function') renderCustomHabitsTracker();
     triggerHaptic('alerts', 'gentle');
     playAppSound('logging');
-    return `تم إنشاء عادة جديدة "**${habitName}**" وتعليمها كمنجزة لليوم بنجاح! 🎯`;
+    return `عاش! ضفتلك عادة جديدة باسم "**${habitName}**" وعلمتلك عليها كمان للنهاردة، كمل كدة يا بطل! 🎯`;
   }
 }
 window.executeToggleHabitAction = executeToggleHabitAction;
@@ -30984,13 +31365,13 @@ function executeLogWorkoutAction(isRest = false){
     storageSet('gym-rest-day:' + iso, 'true');
     if(typeof renderDomainStudyGym === 'function') renderDomainStudyGym();
     triggerHaptic('buttons', 'gentle');
-    return 'تم تسجيل اليوم **كيوم راحة واستشفاء عضلي** بنجاح 🧘‍♂️ الراحة نصف التمرين!';
+    return 'سجلتلك النهاردة **يوم راحة واستشفاء عالي** 🧘‍♂️ الراحة بتبني العضلات زي الحديد بالظبط، ريح واشرب ميتك!';
   } else {
     completeGymSession(iso, { forceComplete: true });
     if(typeof renderDomainStudyGym === 'function') renderDomainStudyGym();
     triggerHaptic('alerts', 'gentle');
     playAppSound('logging');
-    return 'عاش يا وحش! 💪 تم تسجيل **تمرين اليوم كمنجز** في سجل الجيم والتمارين بنجاح.';
+    return 'عاش يا وحش! 🏋️‍♂️ سجلتلك **تمرين النهاردة**، فورمة في السحاب واستمرارية أبطال!';
   }
 }
 window.executeLogWorkoutAction = executeLogWorkoutAction;
@@ -31006,7 +31387,7 @@ function executeAddMicroTasksAction(tasksArray, goalName = 'برمجة'){
   if(typeof renderCustomHabitsTracker === 'function') renderCustomHabitsTracker();
   triggerHaptic('alerts', 'gentle');
   playAppSound('logging');
-  return `تمت إضافة **${tasksArray.length} مهام مصغرة (Micro-learning)** لهدف "${goalName}" إلى جدول عاداتك اليومية بنجاح! 🚀\nيمكنك الآن إنجازها والتعليم عليها خطوة بخطوة.`;
+  return `عشان نكسر حاجز التسويف في "${goalName}"، قسمتهالك لـ ${tasksArray.length} خطوات سريعة ومركزة للنهاردة:\n${tasksArray.map((t, idx) => `${idx+1}. ${t}`).join('\n')}\n\nنزلتهملك في جدول عاداتك ومهامك، ابدأ بأول خطوة دلوقتي يا بطل! 🚀`;
 }
 window.executeAddMicroTasksAction = executeAddMicroTasksAction;
 
@@ -31022,7 +31403,7 @@ function executeSaveBookSummaryAction(bookTitle, pointsText){
 
   triggerHaptic('alerts', 'gentle');
   playAppSound('logging');
-  return `تم حفظ **زتونة كتاب: ${bookTitle}** في ملاحظاتك اليومية، وتمت إضافة عادة قراءة 15 دقيقة يومياً في جدول عاداتك بنجاح! 📖💡`;
+  return `جبتلك زتونة كتاب "${bookTitle}" وحفظتهالك في كروت القراءة والملاحظات، وضفتلك عادة قراءة 15 دقيقة يومياً في جدولك.. عاش يا بطل! 📚💡`;
 }
 window.executeSaveBookSummaryAction = executeSaveBookSummaryAction;
 
@@ -31065,6 +31446,12 @@ function executeAppAction(action){
         return `تم تشغيل أصوات الطبيعة والهدوء (${action.sound || 'ضوضاء بنية'}) 🌧️`;
       case 'add_note':
         return executeAddNoteAction(action.text || action.note);
+      case 'log_expense':
+        return executeLogExpenseAction(action.amount, action.category, action.note);
+      case 'complete_activity':
+        return executeCompleteActivityAction(action.activityName || action.activityId || action.name);
+      case 'log_meal':
+        return executeLogMealAction(action.mealIndex, action.mealName);
       default:
         console.warn('[ActionEngine] Unknown action:', action.type);
         return null;
@@ -31155,6 +31542,38 @@ function parseLocalIntent(prompt){
     return { type: 'chat_reply', text: 'فتحت لك خريطة الإجهاد العضلي واستشفاء الـ 48 ساعة 🏋️‍♂️' };
   }
 
+  // 7. Expense Logging: "صرفت 50 جنيه أكل", "سجل مصروف 30 مواصلات", "دفعت 100 في سوبرماركت"
+  if(/(صرفت|سجل.*مصروف|دفعت|اشتريت.*بـ?)/i.test(p)){
+    const numMatch = p.match(/(\d+(?:\.\d+)?)/);
+    const amount = numMatch ? parseFloat(numMatch[1]) : 0;
+    if(amount > 0){
+      let cat = 'عام';
+      if(/أكل|طعام|غدا|فطار|عشا|مطعم|أغذية/i.test(p)) cat = 'طعام';
+      else if(/مواصلات|تاكسي|أوبر|بنزين|مترو/i.test(p)) cat = 'مواصلات';
+      else if(/تسوق|هدوم|شوبينج|شراء/i.test(p)) cat = 'تسوق';
+      else if(/فواتير|فاتورة|نت|كهربا|شحن|موبايل/i.test(p)) cat = 'فواتير';
+      else if(/ترفيه|خروجة|سينما|فسحة/i.test(p)) cat = 'ترفيه';
+      return { type: 'log_expense', amount, category: cat, note: p };
+    }
+  }
+
+  // 8. Activity Completion in Schedule: "خلصت مذاكرة", "علم على تمرين في الجدول", "تميت الشغل"
+  if(/(خلصت|تميت|علم.*على.*(نشاط|مذاكرة|شغل|قراءة|كورس))/i.test(p)){
+    const cleanAct = p.replace(/^(خلصت|تميت|علم.*على.*(نشاط|في الجدول)?)/i, '').trim();
+    if(cleanAct){
+      return { type: 'complete_activity', activityName: cleanAct };
+    }
+  }
+
+  // 9. Meal Logging: "أكلت الفطار", "سجل وجبة الغدا", "أكلت وجبة 1"
+  if(/(أكلت|سجل.*(فطار|غدا|عشا|وجبة))/i.test(p)){
+    let mName = 'وجبة';
+    if(/فطار/i.test(p)) mName = 'فطار';
+    else if(/غدا/i.test(p)) mName = 'غدا';
+    else if(/عشا/i.test(p)) mName = 'عشا';
+    return { type: 'log_meal', mealName: mName };
+  }
+
   return null;
 }
 window.parseLocalIntent = parseLocalIntent;
@@ -31196,9 +31615,18 @@ function toggleWakeWordHandsFree(){
   }
 
   if(_isWakeWordActive){
-    initWakeWordListener();
+    if(window.ZatoonaNativeBridge && typeof window.ZatoonaNativeBridge.setWakeWordListening === 'function'){
+      window.ZatoonaNativeBridge.setWakeWordListening(true);
+    } else if(window.ZatoonaNativeBridge && typeof window.ZatoonaNativeBridge.startVoiceRecognition === 'function'){
+      window.ZatoonaNativeBridge.startVoiceRecognition();
+    } else {
+      initWakeWordListener();
+    }
     triggerHaptic('buttons', 'medium');
   } else {
+    if(window.ZatoonaNativeBridge && typeof window.ZatoonaNativeBridge.setWakeWordListening === 'function'){
+      try { window.ZatoonaNativeBridge.setWakeWordListening(false); } catch(e){}
+    }
     if(_wakeWordRecInstance){
       try { _wakeWordRecInstance.stop(); } catch(e){}
       _wakeWordRecInstance = null;
@@ -31880,11 +32308,24 @@ function renderAllAiModalMessages(){
   let html = '';
   history.forEach(m => {
     const isBot = m.role === 'assistant';
-    html += `
-      <div class="${isBot ? 'ai-bubble-bot' : 'ai-bubble-user'}">
-        ${isBot ? formatAiMessageMarkdown(m.text) : escapeHtml(m.text)}
-      </div>
-    `;
+    if(isBot){
+      html += `
+        <div class="ai-bubble-bot">
+          <div class="ai-msg-body">${formatAiMessageMarkdown(m.text)}</div>
+          <div style="display:flex; justify-content:flex-end; margin-top:6px;">
+            <button type="button" class="ai-msg-speak-btn" onclick="speakAiCoachMessage(this)" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:12px; color:inherit; font-size:0.75rem; padding:3px 8px; cursor:pointer; display:flex; align-items:center; gap:4px;" title="استمع لرد الكوتش بالصوت">
+              🔊 استمع
+            </button>
+          </div>
+        </div>
+      `;
+    } else {
+      html += `
+        <div class="ai-bubble-user">
+          ${escapeHtml(m.text)}
+        </div>
+      `;
+    }
   });
   container.innerHTML = html;
   container.scrollTop = container.scrollHeight;
@@ -31897,7 +32338,18 @@ function appendSingleAiMessage(role, text){
   const isBot = role === 'assistant';
   const div = document.createElement('div');
   div.className = isBot ? 'ai-bubble-bot' : 'ai-bubble-user';
-  div.innerHTML = isBot ? formatAiMessageMarkdown(text) : escapeHtml(text);
+  if(isBot){
+    div.innerHTML = `
+      <div class="ai-msg-body">${formatAiMessageMarkdown(text)}</div>
+      <div style="display:flex; justify-content:flex-end; margin-top:6px;">
+        <button type="button" class="ai-msg-speak-btn" onclick="speakAiCoachMessage(this)" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:12px; color:inherit; font-size:0.75rem; padding:3px 8px; cursor:pointer; display:flex; align-items:center; gap:4px;" title="استمع لرد الكوتش بالصوت">
+          🔊 استمع
+        </button>
+      </div>
+    `;
+  } else {
+    div.innerHTML = escapeHtml(text);
+  }
   container.appendChild(div);
   container.scrollTop = container.scrollHeight;
 }
@@ -31963,26 +32415,31 @@ async function processAiUserPrompt(prompt){
   try {
     if(isOnline){
       const stats = analyzeDailyWellnessStats(iso);
-      const summaryText = typeof generateDailySummaryText === 'function' ? generateDailySummaryText(iso) : JSON.stringify(stats);
-      const toneDesc = settings.tone === 'direct' ? 'مباشر وعملي ومحفز' : (settings.tone === 'detailed' ? 'تحليلي ومفصل بالأرقام' : 'داعم وأخوي ومشجع');
-      const systemInstruction = `أنت "كوتش زتونة الذكي"، مستشار ومساعد صوتي وشخصي ودود ومحفز يتحدث باللهجة المصرية الودودة أو العربية الطبيعية السلسة وبإيجاز مفيد ومباشر.
-أنت مدمج داخل تطبيق زتونة (صلاة، نوم، رياضة، تغذية، عادات، مهارات، قراءة). أسلوبك: ${toneDesc}.
-جاوب على سؤال المستخدم مباشرة وسريعاً وبإيجاز. بيانات اليوم (${iso}): ${summaryText}.
-
-قدراتك التنفيذية وإدارة التطبيق:
-أنت قادر على تسجيل أو تعديل أي شيء في التطبيق للمستخدم! إذا طلب منك تسجيل أو تعديل أو إضافة أي شيء أو تقسيم مهارة أو تلخيص كتاب، نفذ ذلك وأضف في آخر ردك كود الأمر:
+      const unifiedAppContext = typeof getUnifiedZatoonaAppContext === 'function' ? getUnifiedZatoonaAppContext(iso) : JSON.stringify(stats);
+      const toneDesc = settings.tone === 'direct' ? 'مباشر وعملي وبيدخل في الموضوع على طول' : (settings.tone === 'detailed' ? 'مفصل وواضح بالخطوات' : 'أخوي وودود ومشجع');
+      const systemInstruction = `أنت "كوتش زتونة"، مدربك الشخصي وأخوك الجدع المدمج جوة تطبيق زتونة.
+قواعد لهجتك وأسلوبك (إلزامية ومهمة جداً):
+قاعدة حاسمة ومطلقة: ممنوع تماماً كتابة أي مسودات تفكير، أو خيارات (Option 1, Option 2)، أو تحليل لنوايا المستخدم (Intent)، أو ترجمة لكلامه للإنجليزية، أو تكرار ما قاله. اكتب فوراً وبشكل مباشر وفقط الرد النهائي الموجه للمستخدم بالعامية المصرية كما ينطق به كوتش زتونة.
+1. اتكلم بلهجة مصرية عامية 100% طبيعية وسلسة وطلاقة تامة زي ما واحد مصري جدع وشاطر بيكلم صاحبه أو أخوه، بلاش تماماً أي كلام معرب آلي أو فصحى مصطنعة زي "مرحباً بك"، "إنني هنا لمساعدتك"، "لقد قمت بإنجاز"، "سأقوم بتنفيذ طلبك".
+2. كلامك بيتقرأ بصوت عالي للمستخدم: خليه سهل في النطق، عفوي، ومفهوم بالسماع، بدون تعقيد، وبدون ما تذكر رموز غريبة.
+3. أسلوبك: ${toneDesc}. رد في سطرين لـ 3 أسطر بالكتير واديله "الزتونة" المفيدة على طول بأسلوب حماسي ومحفز وملم بكل تفاصيل يومه.
+4. أنت عندك وصول مباشر لبيانات اليوم الحية للمستخدم (الجدول، الصلوات، الميزانية، الأكل، التمارين، النوم، والعادات) كما هي موضحة أدناه؛ استخدم هذه الأرقام والأسماء بدقة وبدون أي تخمين.
+5. لو طلب منك تسجيل أو تعديل أو إضافة أي حاجة في التطبيق أو تقسيم مهارة أو تلخيص كتاب أو تسجيل مصروف أو وجبة أو نشاط، نفذ ذلك وأضف في آخر ردك كود الأمر:
 <<<ACTION:{"type":"ACTION_TYPE", ...}>>>
 الأنواع المدعومة:
 - تسجيل مياه: <<<ACTION:{"type":"log_water","delta":1}>>>
 - تسجيل صلاة أو ورد: <<<ACTION:{"type":"log_prayer","target":"dhuhr|asr|maghrib|isha|fajr|qiyam|witr|sabah|masaa|quran","isSunnah":false}>>>
 - تسجيل تمرين: <<<ACTION:{"type":"log_workout","isRest":false}>>>
 - تعليم أو إضافة عادة: <<<ACTION:{"type":"toggle_habit","habitName":"..."}>>>
-- تقسيم مهارة (Micro-learning): <<<ACTION:{"type":"add_micro_tasks","goal":"برمجة","tasks":["مهمة 1","مهمة 2","مهمة 3"]}>>>
+- تسجيل مصروف ميزانية: <<<ACTION:{"type":"log_expense","amount":50,"category":"طعام|مواصلات|تسوق|فواتير|ترفيه|عام","note":"..."}>>>
+- تعليم نشاط في الجدول إنه خلص: <<<ACTION:{"type":"complete_activity","activityName":"اسم النشاط"}>>>
+- تسجيل وجبة: <<<ACTION:{"type":"log_meal","mealName":"فطار|غداء|عشاء|سناك"}>>>
+- تقسيم مهارة (Micro-learning): <<<ACTION:{"type":"add_micro_tasks","goal":"اسم المهارة","tasks":["مهمة 1","مهمة 2","مهمة 3"]}>>>
 - زتونة كتاب: <<<ACTION:{"type":"save_book_summary","title":"اسم الكتاب","points":"أهم 3 أفكار وعادة مقترحة"}>>>
 - تسجيل ملاحظة: <<<ACTION:{"type":"add_note","text":"..."}>>>
 
-إذا سألك المستخدم عن مهارة (مثل برمجة)، قسمها فوراً لـ 3 مهام Micro-learning عملية محددة تناسب يومه، وضع كود ACTION الخاص بها.
-إذا ذكر كتاباً، لخص له "زتونة الكتاب" في: 1. الفكرة الجوهرية 2. أهم 3 أفكار عملية للتطبيق الفوري 3. عادة يومية مقترحة، وضع كود ACTION الخاص بها.`;
+بيانات المستخدم الشاملة لليوم في تطبيق زيتونة:
+${unifiedAppContext}`;
 
       // Compact context: last 4 turns for lightning speed
       const recentTurns = history.slice(-4);
@@ -32001,6 +32458,7 @@ async function processAiUserPrompt(prompt){
         settings.modelChoice || 'auto'
       );
       replyText = (res && res.text) ? res.text : 'عذراً يا بطل، لم أتمكن من الحصول على رد.';
+      replyText = sanitizeAiCoachResponse(replyText, prompt);
 
       // Extract and execute embedded action if present
       const actionMatch = replyText.match(/<<<ACTION:([\s\S]*?)>>>/);
@@ -32204,6 +32662,14 @@ function syncAiSettingsUI(){
   const modelSelect = document.getElementById('settingsAiModelSelect');
   if(modelSelect){
     modelSelect.value = settings.modelChoice || 'auto';
+  }
+  const elevenKeyInput = document.getElementById('settingsAiElevenKeyInput');
+  if(elevenKeyInput && document.activeElement !== elevenKeyInput){
+    elevenKeyInput.value = settings.elevenLabsApiKey || '';
+  }
+  const elevenVoiceInput = document.getElementById('settingsAiElevenVoiceInput');
+  if(elevenVoiceInput && document.activeElement !== elevenVoiceInput){
+    elevenVoiceInput.value = settings.elevenLabsVoiceId || 'onwK4e9ZLuTAKqWW03F9';
   }
 }
 
@@ -51478,7 +51944,9 @@ window.openStorageConsentSettings = openStorageConsentSettings;
           </div>
         </div>
       </div>
-      <div style="display:flex; gap:6px; align-items:center;">
+      <div style="display:flex; gap:6px; align-items:center; overflow-x:auto; max-width:68%; scrollbar-width:none; -webkit-overflow-scrolling:touch;">
+        <button type="button" class="ai-chat-action-btn" onclick="openAiVoiceSettingsModal()" title="إعدادات الصوت وخامة ElevenLabs المصرية">🎙️ إعداد الصوت</button>
+        <button type="button" id="btnToggleFloatingCoach" class="ai-chat-action-btn" onclick="toggleFloatingCoachBubble()" title="تشغيل ويدجت الكوتش العائم فوق أي تطبيق على الشاشة">📌 ويدجت عائم</button>
         <button type="button" id="btnWakeWordToggle" class="ai-chat-action-btn" onclick="toggleWakeWordHandsFree()" title="تفعيل الاستماع بدون لمس الشاشة">🗣️ نداء صوتي</button>
         <button type="button" class="ai-chat-action-btn" onclick="openAiProfileMemoryModal()" title="الذاكرة السياقية المستمرة">🧠 ذاكرة</button>
         <button type="button" id="btnAiChatVoiceToggle" class="ai-chat-action-btn" onclick="toggleAiCoachVoiceOutput()" title="تشغيل أو كتم صوت الكوتش المتحدث">
@@ -51802,5 +52270,432 @@ window.openStorageConsentSettings = openStorageConsentSettings;
     </div>
   </div>
 </div>
+
+<!-- ==========================================================================
+     FULL-APP AI CONTEXT ENGINE & ELEVENLABS VOICE SETTINGS CONTROLLERS
+     ========================================================================== -->
+<script>
+function onSettingsElevenKeyInput(val){
+  const settings = loadAiCoachSettings();
+  settings.elevenLabsApiKey = (val || '').trim();
+  saveAiCoachSettings(settings);
+}
+window.onSettingsElevenKeyInput = onSettingsElevenKeyInput;
+
+function onSettingsElevenVoiceInput(val){
+  const settings = loadAiCoachSettings();
+  settings.elevenLabsVoiceId = (val || '').trim() || 'onwK4e9ZLuTAKqWW03F9';
+  saveAiCoachSettings(settings);
+}
+window.onSettingsElevenVoiceInput = onSettingsElevenVoiceInput;
+
+async function testElevenLabsConnectionNow(){
+  triggerHaptic('buttons', 'gentle');
+  const statusEl = document.getElementById('txtElevenTestStatus');
+  const statusElModal = document.getElementById('modalTxtElevenStatus');
+  const settings = loadAiCoachSettings();
+  if(!settings.elevenLabsApiKey || !settings.elevenLabsApiKey.trim()){
+    const msg = '<span style="color:#ef4444;">⚠️ يرجى إدخال مفتاح ElevenLabs أولاً</span>';
+    if(statusEl) statusEl.innerHTML = msg;
+    if(statusElModal) statusElModal.innerHTML = msg;
+    return;
+  }
+  const waitMsg = '<span style="color:var(--accent);">⏳ جاري توليد صوت مصري فائق النقاء...</span>';
+  if(statusEl) statusEl.innerHTML = waitMsg;
+  if(statusElModal) statusElModal.innerHTML = waitMsg;
+
+  try {
+    const ok = await playElevenLabsTTS('عاش يا وحش! صوت إيلفن لابس شغال تمام وزي الفل، جاهز أكلمك بلهجة مصرية بشرية 100%!', settings.elevenLabsApiKey, settings.elevenLabsVoiceId);
+    if(ok){
+      const successMsg = '<span style="color:#10b981;">✅ الاتصال والصوت ناجح 100%!</span>';
+      if(statusEl) statusEl.innerHTML = successMsg;
+      if(statusElModal) statusElModal.innerHTML = successMsg;
+    } else {
+      const failMsg = '<span style="color:#ef4444;">❌ فشل تشغيل الصوت، تحقق من المفتاح</span>';
+      if(statusEl) statusEl.innerHTML = failMsg;
+      if(statusElModal) statusElModal.innerHTML = failMsg;
+    }
+  } catch(e){
+    const errMsg = `<span style="color:#ef4444;">❌ خطأ: ${escapeHtml(e.message)}</span>`;
+    if(statusEl) statusEl.innerHTML = errMsg;
+    if(statusElModal) statusElModal.innerHTML = errMsg;
+  }
+}
+window.testElevenLabsConnectionNow = testElevenLabsConnectionNow;
+
+function openAiVoiceSettingsModal(){
+  triggerHaptic('buttons', 'gentle');
+  let modal = document.getElementById('aiVoiceSettingsModal');
+  if(!modal){
+    modal = document.createElement('div');
+    modal.id = 'aiVoiceSettingsModal';
+    modal.className = 'ai-chat-fullscreen-overlay';
+    modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);z-index:999999;display:none;align-items:center;justify-content:center;padding:16px;';
+    modal.innerHTML = `
+      <div style="background:var(--card-bg, #1e293b);border:1px solid rgba(255,255,255,0.12);border-radius:20px;max-width:440px;width:100%;padding:20px;color:var(--text);box-shadow:0 20px 40px rgba(0,0,0,0.5);direction:rtl;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <div style="font-weight:700;font-size:1.05rem;display:flex;align-items:center;gap:6px;">🎙️ إعدادات صوت الكوتش (ElevenLabs)</div>
+          <button type="button" onclick="closeAiVoiceSettingsModal()" style="background:none;border:none;color:var(--muted);font-size:1.3rem;cursor:pointer;">✕</button>
+        </div>
+        <p style="font-size:0.8rem;color:var(--muted);line-height:1.5;margin-bottom:12px;">
+          للحصول على خامة صوت بشرية فائقة الواقعية بلهجة مصرية، تقدر تضيف مفتاح ElevenLabs API هنا. في حالة عدم توفره، التطبيق بيعتمد على محرك جوجل الذكي المدمج في الموبايل مجاناً.
+        </p>
+        <div style="margin-bottom:10px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <label style="font-size:0.8rem;font-weight:700;">مفتاح ElevenLabs API Key:</label>
+            <a href="https://elevenlabs.io" target="_blank" rel="noopener" style="font-size:0.72rem;color:var(--accent);text-decoration:underline;">احصل على مفتاح مجاني ↗</a>
+          </div>
+          <input type="password" id="modalElevenKeyInput" class="weight-input" placeholder="sk_..." style="width:100%;font-size:0.85rem;" oninput="onSettingsElevenKeyInput(this.value)">
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="display:block;font-size:0.8rem;font-weight:700;margin-bottom:4px;">معرّف الصوت (Voice ID - اختياري):</label>
+          <input type="text" id="modalElevenVoiceInput" class="weight-input" placeholder="onwK4e9ZLuTAKqWW03F9" style="width:100%;font-size:0.85rem;" oninput="onSettingsElevenVoiceInput(this.value)">
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap;">
+          <button type="button" class="btn" onclick="testElevenLabsConnectionNow()" style="background:var(--accent);color:#fff;font-weight:700;font-size:0.8rem;padding:7px 14px;border-radius:10px;">
+            🧪 فحص وتجربة الصوت
+          </button>
+          <button type="button" class="btn" onclick="speakAiCoachResponse('عاش يا وحش! أنا معاك وسامعك ومستعدين نكسر الدنيا النهاردة!')" style="background:rgba(255,255,255,0.08);color:var(--text);font-weight:700;font-size:0.8rem;padding:7px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.15);">
+            🔊 تجربة محرك الموبايل
+          </button>
+          <div id="modalTxtElevenStatus" style="font-size:0.75rem;color:var(--muted);width:100%;margin-top:4px;"></div>
+        </div>
+        <button type="button" class="btn" onclick="closeAiVoiceSettingsModal()" style="width:100%;background:var(--good, #10b981);color:#fff;font-weight:700;font-size:0.85rem;padding:10px;border-radius:12px;border:none;">
+          تم وحفظ الإعدادات ✓
+        </button>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  }
+  const settings = loadAiCoachSettings();
+  const kInp = document.getElementById('modalElevenKeyInput');
+  if(kInp) kInp.value = settings.elevenLabsApiKey || '';
+  const vInp = document.getElementById('modalElevenVoiceInput');
+  if(vInp) vInp.value = settings.elevenLabsVoiceId || 'onwK4e9ZLuTAKqWW03F9';
+  modal.style.display = 'flex';
+}
+window.openAiVoiceSettingsModal = openAiVoiceSettingsModal;
+
+function closeAiVoiceSettingsModal(){
+  const modal = document.getElementById('aiVoiceSettingsModal');
+  if(modal) modal.style.display = 'none';
+}
+window.closeAiVoiceSettingsModal = closeAiVoiceSettingsModal;
+
+function speakAiCoachMessage(btn){
+  triggerHaptic('buttons', 'light');
+  const bubble = btn.closest('.ai-bubble-bot');
+  if(!bubble) return;
+  const bodyEl = bubble.querySelector('.ai-msg-body');
+  const raw = bodyEl ? bodyEl.innerText : bubble.innerText;
+  speakAiCoachResponse(raw);
+}
+window.speakAiCoachMessage = speakAiCoachMessage;
+
+function formatActTime(val){
+  if(typeof val === 'number') return (typeof schedMinToTime12 === 'function') ? schedMinToTime12(val) : Math.floor(val/60)+':'+(val%60<10?'0':'')+(val%60);
+  if(typeof val === 'string'){
+    const min = typeof schedTimeToMin === 'function' ? schedTimeToMin(val) : null;
+    if(min !== null && typeof schedMinToTime12 === 'function') return schedMinToTime12(min);
+    return val;
+  }
+  return '';
+}
+window.formatActTime = formatActTime;
+
+function getUnifiedZatoonaAppContext(iso){
+  iso = iso || toISO(weekDates[selectedIdx]);
+  const dayIdx = typeof isoDayIdx === 'function' ? isoDayIdx(iso) : selectedIdx;
+  const ARABIC_DAYS = ['السبت', 'الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'];
+  const sections = [];
+
+  sections.push(`📅 التاريخ: ${iso} (يوم: ${ARABIC_DAYS[dayIdx] || ''})`);
+
+  try {
+    const settings = typeof scheduleSettings !== 'undefined' && scheduleSettings ? scheduleSettings : (typeof loadScheduleSettings === 'function' ? loadScheduleSettings() : null);
+    const schedRec = typeof getDaySchedRecord === 'function' && settings ? getDaySchedRecord(iso, dayIdx, settings) : null;
+    const schedChecks = typeof loadScheduleCheck === 'function' ? loadScheduleCheck(iso) : {};
+    if(schedRec && Array.isArray(schedRec.acts) && schedRec.acts.length > 0){
+      const totalActs = schedRec.acts.length;
+      const doneActs = schedRec.acts.filter(a => schedChecks[a.id]);
+      const pendingActs = schedRec.acts.filter(a => !schedChecks[a.id]);
+
+      const now = new Date();
+      const nowMin = now.getHours() * 60 + now.getMinutes();
+      let currentAct = null;
+      let nextAct = null;
+
+      for(const act of schedRec.acts){
+        const sMin = typeof act.start === 'number' ? act.start : (typeof schedTimeToMin === 'function' ? schedTimeToMin(act.start) : null);
+        const eMin = typeof act.end === 'number' ? act.end : (typeof schedTimeToMin === 'function' ? schedTimeToMin(act.end) : null);
+        if(sMin !== null && eMin !== null){
+          if(nowMin >= sMin && nowMin < eMin){
+            currentAct = act;
+          } else if(sMin > nowMin && (!nextAct || sMin < (typeof nextAct.start === 'number' ? nextAct.start : 9999))){
+            nextAct = act;
+          }
+        }
+      }
+
+      let schedStr = `⏰ الجدول والأنشطة: تم إنجاز ${doneActs.length} من ${totalActs} نشاط`;
+      if(currentAct){
+        schedStr += ` | النشاط الحالي: "${currentAct.name || currentAct.type}" (${formatActTime(currentAct.start)} إلى ${formatActTime(currentAct.end)})${schedChecks[currentAct.id] ? ' [منجز ✓]' : ' [جاري]'}`;
+      }
+      if(nextAct){
+        schedStr += ` | النشاط القادم: "${nextAct.name || nextAct.type}" الساعة ${formatActTime(nextAct.start)}`;
+      }
+      if(pendingActs.length > 0){
+        const topPending = pendingActs.slice(0, 4).map(a => `${a.name || a.type} (${formatActTime(a.start)})`).join('، ');
+        schedStr += ` | باقي الأنشطة: ${topPending}${pendingActs.length > 4 ? ' وغيرها' : ''}`;
+      }
+      sections.push(schedStr);
+    } else {
+      sections.push(`⏰ الجدول: لا توجد أنشطة مسجلة لهذا اليوم`);
+    }
+  } catch(eSched){
+    console.warn('[AppContext] Sched error:', eSched);
+  }
+
+  try {
+    const prayer = typeof loadPrayer === 'function' ? loadPrayer(iso) : {};
+    const prayerNames = [
+      { key: 'fajr', label: 'الفجر' },
+      { key: 'dhuhr', label: 'الظهر' },
+      { key: 'asr', label: 'العصر' },
+      { key: 'maghrib', label: 'المغرب' },
+      { key: 'isha', label: 'العشاء' }
+    ];
+    const doneFard = prayerNames.filter(p => prayer[p.key] && prayer[p.key].fard).map(p => p.label);
+    const pendingFard = prayerNames.filter(p => !prayer[p.key] || !prayer[p.key].fard).map(p => p.label);
+    const sunnahCount = Object.values(prayer).filter(v => v && v.sunnah).length;
+
+    const qiyam = typeof loadQiyam === 'function' ? loadQiyam(iso) : {};
+    const qiyamDone = !!(qiyam && (qiyam.i0 || qiyam.i1));
+
+    const quran = typeof loadQuran === 'function' ? loadQuran(iso) : {};
+    const quranCount = Object.values(quran).filter(Boolean).length;
+
+    const fasting = typeof loadFasting === 'function' ? loadFasting(iso) : null;
+    const isFasted = !!(fasting && fasting.fasted);
+
+    const qada = typeof loadQadaState === 'function' ? loadQadaState() : null;
+
+    let worshipStr = `🕌 العبادات: الفروض المنجزة (${doneFard.length}/5: ${doneFard.join('، ') || 'لم تسجل بعد'})`;
+    if(pendingFard.length > 0){
+      worshipStr += ` | الباقي: ${pendingFard.join('، ')}`;
+    }
+    worshipStr += ` | السنن: ${sunnahCount}`;
+    worshipStr += ` | قيام الليل: ${qiyamDone ? 'تم ✓' : 'لم يسجل'}`;
+    worshipStr += ` | ورد القرآن: ${quranCount > 0 ? quranCount + ' أوراد' : 'لم يسجل'}`;
+    if(isFasted) worshipStr += ` | صائم اليوم بحمد الله`;
+    if(qada && (qada.fastingDays > 0 || (qada.prayers && Object.values(qada.prayers).some(v => v > 0)))){
+      const qFast = qada.fastingDays || 0;
+      const qPray = qada.prayers ? Object.values(qada.prayers).reduce((a, b) => a + (Number(b) || 0), 0) : 0;
+      worshipStr += ` | القضاء المتبقي: ${qPray} صلوات و ${qFast} أيام صيام`;
+    }
+    sections.push(worshipStr);
+  } catch(eWorship){
+    console.warn('[AppContext] Worship error:', eWorship);
+  }
+
+  try {
+    const habits = typeof loadCustomHabitsList === 'function' ? loadCustomHabitsList() : [];
+    const dailyHabits = typeof loadDailyCustomHabits === 'function' ? loadDailyCustomHabits(iso) : {};
+    if(habits.length > 0){
+      const doneHabits = habits.filter(h => dailyHabits[h.id] && dailyHabits[h.id].done);
+      const pendingHabits = habits.filter(h => !dailyHabits[h.id] || !dailyHabits[h.id].done);
+      let habitsStr = `🎯 العادات والمهارات: تم إنجاز ${doneHabits.length} من ${habits.length}`;
+      if(doneHabits.length > 0){
+        habitsStr += ` (منجز: ${doneHabits.map(h => h.title).join('، ')})`;
+      }
+      if(pendingHabits.length > 0){
+        habitsStr += ` | متبقي: ${pendingHabits.map(h => h.title).join('، ')}`;
+      }
+      sections.push(habitsStr);
+    }
+  } catch(eHabits){
+    console.warn('[AppContext] Habits error:', eHabits);
+  }
+
+  try {
+    const water = typeof loadWater === 'function' ? loadWater(iso) : 0;
+    const effMeals = typeof getEffectiveDayMeals === 'function' ? getEffectiveDayMeals(iso, dayIdx) : null;
+    const dayTgt = typeof dayTargets === 'function' ? dayTargets(dayIdx, iso) : null;
+    const daySt = typeof loadDayStatus === 'function' ? loadDayStatus(iso) : {};
+
+    let nutStr = `🥗 الأكل والتغذية: شربت ${water}/8 كوبايات مية`;
+    if(effMeals && Array.isArray(effMeals.meals) && effMeals.meals.length > 0){
+      const totalMeals = effMeals.meals.length;
+      let eatenCount = 0;
+      let eatenKcal = 0;
+      let eatenProtein = 0;
+      const mealNames = [];
+
+      effMeals.meals.forEach((m, i) => {
+        const st = daySt[i] || {};
+        const isEaten = (st.state === 'planned' || st.state === 'modified');
+        if(isEaten) eatenCount++;
+        const mc = typeof getMealComputed === 'function' ? getMealComputed(dayIdx, i, effMeals.meals, iso) : null;
+        if(isEaten && mc){
+          eatenKcal += mc.kcal || 0;
+          eatenProtein += mc.protein || 0;
+        }
+        mealNames.push(`${m.name || 'وجبة ' + (i+1)}${isEaten ? ' (تم الأكل ✓)' : ''}`);
+      });
+
+      const tgtKcal = dayTgt ? Math.round(dayTgt.kcal) : 2000;
+      const tgtProtein = dayTgt ? Math.round(dayTgt.protein) : 130;
+      nutStr += ` | المستهلك: ${Math.round(eatenKcal)} من ${tgtKcal} كالوري (${Math.round(eatenProtein)}/${tgtProtein} بروتين)`;
+      nutStr += ` | الوجبات: ${eatenCount}/${totalMeals} منجز (${mealNames.join('، ')})`;
+    }
+    sections.push(nutStr);
+  } catch(eNut){
+    console.warn('[AppContext] Nutrition error:', eNut);
+  }
+
+  try {
+    const now = new Date();
+    const mb = typeof computeMonthBudget === 'function' ? computeMonthBudget(now.getFullYear(), now.getMonth()) : null;
+    if(mb){
+      const overall = mb.overallBudget || 0;
+      const spent = Math.round(mb.totalSpent || 0);
+      const remaining = Math.round(mb.remaining || 0);
+      let bStr = `💰 الميزانية والمصاريف: إجمالي المصروف هذا الشهر ${spent} ج.م`;
+      if(overall > 0){
+        bStr += ` من أصل ميزانية ${overall} ج.م (المتبقي: ${remaining} ج.م - استهلكت ${mb.usedPct || 0}%)`;
+      } else {
+        bStr += ` (المتبقي: حر/غير محدد سقف)`;
+      }
+      const todayExpenses = (mb.monthExpenses || []).filter(e => e.date === iso);
+      if(todayExpenses.length > 0){
+        const todaySum = todayExpenses.reduce((s, e) => s + (Number(e.amount) || 0), 0);
+        bStr += ` | مصاريف اليوم: ${todaySum} ج.م`;
+      }
+      sections.push(bStr);
+    }
+  } catch(eBudget){
+    console.warn('[AppContext] Budget error:', eBudget);
+  }
+
+  try {
+    const effGym = typeof getEffectiveGymDay === 'function' ? getEffectiveGymDay(iso, dayIdx) : null;
+    const gymProg = typeof getGymSessionProgress === 'function' ? getGymSessionProgress(iso) : null;
+    const isRest = effGym ? (effGym.isRestDay || effGym.gymType === 'rest') : false;
+    const routineName = effGym ? (effGym.routineTitle || effGym.routineId || effGym.gymType || 'تمرين') : 'تمرين';
+
+    let gymStr = `🏋️‍♂️ الجيم والرياضة: اليوم ${isRest ? 'يوم راحة واستشفاء 🛋️' : `تمرين (${routineName})`}`;
+    if(!isRest && gymProg){
+      gymStr += ` | المنجز: ${gymProg.doneExercises}/${gymProg.totalExercises} تمارين (${gymProg.doneSets}/${gymProg.totalSets} مجموعات)`;
+    }
+    sections.push(gymStr);
+  } catch(eGym){
+    console.warn('[AppContext] Gym error:', eGym);
+  }
+
+  try {
+    const sleep = typeof loadSleepTimes === 'function' ? loadSleepTimes(iso) : null;
+    const sleepH = typeof sleepHours === 'function' ? sleepHours(sleep) : null;
+    if(sleepH !== null && !isNaN(sleepH)){
+      sections.push(`🌙 النوم: ${sleepH.toFixed(1)} ساعة الليلة الماضية`);
+    } else {
+      sections.push(`🌙 النوم: لم يسجل بعد`);
+    }
+  } catch(eSleep){
+    console.warn('[AppContext] Sleep error:', eSleep);
+  }
+
+  try {
+    const dailyNote = typeof loadDailyNote === 'function' ? loadDailyNote(iso) : '';
+    if(dailyNote && dailyNote.trim()){
+      sections.push(`📝 ملاحظة اليوم: "${dailyNote.trim().slice(0, 150)}"`);
+    }
+  } catch(eNote){
+    console.warn('[AppContext] Note error:', eNote);
+  }
+
+  try {
+    const mem = typeof loadAiCoachProfileMemory === 'function' ? loadAiCoachProfileMemory() : null;
+    if(mem){
+      const memParts = [];
+      if(mem.workoutSplit) memParts.push(`التقسيم: ${mem.workoutSplit}`);
+      if(mem.injuries) memParts.push(`إصابات: ${mem.injuries}`);
+      if(mem.goals) memParts.push(`أهداف: ${mem.goals}`);
+      if(mem.reading) memParts.push(`قراءة: ${mem.reading}`);
+      if(memParts.length > 0){
+        sections.push(`🧠 الذاكرة الدائمة: ${memParts.join(' | ')}`);
+      }
+    }
+  } catch(eMem){
+    console.warn('[AppContext] Memory error:', eMem);
+  }
+
+  return sections.join('\n');
+}
+window.getUnifiedZatoonaAppContext = getUnifiedZatoonaAppContext;
+
+function executeLogExpenseAction(amount, category, note){
+  const iso = toISO(weekDates[selectedIdx]);
+  const num = Number(amount) || 0;
+  if(num <= 0) return 'يا غالي لازم تحدد مبلغ المصروف صح عشان أسجله 💰';
+  const cat = category || 'عام';
+  if(typeof addExpense === 'function'){
+    addExpense({ date: iso, amount: num, category: cat, note: note || '' });
+  }
+  if(typeof renderBudgetAll === 'function') try { renderBudgetAll(); } catch(e){}
+  triggerHaptic('alerts', 'gentle');
+  return `عاش يا بطل! سجلتلك مصروف ${num} ج.م في قسم "${cat}" بنجاح 💸`;
+}
+window.executeLogExpenseAction = executeLogExpenseAction;
+
+function executeCompleteActivityAction(nameOrId){
+  const iso = toISO(weekDates[selectedIdx]);
+  const dayIdx = typeof isoDayIdx === 'function' ? isoDayIdx(iso) : selectedIdx;
+  const settings = typeof scheduleSettings !== 'undefined' && scheduleSettings ? scheduleSettings : (typeof loadScheduleSettings === 'function' ? loadScheduleSettings() : null);
+  const schedRec = typeof getDaySchedRecord === 'function' && settings ? getDaySchedRecord(iso, dayIdx, settings) : null;
+  if(!schedRec || !Array.isArray(schedRec.acts) || schedRec.acts.length === 0){
+    return 'ملقتش أنشطة مسجلة في جدول النهاردة يا صاحبي!';
+  }
+  const checks = typeof loadScheduleCheck === 'function' ? loadScheduleCheck(iso) : {};
+  const term = (nameOrId || '').trim().toLowerCase();
+  let target = schedRec.acts.find(a => a.id === term);
+  if(!target){
+    target = schedRec.acts.find(a => (a.name || a.type || '').toLowerCase().includes(term));
+  }
+  if(!target){
+    return `ملقتش نشاط باسم "${nameOrId}" في جدول النهاردة، قولي اسمه بالظبط وأنا أعلّمهولك منجز فوراً!`;
+  }
+  checks[target.id] = true;
+  if(typeof saveScheduleCheck === 'function') saveScheduleCheck(iso, checks);
+  if(typeof renderScheduleChecklist === 'function') try { renderScheduleChecklist(); } catch(e){}
+  triggerHaptic('alerts', 'gentle');
+  return `تسلم إيدك يا وحش! علمتلك على نشاط "${target.name || target.type}" في جدول النهاردة إنه خلص بنجاح ✅`;
+}
+window.executeCompleteActivityAction = executeCompleteActivityAction;
+
+function executeLogMealAction(mealIndex, mealName){
+  const iso = toISO(weekDates[selectedIdx]);
+  const dayIdx = typeof isoDayIdx === 'function' ? isoDayIdx(iso) : selectedIdx;
+  const effMeals = typeof getEffectiveDayMeals === 'function' ? getEffectiveDayMeals(iso, dayIdx) : null;
+  const daySt = typeof loadDayStatus === 'function' ? loadDayStatus(iso) : {};
+  if(!effMeals || !Array.isArray(effMeals.meals) || effMeals.meals.length === 0){
+    return 'ملقتش جدول وجبات مسجل للنهاردة يا بطل!';
+  }
+  let idx = -1;
+  if(typeof mealIndex === 'number' && mealIndex >= 0 && mealIndex < effMeals.meals.length){
+    idx = mealIndex;
+  } else if(mealName){
+    const term = mealName.trim().toLowerCase();
+    idx = effMeals.meals.findIndex(m => (m.name || '').toLowerCase().includes(term));
+  }
+  if(idx === -1) idx = 0;
+  const targetMeal = effMeals.meals[idx];
+  daySt[idx] = Object.assign({}, daySt[idx], { state: 'planned' });
+  if(typeof saveDayStatus === 'function') saveDayStatus(iso, daySt);
+  if(typeof renderMeals === 'function') try { renderMeals(); } catch(e){}
+  triggerHaptic('alerts', 'gentle');
+  return `بالهنا والشفا يا بطل! علمتلك على وجبة "${targetMeal ? (targetMeal.name || 'الوجبة') : 'الوجبة'}" إنها اتأكلت بالكامل ومطابقة لخطتك 🥗✓`;
+}
+window.executeLogMealAction = executeLogMealAction;
+</script>
 </body>
 </html>

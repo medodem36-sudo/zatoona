@@ -69,12 +69,20 @@ class FloatingStudyBubbleService : Service() {
                 timerTitle = title
                 remainingSeconds = duration
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
+                // Android 14 requirement: startForeground must be invoked immediately before any stopSelf
+                try {
+                    startForeground(NOTIFICATION_ID, buildForegroundNotification())
+                } catch (e: Exception) {
                     stopSelf()
                     return START_NOT_STICKY
                 }
 
-                startForeground(NOTIFICATION_ID, buildForegroundNotification())
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
+                    stopBubble()
+                    stopSelf()
+                    return START_NOT_STICKY
+                }
+
                 showOrUpdateBubble()
                 startTimer()
             }

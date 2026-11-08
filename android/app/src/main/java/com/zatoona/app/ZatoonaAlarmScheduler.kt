@@ -176,40 +176,53 @@ class ZatoonaAlarmScheduler(private val context: Context) {
             return
         }
 
-        // 1. Direct launch attempt for AlarmActivity (turns on screen, shows over lock screen & over other apps)
-        val activityIntent = Intent(context, AlarmActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or
-                    Intent.FLAG_ACTIVITY_NO_USER_ACTION or
-                    Intent.FLAG_ACTIVITY_CLEAR_TOP
-            putExtra(AlarmService.EXTRA_SCHEDULE_ID, schedule.id)
-            putExtra(AlarmService.EXTRA_TRIGGER_MS, firedEpochMs)
-            putExtra(AlarmService.EXTRA_TITLE, schedule.title)
-            putExtra(AlarmService.EXTRA_BODY, schedule.body)
-            putExtra(AlarmService.EXTRA_MODE, schedule.mode)
-            putExtra(AlarmService.EXTRA_TYPE, schedule.type)
-        }
-        try {
-            context.startActivity(activityIntent)
-            Log.i(TAG, "Direct launch of AlarmActivity initiated for ${schedule.id}")
-        } catch (e: Exception) {
-            Log.w(TAG, "Direct start of AlarmActivity from receiver bypassed: ${e.message}")
-        }
+        // Determine whether this schedule is a looping wake-up ALARM vs a NOTIFICATION
+        // Alarms: sleep wake-up routine or explicit alarm mode
+        // Notifications: prayers, daily activities, workouts, custom reminders
+        val isRingingAlarm = schedule.type.equals("sleep", ignoreCase = true) ||
+                             schedule.mode.equals("alarm", ignoreCase = true)
 
-        // 2. Start native AlarmService (Foreground Service with looping audio + swipe UI + notification)
-        val serviceIntent = Intent(context, AlarmService::class.java).apply {
-            action = AlarmService.ACTION_START_ALARM
-            putExtra(AlarmService.EXTRA_SCHEDULE_ID, schedule.id)
-            putExtra(AlarmService.EXTRA_TRIGGER_MS, firedEpochMs)
-            putExtra(AlarmService.EXTRA_TITLE, schedule.title)
-            putExtra(AlarmService.EXTRA_BODY, schedule.body)
-            putExtra(AlarmService.EXTRA_MODE, schedule.mode)
-            putExtra(AlarmService.EXTRA_TYPE, schedule.type)
-        }
-        try {
-            ContextCompat.startForegroundService(context, serviceIntent)
-        } catch (e: Exception) {
-            Log.e(TAG, "Failed to start AlarmService, falling back to full-screen alarm notification: ${e.message}")
-            notificationManager.showAlarmNotification(schedule, firedEpochMs)
+        if (isRingingAlarm) {
+            // 1. Direct launch attempt for AlarmActivity (turns on screen, shows over lock screen & over other apps)
+            val activityIntent = Intent(context, AlarmActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+                        Intent.FLAG_ACTIVITY_NO_USER_ACTION or
+                        Intent.FLAG_ACTIVITY_CLEAR_TOP
+                putExtra(AlarmService.EXTRA_SCHEDULE_ID, schedule.id)
+                putExtra(AlarmService.EXTRA_TRIGGER_MS, firedEpochMs)
+                putExtra(AlarmService.EXTRA_TITLE, schedule.title)
+                putExtra(AlarmService.EXTRA_BODY, schedule.body)
+                putExtra(AlarmService.EXTRA_MODE, schedule.mode)
+                putExtra(AlarmService.EXTRA_TYPE, schedule.type)
+            }
+            try {
+                context.startActivity(activityIntent)
+                Log.i(TAG, "Direct launch of AlarmActivity initiated for ${schedule.id}")
+            } catch (e: Exception) {
+                Log.w(TAG, "Direct start of AlarmActivity from receiver bypassed: ${e.message}")
+            }
+
+            // 2. Start native AlarmService (Foreground Service with looping audio + swipe UI + notification)
+            val serviceIntent = Intent(context, AlarmService::class.java).apply {
+                action = AlarmService.ACTION_START_ALARM
+                putExtra(AlarmService.EXTRA_SCHEDULE_ID, schedule.id)
+                putExtra(AlarmService.EXTRA_TRIGGER_MS, firedEpochMs)
+                putExtra(AlarmService.EXTRA_TITLE, schedule.title)
+                putExtra(AlarmService.EXTRA_BODY, schedule.body)
+                putExtra(AlarmService.EXTRA_MODE, schedule.mode)
+                putExtra(AlarmService.EXTRA_TYPE, schedule.type)
+            }
+            try {
+                ContextCompat.startForegroundService(context, serviceIntent)
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to start AlarmService, falling back to full-screen alarm notification: ${e.message}")
+                notificationManager.showAlarmNotification(schedule, firedEpochMs)
+            }
+        } else {
+            // Prayers, activities, and standard reminders: post a single clean OS notification
+            // Never ring endless alarm audio or pop up AlarmActivity
+            Log.i(TAG, "Posting single native notification for ${schedule.type}: ${schedule.id}")
+            notificationManager.showNotification(schedule)
         }
 
         // Local Recurrence Calculation (sustainable without WebView or internet)
