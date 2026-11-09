@@ -50,6 +50,16 @@
             </intent-filter>
         </receiver>
 
+        <!-- Interactive Notification Action Receiver (Quick Water, Task Done) -->
+        <receiver
+            android:name=".NotificationActionReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.zatoona.app.ACTION_QUICK_WATER" />
+                <action android:name="com.zatoona.app.ACTION_MARK_DONE" />
+            </intent-filter>
+        </receiver>
+
         <!-- Alarm Full-Screen Lock-Screen Activity -->
         <activity
             android:name=".AlarmActivity"

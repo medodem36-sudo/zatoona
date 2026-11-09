@@ -59,6 +59,19 @@ class TestPhase2StudyHub(unittest.TestCase):
             lambda d: d.execute_script("return document.readyState") == "complete"
         )
         time.sleep(1)
+        cls.driver.execute_script("""
+            if (window.notificationSettings) window.notificationSettings.inAppModal = false;
+            const rem = document.getElementById('inAppReminderModal');
+            if (rem) rem.classList.add('hidden');
+        """)
+
+    def setUp(self):
+        if hasattr(self, "driver") and self.driver:
+            self.driver.execute_script("""
+                if (window.notificationSettings) window.notificationSettings.inAppModal = false;
+                const rem = document.getElementById('inAppReminderModal');
+                if (rem) rem.classList.add('hidden');
+            """)
 
     @classmethod
     def tearDownClass(cls):

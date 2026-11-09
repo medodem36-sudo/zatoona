@@ -521,6 +521,15 @@ REGISTERED_SUITES = [
         "active": True,
         "description": "Verifies Android native shell, Gradle files, Manifest permissions, WebKit AssetLoader, and ZatoonaNativeBridge contract."
     },
+    {
+        "id": "roadmap_features_suite",
+        "name": "Phase 23 Continuous Roadmap Features Full Acceptance Suite",
+        "category": "Roadmap and Native Platform",
+        "rel_path": "scratch/test_roadmap_features_suite.py",
+        "timeout_sec": 90,
+        "active": True,
+        "description": "Verifies Adaptive Day Planner (Autopilot), Cross-Domain Insights Engine, Automated Safe Backup, and Rich Interactive Notification Actions."
+    },
     # Superseded / Obsolete historical gates (excluded by default, enabled via --include-superseded)
     {
         "id": "phase9b1_1_gate",

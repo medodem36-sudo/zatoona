@@ -134,6 +134,37 @@ class ZatoonaNotificationManager(private val context: Context) {
             .setGroup(GROUP_ZATOONA_REMINDERS)
 
         val notifId = abs(schedule.id.hashCode())
+
+        // Attach interactive action buttons (Feature: Rich Notification Actions)
+        if (schedule.mode == "meal" || schedule.title.contains("ماء") || schedule.title.contains("ترطيب") || schedule.body.contains("ماء")) {
+            val waterIntent = Intent(context, NotificationActionReceiver::class.java).apply {
+                action = NotificationActionReceiver.ACTION_QUICK_WATER
+                putExtra(NotificationActionReceiver.EXTRA_NOTIFICATION_ID, notifId)
+                putExtra(NotificationActionReceiver.EXTRA_SCHEDULE_ID, schedule.id)
+            }
+            val waterPending = PendingIntent.getBroadcast(
+                context,
+                requestCode + 101,
+                waterIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+            builder.addAction(R.mipmap.ic_launcher, "+1 كوب ماء 💧", waterPending)
+        }
+
+        val doneIntent = Intent(context, NotificationActionReceiver::class.java).apply {
+            action = NotificationActionReceiver.ACTION_MARK_DONE
+            putExtra(NotificationActionReceiver.EXTRA_NOTIFICATION_ID, notifId)
+            putExtra(NotificationActionReceiver.EXTRA_SCHEDULE_ID, schedule.id)
+        }
+        val donePending = PendingIntent.getBroadcast(
+            context,
+            requestCode + 102,
+            doneIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        val doneLabel = if (schedule.mode == "prayer" || schedule.type == "prayer") "تمت الصلاة 🕌" else "تم الإنجاز ✅"
+        builder.addAction(R.mipmap.ic_launcher, doneLabel, donePending)
+
         notificationManager.notify(notifId, builder.build())
 
         // Post / update Android notification group summary (Proposal #14)

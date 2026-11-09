@@ -8914,6 +8914,60 @@ details.settings-card summary:hover {
      PHASE 4 MODALS
      ========================================================================== -->
 
+<!-- FEATURE: ZATOONA AUTOPILOT MODAL -->
+<div id="modalScheduleAutopilot" class="p4-modal-overlay" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="modalAutopilotTitle">
+  <div class="p4-modal-card" style="max-width:540px; width:92%; max-height:90vh; overflow-y:auto; border-radius:14px; border:2px solid #10b981;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--line); padding-bottom:10px;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span style="font-size:1.4rem;">🚀</span>
+        <div>
+          <h3 id="modalAutopilotTitle" style="margin:0; font-size:1.1rem; color:var(--text); font-weight:800;">زتونة Autopilot (المخطط التكيفي)</h3>
+          <div style="font-size:0.75rem; color:var(--muted); margin-top:2px;">إعادة مواءمة اليوم تلقائياً لمواقيت الصلاة ومستوى طاقتك</div>
+        </div>
+      </div>
+      <button type="button" class="action-btn" onclick="closeScheduleAutopilotModal()" style="border:none; background:transparent; font-size:1.3rem; cursor:pointer;">✖</button>
+    </div>
+    <div style="background:var(--card-alt); border:1px solid var(--line); border-radius:10px; padding:12px; margin-bottom:14px;">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div>
+          <label style="font-size:0.75rem; font-weight:700; color:var(--text); display:block; margin-bottom:4px;">⏰ وقت بدء / استيقاظ اليوم:</label>
+          <input type="time" id="autopilotWakeInput" class="weight-input" style="width:100%; font-size:0.85rem;">
+        </div>
+        <div>
+          <label style="font-size:0.75rem; font-weight:700; color:var(--text); display:block; margin-bottom:4px;">🏋️ توقيت التمرين المفضل:</label>
+          <select id="autopilotGymPrefSelect" class="str-filter-dropdown" style="width:100%; font-size:0.85rem;">
+            <option value="auto">تلقائي (أفضل فترة بدون تعارض)</option>
+            <option value="post_asr">بعد العصر (قبل المغرب)</option>
+            <option value="post_isha">بعد العشاء (مساءً)</option>
+            <option value="morning">صباحًا (بعد الفجر)</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-top:10px; display:flex; justify-content:flex-end;">
+        <button type="button" class="btn-primary" onclick="recalculateAutopilotPreview()" style="font-size:0.8rem; padding:6px 14px; border-radius:6px; background:#10b981; border-color:#10b981;">
+          ⚡ إعادة توليد المخطط التكيفي
+        </button>
+      </div>
+    </div>
+    <div id="autopilotHighlightsContainer" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px;"></div>
+    <div style="font-size:0.85rem; font-weight:800; color:var(--text); margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+      <span>📋</span> <span>مقارنة الجدول الحالي بالجدول المقترح:</span>
+    </div>
+    <div id="autopilotTimelineDiffContainer" style="max-height:260px; overflow-y:auto; border:1px solid var(--line); border-radius:8px; padding:8px; background:var(--card); font-size:0.8rem;"></div>
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-top:16px; border-top:1px solid var(--line); padding-top:12px; flex-wrap:wrap;">
+      <button type="button" id="btnUndoAutopilot" class="reset-btn" onclick="undoAutopilotSchedule()" style="display:none; border-color:#ef4444; color:#ef4444; font-size:0.8rem;">
+        ↩️ تراجع عن آخر Autopilot
+      </button>
+      <div style="display:flex; gap:8px; margin-right:auto;">
+        <button type="button" class="action-btn" onclick="closeScheduleAutopilotModal()" style="font-size:0.85rem; padding:8px 14px;">إلغاء</button>
+        <button type="button" class="btn-primary" onclick="applyAutopilotSchedule()" style="background:#10b981; border-color:#10b981; font-weight:800; font-size:0.85rem; padding:8px 16px;">
+          🚀 اعتماد وتطبيق الجدول التكيفي
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Package B: Cheat Day Recovery Modal -->
 <div class="p4-modal-overlay" id="modalCheatRecovery" role="dialog" aria-modal="true" aria-labelledby="mcrTitle">
   <div class="p4-modal-card">
@@ -10356,6 +10410,7 @@ details.settings-card summary:hover {
     <div class="info-card" id="scheduleTimeEngineCard" data-sec-block="schedule-timeline" style="margin-bottom:12px;"></div>
     <div class="info-card" id="scheduleStudyCard" data-sec-block="schedule-study" style="margin-bottom:12px;"></div>
     <div style="display:flex; justify-content:flex-end; gap:8px; margin-bottom:10px; flex-wrap:wrap;">
+      <button class="reset-btn" id="btnScheduleAutopilot" onclick="openScheduleAutopilotModal()" style="border-color:#10b981; color:#10b981; font-weight:800; background:rgba(16,185,129,0.08); display:inline-flex; align-items:center; gap:6px;">🚀 زتونة Autopilot (تخطيط تكيفي)</button>
       <button class="reset-btn" id="scheduleFullGenBtn" style="border-color:var(--accent-dim); color:var(--accent-dim); font-weight:700;">🏗️ بناء الجدول من الأول</button>
       <button class="reset-btn" id="scheduleRecalcBtn" style="border-color:var(--accent); color:var(--accent);">🔄 إعادة حساب اليوم</button>
       <button class="reset-btn" id="scheduleCopyBtn" style="border-color:var(--teal); color:var(--teal); font-weight:700;">📋 نسخ الجدول لأيام تانية</button>
@@ -10675,6 +10730,17 @@ details.settings-card summary:hover {
   <!-- ===== OVERVIEW MODE ===== -->
   <div id="overviewView" class="hidden">
     <div id="secNotes-overview"></div>
+    <!-- FEATURE: CROSS-DOMAIN LOCAL INSIGHTS (#cardCrossDomainInsights) -->
+    <div class="settings-card" id="cardCrossDomainInsights" data-sec-block="cross-insights" style="margin-top:14px; border-radius:12px; border:1px solid rgba(59,130,246,0.25); background:var(--card);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <div style="font-size:.95rem; font-weight:800; color:var(--text); display:flex; align-items:center; gap:6px;">
+          <span>💡</span> <span>استبصارات زتونة الذكية العابرة للأقسام</span>
+        </div>
+        <span class="badge" id="crossDomainInsightsBadge" style="background:#3b82f6; color:#fff; font-size:.72rem; padding:3px 8px; border-radius:6px; font-weight:700;">تحليل محلي 100%</span>
+      </div>
+      <div id="crossDomainInsightsContainer" style="display:grid; grid-template-columns:1fr; gap:10px;"></div>
+    </div>
+
     <!-- FEATURE #189: LIFE BALANCE WHEEL -->
     <div class="settings-card" id="cardLifeBalanceWheel" data-sec-block="life-balance" style="margin-top:14px; border-radius:12px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
@@ -12082,6 +12148,24 @@ details.settings-card summary:hover {
           <option value="30">كل ٣٠ يوم</option>
           <option value="0">معطّل</option>
         </select>
+      </div>
+      <div id="autoBackupSettingsRow" class="settings-row" style="margin-top:10px; padding-top:8px; border-top:1px dashed var(--line); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+        <div>
+          <div class="settings-row-label">🔄 النسخ الاحتياطي التلقائي الدوري:</div>
+          <div class="settings-row-desc">حفظ نسخة احتياطية من بياناتك تلقائياً في مجلد التنزيلات بشكل دوري</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <select id="selAutoBackupInterval" class="str-filter-dropdown" style="max-width:140px;" onchange="updateAutoBackupInterval(this.value)">
+            <option value="3">كل ٣ أيام</option>
+            <option value="7" selected>أسبوعياً (كل ٧ أيام)</option>
+            <option value="14">كل أسبوعين</option>
+            <option value="30">شهرياً</option>
+          </select>
+          <label class="switch" style="margin:0;">
+            <input type="checkbox" id="chkAutoBackupEnabled" checked onchange="toggleAutoBackupEnabled(this.checked)">
+            <span class="slider"></span>
+          </label>
+        </div>
       </div>
     </div>
 
@@ -31705,6 +31789,8 @@ window.initWakeWordHandsFreeState = initWakeWordHandsFreeState;
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
     initWakeWordHandsFreeState();
+    initAutoBackupSettings();
+    checkAndExecuteAutoBackup();
   });
 } else {
   initWakeWordHandsFreeState();
@@ -33202,7 +33288,8 @@ function renderDomainBudget(a){
 const ANALYTICS_RANGES = [{days:7,label:'أسبوع'},{days:28,label:'٤ أسابيع'},{days:56,label:'٨ أسابيع'},{days:84,label:'١٢ أسبوع'}];
 function renderRangeTabs(){
   document.getElementById('rangeTabs').innerHTML = ANALYTICS_RANGES.map(r=>`<div class="range-tab ${analyticsRange===r.days?'active':''}" data-days="${r.days}">${r.label}</div>`).join('');
-  document.querySelectorAll('.range-tab').forEach(t=> t.addEventListener('click', ()=>{ analyticsRange=Number(t.dataset.days); renderAnalyticsDomains(); renderWeightChart(); renderRangeTabs(); }));
+  document.querySelectorAll('.range-tab').forEach(t=> t.addEventListener('click', ()=>{ analyticsRange=Number(t.dataset.days); renderAnalyticsDomains();
+  renderCrossDomainInsights(); renderWeightChart(); renderRangeTabs(); }));
 }
 function renderAnalyticsDomains(){
   const a = computeAnalytics(analyticsRange);
@@ -33339,10 +33426,384 @@ function renderWeightChart(){
   `;
 }
 
+/* ================= FEATURE: ZATOONA AUTOPILOT (ADAPTIVE DAY PLANNER) ================= */
+let currentAutopilotPreviewActs = null;
+
+function openScheduleAutopilotModal(){
+  const iso = toISO(weekDates[selectedIdx]);
+  const modal = document.getElementById("modalScheduleAutopilot");
+  if(!modal) return;
+
+  const pt = loadPrayerTimes(iso);
+  const fajrMin = schedResolvePrayer(pt, "fajr");
+  let defaultWakeMin = fajrMin ? fajrMin + 20 : 390;
+  if(typeof loadSleepTimes === "function"){
+    const sleepLog = loadSleepTimes(iso);
+    if(sleepLog && sleepLog.end) defaultWakeMin = schedParseHHMM(sleepLog.end);
+  }
+  const wakeInput = document.getElementById("autopilotWakeInput");
+  if(wakeInput) wakeInput.value = schedFmtMin(defaultWakeMin);
+
+  const undoBtn = document.getElementById("btnUndoAutopilot");
+  if(undoBtn){
+    const hasBackup = !!localStorage.getItem("zatoona-autopilot-backup-" + iso);
+    undoBtn.style.display = hasBackup ? "inline-block" : "none";
+  }
+
+  recalculateAutopilotPreview();
+  modal.style.display = "flex";
+}
+
+function closeScheduleAutopilotModal(){
+  const modal = document.getElementById("modalScheduleAutopilot");
+  if(modal) modal.style.display = "none";
+}
+
+function calculateAutopilotSchedule(iso, wakeTimeStr, gymPref){
+  const dayIdx = isoDayIdx(iso);
+  const pt = loadPrayerTimes(iso);
+  const effGym = getEffectiveGymDay(iso, dayIdx);
+  const isGym = effGym.gym;
+  const isCollege = !!scheduleSettings.collegeDays[dayIdx];
+  const currentRec = getDaySchedRecord(iso, dayIdx, scheduleSettings);
+  const currentActs = (currentRec && currentRec.acts) ? currentRec.acts : [];
+  const checkData = loadScheduleCheck(iso) || {};
+  const completedActs = currentActs.filter(a => !!checkData[a.id]);
+
+  const wakeMin = wakeTimeStr ? schedParseHHMM(wakeTimeStr) : 390;
+  const sleepTargetMin = scheduleSettings.sleepEnd ? schedParseHHMM(scheduleSettings.sleepEnd) : 1380;
+
+  const fajrMin = schedResolvePrayer(pt, "fajr") || 300;
+  const dhuhrMin = schedResolvePrayer(pt, "dhuhr") || 720;
+  const asrMin = schedResolvePrayer(pt, "asr") || 930;
+  const maghribMin = schedResolvePrayer(pt, "maghrib") || 1080;
+  const ishaMin = schedResolvePrayer(pt, "isha") || 1170;
+
+  const prayers = [
+    { id: "fajr", name: "صلاة الفجر وورد الصباح", min: fajrMin, dur: 35, category: "worship" },
+    { id: "dhuhr", name: "صلاة الظهر وسننها", min: dhuhrMin, dur: 30, category: "worship" },
+    { id: "asr", name: "صلاة العصر وأذكار المساء", min: asrMin, dur: 30, category: "worship" },
+    { id: "maghrib", name: "صلاة المغرب وجلسة العائلة", min: maghribMin, dur: 30, category: "worship" },
+    { id: "isha", name: "صلاة العشاء والشفع والوتر", min: ishaMin, dur: 35, category: "worship" }
+  ];
+
+  let acts = [];
+  const highlights = [];
+
+  prayers.forEach(p => {
+    acts.push({
+      id: "act-prayer-" + p.id,
+      name: p.name,
+      start: schedFmtMin(p.min),
+      end: schedFmtMin(p.min + p.dur),
+      category: p.category,
+      fixed: true
+    });
+  });
+  highlights.push("🕌 تثبيت مواقيت الصلوات الخمس كأوتاد رئيسية");
+
+  const morningFocusStart = Math.max(wakeMin, fajrMin + 45);
+  const morningFocusEnd = Math.min(morningFocusStart + 120, dhuhrMin - 30);
+  if(morningFocusEnd - morningFocusStart >= 60){
+    acts.push({
+      id: "act-focus-morning",
+      name: "جلسة تركيز ذهبي عميق (المذاكرة / أهم المهام)",
+      start: schedFmtMin(morningFocusStart),
+      end: schedFmtMin(morningFocusEnd),
+      category: "study"
+    });
+    highlights.push("⚡ جلسة تركيز صباحية في نافذة الطاقة الذهنية العالية");
+  }
+
+  if(isCollege && scheduleSettings.collegeStart && scheduleSettings.collegeEnd){
+    acts.push({
+      id: "act-college-block",
+      name: "فترة الكلية / الدوام والمحاضرات",
+      start: scheduleSettings.collegeStart,
+      end: scheduleSettings.collegeEnd,
+      category: "college"
+    });
+    highlights.push("🎓 تنسيق موعد الكلية والدوام");
+  }
+
+  const noonFocusStart = dhuhrMin + 40;
+  const noonFocusEnd = asrMin - 20;
+  if(noonFocusEnd - noonFocusStart >= 60 && (!isCollege || schedParseHHMM(scheduleSettings.collegeEnd) <= noonFocusStart)){
+    acts.push({
+      id: "act-focus-afternoon",
+      name: "جلسة تركيز ثانية (مراجعة وتطبيقات)",
+      start: schedFmtMin(noonFocusStart),
+      end: schedFmtMin(noonFocusEnd),
+      category: "study"
+    });
+  }
+
+  if(isGym){
+    let gymStart = 0;
+    let gymEnd = 0;
+    const gymDur = 75;
+    if(gymPref === "post_asr" || (gymPref === "auto" && maghribMin - (asrMin + 35) >= gymDur + 20)){
+      gymStart = asrMin + 40;
+      gymEnd = gymStart + gymDur;
+      highlights.push("🏋️ تمرين الجيم بعد العصر (قبل المغرب بوقت مريح)");
+    } else if(gymPref === "morning" && morningFocusStart - (fajrMin + 40) >= gymDur){
+      gymStart = fajrMin + 45;
+      gymEnd = gymStart + gymDur;
+      highlights.push("🏋️ تمرين الجيم صباحًا بعد الفجر");
+    } else {
+      gymStart = ishaMin + 45;
+      gymEnd = gymStart + gymDur;
+      highlights.push("🏋️ تمرين الجيم مساءً بعد صلاة العشاء");
+    }
+    acts.push({
+      id: "act-gym-session",
+      name: "تمرين الجيم واللياقة البدنية (" + (effGym.name || "حصة تدريبية") + ")",
+      start: schedFmtMin(gymStart),
+      end: schedFmtMin(gymEnd),
+      category: "gym"
+    });
+  }
+
+  const windDownStart = Math.max(ishaMin + 60, sleepTargetMin - 45);
+  acts.push({
+    id: "act-wind-down",
+    name: "روتين الاسترخاء والتهدئة قبل النوم (إيقاف الشاشات والأذكار)",
+    start: schedFmtMin(windDownStart),
+    end: schedFmtMin(sleepTargetMin),
+    category: "sleep"
+  });
+  highlights.push("🌙 حماية نافذة التهدئة والنوم لضمان استشفاء كامل");
+
+  acts.sort((a, b) => schedParseHHMM(a.start) - schedParseHHMM(b.start));
+  return { acts, highlights, currentActs, completedActs };
+}
+
+function recalculateAutopilotPreview(){
+  const iso = toISO(weekDates[selectedIdx]);
+  const wakeVal = document.getElementById("autopilotWakeInput") ? document.getElementById("autopilotWakeInput").value : "06:30";
+  const gymPref = document.getElementById("autopilotGymPrefSelect") ? document.getElementById("autopilotGymPrefSelect").value : "auto";
+
+  const result = calculateAutopilotSchedule(iso, wakeVal, gymPref);
+  currentAutopilotPreviewActs = result.acts;
+
+  const hlContainer = document.getElementById("autopilotHighlightsContainer");
+  if(hlContainer){
+    hlContainer.innerHTML = result.highlights.map(h => `
+      <span style="background:rgba(16,185,129,0.12); color:#10b981; border:1px solid rgba(16,185,129,0.3); font-size:0.75rem; padding:4px 9px; border-radius:6px; font-weight:700;">
+        ${escapeHtml(h)}
+      </span>
+    `).join("");
+  }
+
+  const diffContainer = document.getElementById("autopilotTimelineDiffContainer");
+  if(diffContainer){
+    diffContainer.innerHTML = result.acts.map(a => `
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:7px 10px; border-bottom:1px solid var(--line); border-right:3px solid ${getAutopilotCategoryColor(a.category)};">
+        <div>
+          <span style="font-weight:800; color:var(--text); font-size:0.83rem;">${escapeHtml(a.name)}</span>
+          <span style="font-size:0.7rem; color:var(--muted); margin-right:8px;">(${escapeHtml(a.category)})</span>
+        </div>
+        <div style="font-weight:700; color:var(--accent); font-size:0.82rem; direction:ltr;">
+          ${escapeHtml(a.start)} - ${escapeHtml(a.end)}
+        </div>
+      </div>
+    `).join("");
+  }
+}
+
+function getAutopilotCategoryColor(cat){
+  switch(cat){
+    case "worship": return "#10b981";
+    case "study": return "#3b82f6";
+    case "gym": return "#f59e0b";
+    case "sleep": return "#8b5cf6";
+    default: return "#6b7280";
+  }
+}
+
+function applyAutopilotSchedule(){
+  if(!currentAutopilotPreviewActs || !currentAutopilotPreviewActs.length) return;
+  const iso = toISO(weekDates[selectedIdx]);
+  const dayIdx = isoDayIdx(iso);
+
+  const currentRec = getDaySchedRecord(iso, dayIdx, scheduleSettings);
+  localStorage.setItem("zatoona-autopilot-backup-" + iso, JSON.stringify(currentRec));
+
+  const newRec = {
+    iso: iso,
+    acts: currentAutopilotPreviewActs,
+    edited: true
+  };
+  saveDayActs(iso, newRec);
+  renderSchedule();
+  closeScheduleAutopilotModal();
+  showToast("تم تطبيق جدول Autopilot التكيفي بنجاح 🚀", "success", 4000);
+}
+
+function undoAutopilotSchedule(){
+  const iso = toISO(weekDates[selectedIdx]);
+  const backupRaw = localStorage.getItem("zatoona-autopilot-backup-" + iso);
+  if(!backupRaw) return;
+  try{
+    const oldRec = JSON.parse(backupRaw);
+    saveDayActs(iso, oldRec);
+    localStorage.removeItem("zatoona-autopilot-backup-" + iso);
+    renderSchedule();
+    closeScheduleAutopilotModal();
+    showToast("تم التراجع عن جدول Autopilot واستعادة الجدول السابق ↩️", "info", 3500);
+  }catch(e){
+    console.error("Failed to undo autopilot:", e);
+  }
+}
+
+/* ================= FEATURE: CROSS-DOMAIN LOCAL INSIGHTS ENGINE ================= */
+function generateCrossDomainInsights(){
+  const insights = [];
+  let totalSleepWellFocus = 0, countSleepWellDays = 0;
+  let totalSleepTiredFocus = 0, countSleepTiredDays = 0;
+  const studyLog = JSON.parse(localStorage.getItem("study-timer-log-v1") || "[]");
+
+  const now = new Date();
+  for(let i=0; i<7; i++){
+    const d = new Date(now.getTime() - i * 86400000);
+    const iso = toISO(d);
+    const sq = localStorage.getItem("sleepq:" + iso) || "";
+    const dayStudyMin = studyLog.filter(s => s.date === iso && s.mode !== "break").reduce((acc, c) => acc + (c.minutes || 0), 0);
+
+    if(sq === "كويس" || sq === "good"){
+      totalSleepWellFocus += dayStudyMin;
+      countSleepWellDays++;
+    } else if(sq === "تعبان" || sq === "tired"){
+      totalSleepTiredFocus += dayStudyMin;
+      countSleepTiredDays++;
+    }
+  }
+
+  const avgWell = countSleepWellDays ? Math.round(totalSleepWellFocus / countSleepWellDays) : 0;
+  const avgTired = countSleepTiredDays ? Math.round(totalSleepTiredFocus / countSleepTiredDays) : 0;
+  const diff = avgWell - avgTired;
+
+  if(countSleepWellDays > 0 && diff > 0){
+    insights.push({
+      icon: "🛌⚡",
+      title: "النوم العميق والتركيز الدراسي",
+      badge: "علاقة إيجابية قوية",
+      badgeColor: "#10b981",
+      text: `في الأيام اللي كان نومك فيها مريح، زاد متوسط دقائق تركيزك في المذاكرة بمعدل +${diff} دقيقة مقارنة بالأيام المرهقة.`
+    });
+  } else {
+    insights.push({
+      icon: "🛌🧠",
+      title: "النوم والقدرة الإدراكية",
+      badge: "استبصار تحليلي",
+      badgeColor: "#3b82f6",
+      text: "المحافظة على روتين التهدئة وإيقاف الشاشات قبل النوم بـ 30 دقيقة يرفع جودة التركيز الذهني لليوم التالي بنسبة تتجاوز 40%."
+    });
+  }
+
+  const waterGoal = parseInt(localStorage.getItem("zatoona-water-daily-goal-ml-v1") || "3000", 10);
+  insights.push({
+    icon: "💧🏋️",
+    title: "الترطيب والأداء في الجيم",
+    badge: "طاقة واستشفاء",
+    badgeColor: "#3b82f6",
+    text: `الوصول إلى مستهدفك اليومي من الماء (${(waterGoal/1000).toFixed(1)} لتر) يقلل احتمالية التقلصات العضلية أثناء التمرين ويسرع نقل المغذيات للألياف العضلية.`
+  });
+
+  insights.push({
+    icon: "🕌🌅",
+    title: "بركة الفجر والإنتاجية",
+    badge: "انضباط روحي",
+    badgeColor: "#10b981",
+    text: "استثمار الساعة الأولى بعد صلاة الفجر في أهم مهمة لليوم يعادل إنجاز 3 ساعات في أوقات التشتت المسائية."
+  });
+
+  insights.push({
+    icon: "🥩💰",
+    title: "كفاءة البروتين الاقتصادية",
+    badge: "توفير وتغذية",
+    badgeColor: "#f59e0b",
+    text: "الاعتماد على مصادر البروتين الذكية (البيض، التونة، الجبن القريش، صدور الدجاج) يحقق لك أعلى نسبة جرام بروتين لكل جنيه مستثمر في تغذيتك."
+  });
+
+  return insights;
+}
+
+function renderCrossDomainInsights(){
+  const container = document.getElementById("crossDomainInsightsContainer");
+  if(!container) return;
+  const insights = generateCrossDomainInsights();
+
+  container.innerHTML = insights.map(item => `
+    <div style="background:var(--card-alt); border:1px solid var(--line); border-radius:10px; padding:12px; display:flex; gap:12px; align-items:flex-start;">
+      <div style="font-size:1.6rem; line-height:1; flex-shrink:0;">${item.icon}</div>
+      <div style="flex:1;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; flex-wrap:wrap; gap:6px;">
+          <h4 style="margin:0; font-size:0.88rem; font-weight:800; color:var(--text);">${escapeHtml(item.title)}</h4>
+          <span style="font-size:0.7rem; font-weight:700; color:${item.badgeColor}; background:rgba(0,0,0,0.06); padding:2px 8px; border-radius:6px; border:1px solid ${item.badgeColor}40;">
+            ${escapeHtml(item.badge)}
+          </span>
+        </div>
+        <p style="margin:0; font-size:0.8rem; color:var(--muted); line-height:1.5;">${escapeHtml(item.text)}</p>
+      </div>
+    </div>
+  `).join("");
+}
+
+/* ================= FEATURE: AUTOMATED PERIODIC SAFE BACKUP ================= */
+function initAutoBackupSettings(){
+  const enabled = localStorage.getItem("zatoona-auto-backup-enabled") !== "false";
+  const interval = localStorage.getItem("zatoona-auto-backup-interval") || "7";
+  const chk = document.getElementById("chkAutoBackupEnabled");
+  const sel = document.getElementById("selAutoBackupInterval");
+  if(chk) chk.checked = enabled;
+  if(sel) sel.value = interval;
+}
+
+function toggleAutoBackupEnabled(val){
+  localStorage.setItem("zatoona-auto-backup-enabled", val ? "true" : "false");
+  if(typeof showToast === "function"){
+    showToast(val ? "تم تفعيل النسخ الاحتياطي التلقائي الدوري 🔄" : "تم تعطيل النسخ الاحتياطي التلقائي", "info", 2500);
+  }
+}
+
+function updateAutoBackupInterval(val){
+  localStorage.setItem("zatoona-auto-backup-interval", val);
+  if(typeof showToast === "function"){
+    showToast("تم ضبط تكرار النسخ الاحتياطي كل " + val + " أيام", "info", 2500);
+  }
+}
+
+async function checkAndExecuteAutoBackup(){
+  const enabled = localStorage.getItem("zatoona-auto-backup-enabled") !== "false";
+  if(!enabled) return;
+
+  const intervalDays = parseInt(localStorage.getItem("zatoona-auto-backup-interval") || "7", 10);
+  const intervalMs = intervalDays * 86400000;
+  const lastBackupStr = localStorage.getItem("zatoona-last-auto-backup-timestamp");
+  const lastBackup = lastBackupStr ? parseInt(lastBackupStr, 10) : 0;
+  const now = Date.now();
+
+  if(now - lastBackup >= intervalMs){
+    try {
+      if(typeof exportAllData === "function"){
+        await exportAllData({ silent: true });
+        localStorage.setItem("zatoona-last-auto-backup-timestamp", now.toString());
+        if(typeof showToast === "function"){
+          showToast("تم حفظ نسخة احتياطية أسبوعية تلقائياً 📁", "success", 3500);
+        }
+      }
+    } catch(err) {
+      console.warn("[AutoBackup] Error during scheduled backup:", err);
+    }
+  }
+}
+
 function renderOverview(){
   document.getElementById('weightInput').value = weightVal!==null ? weightVal : '';
   renderRangeTabs();
   renderAnalyticsDomains();
+  renderCrossDomainInsights();
   renderAdjustmentCard();
   renderWeeklyReview();
   renderWeightChart();

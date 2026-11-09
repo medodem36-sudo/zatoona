@@ -36,3 +36,4 @@
 -keep class com.zatoona.app.FloatingStudyBubbleService { *; }
 -keep class com.zatoona.app.ZatoonaAlarmScheduler { *; }
 -keep class com.zatoona.app.ZatoonaNotificationManager { *; }
+-keep class com.zatoona.app.NotificationActionReceiver { *; }
