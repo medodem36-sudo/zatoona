@@ -1009,7 +1009,12 @@ class ZatoonaBridge(private val context: Context) {
 
                 val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as? android.hardware.camera2.CameraManager
 
-                val cameraId = cameraManager?.cameraIdList?.firstOrNull()
+                val cameraId = cameraManager?.cameraIdList?.firstOrNull { id ->
+                    try {
+                        val chars = cameraManager.getCameraCharacteristics(id)
+                        chars.get(android.hardware.camera2.CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
+                    } catch (_: Exception) { false }
+                } ?: cameraManager?.cameraIdList?.firstOrNull()
 
                 if (cameraManager != null && cameraId != null) {
 
@@ -1036,6 +1041,10 @@ class ZatoonaBridge(private val context: Context) {
                         } catch (e: Exception) {
 
                             // Camera in use or torch unavailable
+
+                        } finally {
+
+                            try { cameraManager.setTorchMode(cameraId, false) } catch (_: Exception) {}
 
                         }
 
@@ -1569,6 +1578,51 @@ class ZatoonaBridge(private val context: Context) {
     }
 
 
+
+    @JavascriptInterface
+    fun saveBackupFile(filename: String?, jsonContent: String?): Boolean {
+        if (jsonContent.isNullOrBlank()) return false
+        val cleanName = if (!filename.isNullOrBlank()) filename else "zatoona-backup-${System.currentTimeMillis()}.json"
+        return try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                val resolver = context.contentResolver
+                val contentValues = android.content.ContentValues().apply {
+                    put(android.provider.MediaStore.MediaColumns.DISPLAY_NAME, cleanName)
+                    put(android.provider.MediaStore.MediaColumns.MIME_TYPE, "application/json")
+                    put(android.provider.MediaStore.MediaColumns.RELATIVE_PATH, android.os.Environment.DIRECTORY_DOWNLOADS)
+                }
+                val uri = resolver.insert(android.provider.MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
+                if (uri != null) {
+                    resolver.openOutputStream(uri)?.use { outputStream ->
+                        outputStream.write(jsonContent.toByteArray(Charsets.UTF_8))
+                        outputStream.flush()
+                    }
+                    (context as? android.app.Activity)?.runOnUiThread {
+                        android.widget.Toast.makeText(context, "تم حفظ النسخة الاحتياطية في التنزيلات بنجاح 📁", android.widget.Toast.LENGTH_LONG).show()
+                    }
+                    true
+                } else {
+                    false
+                }
+            } else {
+                @Suppress("DEPRECATION")
+                val downloadsDir = android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_DOWNLOADS)
+                if (!downloadsDir.exists()) downloadsDir.mkdirs()
+                val file = java.io.File(downloadsDir, cleanName)
+                file.writeText(jsonContent, Charsets.UTF_8)
+                (context as? android.app.Activity)?.runOnUiThread {
+                    android.widget.Toast.makeText(context, "تم حفظ النسخة الاحتياطية في التنزيلات 📁", android.widget.Toast.LENGTH_LONG).show()
+                }
+                true
+            }
+        } catch (e: Exception) {
+            Log.e("ZatoonaBridge", "saveBackupFile error: ${e.message}")
+            (context as? android.app.Activity)?.runOnUiThread {
+                android.widget.Toast.makeText(context, "تعذر حفظ النسخة الاحتياطية: ${e.message}", android.widget.Toast.LENGTH_SHORT).show()
+            }
+            false
+        }
+    }
 
     private fun errorResponse(code: String, message: String): String {
 

@@ -40,6 +40,7 @@ class WakeWordService : Service() {
     private var speechRecognizer: SpeechRecognizer? = null
     private var textToSpeech: TextToSpeech? = null
     private var isTtsReady: Boolean = false
+    private var consecutiveErrorCount: Int = 0
 
     companion object {
         const val TAG = "WakeWordService"
@@ -267,6 +268,7 @@ class WakeWordService : Service() {
                 setRecognitionListener(object : RecognitionListener {
                     override fun onReadyForSpeech(params: Bundle?) {
                         Log.d(TAG, "Listening for wake word...")
+                        consecutiveErrorCount = 0
                     }
 
                     override fun onBeginningOfSpeech() {}
@@ -278,16 +280,21 @@ class WakeWordService : Service() {
                         Log.d(TAG, "Recognizer error code: $error")
                         if (!isRunning || isPausedForExternalInput) return
 
-                        val delay = when (error) {
-                            SpeechRecognizer.ERROR_RECOGNIZER_BUSY -> 600L
-                            SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> 2000L
-                            SpeechRecognizer.ERROR_AUDIO -> 1000L
-                            else -> 250L // Fast loop restart for timeout or no-match
+                        consecutiveErrorCount++
+                        val baseDelay = when (error) {
+                            SpeechRecognizer.ERROR_RECOGNIZER_BUSY -> 1000L
+                            SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> 5000L
+                            SpeechRecognizer.ERROR_AUDIO -> 2000L
+                            SpeechRecognizer.ERROR_NETWORK, SpeechRecognizer.ERROR_NETWORK_TIMEOUT -> 3000L
+                            SpeechRecognizer.ERROR_NO_MATCH, SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> 400L
+                            else -> 400L
                         }
-                        scheduleRecognizerRestart(delay)
+                        val backoffDelay = (baseDelay * (1.0 + (consecutiveErrorCount.coerceAtMost(5) * 0.4))).toLong()
+                        scheduleRecognizerRestart(backoffDelay)
                     }
 
                     override fun onResults(results: Bundle?) {
+                        consecutiveErrorCount = 0
                         val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION) ?: arrayListOf()
                         Log.d(TAG, "Recognizer onResults: $matches")
 
@@ -303,7 +310,7 @@ class WakeWordService : Service() {
 
                         if (!matched) {
                             // No wake word in this utterance; silently restart continuous listening
-                            scheduleRecognizerRestart(200L)
+                            scheduleRecognizerRestart(250L)
                         }
                     }
 
@@ -330,6 +337,7 @@ class WakeWordService : Service() {
                 putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3)
                 putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
                 putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, packageName)
+                putExtra("android.speech.extra.PREFER_OFFLINE", true)
             }
 
             speechRecognizer?.startListening(recognizerIntent)
@@ -481,20 +489,15 @@ class WakeWordService : Service() {
     }
 
     private fun isWakeWordMatch(normalized: String): Boolean {
-        val keywords = listOf(
-            "كوتش", "يا كوتش", "ياكوتش",
-            "زتونه", "يازتونه", "يا زتونه",
-            "زيتونه", "يازيتونه", "يا زيتونه"
-        )
-        for (kw in keywords) {
-            if (normalized.contains(kw)) return true
-        }
-        return false
+        // Require wake word at the start of speech with vocative prefix ("يا كوتش" / "ياكوتش" / "يا زتونة" / "يازتونة")
+        // or as a distinct standalone token at utterance start, preventing false triggers from "كوتشي" or "زيتونة في".
+        val pattern = Regex("^(يا\\s*كوتش|ياكوتش|يا\\s*زتون[هة]|يازتون[هة]|يا\\s*زيتون[هة]|يازيتون[هة]|كوتش\\b|زتون[هة]\\b)(\\s+|$)", RegexOption.IGNORE_CASE)
+        return pattern.containsMatchIn(normalized)
     }
 
     private fun extractCommand(rawText: String): String {
         return rawText.replace(
-            Regex("^(يا\\s*كوتش|كوتش|يا\\s*زتون[هة]|زتون[هة]|يا\\s*زيتون[هة]|زيتون[هة]|ياكوتش|يازتون[هة]|يازيتون[هة])\\s*", RegexOption.IGNORE_CASE),
+            Regex("^(يا\\s*كوتش|ياكوتش|يا\\s*زتون[هة]|يازتون[هة]|يا\\s*زيتون[هة]|يازيتون[هة]|كوتش\\b|زتون[هة]\\b)\\s*", RegexOption.IGNORE_CASE),
             ""
         ).trim()
     }

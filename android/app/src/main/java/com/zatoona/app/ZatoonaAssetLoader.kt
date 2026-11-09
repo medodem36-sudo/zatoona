@@ -1,6 +1,7 @@
 package com.zatoona.app
 
 import android.content.Context
+import android.net.Uri
 import androidx.webkit.WebViewAssetLoader
 
 /**
@@ -23,6 +24,12 @@ object ZatoonaAssetLoader {
 
     fun isTrustedUrl(url: String?): Boolean {
         if (url.isNullOrBlank()) return false
-        return url.startsWith(TRUSTED_ORIGIN)
+        return try {
+            val uri = Uri.parse(url)
+            uri.scheme.equals("https", ignoreCase = true) &&
+                    uri.host.equals(TRUSTED_DOMAIN, ignoreCase = true)
+        } catch (_: Exception) {
+            false
+        }
     }
 }

@@ -53,15 +53,30 @@ class AlarmActivity : AppCompatActivity() {
     private var accelerometer: Sensor? = null
     private var isFaceDown = false
     private var lastFlipTime = 0L
+    private var activityStartTime = 0L
+    private var hasBeenFaceUp = false
 
     private val sensorListener = object : SensorEventListener {
         override fun onSensorChanged(event: SensorEvent?) {
             if (event?.sensor?.type == Sensor.TYPE_ACCELEROMETER) {
                 val z = event.values[2]
+                val now = System.currentTimeMillis()
+
+                // If the phone was already lying face-down when the alarm launched,
+                // do NOT immediately dismiss it. Wait for the phone to be picked up/face-up first.
+                if (now - activityStartTime < 2000L) {
+                    if (z < -6.5) {
+                        isFaceDown = true
+                    } else if (z > 1.5) {
+                        hasBeenFaceUp = true
+                        isFaceDown = false
+                    }
+                    return
+                }
+
                 // When phone is placed face-down, Z acceleration is near -9.8 m/s^2
                 if (z < -6.5) {
-                    val now = System.currentTimeMillis()
-                    if (!isFaceDown && (now - lastFlipTime > 1500)) {
+                    if (!isFaceDown && hasBeenFaceUp && (now - lastFlipTime > 1500)) {
                         isFaceDown = true
                         lastFlipTime = now
                         android.util.Log.i(TAG, "Flip-to-Dismiss gesture detected! Dismissing alarm.")
@@ -71,6 +86,7 @@ class AlarmActivity : AppCompatActivity() {
                     }
                 } else if (z > 2.0) {
                     isFaceDown = false
+                    hasBeenFaceUp = true
                 }
             }
         }
@@ -88,6 +104,7 @@ class AlarmActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        activityStartTime = System.currentTimeMillis()
 
         configureLockScreenFlags()
         setContentView(R.layout.activity_alarm)

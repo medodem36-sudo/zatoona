@@ -1,11 +1,14 @@
 package com.zatoona.app
 
 import android.app.AlarmManager
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
+import androidx.core.app.NotificationCompat
 
 /**
  * BootReceiver
@@ -16,6 +19,7 @@ class BootReceiver : BroadcastReceiver() {
 
     companion object {
         const val TAG = "ZatoonaBootReceiver"
+        private const val WAKE_PROMPT_NOTIF_ID = 7771
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
@@ -46,18 +50,33 @@ class BootReceiver : BroadcastReceiver() {
             val prefs = context.getSharedPreferences("zatoona_settings", Context.MODE_PRIVATE)
             val wakeWordEnabled = prefs.getBoolean("wake_word_continuous_enabled", false)
             if (wakeWordEnabled) {
-                val wakeIntent = Intent(context, WakeWordService::class.java).apply {
-                    this.action = WakeWordService.ACTION_START
-                }
+                // In Android 14+ (API 34), starting a ForegroundService with MICROPHONE type from
+                // a background BOOT_COMPLETED receiver throws ForegroundServiceStartNotAllowedException.
+                // We show an interactive notification allowing the user to resume listening with 1 tap.
                 try {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        context.startForegroundService(wakeIntent)
-                    } else {
-                        context.startService(wakeIntent)
+                    val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
+                    val launchIntent = Intent(context, MainActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        putExtra(MainActivity.EXTRA_AUTO_LISTEN, true)
                     }
-                    Log.i(TAG, "Restarted WakeWordService following broadcast: $action")
+                    val pi = PendingIntent.getActivity(
+                        context,
+                        WAKE_PROMPT_NOTIF_ID,
+                        launchIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                    )
+                    val notif = NotificationCompat.Builder(context, ZatoonaNotificationManager.CHANNEL_REMINDERS)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle("المساعد الصوتي لزتونة 🎙️")
+                        .setContentText("انقر هنا لتفعيل الاستماع التلقائي بكلمة النداء")
+                        .setContentIntent(pi)
+                        .setAutoCancel(true)
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .build()
+                    nm?.notify(WAKE_PROMPT_NOTIF_ID, notif)
+                    Log.i(TAG, "Posted WakeWord activation prompt notification following broadcast: $action")
                 } catch (e: Exception) {
-                    Log.e(TAG, "Failed to restart WakeWordService: ${e.message}")
+                    Log.e(TAG, "Failed to post WakeWord notification: ${e.message}")
                 }
             }
         }

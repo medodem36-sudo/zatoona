@@ -168,7 +168,8 @@ class ZatoonaScheduleRepository(context: Context) {
             "weekdays", "sleep_routine" -> {
                 if (schedule.timeHour < 0 || schedule.timeMinute < 0) return null
                 val activeDays = schedule.activeDays
-                val allActive = activeDays.isEmpty() || activeDays.none { it }
+                if (activeDays.isNotEmpty() && activeDays.none { it }) return null
+                val allActive = activeDays.isEmpty()
 
                 for (offset in 0..7) {
                     val cal = Calendar.getInstance().apply {

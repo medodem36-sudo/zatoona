@@ -15482,7 +15482,23 @@ let workoutHistoryTo = '';
 let searchDebounceTimer = null;
 
 function storageGet(key){ try{ const v = localStorage.getItem(STORAGE_PREFIX+key); return v===null?null:v; }catch(e){ return null; } }
-function storageSet(key, value){ try{ localStorage.setItem(STORAGE_PREFIX+key, value); }catch(e){} }
+let _quotaToastDebounce = 0;
+function storageSet(key, value){
+  try {
+    localStorage.setItem(STORAGE_PREFIX+key, value);
+    return true;
+  } catch(e) {
+    console.warn('[storage] set error for key ' + key, e);
+    const now = Date.now();
+    if(now - _quotaToastDebounce > 60000){
+      _quotaToastDebounce = now;
+      if(typeof showToast === 'function'){
+        showToast('⚠️ تنبيه: مساحة تخزين المتصفح ممتلئة! تعذر حفظ بعض البيانات الجديدة.', 4500);
+      }
+    }
+    return false;
+  }
+}
 function storageRemove(key){ try{ localStorage.removeItem(STORAGE_PREFIX+key); }catch(e){} }
 
 /* ================= THEME SYSTEM (Light / Dark) ================= */
@@ -16997,9 +17013,12 @@ function initNotificationScheduler(){
   if(notifSchedulerInterval) clearInterval(notifSchedulerInterval);
   checkAndDispatchDueReminders();
   notifSchedulerInterval = setInterval(()=> checkAndDispatchDueReminders(), 30000);
-  document.addEventListener('visibilitychange', ()=>{
-    if(!document.hidden) checkAndDispatchDueReminders();
-  });
+  if(!window._notifVisibilityAttached){
+    window._notifVisibilityAttached = true;
+    document.addEventListener('visibilitychange', ()=>{
+      if(!document.hidden) checkAndDispatchDueReminders();
+    });
+  }
   // Phase 13.4B2: sync reminders to native Android alarm engine
   try { syncRemindersToNativeBridge(); } catch(e){ console.warn('[native-bridge] init sync error:', e); }
   // Phase 13.5: sync daily habits to native Android widget
@@ -17415,7 +17434,24 @@ function fmtDate(d){ return d.toLocaleDateString('ar-EG', {day:'2-digit', month:
 
 function loadDayStatus(iso){ return storageGetJSON('meals:'+iso, {}); }
 function saveDayStatus(iso, obj){ storageSet('meals:'+iso, JSON.stringify(obj)); }
-function loadWater(iso){ const raw = storageGet('water:'+iso); return raw ? parseInt(raw,10) : 0; }
+function loadWater(iso){
+  let val = 0;
+  const raw = storageGet('water:'+iso);
+  if(raw) val = parseInt(raw,10) || 0;
+  try {
+    if(window.ZatoonaNativeBridge && typeof window.ZatoonaNativeBridge.getWaterWidgetCache === 'function'){
+      const cached = JSON.parse(window.ZatoonaNativeBridge.getWaterWidgetCache() || '{}');
+      if(cached && cached.date === iso && typeof cached.waterMl === 'number'){
+        const widgetCups = Math.floor(cached.waterMl / 250);
+        if(widgetCups > val){
+          val = widgetCups;
+          storageSet('water:'+iso, String(val));
+        }
+      }
+    }
+  } catch(e){}
+  return val;
+}
 function saveWater(iso, n){ storageSet('water:'+iso, String(n)); try { if(typeof syncWaterToNativeWidget === 'function') syncWaterToNativeWidget(n); } catch(e){} }
 function loadShopping(){ return storageGetJSON('shopping', {}); }
 function saveShopping(obj){ storageSet('shopping', JSON.stringify(obj)); }
@@ -30420,7 +30456,7 @@ async function discoverGeminiModels(apiKey){
 
   for(const ver of ['v1beta', 'v1']){
     try {
-      const endpoint = `https://generativelanguage.googleapis.com/${ver}/models?key=${encodeURIComponent(cleanKey)}`;
+      const endpoint = `https://generativelanguage.googleapis.com/${ver}/models`;
       const resp = await fetch(endpoint, {
         headers: { 'Content-Type': 'application/json', 'x-goog-api-key': cleanKey }
       });
@@ -30490,7 +30526,7 @@ async function callGeminiGenerateContent(apiKey, contents, systemInstruction = '
 
   for(const c of candidates){
     try {
-      const endpoint = `https://generativelanguage.googleapis.com/${c.version}/models/${c.model}:generateContent?key=${encodeURIComponent(cleanKey)}`;
+      const endpoint = `https://generativelanguage.googleapis.com/${c.version}/models/${c.model}:generateContent`;
 
       const payload = {
         contents,
@@ -30585,7 +30621,7 @@ async function callGeminiGenerateContent(apiKey, contents, systemInstruction = '
     if(discovery.models && discovery.models.length > 0){
       for(const m of discovery.models){
         if(!candidates.some(c => c.version === m.version && c.model === m.model)){
-          const res = await fetch(`https://generativelanguage.googleapis.com/${m.version}/models/${m.model}:generateContent?key=${encodeURIComponent(cleanKey)}`, {
+          const res = await fetch(`https://generativelanguage.googleapis.com/${m.version}/models/${m.model}:generateContent`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'x-goog-api-key': cleanKey },
             body: JSON.stringify({ contents, generationConfig: { maxOutputTokens: 800, temperature: 0.7 } })
@@ -31386,7 +31422,7 @@ function executeAddMicroTasksAction(tasksArray, goalName = 'برمجة'){
   if(typeof renderCustomHabitsTracker === 'function') renderCustomHabitsTracker();
   triggerHaptic('alerts', 'gentle');
   playAppSound('logging');
-  return `عشان نكسر حاجز التسويف في "${goalName}"، قسمتهالك لـ ${tasksArray.length} خطوات سريعة ومركزة للنهاردة:\n${tasksArray.map((t, idx) => `${idx+1}. ${t}`).join('\n')}\n\nنزلتهملك في جدول عاداتك ومهامك، ابدأ بأول خطوة دلوقتي يا بطل! 🚀`;
+  return `عشان نكسر حاجز التسويف في "${goalName}"، قسمتهالك لـ ${tasksArray.length} مهام مصغرة وخطوات سريعة ومركزة للنهاردة:\n${tasksArray.map((t, idx) => `${idx+1}. ${t}`).join('\n')}\n\nنزلتهملك في جدول عاداتك ومهامك، ابدأ بأول خطوة دلوقتي يا بطل! 🚀`;
 }
 window.executeAddMicroTasksAction = executeAddMicroTasksAction;
 
@@ -36062,6 +36098,17 @@ async function exportAllData(options = {}){
 
   if(options.download !== false && typeof document !== 'undefined'){
     const jsonStr = JSON.stringify(finalPayload, null, 2);
+    if(window.ZatoonaNativeBridge && typeof window.ZatoonaNativeBridge.saveBackupFile === 'function'){
+      try {
+        const saved = window.ZatoonaNativeBridge.saveBackupFile(filename, jsonStr);
+        if(saved){
+          if(typeof showToast === 'function') showToast('تم حفظ ملف النسخة الاحتياطية في التنزيلات بنجاح 📁', 4000);
+          return finalPayload;
+        }
+      } catch(e){
+        console.warn('[backup] native saveBackupFile error:', e);
+      }
+    }
     const blob = new Blob([jsonStr], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -40503,8 +40550,7 @@ function renderStretchesView(){
     updateTimerDisplay();
   }
 
-  function resetTimer(){
-    // Capture and credit any focused study minutes elapsed before resetting
+  function commitElapsedFocusMinutes(){
     if(timerPhase === 'focus'){
       let elapsedSecs = 0;
       if(timerMode === 'flow'){
@@ -40526,7 +40572,10 @@ function renderStretchesView(){
         if(typeof syncStudyWidgetIfBridge === 'function') syncStudyWidgetIfBridge();
       }
     }
+  }
 
+  function resetTimer(){
+    commitElapsedFocusMinutes();
     pauseTimer();
     if(timerMode === 'flow'){
       timerElapsedFlow = 0;
@@ -40571,12 +40620,19 @@ function renderStretchesView(){
 
   function skipTimerPhase(){
     pauseTimer();
+    commitElapsedFocusMinutes();
     if(timerPhase === 'focus'){
       timerPhase = 'break';
     } else {
       timerPhase = 'focus';
     }
-    resetTimer();
+    if(timerMode === 'flow'){
+      timerElapsedFlow = 0;
+    } else {
+      timerSecondsLeft = getPhaseConfig(timerMode, timerPhase);
+      timerTotalPhaseSeconds = timerSecondsLeft;
+    }
+    updateTimerDisplay();
   }
 
   function logStudySession(durationSecs){
@@ -41353,10 +41409,15 @@ function renderStretchesView(){
       } else if(!document.hidden && timerIsRunning){
         try {
           if(window.ZatoonaNativeBridge && typeof window.ZatoonaNativeBridge.getFloatingStudyRemainingSeconds === 'function'){
-            const nativeRem = window.ZatoonaNativeBridge.getFloatingStudyRemainingSeconds();
-            if(nativeRem > 0 && timerMode !== 'flow'){
-              timerSecondsLeft = nativeRem;
-              updateTimerDisplay();
+            const isFloatingRunning = typeof window.ZatoonaNativeBridge.isFloatingStudyTimerRunning === 'function'
+              ? window.ZatoonaNativeBridge.isFloatingStudyTimerRunning()
+              : true;
+            if(isFloatingRunning){
+              const nativeRem = window.ZatoonaNativeBridge.getFloatingStudyRemainingSeconds();
+              if(nativeRem > 0 && timerMode !== 'flow'){
+                timerSecondsLeft = nativeRem;
+                updateTimerDisplay();
+              }
             }
           }
         } catch(e){}
@@ -45075,6 +45136,7 @@ function renderStretchesView(){
 
   // Periodic ticker for gentle dhikr reminder
   setInterval(function(){
+    if(document.hidden) return;
     try {
       const s = getRandomDhikrSettings();
       if(!s || !s.enabled) return;
@@ -49032,6 +49094,7 @@ function renderStretchesView(){
     updateDynamicStatusCapsule();
     if(!window._capsuleTimerId){
       window._capsuleTimerId = setInterval(() => {
+        if(document.hidden) return;
         try { updateDynamicStatusCapsule(); } catch(e){}
       }, 30000);
     }
@@ -49263,6 +49326,21 @@ function renderStretchesView(){
             }
           } catch (e) {}
         }
+      }
+
+      if (window.ZatoonaNativeBridge && typeof window.ZatoonaNativeBridge.getStudyWidgetCache === 'function') {
+        try {
+          var nativeStudyCache = JSON.parse(window.ZatoonaNativeBridge.getStudyWidgetCache() || '{}');
+          if (nativeStudyCache && typeof nativeStudyCache.focusMinutesToday === 'number' && nativeStudyCache.focusMinutesToday > focusMinutes) {
+            var diffMins = nativeStudyCache.focusMinutesToday - focusMinutes;
+            if (diffMins > 0) {
+              focusMinutes = nativeStudyCache.focusMinutesToday;
+              if (typeof logStudySession === 'function') {
+                logStudySession(diffMins * 60);
+              }
+            }
+          }
+        } catch(e){}
       }
 
       var payload = {

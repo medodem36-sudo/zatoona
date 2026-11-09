@@ -82,6 +82,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 
 import androidx.core.content.ContextCompat
+import android.app.Activity
+import android.webkit.ValueCallback
 
 
 
@@ -126,6 +128,32 @@ class MainActivity : AppCompatActivity() {
     private val mainHandler = Handler(Looper.getMainLooper())
 
     private var isWakeWordListening = false
+
+    private var pendingWakeCommand: String? = null
+    private var pendingWakeTrigger: Boolean = false
+
+    private var fileChooserCallback: ValueCallback<Array<Uri>>? = null
+
+    private val fileChooserLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        val uris = if (result.resultCode == Activity.RESULT_OK) {
+            val intent = result.data
+            if (intent?.clipData != null) {
+                val clipData = intent.clipData!!
+                val list = Array(clipData.itemCount) { i -> clipData.getItemAt(i).uri }
+                list
+            } else if (intent?.data != null) {
+                arrayOf(intent.data!!)
+            } else {
+                null
+            }
+        } else {
+            null
+        }
+        fileChooserCallback?.onReceiveValue(uris)
+        fileChooserCallback = null
+    }
 
 
 
@@ -204,16 +232,6 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-
-            setShowWhenLocked(true)
-
-            setTurnScreenOn(true)
-
-        }
-
-
-
         handleNotificationIntent(intent)
 
 
@@ -267,32 +285,14 @@ class MainActivity : AppCompatActivity() {
             val km = getSystemService(Context.KEYGUARD_SERVICE) as? KeyguardManager
             km?.requestDismissKeyguard(this, null)
 
-            mainHandler.postDelayed({
-                if (!wakeCommand.isNullOrBlank()) {
-                    val jsonCmd = org.json.JSONObject.quote(wakeCommand)
-                    webView.evaluateJavascript("""
-                        (function(){
-                            if(typeof openAiFullscreenChat === 'function') openAiFullscreenChat();
-                            if(typeof window.onNativeWakeWordTriggered === 'function') {
-                                window.onNativeWakeWordTriggered($jsonCmd);
-                            } else if(typeof processAiUserPrompt === 'function') {
-                                processAiUserPrompt($jsonCmd);
-                            }
-                        })()
-                    """.trimIndent(), null)
-                } else {
-                    webView.evaluateJavascript("""
-                        (function(){
-                            if(typeof openAiFullscreenChat === 'function') openAiFullscreenChat();
-                            if(typeof window.onNativeWakeWordTriggered === 'function') {
-                                window.onNativeWakeWordTriggered('');
-                            } else if(typeof toggleAiVoiceInput === 'function') {
-                                setTimeout(toggleAiVoiceInput, 300);
-                            }
-                        })()
-                    """.trimIndent(), null)
-                }
-            }, 350)
+            if (isPageLoaded) {
+                mainHandler.postDelayed({
+                    executeWakeCommand(wakeCommand)
+                }, 200)
+            } else {
+                pendingWakeTrigger = true
+                pendingWakeCommand = wakeCommand
+            }
         }
 
         val mode = intent.getStringExtra(ZatoonaNotificationManager.EXTRA_MODE)
@@ -325,34 +325,43 @@ class MainActivity : AppCompatActivity() {
             val km = getSystemService(Context.KEYGUARD_SERVICE) as? KeyguardManager
             km?.requestDismissKeyguard(this, null)
 
-            if (cleanCommand.isNotBlank()) {
-                val jsonCmd = org.json.JSONObject.quote(cleanCommand)
-                webView.evaluateJavascript("""
-                    (function(){
-                        if(typeof openAiFullscreenChat === 'function') openAiFullscreenChat();
-                        if(typeof window.onNativeWakeWordTriggered === 'function') {
-                            window.onNativeWakeWordTriggered($jsonCmd);
-                        } else if(typeof processAiUserPrompt === 'function') {
-                            processAiUserPrompt($jsonCmd);
-                        }
-                    })()
-                """.trimIndent(), null)
+            if (isPageLoaded) {
+                executeWakeCommand(cleanCommand)
             } else {
-                webView.evaluateJavascript("""
-                    (function(){
-                        if(typeof openAiFullscreenChat === 'function') openAiFullscreenChat();
-                        if(typeof window.onNativeWakeWordTriggered === 'function') {
-                            window.onNativeWakeWordTriggered('');
-                        } else if(typeof toggleAiVoiceInput === 'function') {
-                            setTimeout(toggleAiVoiceInput, 300);
-                        }
-                    })()
-                """.trimIndent(), null)
+                pendingWakeTrigger = true
+                pendingWakeCommand = cleanCommand
             }
         }
     }
 
 
+
+    private fun executeWakeCommand(command: String?) {
+        if (!command.isNullOrBlank()) {
+            val jsonCmd = org.json.JSONObject.quote(command)
+            webView.evaluateJavascript("""
+                (function(){
+                    if(typeof openAiFullscreenChat === 'function') openAiFullscreenChat();
+                    if(typeof window.onNativeWakeWordTriggered === 'function') {
+                        window.onNativeWakeWordTriggered($jsonCmd);
+                    } else if(typeof processAiUserPrompt === 'function') {
+                        processAiUserPrompt($jsonCmd);
+                    }
+                })()
+            """.trimIndent(), null)
+        } else {
+            webView.evaluateJavascript("""
+                (function(){
+                    if(typeof openAiFullscreenChat === 'function') openAiFullscreenChat();
+                    if(typeof window.onNativeWakeWordTriggered === 'function') {
+                        window.onNativeWakeWordTriggered('');
+                    } else if(typeof toggleAiVoiceInput === 'function') {
+                        setTimeout(toggleAiVoiceInput, 300);
+                    }
+                })()
+            """.trimIndent(), null)
+        }
+    }
 
     private fun dispatchPendingNavigation() {
 
@@ -464,6 +473,14 @@ class MainActivity : AppCompatActivity() {
 
                 dispatchPendingNavigation()
 
+                if (pendingWakeTrigger) {
+                    pendingWakeTrigger = false
+                    val cmd = pendingWakeCommand
+                    pendingWakeCommand = null
+                    mainHandler.postDelayed({
+                        executeWakeCommand(cmd)
+                    }, 200)
+                }
             }
 
 
@@ -660,6 +677,27 @@ class MainActivity : AppCompatActivity() {
 
                 return true
 
+            }
+
+            override fun onShowFileChooser(
+                view: WebView?,
+                filePathCallback: ValueCallback<Array<Uri>>?,
+                fileChooserParams: FileChooserParams?
+            ): Boolean {
+                fileChooserCallback?.onReceiveValue(null)
+                fileChooserCallback = filePathCallback
+                return try {
+                    val intent = fileChooserParams?.createIntent() ?: Intent(Intent.ACTION_GET_CONTENT).apply {
+                        type = "*/*"
+                        addCategory(Intent.CATEGORY_OPENABLE)
+                    }
+                    fileChooserLauncher.launch(intent)
+                    true
+                } catch (e: Exception) {
+                    fileChooserCallback?.onReceiveValue(null)
+                    fileChooserCallback = null
+                    false
+                }
             }
 
         }
@@ -928,6 +966,14 @@ class MainActivity : AppCompatActivity() {
 
         } catch (e: Exception) {}
 
+    }
+
+    override fun onStop() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            setShowWhenLocked(false)
+            setTurnScreenOn(false)
+        }
+        super.onStop()
     }
 
 
